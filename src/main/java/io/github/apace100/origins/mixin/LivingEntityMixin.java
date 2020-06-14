@@ -1,23 +1,64 @@
 package io.github.apace100.origins.mixin;
 
+import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.block.TemporaryCobwebBlock;
+import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.power.CooldownPower;
 import io.github.apace100.origins.power.PowerTypes;
+import io.github.apace100.origins.power.SetEntityGroupPower;
 import io.github.apace100.origins.registry.ModBlocks;
+import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.List;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
+    }
+
+    // SetEntityGroupPower
+    @Inject(at = @At("HEAD"), method = "getGroup", cancellable = true)
+    public void getGroup(CallbackInfoReturnable<EntityGroup> info) {
+        if((Object)this instanceof PlayerEntity) {
+            List<SetEntityGroupPower> groups = ModComponents.ORIGIN.get(this).getPowers(SetEntityGroupPower.class);
+            if(groups.size() > 0) {
+                if(groups.size() > 1) {
+                    Origins.LOGGER.warn("Origin '" + Origin.get(this).getName().getKey() + "' had two instances of SetEntityGroupPower.");
+                }
+                info.setReturnValue(groups.get(0).group);
+            }
+        }
+    }
+
+    // CLIMBING
+    @Inject(at = @At("HEAD"), method = "isClimbing", cancellable = true)
+    public void doSpiderClimbing(CallbackInfoReturnable<Boolean> info) {
+        if(PowerTypes.CLIMBING.isActive(this)) {
+            if(this.horizontalCollision) {
+                info.setReturnValue(this.horizontalCollision);
+            }
+        }
+    }
+
+    // WATER_BREATHING
+    @Inject(at = @At("HEAD"), method = "canBreatheInWater", cancellable = true)
+    public void doWaterBreathing(CallbackInfoReturnable<Boolean> info) {
+        if(PowerTypes.WATER_BREATHING.isActive(this)) {
+            info.setReturnValue(true);
+        }
     }
 
     // SWIM_SPEED

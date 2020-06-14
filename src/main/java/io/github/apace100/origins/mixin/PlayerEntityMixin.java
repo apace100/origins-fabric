@@ -5,6 +5,7 @@ import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.registry.ModRegistries;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -36,6 +37,15 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
         super(entityType, world);
     }
 
+    // NO_COBWEB_SLOWDOWN
+    @Inject(at = @At("HEAD"), method = "slowMovement", cancellable = true)
+    public void slowMovement(BlockState state, Vec3d multiplier, CallbackInfo info) {
+        if (PowerTypes.NO_COBWEB_SLOWDOWN.isActive(this)) {
+            info.cancel();
+        }
+    }
+
+    // AQUA_AFFINITY
     @ModifyConstant(method = "getBlockBreakingSpeed", constant = @Constant(ordinal = 0, floatValue = 5.0F))
     private float modifyBlockBreakingSpeed(float in) {
         if(PowerTypes.AQUA_AFFINITY.isActive(this)) {
@@ -44,17 +54,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
         return in;
     }
 
-    @Override
-    public boolean canBreatheInWater() {
-        if(super.canBreatheInWater()) {
-            return true;
-        }
-        return PowerTypes.WATER_VISION.isActive(this);
-    }
-
+    // WATER_BREATHING
     @Inject(at = @At("TAIL"), method = "tick")
     private void tick(CallbackInfo info) {
-        if(PowerTypes.WATER_VISION.isActive(this)) {
+        if(PowerTypes.WATER_BREATHING.isActive(this)) {
             if(!this.isSubmergedIn(FluidTags.WATER)) {
                 int landGain = this.getNextAirOnLand(0);
                 this.setAir(this.getNextAirUnderwater(this.getAir()) - landGain);

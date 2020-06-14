@@ -37,8 +37,12 @@ public class Origin {
             PowerTypes.LIKE_WATER
         ));
         ARACHNID = register("arachnid", new Origin(Items.COBWEB, Impact.LOW, 0).add(
+            PowerTypes.CLIMBING,
+            PowerTypes.WEBBING,
             PowerTypes.FRAGILE,
-            PowerTypes.WEBBING
+            PowerTypes.NO_COBWEB_SLOWDOWN,
+            PowerTypes.CARNIVORE,
+            PowerTypes.ARTHROPOD
         ));
     }
 

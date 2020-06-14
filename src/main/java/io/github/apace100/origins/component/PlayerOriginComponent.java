@@ -51,7 +51,7 @@ public class PlayerOriginComponent implements OriginComponent {
     }
 
     @Override
-    public <T extends Power> Collection<T> getPowers(Class<T> powerClass) {
+    public <T extends Power> List<T> getPowers(Class<T> powerClass) {
         List<T> list = new LinkedList<>();
         for(Power power : powers.values()) {
             if(power.getClass().isAssignableFrom(powerClass)) {

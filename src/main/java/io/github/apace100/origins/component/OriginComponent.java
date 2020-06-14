@@ -7,6 +7,7 @@ import nerdhub.cardinal.components.api.component.Component;
 import nerdhub.cardinal.components.api.util.sync.EntitySyncedComponent;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface OriginComponent extends EntitySyncedComponent {
 
@@ -16,7 +17,7 @@ public interface OriginComponent extends EntitySyncedComponent {
 
 	boolean hasPower(PowerType<?> powerType);
 	<T extends Power> T getPower(PowerType<T> powerType);
-	<T extends Power> Collection<T> getPowers(Class<T> powerClass);
+	<T extends Power> List<T> getPowers(Class<T> powerClass);
 
 	void setOrigin(Origin origin);
 

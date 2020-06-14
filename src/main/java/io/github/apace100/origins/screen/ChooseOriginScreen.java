@@ -42,8 +42,6 @@ public class ChooseOriginScreen extends Screen {
 	public ChooseOriginScreen() {
 		super(new TranslatableText(Origins.MODID + ".screen.choose_origin"));
 		this.originSelection = new ArrayList<>(10);
-		System.out.println(ModRegistries.ORIGIN.getIds().size());
-		System.out.println(ModRegistries.ORIGIN.getIds());
 		ModRegistries.ORIGIN.forEach(origin -> {
 			if(origin.isChoosable()) {
 				this.originSelection.add(origin);
@@ -64,8 +62,8 @@ public class ChooseOriginScreen extends Screen {
 	protected void init() {
 		super.init();
 		guiLeft = (this.width - windowWidth) / 2;
-        guiTop = (this.height - windowHeight) / 3;
-        addButton(new ButtonWidget(guiLeft - 40,            this.height / 2 - 10, 20, 20, new LiteralText("<"), b -> {
+        guiTop = (this.height - windowHeight) / 2;
+        addButton(new ButtonWidget(guiLeft - 40,this.height / 2 - 10, 20, 20, new LiteralText("<"), b -> {
         	currentOrigin = (currentOrigin - 1 + originSelection.size()) % originSelection.size();
         	scrollPos = 0;
         }));
@@ -89,6 +87,7 @@ public class ChooseOriginScreen extends Screen {
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		this.renderBackground(matrices);
 		this.renderOriginWindow(matrices, mouseX, mouseY);
 		super.render(matrices, mouseX, mouseY, delta);
 	}
@@ -126,7 +125,7 @@ public class ChooseOriginScreen extends Screen {
 	}
 	
 	private void renderOriginName(MatrixStack matrices) {
-		Text originName = originSelection.get(currentOrigin).getName();
+		StringRenderable originName = textRenderer.trimToWidth(originSelection.get(currentOrigin).getName(), windowWidth - 36);
 		this.drawStringWithShadow(matrices, textRenderer, originName.getString(), guiLeft + 39, guiTop + 19, 0xFFFFFF);
 		ItemStack is = originSelection.get(currentOrigin).getDisplayItem();
 		this.itemRenderer.renderInGui(is, guiLeft + 15, guiTop + 15);
@@ -167,7 +166,6 @@ public class ChooseOriginScreen extends Screen {
 		y -= scrollPos;
 		
 		Text orgDesc = origin.getDescription();
-		//StringRenderable orgDescDraw = textRenderer.trimToWidth(orgDesc, windowWidth - 36);
 		List<StringRenderable> descLines = textRenderer.wrapLines(orgDesc, windowWidth - 36);
 		for(StringRenderable line : descLines) {
 			if(y >= startY - 18 && y <= endY + 12) {
@@ -177,14 +175,12 @@ public class ChooseOriginScreen extends Screen {
 		}
 		
 		for(PowerType<?> p : origin.getPowerTypes()) {
-			//if(p.isHidden()) {
-			//	continue;
-			//}
-			Text name = p.getName().formatted(Formatting.UNDERLINE);
+			if(p.isHidden()) {
+				continue;
+			}
+			StringRenderable name = textRenderer.trimToWidth(p.getName().formatted(Formatting.UNDERLINE), windowWidth - 36);
 			Text desc = p.getDescription();
-			//StringRenderable drawDesc = textRenderer.trimToWidth(desc, windowWidth - 36);
 			List<StringRenderable> drawLines = textRenderer.wrapLines(desc, windowWidth - 36);
-			//System.out.println("drawLines: " + drawLines.size());
 			if(y >= startY - 24 && y <= endY + 12) {
 				textRenderer.draw(matrices, name, x, y, 0xFFFFFF);
 			}

@@ -29,6 +29,12 @@
   "power.origins.webbing.name": "Webbing",
   "power.origins.webbing.description": "When you hit an enemy in melee, they get stuck in cobweb.",
 
+  "power.origins.climbing.name": "Climbing",
+  "power.origins.climbing.description": "You are able to climb up any kind of wall, not just ladders.",
+
+  "power.origins.carnivore.name": "Carnivore",
+  "power.origins.carnivore.description": "Your diet is restricted to meat, you can't eat vegetables.",
+
   "origins.gui.select": "Select",
   "origins.gui.choose_origin.title": "Choose your Origin",
   "origins.gui.impact.impact": "Impact",

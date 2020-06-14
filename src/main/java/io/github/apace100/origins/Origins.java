@@ -7,6 +7,7 @@ import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.registry.ModBlocks;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModItems;
+import io.github.apace100.origins.registry.ModTags;
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,6 +23,7 @@ public class Origins implements ModInitializer {
 		ModComponents.register();
 		ModBlocks.register();
 		ModItems.register();
+		ModTags.register();
 		ModPacketsC2S.register();
 		PowerTypes.init();
 		Origin.init();
