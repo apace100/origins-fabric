@@ -1,13 +1,8 @@
 package io.github.apace100.origins.block;
 
-import com.sun.media.jfxmedia.events.PlayerEvent;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import io.github.apace100.origins.power.PowerTypes;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;

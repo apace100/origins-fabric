@@ -24,7 +24,7 @@ public class PlayerOriginComponent implements OriginComponent {
 
     public PlayerOriginComponent(PlayerEntity player) {
         this.player = player;
-        this.origin = Origin.EMPTY;
+        this.setOrigin(Origin.EMPTY);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class PlayerOriginComponent implements OriginComponent {
     @Override
     public void fromTag(CompoundTag compoundTag) {
         if(player == null) {
-            Origins.LOGGER.error("Player was null in `fromTag`! Cry... :'(");
+            Origins.LOGGER.error("Player was null in `fromTag`! This is a bug!");
         }
         this.setOrigin(ModRegistries.ORIGIN.get(Identifier.tryParse(compoundTag.getString("Origin"))));
         ListTag powerList = (ListTag)compoundTag.get("Powers");
@@ -96,8 +96,6 @@ public class PlayerOriginComponent implements OriginComponent {
             power.fromTag(data);
             this.powers.put(type, power);
         }
-        Origins.LOGGER.info("Deserialized OriginComponent:");
-        Origins.LOGGER.info(toString());
     }
 
     @Override
@@ -126,11 +124,11 @@ public class PlayerOriginComponent implements OriginComponent {
 
     @Override
     public String toString() {
-        String str = "OriginComponent:" + ModRegistries.ORIGIN.getId(origin) + "[\n";
+        StringBuilder str = new StringBuilder("OriginComponent:" + ModRegistries.ORIGIN.getId(origin) + "[\n");
         for (Map.Entry<PowerType<?>, Power> powerEntry : powers.entrySet()) {
-            str += "\t" + ModRegistries.POWER_TYPE.getId(powerEntry.getKey()) + ": " + powerEntry.getValue().toTag().toString() + "\n";
+            str.append("\t").append(ModRegistries.POWER_TYPE.getId(powerEntry.getKey())).append(": ").append(powerEntry.getValue().toTag().toString()).append("\n");
         }
-        str += "]";
-        return str;
+        str.append("]");
+        return str.toString();
     }
 }

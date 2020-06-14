@@ -11,6 +11,8 @@ import net.minecraft.util.registry.Registry;
 
 public class PowerTypes {
 
+    public static final PowerType<InvulnerablePower> INVULNERABILITY;
+
     public static final PowerType<Power> WATER_BREATHING;
     public static final PowerType<Power> AQUA_AFFINITY;
     public static final PowerType<Power> WATER_VISION;
@@ -26,6 +28,8 @@ public class PowerTypes {
     public static final PowerType<SetEntityGroupPower> ARTHROPOD;
 
     static {
+        INVULNERABILITY = register("invulnerability", new PowerType<>(InvulnerablePower::new));
+
         WATER_BREATHING = register("water_breathing", new PowerType<>(Power::new));
         AQUA_AFFINITY = register("aqua_affinity", new PowerType<>(Power::new));
         WATER_VISION = register("water_vision", new PowerType<>(Power::new));
@@ -36,7 +40,7 @@ public class PowerTypes {
         FRAGILE = register("fragile", new PowerType<>((type, player) -> new AttributePower(type, player, EntityAttributes.GENERIC_MAX_HEALTH, new EntityAttributeModifier("power_type:fragile", -6.0, EntityAttributeModifier.Operation.ADDITION))));
         WEBBING = register("webbing", new PowerType<>((type, player) -> new CooldownPower(type, player, 6 * 20)));
         CLIMBING = register("climbing", new PowerType<>(Power::new));
-        NO_COBWEB_SLOWDOWN = register("no_cobweb_slowdown", new PowerType<>((type, player) -> new Power(type, player)).setHidden());
+        NO_COBWEB_SLOWDOWN = register("no_cobweb_slowdown", new PowerType<>(Power::new).setHidden());
         CARNIVORE = register("carnivore", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, (stack -> stack.isFood() && !stack.getItem().isIn(ModTags.MEAT)))));
         ARTHROPOD = register("arthropod", new PowerType<>((type, player) -> new SetEntityGroupPower(type, player, EntityGroup.ARTHROPOD)).setHidden());
 

@@ -8,7 +8,6 @@ import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModRegistries;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -27,7 +26,7 @@ public class Origin {
     public static final Origin ARACHNID;
 
     static {
-        EMPTY = register("empty", new Origin(Items.AIR, Impact.NONE, -1).setUnchoosable());
+        EMPTY = register("empty", new Origin(Items.AIR, Impact.NONE, -1).setUnchoosable().add(PowerTypes.INVULNERABILITY));
         HUMAN = register("human", new Origin(Items.PLAYER_HEAD, Impact.NONE, 0));
         MERLING = register("merling", new Origin(Items.COD, Impact.HIGH, 0).add(
             PowerTypes.WATER_BREATHING,
