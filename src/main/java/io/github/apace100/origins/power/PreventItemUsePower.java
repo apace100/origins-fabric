@@ -17,7 +17,7 @@ public class PreventItemUsePower extends Power {
     public PreventItemUsePower(PowerType<?> type, PlayerEntity player, Predicate<ItemStack> predicate) {
         super(type, player);
         this.predicate = predicate;
-        UseItemCallback.EVENT.register(((playerEntity, world, hand) -> {
+        /*UseItemCallback.EVENT.register(((playerEntity, world, hand) -> {
             if(getType().isActive(playerEntity)) {
                 ItemStack stackInHand = playerEntity.getStackInHand(hand);
                 if(doesPrevent(stackInHand)) {
@@ -25,7 +25,7 @@ public class PreventItemUsePower extends Power {
                 }
             }
             return TypedActionResult.pass(ItemStack.EMPTY);
-        }));
+        }));*/
     }
 
     public boolean doesPrevent(ItemStack stack) {

@@ -2,6 +2,7 @@ package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.block.TemporaryCobwebBlock;
+import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.power.CooldownPower;
 import io.github.apace100.origins.power.PowerTypes;
@@ -33,10 +34,13 @@ public abstract class LivingEntityMixin extends Entity {
     @Inject(at = @At("HEAD"), method = "getGroup", cancellable = true)
     public void getGroup(CallbackInfoReturnable<EntityGroup> info) {
         if((Object)this instanceof PlayerEntity) {
-            List<SetEntityGroupPower> groups = ModComponents.ORIGIN.get(this).getPowers(SetEntityGroupPower.class);
+            OriginComponent component = ModComponents.ORIGIN.get(this);
+            List<SetEntityGroupPower> groups = component.getPowers(SetEntityGroupPower.class);
             if(groups.size() > 0) {
                 if(groups.size() > 1) {
                     Origins.LOGGER.warn("Origin '" + Origin.get(this).getName().getKey() + "' had two instances of SetEntityGroupPower.");
+                    Origins.LOGGER.info("Deserialized OriginComponent:");
+                    Origins.LOGGER.info(component.toString());
                 }
                 info.setReturnValue(groups.get(0).group);
             }

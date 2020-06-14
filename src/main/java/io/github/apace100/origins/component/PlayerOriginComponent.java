@@ -54,7 +54,7 @@ public class PlayerOriginComponent implements OriginComponent {
     public <T extends Power> List<T> getPowers(Class<T> powerClass) {
         List<T> list = new LinkedList<>();
         for(Power power : powers.values()) {
-            if(power.getClass().isAssignableFrom(powerClass)) {
+            if(powerClass.isAssignableFrom(power.getClass())) {
                 list.add((T)power);
             }
         }
@@ -86,20 +86,18 @@ public class PlayerOriginComponent implements OriginComponent {
         if(player == null) {
             Origins.LOGGER.error("Player was null in `fromTag`! Cry... :'(");
         }
-        this.origin = null;
-        this.powers.clear();
-
-        this.origin = ModRegistries.ORIGIN.get(Identifier.tryParse(compoundTag.getString("Origin")));
+        this.setOrigin(ModRegistries.ORIGIN.get(Identifier.tryParse(compoundTag.getString("Origin"))));
         ListTag powerList = (ListTag)compoundTag.get("Powers");
         for(int i = 0; i < powerList.size(); i++) {
             CompoundTag powerTag = powerList.getCompound(i);
             PowerType<?> type = ModRegistries.POWER_TYPE.get(Identifier.tryParse(powerTag.getString("Type")));
             Tag data = powerTag.get("Data");
             Power power = type.create(player);
-            power.onAdded();
             power.fromTag(data);
             this.powers.put(type, power);
         }
+        Origins.LOGGER.info("Deserialized OriginComponent:");
+        Origins.LOGGER.info(toString());
     }
 
     @Override
@@ -124,5 +122,15 @@ public class PlayerOriginComponent implements OriginComponent {
     @Override
     public ComponentType<?> getComponentType() {
         return ModComponents.ORIGIN;
+    }
+
+    @Override
+    public String toString() {
+        String str = "OriginComponent:" + ModRegistries.ORIGIN.getId(origin) + "[\n";
+        for (Map.Entry<PowerType<?>, Power> powerEntry : powers.entrySet()) {
+            str += "\t" + ModRegistries.POWER_TYPE.getId(powerEntry.getKey()) + ": " + powerEntry.getValue().toTag().toString() + "\n";
+        }
+        str += "]";
+        return str;
     }
 }

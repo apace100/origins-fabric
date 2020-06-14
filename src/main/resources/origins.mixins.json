@@ -7,7 +7,8 @@
     "RegistryAccessor",
     "PlayerEntityMixin",
     "LivingEntityMixin",
-    "LoginMixin"
+    "LoginMixin",
+    "ItemMixin"
   ],
   "client": [
     "ClientPlayerEntityMixin",
