@@ -27,6 +27,9 @@ public class PowerTypes {
     public static final PowerType<PreventItemUsePower> CARNIVORE;
     public static final PowerType<SetEntityGroupPower> ARTHROPOD;
 
+    public static final PowerType<Power> FIRE_IMMUNITY;
+    public static final PowerType<NetherSpawnPower> NETHER_SPAWN;
+
     static {
         INVULNERABILITY = register("invulnerability", new PowerType<>(InvulnerablePower::new));
 
@@ -44,6 +47,8 @@ public class PowerTypes {
         CARNIVORE = register("carnivore", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, (stack -> stack.isFood() && !stack.getItem().isIn(ModTags.MEAT)))));
         ARTHROPOD = register("arthropod", new PowerType<>((type, player) -> new SetEntityGroupPower(type, player, EntityGroup.ARTHROPOD)).setHidden());
 
+        FIRE_IMMUNITY = register("fire_immunity", new PowerType<>(Power::new));
+        NETHER_SPAWN = register("nether_spawn", new PowerType<>(NetherSpawnPower::new));
     }
 
     public static void init() {

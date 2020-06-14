@@ -11,6 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -40,6 +41,14 @@ public abstract class LivingEntityMixin extends Entity {
                 }
                 info.setReturnValue(groups.get(0).group);
             }
+        }
+    }
+
+    // FIRE_IMMUNITY
+    @Inject(at = @At("HEAD"), method = "damage", cancellable = true)
+    public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
+        if(source.isFire() && PowerTypes.FIRE_IMMUNITY.isActive(this)) {
+            info.setReturnValue(false);
         }
     }
 

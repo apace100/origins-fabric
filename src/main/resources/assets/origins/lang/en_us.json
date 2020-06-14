@@ -8,6 +8,9 @@
   "origin.origins.arachnid.name": "Arachnid",
   "origin.origins.arachnid.description": "Their climbing abilities and the ability to trap their foes in spiderweb make the Arachnid perfect hunters.",
 
+  "origin.origins.blazeborn.name": "Blazeborn",
+  "origin.origins.blazeborn.description": "Late descendants of the Blaze, the Blazeborn are naturally immune to the perils of the Nether.",
+
   "power.origins.water_breathing.name": "Gills",
   "power.origins.water_breathing.description": "You can breathe underwater, but not on land.",
 
@@ -34,6 +37,12 @@
 
   "power.origins.carnivore.name": "Carnivore",
   "power.origins.carnivore.description": "Your diet is restricted to meat, you can't eat vegetables.",
+
+  "power.origins.fire_immunity.name": "Fire Immunity",
+  "power.origins.fire_immunity.description": "You are immune to all types of fire damage.",
+
+  "power.origins.nether_spawn.name": "Nether Inhabitant",
+  "power.origins.nether_spawn.description": "Your natural spawn will be in the Nether.",
 
   "origins.gui.select": "Select",
   "origins.gui.choose_origin.title": "Choose your Origin",

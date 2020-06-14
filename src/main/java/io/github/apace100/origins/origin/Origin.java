@@ -24,6 +24,7 @@ public class Origin {
     public static final Origin HUMAN;
     public static final Origin MERLING;
     public static final Origin ARACHNID;
+    public static final Origin BLAZEBORN;
 
     static {
         EMPTY = register("empty", new Origin(Items.AIR, Impact.NONE, -1).setUnchoosable().add(PowerTypes.INVULNERABILITY));
@@ -42,6 +43,10 @@ public class Origin {
             PowerTypes.NO_COBWEB_SLOWDOWN,
             PowerTypes.CARNIVORE,
             PowerTypes.ARTHROPOD
+        ));
+        BLAZEBORN = register("blazeborn", new Origin(Items.BLAZE_POWDER, Impact.HIGH, 1).add(
+            PowerTypes.FIRE_IMMUNITY,
+            PowerTypes.NETHER_SPAWN
         ));
     }
 
