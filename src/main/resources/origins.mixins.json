@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "io.github.apace100.origins.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "RegistryAccessor",
+    "PlayerEntityMixin",
+    "LivingEntityMixin",
+    "LoginMixin"
+  ],
+  "client": [
+    "ClientPlayerEntityMixin",
+    "GameRendererMixin",
+    "BackgroundRendererMixin",
+    "LightmapTextureManagerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
