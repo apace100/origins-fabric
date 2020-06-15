@@ -44,11 +44,20 @@
   "power.origins.nether_spawn.name": "Nether Inhabitant",
   "power.origins.nether_spawn.description": "Your natural spawn will be in the Nether.",
 
+  "power.origins.burning_wrath.name": "Burning Wrath",
+  "power.origins.burning_wrath.description": "When on fire, you deal additional damage with your attacks.",
+
+  "power.origins.water_vulnerability.name": "Hydrophobia",
+  "power.origins.water_vulnerability.description": "You receive damage over time while in contact with water.",
+
   "origins.gui.select": "Select",
   "origins.gui.choose_origin.title": "Choose your Origin",
   "origins.gui.impact.impact": "Impact",
   "origins.gui.impact.none": "None",
   "origins.gui.impact.low": "Low",
   "origins.gui.impact.medium": "Medium",
-  "origins.gui.impact.high": "High"
+  "origins.gui.impact.high": "High",
+
+  "death.attack.no_water_for_gills": "%s didn't manage to keep wet.",
+  "death.attack.hurt_by_water": "%s took a bath for too long."
 }

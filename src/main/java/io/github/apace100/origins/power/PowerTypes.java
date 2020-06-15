@@ -29,6 +29,8 @@ public class PowerTypes {
 
     public static final PowerType<Power> FIRE_IMMUNITY;
     public static final PowerType<NetherSpawnPower> NETHER_SPAWN;
+    public static final PowerType<ModifyDamageDealtPower> BURNING_WRATH;
+    public static final PowerType<VariableIntPower> WATER_VULNERABILITY;
 
     static {
         INVULNERABILITY = register("invulnerability", new PowerType<>(InvulnerablePower::new));
@@ -49,6 +51,8 @@ public class PowerTypes {
 
         FIRE_IMMUNITY = register("fire_immunity", new PowerType<>(Power::new));
         NETHER_SPAWN = register("nether_spawn", new PowerType<>(NetherSpawnPower::new));
+        BURNING_WRATH = register("burning_wrath", new PowerType<>((type, player) -> new ModifyDamageDealtPower(type, player, (p, s) -> p.isOnFire(), dmg -> dmg + 3.0F)));
+        WATER_VULNERABILITY = register("water_vulnerability", new PowerType<>((type, player) -> new VariableIntPower(type, player, 20, 0, 20)));
     }
 
     public static void init() {

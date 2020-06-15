@@ -46,7 +46,9 @@ public class Origin {
         ));
         BLAZEBORN = register("blazeborn", new Origin(Items.BLAZE_POWDER, Impact.HIGH, 1).add(
             PowerTypes.FIRE_IMMUNITY,
-            PowerTypes.NETHER_SPAWN
+            PowerTypes.NETHER_SPAWN,
+            PowerTypes.BURNING_WRATH,
+            PowerTypes.WATER_VULNERABILITY
         ));
     }
 
