@@ -91,6 +91,15 @@ public abstract class LivingEntityMixin extends Entity {
         return entity.method_26317(d, bl, vec3d);
     }
 
+    @ModifyVariable(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getFluidState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/fluid/FluidState;"), method = "travel", name = "d", ordinal = 0)
+    public double doAvianSlowFalling(double in) {
+        if(!this.isSneaking() && this.getVelocity().y <= 0.0D && PowerTypes.SLOW_FALLING.isActive(this)) {
+            this.fallDistance = 0;
+            return 0.01D;
+        }
+        return in;
+    }
+
     // WEBBING
     @Inject(at = @At("HEAD"), method = "onAttacking")
     public void onAttacking(Entity target, CallbackInfo info) {

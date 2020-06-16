@@ -6,6 +6,7 @@ import io.github.apace100.origins.registry.ModTags;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -32,6 +33,11 @@ public class PowerTypes {
     public static final PowerType<ModifyDamageDealtPower> BURNING_WRATH;
     public static final PowerType<VariableIntPower> WATER_VULNERABILITY;
 
+    public static final PowerType<Power> SLOW_FALLING;
+    public static final PowerType<AttributePower> TAILWIND;
+    public static final PowerType<PreventItemUsePower> VEGETARIAN;
+    public static final PowerType<Power> FRESH_AIR;
+
     static {
         INVULNERABILITY = register("invulnerability", new PowerType<>(InvulnerablePower::new));
 
@@ -53,6 +59,11 @@ public class PowerTypes {
         NETHER_SPAWN = register("nether_spawn", new PowerType<>(NetherSpawnPower::new));
         BURNING_WRATH = register("burning_wrath", new PowerType<>((type, player) -> new ModifyDamageDealtPower(type, player, (p, s) -> p.isOnFire(), dmg -> dmg + 3.0F)));
         WATER_VULNERABILITY = register("water_vulnerability", new PowerType<>((type, player) -> new VariableIntPower(type, player, 20, 0, 20)));
+
+        SLOW_FALLING = register("slow_falling", new PowerType<>(Power::new));
+        TAILWIND = register("tailwind", new PowerType<>((type, player) -> new AttributePower(type, player, EntityAttributes.GENERIC_MOVEMENT_SPEED, new EntityAttributeModifier("power_type:tailwind", 0.02, EntityAttributeModifier.Operation.ADDITION))));
+        VEGETARIAN = register("vegetarian", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, Ingredient.fromTag(ModTags.MEAT))));
+        FRESH_AIR = register("fresh_air", new PowerType<>(Power::new));
     }
 
     public static void init() {

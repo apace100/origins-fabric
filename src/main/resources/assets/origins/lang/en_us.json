@@ -11,6 +11,9 @@
   "origin.origins.blazeborn.name": "Blazeborn",
   "origin.origins.blazeborn.description": "Late descendants of the Blaze, the Blazeborn are naturally immune to the perils of the Nether.",
 
+  "origin.origins.avian.name": "Avian",
+  "origin.origins.avian.description": "The Avian race has lost their ability to fly a long time ago. Now these peaceful creatures can be seen gliding from one place to another.",
+
   "power.origins.water_breathing.name": "Gills",
   "power.origins.water_breathing.description": "You can breathe underwater, but not on land.",
 
@@ -49,6 +52,19 @@
 
   "power.origins.water_vulnerability.name": "Hydrophobia",
   "power.origins.water_vulnerability.description": "You receive damage over time while in contact with water.",
+
+  "power.origins.tailwind.name": "Tailwind",
+  "power.origins.tailwind.description": "You are a little bit quicker on foot than others.",
+
+  "power.origins.slow_falling.name": "Featherweight",
+  "power.origins.slow_falling.description": "You fall as gently to the ground as a feather would, unless you sneak.",
+
+  "power.origins.vegetarian.name": "Vegetarian",
+  "power.origins.vegetarian.description": "You can't digest any meat.",
+
+  "power.origins.fresh_air.name": "Fresh Air",
+  "power.origins.fresh_air.description": "When sleeping, your bed needs to be at an altitude of at least 86 blocks, so you can breathe fresh air.",
+
 
   "origins.gui.select": "Select",
   "origins.gui.choose_origin.title": "Choose your Origin",

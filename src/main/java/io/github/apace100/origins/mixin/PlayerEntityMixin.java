@@ -111,6 +111,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
         }
     }
 
+    // WATER_BREATHING
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isSubmergedIn(Lnet/minecraft/tag/Tag;)Z"), method = "updateTurtleHelmet")
     public boolean isSubmergedInProxy(PlayerEntity player, Tag<Fluid> fluidTag) {
         boolean submerged = this.isSubmergedIn(fluidTag);

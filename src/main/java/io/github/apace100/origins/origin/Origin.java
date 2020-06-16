@@ -25,6 +25,7 @@ public class Origin {
     public static final Origin MERLING;
     public static final Origin ARACHNID;
     public static final Origin BLAZEBORN;
+    public static final Origin AVIAN;
 
     static {
         EMPTY = register("empty", new Origin(Items.AIR, Impact.NONE, -1).setUnchoosable().add(PowerTypes.INVULNERABILITY));
@@ -36,7 +37,7 @@ public class Origin {
             PowerTypes.SWIM_SPEED,
             PowerTypes.LIKE_WATER
         ));
-        ARACHNID = register("arachnid", new Origin(Items.COBWEB, Impact.LOW, 0).add(
+        ARACHNID = register("arachnid", new Origin(Items.COBWEB, Impact.LOW, 1).add(
             PowerTypes.CLIMBING,
             PowerTypes.WEBBING,
             PowerTypes.FRAGILE,
@@ -49,6 +50,12 @@ public class Origin {
             PowerTypes.NETHER_SPAWN,
             PowerTypes.BURNING_WRATH,
             PowerTypes.WATER_VULNERABILITY
+        ));
+        AVIAN = register("avian", new Origin(Items.FEATHER, Impact.LOW, 0).add(
+            PowerTypes.SLOW_FALLING,
+            PowerTypes.TAILWIND,
+            PowerTypes.FRESH_AIR,
+            PowerTypes.VEGETARIAN
         ));
     }
 

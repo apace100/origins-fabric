@@ -9,7 +9,8 @@
     "LivingEntityMixin",
     "LoginMixin",
     "ItemMixin",
-    "DamageSourceAccessor"
+    "DamageSourceAccessor",
+    "ServerPlayerEntityMixin"
   ],
   "client": [
     "ClientPlayerEntityMixin",
