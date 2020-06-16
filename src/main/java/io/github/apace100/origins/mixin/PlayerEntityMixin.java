@@ -10,10 +10,13 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.command.CommandOutput;
 import net.minecraft.tag.FluidTags;
+import net.minecraft.tag.Tag;
 import net.minecraft.util.Nameable;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Difficulty;
@@ -27,6 +30,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class PlayerEntityMixin extends LivingEntity implements Nameable, CommandOutput {
 
     @Shadow public abstract boolean damage(DamageSource source, float amount);
+
+    @Shadow protected boolean isSubmergedInWater;
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -55,14 +60,23 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
 
     // AQUA_AFFINITY
     @ModifyConstant(method = "getBlockBreakingSpeed", constant = @Constant(ordinal = 0, floatValue = 5.0F))
-    private float modifyBlockBreakingSpeed(float in) {
+    private float modifyWaterBlockBreakingSpeed(float in) {
         if(PowerTypes.AQUA_AFFINITY.isActive(this)) {
             return 1F;
         }
         return in;
     }
 
-    // WATER_BREATHING
+    // AQUA_AFFINITY
+    @ModifyConstant(method = "getBlockBreakingSpeed", constant = @Constant(ordinal = 1, floatValue = 5.0F))
+    private float modifyUngroundedBlockBreakingSpeed(float in) {
+        if(this.isSubmergedIn(FluidTags.WATER) && PowerTypes.AQUA_AFFINITY.isActive(this)) {
+            return 1F;
+        }
+        return in;
+    }
+
+    // WATER_BREATHING & WATER_VULNERABILITY
     @Inject(at = @At("TAIL"), method = "tick")
     private void tick(CallbackInfo info) {
         if(PowerTypes.WATER_VULNERABILITY.isActive(this) && this.isWet()) {
@@ -75,7 +89,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
             }
         }
         if(PowerTypes.WATER_BREATHING.isActive(this)) {
-            if(!this.isSubmergedIn(FluidTags.WATER)) {
+            if(!this.isSubmergedIn(FluidTags.WATER) && !this.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
                 int landGain = this.getNextAirOnLand(0);
                 this.setAir(this.getNextAirUnderwater(this.getAir()) - landGain);
                 if (this.getAir() == -20) {
@@ -95,5 +109,14 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
                 this.setAir(this.getNextAirOnLand(this.getAir()));
             }
         }
+    }
+
+    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isSubmergedIn(Lnet/minecraft/tag/Tag;)Z"), method = "updateTurtleHelmet")
+    public boolean isSubmergedInProxy(PlayerEntity player, Tag<Fluid> fluidTag) {
+        boolean submerged = this.isSubmergedIn(fluidTag);
+        if(PowerTypes.WATER_BREATHING.isActive(this)) {
+            return !submerged;
+        }
+        return submerged;
     }
 }
