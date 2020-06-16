@@ -55,9 +55,9 @@ public abstract class LivingEntityMixin extends Entity {
     // CLIMBING
     @Inject(at = @At("HEAD"), method = "isClimbing", cancellable = true)
     public void doSpiderClimbing(CallbackInfoReturnable<Boolean> info) {
-        if(PowerTypes.CLIMBING.isActive(this)) {
+        if(PowerTypes.CLIMBING.isActive(this) && PowerTypes.CLIMBING.get(this).isActive()) {
             if(this.horizontalCollision) {
-                info.setReturnValue(this.horizontalCollision);
+                info.setReturnValue(true);
             }
         }
     }

@@ -49,7 +49,8 @@ public class Origin {
             PowerTypes.FIRE_IMMUNITY,
             PowerTypes.NETHER_SPAWN,
             PowerTypes.BURNING_WRATH,
-            PowerTypes.WATER_VULNERABILITY
+            PowerTypes.WATER_VULNERABILITY,
+            PowerTypes.FLAME_PARTICLES
         ));
         AVIAN = register("avian", new Origin(Items.FEATHER, Impact.LOW, 0).add(
             PowerTypes.SLOW_FALLING,

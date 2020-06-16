@@ -14,7 +14,10 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.util.Identifier;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class PlayerOriginComponent implements OriginComponent {
 
@@ -48,6 +51,13 @@ public class PlayerOriginComponent implements OriginComponent {
             return (T)powers.get(powerType);
         }
         return null;
+    }
+
+    @Override
+    public List<Power> getPowers() {
+        List<Power> list = new LinkedList<>();
+        list.addAll(powers.values());
+        return list;
     }
 
     @Override

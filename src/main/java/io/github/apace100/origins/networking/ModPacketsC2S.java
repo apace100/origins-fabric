@@ -2,6 +2,7 @@ package io.github.apace100.origins.networking;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.power.Active;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModRegistries;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
@@ -24,6 +25,14 @@ public class ModPacketsC2S {
                     }
                 } else {
                     Origins.LOGGER.warn("Player " + packetContext.getPlayer().getDisplayName().asString() + " try to chose origin while having one already.");
+                }
+            });
+        }));
+        ServerSidePacketRegistry.INSTANCE.register(ModPackets.USE_ACTIVE_POWER, ((packetContext, packetByteBuf) -> {
+            packetContext.getTaskQueue().execute(() -> {
+                OriginComponent component = ModComponents.ORIGIN.get(packetContext.getPlayer());
+                if(component.hasOrigin()) {
+                    component.getPowers().stream().filter(p -> p instanceof Active).forEach(p -> ((Active)p).onUse());
                 }
             });
         }));

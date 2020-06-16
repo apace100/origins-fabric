@@ -6,6 +6,7 @@ import io.github.apace100.origins.registry.ModTags;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -23,7 +24,7 @@ public class PowerTypes {
 
     public static final PowerType<AttributePower> FRAGILE;
     public static final PowerType<CooldownPower> WEBBING;
-    public static final PowerType<Power> CLIMBING;
+    public static final PowerType<TogglePower> CLIMBING;
     public static final PowerType<Power> NO_COBWEB_SLOWDOWN;
     public static final PowerType<PreventItemUsePower> CARNIVORE;
     public static final PowerType<SetEntityGroupPower> ARTHROPOD;
@@ -32,6 +33,7 @@ public class PowerTypes {
     public static final PowerType<NetherSpawnPower> NETHER_SPAWN;
     public static final PowerType<ModifyDamageDealtPower> BURNING_WRATH;
     public static final PowerType<VariableIntPower> WATER_VULNERABILITY;
+    public static final PowerType<ParticlePower> FLAME_PARTICLES;
 
     public static final PowerType<Power> SLOW_FALLING;
     public static final PowerType<AttributePower> TAILWIND;
@@ -49,8 +51,8 @@ public class PowerTypes {
         AQUATIC = register("aquatic", new PowerType<>((type, player) -> new SetEntityGroupPower(type, player, EntityGroup.AQUATIC)).setHidden());
 
         FRAGILE = register("fragile", new PowerType<>((type, player) -> new AttributePower(type, player, EntityAttributes.GENERIC_MAX_HEALTH, new EntityAttributeModifier("power_type:fragile", -6.0, EntityAttributeModifier.Operation.ADDITION))));
-        WEBBING = register("webbing", new PowerType<>((type, player) -> new CooldownPower(type, player, 6 * 20)));
-        CLIMBING = register("climbing", new PowerType<>(Power::new));
+        WEBBING = register("webbing", new PowerType<>((type, player) -> new CooldownPower(type, player, 6 * 20, 5)));
+        CLIMBING = register("climbing", new PowerType<>(TogglePower::new));
         NO_COBWEB_SLOWDOWN = register("no_cobweb_slowdown", new PowerType<>(Power::new).setHidden());
         CARNIVORE = register("carnivore", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, (stack -> stack.isFood() && !stack.getItem().isIn(ModTags.MEAT)))));
         ARTHROPOD = register("arthropod", new PowerType<>((type, player) -> new SetEntityGroupPower(type, player, EntityGroup.ARTHROPOD)).setHidden());
@@ -59,6 +61,7 @@ public class PowerTypes {
         NETHER_SPAWN = register("nether_spawn", new PowerType<>(NetherSpawnPower::new));
         BURNING_WRATH = register("burning_wrath", new PowerType<>((type, player) -> new ModifyDamageDealtPower(type, player, (p, s) -> p.isOnFire(), dmg -> dmg + 3.0F)));
         WATER_VULNERABILITY = register("water_vulnerability", new PowerType<>((type, player) -> new VariableIntPower(type, player, 20, 0, 20)));
+        FLAME_PARTICLES = register("flame_particles", new PowerType<>((type, player) -> new ParticlePower(type, player, ParticleTypes.FLAME, 4)).setHidden());
 
         SLOW_FALLING = register("slow_falling", new PowerType<>(Power::new));
         TAILWIND = register("tailwind", new PowerType<>((type, player) -> new AttributePower(type, player, EntityAttributes.GENERIC_MOVEMENT_SPEED, new EntityAttributeModifier("power_type:tailwind", 0.02, EntityAttributeModifier.Operation.ADDITION))));
