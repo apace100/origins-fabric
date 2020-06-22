@@ -1,8 +1,5 @@
 package io.github.apace100.origins.screen;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.networking.ModPackets;
@@ -24,6 +21,9 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChooseOriginScreen extends Screen {
 
@@ -146,14 +146,7 @@ public class ChooseOriginScreen extends Screen {
 	public boolean mouseScrolled(double x, double y, double z) {
 		boolean retValue = super.mouseScrolled(x, y, z);
 		int np = this.scrollPos - (int)z * 4;
-		if(np < 0) {
-			this.scrollPos = 0;
-		} else
-		if(np > this.currentMaxScroll) {
-			this.scrollPos = this.currentMaxScroll;
-		} else {
-			this.scrollPos = np;
-		}
+		this.scrollPos = np < 0 ? 0 : Math.min(np, this.currentMaxScroll);
 		return retValue;
 	}
 
