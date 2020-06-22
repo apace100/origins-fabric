@@ -29,6 +29,9 @@ public class PowerHudRenderer extends DrawableHelper {
                 if(client.player.getAir() < client.player.getMaxAir()) {
                     y -= 8;
                 }
+                if(client.player.isCreative()) {
+                    y += 8;
+                }
                 int barWidth = 71;
                 int barHeight = 5;
                 int iconSize = 8;

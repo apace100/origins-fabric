@@ -8,13 +8,16 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.command.CommandOutput;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Nameable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
@@ -31,6 +34,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
     @Shadow public abstract boolean damage(DamageSource source, float amount);
 
     @Shadow protected boolean isSubmergedInWater;
+
+    @Shadow public abstract HungerManager getHungerManager();
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -75,9 +80,23 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
         return in;
     }
 
+    // HUNGER_OVER_TIME & BURN_IN_DAYLIGHT
     // WATER_BREATHING & WATER_VULNERABILITY
+    // PARTICLES
     @Inject(at = @At("TAIL"), method = "tick")
     private void tick(CallbackInfo info) {
+        if(this.age % 20 == 0 && PowerTypes.HUNGER_OVER_TIME.isActive(this) && PowerTypes.HUNGER_OVER_TIME.get(this).isActive()) {
+            this.getHungerManager().addExhaustion(0.015F);
+        }
+        if(PowerTypes.BURN_IN_DAYLIGHT.isActive(this) && PowerTypes.BURN_IN_DAYLIGHT.get(this).isActive() && !this.hasStatusEffect(StatusEffects.INVISIBILITY)) {
+            if (this.world.isDay() && !this.world.isClient) {
+                float f = this.getBrightnessAtEyes();
+                BlockPos blockPos = this.getVehicle() instanceof BoatEntity ? (new BlockPos(this.getX(), (double)Math.round(this.getY()), this.getZ())).up() : new BlockPos(this.getX(), (double)Math.round(this.getY()), this.getZ());
+                if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.isSkyVisible(blockPos)) {
+                    this.setOnFireFor(8);
+                }
+            }
+        }
         if(PowerTypes.WATER_VULNERABILITY.isActive(this) && this.isWet()) {
             VariableIntPower waterCounter = PowerTypes.WATER_VULNERABILITY.get(this);
             if(waterCounter.getValue() <= 0) {

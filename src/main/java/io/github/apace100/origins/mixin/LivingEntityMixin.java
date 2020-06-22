@@ -104,7 +104,7 @@ public abstract class LivingEntityMixin extends Entity {
     @Inject(at = @At("HEAD"), method = "onAttacking")
     public void onAttacking(Entity target, CallbackInfo info) {
         if(target instanceof LivingEntity) {
-            if(PowerTypes.WEBBING.isActive(this)) {
+            if(PowerTypes.WEBBING.isActive(this) && !this.isSneaking()) {
                 CooldownPower power = PowerTypes.WEBBING.get(this);
                 if(power.canUse()) {
                     BlockPos targetPos = target.getBlockPos();

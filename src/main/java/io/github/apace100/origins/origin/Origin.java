@@ -26,6 +26,7 @@ public class Origin {
     public static final Origin ARACHNID;
     public static final Origin BLAZEBORN;
     public static final Origin AVIAN;
+    public static final Origin PHANTOM;
 
     static {
         EMPTY = register("empty", new Origin(Items.AIR, Impact.NONE, -1).setUnchoosable().add(PowerTypes.INVULNERABILITY));
@@ -57,6 +58,12 @@ public class Origin {
             PowerTypes.TAILWIND,
             PowerTypes.FRESH_AIR,
             PowerTypes.VEGETARIAN
+        ));
+        PHANTOM = register("phantom", new Origin(Items.PHANTOM_MEMBRANE, Impact.HIGH, 2).add(
+            PowerTypes.PHASING,
+            PowerTypes.INVISIBILITY,
+            PowerTypes.HUNGER_OVER_TIME,
+            PowerTypes.BURN_IN_DAYLIGHT
         ));
     }
 

@@ -10,8 +10,12 @@ public class TogglePower extends Power implements Active {
     private boolean isActive;
 
     public TogglePower(PowerType<?> type, PlayerEntity player) {
+        this(type, player, false);
+    }
+
+    public TogglePower(PowerType<?> type, PlayerEntity player, boolean activeByDefault) {
         super(type, player);
-        this.isActive = true;
+        this.isActive = activeByDefault;
     }
 
     @Override

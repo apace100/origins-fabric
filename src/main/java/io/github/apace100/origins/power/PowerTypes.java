@@ -40,6 +40,11 @@ public class PowerTypes {
     public static final PowerType<PreventItemUsePower> VEGETARIAN;
     public static final PowerType<Power> FRESH_AIR;
 
+    public static final PowerType<TogglePower> PHASING;
+    public static final PowerType<TogglePower> INVISIBILITY;
+    public static final PowerType<TogglePower> HUNGER_OVER_TIME;
+    public static final PowerType<TogglePower> BURN_IN_DAYLIGHT;
+
     static {
         INVULNERABILITY = register("invulnerability", new PowerType<>(InvulnerablePower::new));
 
@@ -52,7 +57,7 @@ public class PowerTypes {
 
         FRAGILE = register("fragile", new PowerType<>((type, player) -> new AttributePower(type, player, EntityAttributes.GENERIC_MAX_HEALTH, new EntityAttributeModifier("power_type:fragile", -6.0, EntityAttributeModifier.Operation.ADDITION))));
         WEBBING = register("webbing", new PowerType<>((type, player) -> new CooldownPower(type, player, 6 * 20, 5)));
-        CLIMBING = register("climbing", new PowerType<>(TogglePower::new));
+        CLIMBING = register("climbing", new PowerType<>((type, player) -> new TogglePower(type, player, true)));
         NO_COBWEB_SLOWDOWN = register("no_cobweb_slowdown", new PowerType<>(Power::new).setHidden());
         CARNIVORE = register("carnivore", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, (stack -> stack.isFood() && !stack.getItem().isIn(ModTags.MEAT)))));
         ARTHROPOD = register("arthropod", new PowerType<>((type, player) -> new SetEntityGroupPower(type, player, EntityGroup.ARTHROPOD)).setHidden());
@@ -67,6 +72,11 @@ public class PowerTypes {
         TAILWIND = register("tailwind", new PowerType<>((type, player) -> new AttributePower(type, player, EntityAttributes.GENERIC_MOVEMENT_SPEED, new EntityAttributeModifier("power_type:tailwind", 0.02, EntityAttributeModifier.Operation.ADDITION))));
         VEGETARIAN = register("vegetarian", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, Ingredient.fromTag(ModTags.MEAT))));
         FRESH_AIR = register("fresh_air", new PowerType<>(Power::new));
+
+        PHASING = register("phasing", new PowerType<>(TogglePower::new));
+        INVISIBILITY = register("invisibility", new PowerType<>(TogglePower::new));
+        HUNGER_OVER_TIME = register("hunger_over_time", new PowerType<>(TogglePower::new));
+        BURN_IN_DAYLIGHT = register("burn_in_daylight", new PowerType<>((type, player) -> new TogglePower(type, player, true)));
     }
 
     public static void init() {

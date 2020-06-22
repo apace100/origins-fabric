@@ -10,7 +10,10 @@
     "LoginMixin",
     "ItemMixin",
     "DamageSourceAccessor",
-    "ServerPlayerEntityMixin"
+    "ServerPlayerEntityMixin",
+    "EntityShapeContextMixin",
+    "AbstractBlockMixin",
+    "EntityMixin"
   ],
   "client": [
     "ClientPlayerEntityMixin",
