@@ -1,7 +1,10 @@
 package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.power.*;
+import io.github.apace100.origins.power.ModDamageSources;
+import io.github.apace100.origins.power.ModifyDamageDealtPower;
+import io.github.apace100.origins.power.PowerTypes;
+import io.github.apace100.origins.power.VariableIntPower;
 import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
@@ -25,8 +28,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.List;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements Nameable, CommandOutput {
@@ -125,15 +126,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
                 }
             } else if(this.getAir() < this.getMaxAir()){
                 this.setAir(this.getNextAirOnLand(this.getAir()));
-            }
-        }
-        if(world.isClient) {
-            OriginComponent component = ModComponents.ORIGIN.get(this);
-            List<ParticlePower> particlePowers = component.getPowers(ParticlePower.class);
-            for (ParticlePower particlePower : particlePowers) {
-                if(this.age % particlePower.getFrequency() == 0) {
-                    world.addParticle(particlePower.getParticle(), this.getParticleX(0.5), this.getRandomBodyY(), this.getParticleZ(0.5), 0, 0, 0);
-                }
             }
         }
     }
