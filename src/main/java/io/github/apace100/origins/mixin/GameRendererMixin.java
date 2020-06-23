@@ -1,6 +1,8 @@
 package io.github.apace100.origins.mixin;
 
+import io.github.apace100.origins.power.NightVisionPower;
 import io.github.apace100.origins.power.PowerTypes;
+import io.github.apace100.origins.registry.ModComponents;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -10,8 +12,8 @@ import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -25,9 +27,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Environment(EnvType.CLIENT)
 @Mixin(GameRenderer.class)
@@ -44,15 +44,21 @@ public class GameRendererMixin {
     @Shadow
     private ItemStack floatingItem;
 
+    // NightVisionPower
     @Inject(at = @At("HEAD"), method = "getNightVisionStrength", cancellable = true)
     private static void getNightVisionStrength(LivingEntity livingEntity, float f, CallbackInfoReturnable<Float> info) {
-        if (livingEntity != null && livingEntity.isSubmergedIn(FluidTags.WATER) && PowerTypes.WATER_VISION.isActive(livingEntity)) {
-            info.setReturnValue(1F);
+        if (livingEntity != null && !livingEntity.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
+            List<NightVisionPower> nvs = ModComponents.ORIGIN.get(livingEntity).getPowers(NightVisionPower.class);
+            Optional<Float> strength = nvs.stream().filter(NightVisionPower::isActive).map(NightVisionPower::getStrength).max(Float::compareTo);
+            if(strength.isPresent()) {
+                info.setReturnValue(strength.get());
+            }
         }
     }
 
     private HashMap<BlockPos, BlockState> savedStates = new HashMap<>();
 
+    // PHASING
     @Inject(at = @At(value = "HEAD"), method = "render")
     private void beforeRender(float tickDelta, long startTime, boolean tick, CallbackInfo info) {
         if (PowerTypes.PHASING.isActive(camera.getFocusedEntity()) && PowerTypes.PHASING.get(camera.getFocusedEntity()).isActive()) {
@@ -84,6 +90,7 @@ public class GameRendererMixin {
         }
     }
 
+    // PHASING
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Camera;update(Lnet/minecraft/world/BlockView;Lnet/minecraft/entity/Entity;ZZF)V"), method = "renderWorld")
     private void preventThirdPerson(Camera camera, BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta) {
         if (PowerTypes.PHASING.isActive(camera.getFocusedEntity()) && PowerTypes.PHASING.get(camera.getFocusedEntity()).isActive()) {

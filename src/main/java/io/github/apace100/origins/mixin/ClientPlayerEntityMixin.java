@@ -5,9 +5,6 @@ import io.github.apace100.origins.power.PowerTypes;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.tag.FluidTags;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,14 +16,6 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
     public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile) {
         super(world, profile);
-    }
-
-    @Override
-    public boolean hasStatusEffect(StatusEffect effect) {
-        if(effect == StatusEffects.NIGHT_VISION && this.isSubmergedIn(FluidTags.WATER) && PowerTypes.WATER_VISION.isActive(this)) {
-            return true;
-        }
-        return super.hasStatusEffect(effect);
     }
 
     @Inject(at = @At("HEAD"), method = "getUnderwaterVisibility", cancellable = true)

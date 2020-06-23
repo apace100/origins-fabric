@@ -8,7 +8,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.EntityShapeContext;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -42,4 +45,21 @@ public abstract class AbstractBlockMixin {
         }
     }
 
+    @Inject(at = @At("HEAD"), method = "calcBlockBreakingDelta", cancellable = true)
+    private void modifyBlockBreakSpeed(BlockState state, PlayerEntity player, BlockView world, BlockPos pos, CallbackInfoReturnable<Float> info) {
+        if(state.getBlock().isIn(ModTags.NATURAL_STONE)) {
+            int adjacent = 0;
+            for(Direction d : Direction.values()) {
+                if(world.getBlockState(pos.offset(d)).getBlock().isIn(ModTags.NATURAL_STONE)) {
+                    adjacent++;
+                }
+            }
+            if(adjacent > 2) {
+                if(PowerTypes.WEAK_ARMS.isActive(player) && !player.hasStatusEffect(StatusEffects.STRENGTH)) {
+                    info.setReturnValue(0F);
+                }
+            }
+
+        }
+    }
 }

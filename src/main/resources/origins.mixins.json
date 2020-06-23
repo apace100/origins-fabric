@@ -13,7 +13,8 @@
     "ServerPlayerEntityMixin",
     "EntityShapeContextMixin",
     "AbstractBlockMixin",
-    "EntityMixin"
+    "EntityMixin",
+    "CreeperEntityMixin"
   ],
   "client": [
     "ClientPlayerEntityMixin",

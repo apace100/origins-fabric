@@ -17,6 +17,9 @@
   "origin.origins.phantom.name": "Phantom",
   "origin.origins.phantom.description": "As half-human and half-phantom offspring, these creatures can switch between a Phantom and a normal form.",
 
+  "origin.origins.feline.name": "Feline",
+  "origin.origins.feline.description": "With their cat-like appearance, the Feline scare creepers away. With the dexterity of cats, they always land safely on their feet.",
+
   "power.origins.water_breathing.name": "Gills",
   "power.origins.water_breathing.description": "You can breathe underwater, but not on land.",
 
@@ -33,7 +36,7 @@
   "power.origins.like_water.description": "When underwater, you do not sink to the ground unless you want to.",
 
   "power.origins.fragile.name": "Fragile",
-  "power.origins.fragile.description": "You have less health than other origins.",
+  "power.origins.fragile.description": "You have 3 less hearts of health than other origins.",
 
   "power.origins.webbing.name": "Webbing",
   "power.origins.webbing.description": "When you hit an enemy in melee, they get stuck in cobweb.",
@@ -79,6 +82,24 @@
 
   "power.origins.burn_in_daylight.name": "Photoallergic",
   "power.origins.burn_in_daylight.description": "You begin to burn in daylight if you are not invisible.",
+
+  "power.origins.fall_immunity.name": "Acrobatics",
+  "power.origins.fall_immunity.description": "You never take fall damage, no matter from which height you fall.",
+
+  "power.origins.sprint_jump.name": "Strong Ankles",
+  "power.origins.sprint_jump.description": "You are able to jump higher by jumping while sprinting.",
+
+  "power.origins.nine_lives.name": "Nine Lives",
+  "power.origins.nine_lives.description": "You have 1 less heart of health than other origins.",
+
+  "power.origins.cat_vision.name": "Nocturnal",
+  "power.origins.cat_vision.description": "You can slightly see in the dark when not in water.",
+
+  "power.origins.weak_arms.name": "Weak Arms",
+  "power.origins.weak_arms.description": "When not under the effect of a strength potion, you can only mine natural stone if there are at most 2 other natural stone blocks adjacent to it.",
+
+  "power.origins.scare_creepers.name": "Catlike Appearance",
+  "power.origins.scare_creepers.description": "Creepers are scared of you and will only explode if you attack them first.",
 
   "category.origins": "Origins",
   "key.origins.active_power": "Active Power",

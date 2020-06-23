@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -25,6 +26,8 @@ import java.util.List;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
+    @Shadow protected abstract float getJumpVelocity();
+
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
     }
@@ -44,10 +47,23 @@ public abstract class LivingEntityMixin extends Entity {
         }
     }
 
-    // FIRE_IMMUNITY
+    // SPRINT_JUMP
+    @Inject(at = @At("HEAD"), method = "getJumpVelocity", cancellable = true)
+    private void modifyJumpVelocity(CallbackInfoReturnable<Float> info) {
+        if(this.isSprinting() && PowerTypes.SPRINT_JUMP.isActive(this)) {
+            float vanilla = 0.42F * this.getJumpVelocityMultiplier();
+            vanilla *= 1.5F;
+            info.setReturnValue(vanilla);
+        }
+    }
+
+    // FIRE_IMMUNITY & FALL_IMMUNITY
     @Inject(at = @At("HEAD"), method = "damage", cancellable = true)
     public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
         if(source.isFire() && PowerTypes.FIRE_IMMUNITY.isActive(this)) {
+            info.setReturnValue(false);
+        }
+        if(source == DamageSource.FALL && PowerTypes.FALL_IMMUNITY.isActive(this)) {
             info.setReturnValue(false);
         }
     }
@@ -91,6 +107,7 @@ public abstract class LivingEntityMixin extends Entity {
         return entity.method_26317(d, bl, vec3d);
     }
 
+    // SLOW_FALLING
     @ModifyVariable(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getFluidState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/fluid/FluidState;"), method = "travel", name = "d", ordinal = 0)
     public double doAvianSlowFalling(double in) {
         if(!this.isSneaking() && this.getVelocity().y <= 0.0D && PowerTypes.SLOW_FALLING.isActive(this)) {

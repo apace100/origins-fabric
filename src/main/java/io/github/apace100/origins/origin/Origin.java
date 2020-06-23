@@ -27,6 +27,7 @@ public class Origin {
     public static final Origin BLAZEBORN;
     public static final Origin AVIAN;
     public static final Origin PHANTOM;
+    public static final Origin FELINE;
 
     static {
         EMPTY = register("empty", new Origin(Items.AIR, Impact.NONE, -1).setUnchoosable().add(PowerTypes.INVULNERABILITY));
@@ -64,6 +65,14 @@ public class Origin {
             PowerTypes.INVISIBILITY,
             PowerTypes.HUNGER_OVER_TIME,
             PowerTypes.BURN_IN_DAYLIGHT
+        ));
+        FELINE = register("feline", new Origin(Items.ORANGE_WOOL, Impact.MEDIUM, 0).add(
+            PowerTypes.FALL_IMMUNITY,
+            PowerTypes.SPRINT_JUMP,
+            PowerTypes.CAT_VISION,
+            PowerTypes.NINE_LIVES,
+            PowerTypes.WEAK_ARMS,
+            PowerTypes.SCARE_CREEPERS
         ));
     }
 
