@@ -7,6 +7,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FluidBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
@@ -75,8 +76,9 @@ public class GameRendererMixin {
                 savedStates.remove(eyePosition);
             }
             for (BlockPos p : eyePositions) {
-                if (!savedStates.containsKey(p) && !client.world.isAir(p)) {
-                    savedStates.put(p, client.world.getBlockState(p));
+                BlockState stateAtP = client.world.getBlockState(p);
+                if (!savedStates.containsKey(p) && !client.world.isAir(p) && !(stateAtP.getBlock() instanceof FluidBlock)) {
+                    savedStates.put(p, stateAtP);
                     client.world.setBlockStateWithoutNeighborUpdates(p, Blocks.AIR.getDefaultState());
                 }
             }

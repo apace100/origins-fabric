@@ -14,7 +14,8 @@
     "EntityShapeContextMixin",
     "AbstractBlockMixin",
     "EntityMixin",
-    "CreeperEntityMixin"
+    "CreeperEntityMixin",
+    "AbstractBlockStateMixin"
   ],
   "client": [
     "ClientPlayerEntityMixin",
