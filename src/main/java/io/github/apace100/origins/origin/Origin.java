@@ -51,6 +51,7 @@ public class Origin {
             PowerTypes.FIRE_IMMUNITY,
             PowerTypes.NETHER_SPAWN,
             PowerTypes.BURNING_WRATH,
+            PowerTypes.HOTBLOODED,
             PowerTypes.WATER_VULNERABILITY,
             PowerTypes.FLAME_PARTICLES
         ));
@@ -64,6 +65,7 @@ public class Origin {
             PowerTypes.PHASING,
             PowerTypes.INVISIBILITY,
             PowerTypes.HUNGER_OVER_TIME,
+            PowerTypes.FRAGILE,
             PowerTypes.BURN_IN_DAYLIGHT
         ));
         FELINE = register("feline", new Origin(Items.ORANGE_WOOL, Impact.MEDIUM, 0).add(

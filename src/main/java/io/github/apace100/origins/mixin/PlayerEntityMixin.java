@@ -87,7 +87,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
     @Inject(at = @At("TAIL"), method = "tick")
     private void tick(CallbackInfo info) {
         if(this.age % 20 == 0 && PowerTypes.HUNGER_OVER_TIME.isActive(this) && PowerTypes.HUNGER_OVER_TIME.get(this).isActive()) {
-            this.getHungerManager().addExhaustion(0.015F);
+            this.getHungerManager().addExhaustion(0.02F);
         }
         if(PowerTypes.BURN_IN_DAYLIGHT.isActive(this) && PowerTypes.BURN_IN_DAYLIGHT.get(this).isActive() && !this.hasStatusEffect(StatusEffects.INVISIBILITY)) {
             if (this.world.isDay() && !this.world.isClient) {

@@ -12,6 +12,8 @@ import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -54,6 +56,14 @@ public abstract class LivingEntityMixin extends Entity {
             float vanilla = 0.42F * this.getJumpVelocityMultiplier();
             vanilla *= 1.5F;
             info.setReturnValue(vanilla);
+        }
+    }
+
+    // HOTBLOODED
+    @Inject(at = @At("HEAD"), method= "canHaveStatusEffect", cancellable = true)
+    private void preventStatusEffects(StatusEffectInstance effect, CallbackInfoReturnable<Boolean> info) {
+        if(PowerTypes.HOTBLOODED.isActive(this) && (effect.getEffectType() == StatusEffects.POISON || effect.getEffectType() == StatusEffects.HUNGER)) {
+            info.setReturnValue(false);
         }
     }
 

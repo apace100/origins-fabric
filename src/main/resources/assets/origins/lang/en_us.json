@@ -36,7 +36,7 @@
   "power.origins.like_water.description": "When underwater, you do not sink to the ground unless you want to.",
 
   "power.origins.fragile.name": "Fragile",
-  "power.origins.fragile.description": "You have 3 less hearts of health than other origins.",
+  "power.origins.fragile.description": "You have 3 less hearts of health than humans.",
 
   "power.origins.webbing.name": "Webbing",
   "power.origins.webbing.description": "When you hit an enemy in melee, they get stuck in cobweb.",
@@ -55,6 +55,9 @@
 
   "power.origins.burning_wrath.name": "Burning Wrath",
   "power.origins.burning_wrath.description": "When on fire, you deal additional damage with your attacks.",
+
+  "power.origins.hotblooded.name": "Hotblooded",
+  "power.origins.hotblooded.description": "Due to your hot body, venoms burn up, making you immune to poison and hunger status effects.",
 
   "power.origins.water_vulnerability.name": "Hydrophobia",
   "power.origins.water_vulnerability.description": "You receive damage over time while in contact with water.",
@@ -90,7 +93,7 @@
   "power.origins.sprint_jump.description": "You are able to jump higher by jumping while sprinting.",
 
   "power.origins.nine_lives.name": "Nine Lives",
-  "power.origins.nine_lives.description": "You have 1 less heart of health than other origins.",
+  "power.origins.nine_lives.description": "You have 1 less heart of health than humans.",
 
   "power.origins.cat_vision.name": "Nocturnal",
   "power.origins.cat_vision.description": "You can slightly see in the dark when not in water.",
