@@ -6,15 +6,18 @@ import io.github.apace100.origins.registry.ModTags;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+@SuppressWarnings("deprecation")
 @Mixin(AbstractBlock.AbstractBlockState.class)
 public abstract class AbstractBlockStateMixin {
 
@@ -30,14 +33,19 @@ public abstract class AbstractBlockStateMixin {
         VoxelShape blockShape = getBlock().getCollisionShape(asBlockState(), world, pos, context);
         if(!blockShape.isEmpty() && context instanceof EntityShapeContext && !getBlock().isIn(ModTags.UNPHASABLE)) {
             EntityShapeContext entityContext = (EntityShapeContext)context;
-            if(!entityContext.isAbove(blockShape, pos, false) || entityContext.isDescending()) {
-                Entity entity = ((EntityShapeContextAccess)context).getEntity();
-                if(PowerTypes.PHASING.isActive(entity) && PowerTypes.PHASING.get(entity).isActive()) {
-                    info.setReturnValue(VoxelShapes.empty());
+            Entity entity = ((EntityShapeContextAccess)context).getEntity();
+            if(entity != null) {
+                if(!isAbove(entity, blockShape, pos, false) || entityContext.isDescending()) {
+                    if(PowerTypes.PHASING.isActive(entity) && PowerTypes.PHASING.get(entity).isActive()) {
+                        info.setReturnValue(VoxelShapes.empty());
+                    }
                 }
-
             }
-
         }
+    }
+
+    @Unique
+    private boolean isAbove(Entity entity, VoxelShape shape, BlockPos pos, boolean defaultValue) {
+        return entity.getY() > (double)pos.getY() + shape.getMax(Direction.Axis.Y) - (entity.isOnGround() ? 8.05/16.0 : 0.0015);
     }
 }
