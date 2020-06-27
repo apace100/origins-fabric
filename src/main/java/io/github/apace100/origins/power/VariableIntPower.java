@@ -33,10 +33,10 @@ public class VariableIntPower extends Power {
     }
 
     public int setValue(int newValue) {
-        if(newValue > max)
-            newValue = max;
-        if(newValue < min)
-            newValue = min;
+        if(newValue > getMax())
+            newValue = getMax();
+        if(newValue < getMin())
+            newValue = getMin();
         return currentValue = newValue;
     }
 

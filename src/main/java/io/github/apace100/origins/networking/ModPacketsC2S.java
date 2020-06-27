@@ -16,7 +16,7 @@ public class ModPacketsC2S {
             packetContext.getTaskQueue().execute(() -> {
                 OriginComponent component = ModComponents.ORIGIN.get(packetContext.getPlayer());
                 if(!component.hasOrigin()) {
-                    System.out.println(originId);
+                    Origins.LOGGER.info("Player " + packetContext.getPlayer().getDisplayName().asString() + " chose Origin: " + originId);
                     Identifier id = Identifier.tryParse(originId);
                     if(id != null) {
                         component.setOrigin(ModRegistries.ORIGIN.get(id));

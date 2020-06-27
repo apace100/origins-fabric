@@ -107,6 +107,10 @@
   "category.origins": "Origins",
   "key.origins.active_power": "Active Power",
 
+  "item.origins.orb_of_origin": "Orb of Origin",
+
+  "enchantment.origins.water_protection": "Water Protection",
+
   "origins.gui.select": "Select",
   "origins.gui.choose_origin.title": "Choose your Origin",
   "origins.gui.impact.impact": "Impact",

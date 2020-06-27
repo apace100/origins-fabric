@@ -3,12 +3,8 @@ package io.github.apace100.origins;
 import io.github.apace100.origins.networking.ModPacketsC2S;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.power.PowerTypes;
-import io.github.apace100.origins.registry.ModBlocks;
-import io.github.apace100.origins.registry.ModComponents;
-import io.github.apace100.origins.registry.ModItems;
-import io.github.apace100.origins.registry.ModTags;
+import io.github.apace100.origins.registry.*;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.client.options.KeyBinding;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,6 +22,8 @@ public class Origins implements ModInitializer {
 		ModItems.register();
 		ModTags.register();
 		ModPacketsC2S.register();
+		ModEnchantments.register();
+		ModLoot.register();
 		PowerTypes.init();
 		Origin.init();
 	}

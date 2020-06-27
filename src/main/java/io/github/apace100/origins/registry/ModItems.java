@@ -28,7 +28,9 @@ public class ModItems {
                 component.setOrigin(Origin.EMPTY);
                 ServerSidePacketRegistry.INSTANCE.sendToPlayer(user, ModPackets.OPEN_ORIGIN_SCREEN, new PacketByteBuf(Unpooled.buffer()));
             }
-            return TypedActionResult.consume(user.getStackInHand(hand));
+            ItemStack stack = user.getStackInHand(hand);
+            stack.decrement(1);
+            return TypedActionResult.consume(stack);
         }
     };
 

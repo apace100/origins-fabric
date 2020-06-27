@@ -4,7 +4,7 @@ import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.ModDamageSources;
 import io.github.apace100.origins.power.ModifyDamageDealtPower;
 import io.github.apace100.origins.power.PowerTypes;
-import io.github.apace100.origins.power.VariableIntPower;
+import io.github.apace100.origins.power.WaterVulnerabilityPower;
 import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
@@ -22,7 +22,6 @@ import net.minecraft.tag.Tag;
 import net.minecraft.util.Nameable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -86,25 +85,26 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
     // PARTICLES
     @Inject(at = @At("TAIL"), method = "tick")
     private void tick(CallbackInfo info) {
-        if(this.age % 20 == 0 && PowerTypes.HUNGER_OVER_TIME.isActive(this) && PowerTypes.HUNGER_OVER_TIME.get(this).isActive()) {
-            this.getHungerManager().addExhaustion(0.02F);
-        }
-        if(PowerTypes.BURN_IN_DAYLIGHT.isActive(this) && PowerTypes.BURN_IN_DAYLIGHT.get(this).isActive() && !this.hasStatusEffect(StatusEffects.INVISIBILITY)) {
-            if (this.world.isDay() && !this.world.isClient) {
-                float f = this.getBrightnessAtEyes();
-                BlockPos blockPos = this.getVehicle() instanceof BoatEntity ? (new BlockPos(this.getX(), (double)Math.round(this.getY()), this.getZ())).up() : new BlockPos(this.getX(), (double)Math.round(this.getY()), this.getZ());
-                if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.isSkyVisible(blockPos)) {
-                    this.setOnFireFor(8);
+        if(!world.isClient) {
+            if(this.age % 20 == 0 && PowerTypes.HUNGER_OVER_TIME.isActive(this) && PowerTypes.HUNGER_OVER_TIME.get(this).isActive()) {
+                this.getHungerManager().addExhaustion(0.12F);
+            }
+            if(PowerTypes.BURN_IN_DAYLIGHT.isActive(this) && PowerTypes.BURN_IN_DAYLIGHT.get(this).isActive() && !this.hasStatusEffect(StatusEffects.INVISIBILITY)) {
+                if (this.world.isDay() && !this.world.isClient) {
+                    float f = this.getBrightnessAtEyes();
+                    BlockPos blockPos = this.getVehicle() instanceof BoatEntity ? (new BlockPos(this.getX(), (double)Math.round(this.getY()), this.getZ())).up() : new BlockPos(this.getX(), (double)Math.round(this.getY()), this.getZ());
+                    if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.isSkyVisible(blockPos)) {
+                        this.setOnFireFor(6);
+                    }
                 }
             }
-        }
-        if(PowerTypes.WATER_VULNERABILITY.isActive(this) && this.isWet()) {
-            VariableIntPower waterCounter = PowerTypes.WATER_VULNERABILITY.get(this);
-            if(waterCounter.getValue() <= 0) {
-                waterCounter.setValue(waterCounter.getMax());
-                this.damage(ModDamageSources.HURT_BY_WATER, world.getDifficulty() == Difficulty.EASY ? 1.0F : 2.0F);
-            } else {
-                waterCounter.decrement();
+            if(PowerTypes.WATER_VULNERABILITY.isActive(this)) {
+                WaterVulnerabilityPower waterCounter = PowerTypes.WATER_VULNERABILITY.get(this);
+                if(this.isWet()) {
+                    waterCounter.inWater();
+                } else {
+                    waterCounter.outOfWater();
+                }
             }
         }
         if(PowerTypes.WATER_BREATHING.isActive(this)) {
