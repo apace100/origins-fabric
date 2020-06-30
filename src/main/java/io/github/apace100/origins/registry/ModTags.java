@@ -9,13 +9,11 @@ import net.minecraft.util.Identifier;
 
 public class ModTags {
 
-    public static Tag<Item> MEAT;
-    public static Tag<Block> UNPHASABLE;
-    public static Tag<Block> NATURAL_STONE;
+    public static final Tag<Item> MEAT = TagRegistry.item(new Identifier(Origins.MODID, "meat"));
+    public static final Tag<Block> UNPHASABLE = TagRegistry.block(new Identifier(Origins.MODID, "unphasable"));
+    public static final Tag<Block> NATURAL_STONE = TagRegistry.block(new Identifier(Origins.MODID, "natural_stone"));
 
     public static void register() {
-        MEAT = TagRegistry.item(new Identifier(Origins.MODID, "meat"));
-        UNPHASABLE = TagRegistry.block(new Identifier(Origins.MODID, "unphasable"));
-        NATURAL_STONE = TagRegistry.block(new Identifier(Origins.MODID, "natural_stone"));
+
     }
 }
