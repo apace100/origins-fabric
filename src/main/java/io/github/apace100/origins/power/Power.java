@@ -1,10 +1,5 @@
 package io.github.apace100.origins.power;
 
-import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.origin.Origin;
-import io.github.apace100.origins.registry.ModComponents;
-import io.github.apace100.origins.registry.ModRegistries;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;

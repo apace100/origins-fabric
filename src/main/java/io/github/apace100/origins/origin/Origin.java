@@ -1,16 +1,22 @@
 package io.github.apace100.origins.origin;
 
 import com.google.common.collect.Lists;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.power.PowerType;
-import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModRegistries;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -22,60 +28,10 @@ public class Origin {
 
     public static final Origin EMPTY;
     public static final Origin HUMAN;
-    public static final Origin MERLING;
-    public static final Origin ARACHNID;
-    public static final Origin BLAZEBORN;
-    public static final Origin AVIAN;
-    public static final Origin PHANTOM;
-    public static final Origin FELINE;
 
     static {
-        EMPTY = register("empty", new Origin(Items.AIR, Impact.NONE, -1).setUnchoosable().add(PowerTypes.INVULNERABILITY));
+        EMPTY = register("empty", new Origin(Items.AIR, Impact.NONE, -1).setUnchoosable());
         HUMAN = register("human", new Origin(Items.PLAYER_HEAD, Impact.NONE, 0));
-        MERLING = register("merling", new Origin(Items.COD, Impact.HIGH, 0).add(
-            PowerTypes.WATER_BREATHING,
-            PowerTypes.AQUA_AFFINITY,
-            PowerTypes.WATER_VISION,
-            PowerTypes.SWIM_SPEED,
-            PowerTypes.LIKE_WATER
-        ));
-        ARACHNID = register("arachnid", new Origin(Items.COBWEB, Impact.LOW, 1).add(
-            PowerTypes.CLIMBING,
-            PowerTypes.WEBBING,
-            PowerTypes.FRAGILE,
-            PowerTypes.NO_COBWEB_SLOWDOWN,
-            PowerTypes.CARNIVORE,
-            PowerTypes.ARTHROPOD
-        ));
-        BLAZEBORN = register("blazeborn", new Origin(Items.BLAZE_POWDER, Impact.HIGH, 1).add(
-            PowerTypes.FIRE_IMMUNITY,
-            PowerTypes.NETHER_SPAWN,
-            PowerTypes.BURNING_WRATH,
-            PowerTypes.HOTBLOODED,
-            PowerTypes.WATER_VULNERABILITY,
-            PowerTypes.FLAME_PARTICLES
-        ));
-        AVIAN = register("avian", new Origin(Items.FEATHER, Impact.LOW, 0).add(
-            PowerTypes.SLOW_FALLING,
-            PowerTypes.TAILWIND,
-            PowerTypes.FRESH_AIR,
-            PowerTypes.VEGETARIAN
-        ));
-        PHANTOM = register("phantom", new Origin(Items.PHANTOM_MEMBRANE, Impact.HIGH, 2).add(
-            PowerTypes.PHASING,
-            PowerTypes.INVISIBILITY,
-            PowerTypes.HUNGER_OVER_TIME,
-            PowerTypes.FRAGILE,
-            PowerTypes.BURN_IN_DAYLIGHT
-        ));
-        FELINE = register("feline", new Origin(Items.ORANGE_WOOL, Impact.MEDIUM, 0).add(
-            PowerTypes.FALL_IMMUNITY,
-            PowerTypes.SPRINT_JUMP,
-            PowerTypes.CAT_VISION,
-            PowerTypes.NINE_LIVES,
-            PowerTypes.WEAK_ARMS,
-            PowerTypes.SCARE_CREEPERS
-        ));
     }
 
     public static void init() {
@@ -83,7 +39,7 @@ public class Origin {
     }
 
     private static Origin register(String path, Origin origin) {
-        return Registry.register(ModRegistries.ORIGIN, new Identifier(Origins.MODID, path), origin);
+        return OriginRegistry.register(new Identifier(Origins.MODID, path), origin);
     }
 
     public static Origin get(Entity entity) {
@@ -120,6 +76,10 @@ public class Origin {
         return this;
     }
 
+    public boolean hasPowerType(PowerType<?> powerType) {
+        return this.powerTypes.contains(powerType);
+    }
+
     public boolean isChoosable() {
         return this.isChoosable;
     }
@@ -137,16 +97,120 @@ public class Origin {
     }
 
     public TranslatableText getName() {
-        Identifier id = ModRegistries.ORIGIN.getId(this);
+        Identifier id = OriginRegistry.getId(this);
         return new TranslatableText("origin." + id.getNamespace() + "." + id.getPath() + ".name");
     }
 
     public TranslatableText getDescription() {
-        Identifier id = ModRegistries.ORIGIN.getId(this);
+        Identifier id = OriginRegistry.getId(this);
         return new TranslatableText("origin." + id.getNamespace() + "." + id.getPath() + ".description");
     }
 
     public int getOrder() {
         return this.order;
+    }
+
+    public void write(PacketByteBuf buffer) {
+        buffer.writeString(OriginRegistry.getId(this).toString());
+        buffer.writeString(Registry.ITEM.getId(displayItem.getItem()).toString());
+        buffer.writeInt(impact.getImpactValue());
+        buffer.writeInt(order);
+        buffer.writeBoolean(this.isChoosable);
+        buffer.writeInt(this.powerTypes.size());
+        for (PowerType<?> powerType : this.powerTypes) {
+            buffer.writeString(ModRegistries.POWER_TYPE.getId(powerType).toString());
+        }
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static Origin read(PacketByteBuf buffer) {
+        String regName = buffer.readString();
+        Identifier iconItemId = Identifier.tryParse(buffer.readString(32767));
+        Item icon = Items.AIR;
+        if(iconItemId != null) {
+            icon = Registry.ITEM.get(iconItemId);
+        }
+        Impact impact = Impact.getByValue(buffer.readInt());
+        int order = buffer.readInt();
+        Origin origin = new Origin(icon, impact, order);
+        if(!buffer.readBoolean()) {
+            origin.setUnchoosable();
+        }
+        int powerCount = buffer.readInt();
+        PowerType<?>[] powers = new PowerType<?>[powerCount];
+        for(int i = 0; i < powerCount; i++) {
+            String s = buffer.readString();
+            try {
+                Identifier id = Identifier.tryParse(s);
+                if(id != null) {
+                    powers[i] = ModRegistries.POWER_TYPE.get(id);
+                } else {
+                    Origins.LOGGER.error("Received invalid power type from server in origin '" + regName + "': '" + s + "'.");
+                }
+            } catch(IllegalArgumentException e) {
+                System.err.println("Failed to get power with id " + s + " which was received from the server in origin " + regName + ".");
+                return null;
+            }
+        }
+        origin.add(powers);
+
+        return origin;
+    }
+
+    public static Origin fromJson(JsonObject json) {
+        JsonArray powerArray = json.getAsJsonArray("powers");
+        PowerType<?>[] powers = new PowerType<?>[powerArray.size()];
+        for (int i = 0; i < powers.length; i++) {
+            Identifier powerId = Identifier.tryParse(powerArray.get(i).getAsString());
+            if (powerId != null) {
+                powers[i] = ModRegistries.POWER_TYPE.get(powerId);
+            } else {
+                Origins.LOGGER.warn("Unknown power ID in json file: " + powerId.toString());
+            }
+        }
+        Identifier iconItemIdentifier = Identifier.tryParse(json.get("icon").getAsString());
+        Item icon = Items.AIR;
+        if (iconItemIdentifier != null) {
+            icon = Registry.ITEM.get(iconItemIdentifier);
+        }
+        JsonElement unchoosable = json.get("unchoosable");
+        boolean isUnchoosable = false;
+        if (unchoosable != null) {
+            isUnchoosable = unchoosable.getAsBoolean();
+        }
+        JsonElement order = json.get("order");
+        int orderNum = 10000;
+        if (order != null) {
+            orderNum = order.getAsInt();
+        }
+        JsonElement impactJson = json.get("impact");
+        int impactNum = 2;
+        if (impactJson != null) {
+            impactNum = impactJson.getAsInt();
+            if (impactNum < 0) {
+                impactNum = 0;
+            }
+            if (impactNum > 3) {
+                impactNum = 3;
+            }
+        }
+        Impact impact = Impact.getByValue(impactNum);
+        Origin origin = new Origin(icon, impact, orderNum);
+        if (isUnchoosable) {
+            origin.setUnchoosable();
+        }
+        origin.add(powers);
+        return origin;
+    }
+
+    @Override
+    public String toString() {
+        String str = "Origin[";
+        for(PowerType<?> pt : powerTypes) {
+            str += ModRegistries.POWER_TYPE.getId(pt);
+            str += ",";
+        }
+        str = str.substring(0, str.length() - 1) + "]";
+        return str;
     }
 }

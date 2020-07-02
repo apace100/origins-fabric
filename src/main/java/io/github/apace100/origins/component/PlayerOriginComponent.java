@@ -2,6 +2,7 @@ package io.github.apace100.origins.component;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.origin.Origin;
+import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.registry.ModComponents;
@@ -108,24 +109,32 @@ public class PlayerOriginComponent implements OriginComponent {
             }
             powers.clear();
         }
-        this.origin = ModRegistries.ORIGIN.get(Identifier.tryParse(compoundTag.getString("Origin")));
+        this.origin = OriginRegistry.get(Identifier.tryParse(compoundTag.getString("Origin")));
         ListTag powerList = (ListTag)compoundTag.get("Powers");
         for(int i = 0; i < powerList.size(); i++) {
             CompoundTag powerTag = powerList.getCompound(i);
             PowerType<?> type = ModRegistries.POWER_TYPE.get(Identifier.tryParse(powerTag.getString("Type")));
-            Tag data = powerTag.get("Data");
-            Power power = type.create(player);
-            power.fromTag(data);
-            this.powers.put(type, power);
-            if(callPowerOnAdd) {
-                power.onAdded();
+            if(origin.hasPowerType(type)) {
+                Tag data = powerTag.get("Data");
+                Power power = type.create(player);
+                power.fromTag(data);
+                this.powers.put(type, power);
+                if(callPowerOnAdd) {
+                    power.onAdded();
+                }
             }
         }
+        this.origin.getPowerTypes().forEach(pt -> {
+            if(!this.powers.containsKey(pt)) {
+                Power power = pt.create(player);
+                this.powers.put(pt, power);
+            }
+        });
     }
 
     @Override
     public CompoundTag toTag(CompoundTag compoundTag) {
-        compoundTag.putString("Origin", ModRegistries.ORIGIN.getId(this.origin).toString());
+        compoundTag.putString("Origin", OriginRegistry.getId(this.origin).toString());
         ListTag powerList = new ListTag();
         for(Map.Entry<PowerType<?>, Power> powerEntry : powers.entrySet()) {
             CompoundTag powerTag = new CompoundTag();
@@ -157,7 +166,7 @@ public class PlayerOriginComponent implements OriginComponent {
 
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder("OriginComponent:" + ModRegistries.ORIGIN.getId(origin) + "[\n");
+        StringBuilder str = new StringBuilder("OriginComponent:" + OriginRegistry.getId(origin) + "[\n");
         for (Map.Entry<PowerType<?>, Power> powerEntry : powers.entrySet()) {
             str.append("\t").append(ModRegistries.POWER_TYPE.getId(powerEntry.getKey())).append(": ").append(powerEntry.getValue().toTag().toString()).append("\n");
         }
