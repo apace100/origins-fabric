@@ -20,6 +20,7 @@ public class ModPacketsC2S {
                     Identifier id = Identifier.tryParse(originId);
                     if(id != null) {
                         component.setOrigin(ModRegistries.ORIGIN.get(id));
+                        component.sync();
                     } else {
                         Origins.LOGGER.warn("Player " + packetContext.getPlayer().getDisplayName().asString() + " chose unknown origin: " + originId);
                     }

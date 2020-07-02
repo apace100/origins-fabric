@@ -12,6 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -88,15 +89,26 @@ public class PlayerOriginComponent implements OriginComponent {
             this.powers.put(powerType, power);
             power.onAdded();
         });
-        this.sync();
     }
 
     @Override
     public void fromTag(CompoundTag compoundTag) {
+        this.fromTag(compoundTag, true);
+    }
+
+    private void fromTag(CompoundTag compoundTag, boolean callPowerOnAdd) {
         if(player == null) {
             Origins.LOGGER.error("Player was null in `fromTag`! This is a bug!");
         }
-        this.setOrigin(ModRegistries.ORIGIN.get(Identifier.tryParse(compoundTag.getString("Origin"))));
+        if(this.origin != null) {
+            if(callPowerOnAdd) {
+                for (Power power: powers.values()) {
+                    power.onRemoved();
+                }
+            }
+            powers.clear();
+        }
+        this.origin = ModRegistries.ORIGIN.get(Identifier.tryParse(compoundTag.getString("Origin")));
         ListTag powerList = (ListTag)compoundTag.get("Powers");
         for(int i = 0; i < powerList.size(); i++) {
             CompoundTag powerTag = powerList.getCompound(i);
@@ -105,6 +117,9 @@ public class PlayerOriginComponent implements OriginComponent {
             Power power = type.create(player);
             power.fromTag(data);
             this.powers.put(type, power);
+            if(callPowerOnAdd) {
+                power.onAdded();
+            }
         }
     }
 
@@ -120,6 +135,14 @@ public class PlayerOriginComponent implements OriginComponent {
         }
         compoundTag.put("Powers", powerList);
         return compoundTag;
+    }
+
+    @Override
+    public void readFromPacket(PacketByteBuf buf) {
+        CompoundTag compoundTag = buf.readCompoundTag();
+        if(compoundTag != null) {
+            this.fromTag(compoundTag, false);
+        }
     }
 
     @Override
