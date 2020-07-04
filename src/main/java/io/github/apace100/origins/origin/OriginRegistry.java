@@ -4,6 +4,7 @@ import io.github.apace100.origins.Origins;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class OriginRegistry {
 
@@ -20,8 +21,21 @@ public class OriginRegistry {
         return origin;
     }
 
+    protected static Origin update(Identifier id, Origin origin) {
+        if(idToOrigin.containsKey(id)) {
+            Origin old = idToOrigin.get(id);
+            idToOrigin.remove(id);
+            originToId.remove(old);
+        }
+        return register(id, origin);
+    }
+
     public static int size() {
         return idToOrigin.size();
+    }
+
+    public static Iterable<Map.Entry<Identifier, Origin>> entries() {
+        return idToOrigin.entrySet();
     }
 
     public static Iterable<Origin> values() {

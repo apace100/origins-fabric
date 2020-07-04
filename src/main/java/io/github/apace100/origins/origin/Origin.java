@@ -19,6 +19,7 @@ import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
 
 import java.util.LinkedList;
@@ -30,8 +31,8 @@ public class Origin {
     public static final Origin HUMAN;
 
     static {
-        EMPTY = register("empty", new Origin(Items.AIR, Impact.NONE, -1).setUnchoosable());
-        HUMAN = register("human", new Origin(Items.PLAYER_HEAD, Impact.NONE, 0));
+        EMPTY = register("empty", new Origin(Items.AIR, Impact.NONE, -1, Integer.MAX_VALUE).setUnchoosable());
+        HUMAN = register("human", new Origin(Items.PLAYER_HEAD, Impact.NONE, 0, Integer.MAX_VALUE));
     }
 
     public static void init() {
@@ -58,12 +59,14 @@ public class Origin {
     private final Impact impact;
     private boolean isChoosable;
     private final int order;
+    private final int loadingPriority;
 
-    protected Origin(ItemConvertible item, Impact impact, int order) {
+    protected Origin(ItemConvertible item, Impact impact, int order, int loadingPriority) {
         this.displayItem = new ItemStack(item);
         this.impact = impact;
         this.isChoosable = true;
         this.order = order;
+        this.loadingPriority = loadingPriority;
     }
 
     protected Origin add(PowerType<?>... powerTypes) {
@@ -78,6 +81,10 @@ public class Origin {
 
     public boolean hasPowerType(PowerType<?> powerType) {
         return this.powerTypes.contains(powerType);
+    }
+
+    public int getLoadingPriority() {
+        return this.loadingPriority;
     }
 
     public boolean isChoosable() {
@@ -111,10 +118,10 @@ public class Origin {
     }
 
     public void write(PacketByteBuf buffer) {
-        buffer.writeString(OriginRegistry.getId(this).toString());
         buffer.writeString(Registry.ITEM.getId(displayItem.getItem()).toString());
         buffer.writeInt(impact.getImpactValue());
         buffer.writeInt(order);
+        buffer.writeInt(loadingPriority);
         buffer.writeBoolean(this.isChoosable);
         buffer.writeInt(this.powerTypes.size());
         for (PowerType<?> powerType : this.powerTypes) {
@@ -124,7 +131,6 @@ public class Origin {
 
     @Environment(EnvType.CLIENT)
     public static Origin read(PacketByteBuf buffer) {
-        String regName = buffer.readString();
         Identifier iconItemId = Identifier.tryParse(buffer.readString(32767));
         Item icon = Items.AIR;
         if(iconItemId != null) {
@@ -132,7 +138,8 @@ public class Origin {
         }
         Impact impact = Impact.getByValue(buffer.readInt());
         int order = buffer.readInt();
-        Origin origin = new Origin(icon, impact, order);
+        int loadingPriority = buffer.readInt();
+        Origin origin = new Origin(icon, impact, order, loadingPriority);
         if(!buffer.readBoolean()) {
             origin.setUnchoosable();
         }
@@ -145,10 +152,10 @@ public class Origin {
                 if(id != null) {
                     powers[i] = ModRegistries.POWER_TYPE.get(id);
                 } else {
-                    Origins.LOGGER.error("Received invalid power type from server in origin '" + regName + "': '" + s + "'.");
+                    Origins.LOGGER.error("Received invalid power type from server in origin: '" + s + "'.");
                 }
             } catch(IllegalArgumentException e) {
-                System.err.println("Failed to get power with id " + s + " which was received from the server in origin " + regName + ".");
+                System.err.println("Failed to get power with id " + s + " which was received from the server.");
                 return null;
             }
         }
@@ -195,7 +202,8 @@ public class Origin {
             }
         }
         Impact impact = Impact.getByValue(impactNum);
-        Origin origin = new Origin(icon, impact, orderNum);
+        int loadingPriority = JsonHelper.getInt(json, "loading_priority", 0);
+        Origin origin = new Origin(icon, impact, orderNum, loadingPriority);
         if (isUnchoosable) {
             origin.setUnchoosable();
         }
