@@ -50,7 +50,7 @@ public class NetherSpawnPower extends Power {
             BlockPos.Mutable mutable = spawnToNetherPos.mutableCopy();
             mutable.setY(center);
             Optional<Vec3d> tpPos = BedBlock.canWakeUpAt(EntityType.PLAYER, nether, mutable);
-            int range = 256;
+            int range = 64;
             for(int dx = -range; dx <= range && !tpPos.isPresent(); dx++) {
                 for(int dz = -range; dz <= range && !tpPos.isPresent(); dz++) {
                     for(int i = 1; i < iterations; i++) {
