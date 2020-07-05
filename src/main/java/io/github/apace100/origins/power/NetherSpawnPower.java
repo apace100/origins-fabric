@@ -5,8 +5,12 @@ import net.minecraft.block.BedBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Pair;
+import net.minecraft.util.Unit;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -14,56 +18,66 @@ import java.util.Optional;
 
 public class NetherSpawnPower extends Power {
 
-    private static BlockPos netherSpawnPosCache;
-    private static Vec3d netherSpawnTpCache;
-
     public NetherSpawnPower(PowerType<?> type, PlayerEntity player) {
         super(type, player);
     }
 
     @Override
-    public void onAdded() {
+    public void onChosen() {
         if(player instanceof ServerPlayerEntity) {
             ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
-            if(!serverPlayer.isSpawnPointSet()) {
-                ServerWorld nether = serverPlayer.getServerWorld().getServer().getWorld(World.NETHER);
-                if(netherSpawnPosCache != null) {
-                    serverPlayer.setSpawnPoint(World.NETHER, netherSpawnPosCache, true, false);
-                    serverPlayer.teleport(nether, netherSpawnTpCache.x, netherSpawnTpCache.y, netherSpawnTpCache.z, player.pitch, player.yaw);
+            Pair<ServerWorld, BlockPos> spawn = getSpawn(false);
+            if(spawn != null) {
+                serverPlayer.setSpawnPoint(World.NETHER, spawn.getRight(), true, false);
+                Optional<Vec3d> tpPos = BedBlock.canWakeUpAt(EntityType.PLAYER, spawn.getLeft(), spawn.getRight());
+                if(tpPos.isPresent()) {
+                    serverPlayer.teleport(spawn.getLeft(), tpPos.get().x, tpPos.get().y, tpPos.get().z, player.pitch, player.yaw);
                 } else {
-                    BlockPos spawnToNetherPos = new BlockPos(serverPlayer.getPos().multiply(1.0 / 8.0).subtract(0, 0, 0));
-                    int iterations = (nether.getDimensionHeight() / 3) - 4;
-                    int center = nether.getDimensionHeight() / 2;
-                    BlockPos.Mutable mutable = spawnToNetherPos.mutableCopy();
-                    Optional<Vec3d> tpPos = Optional.empty();
-                    for(int dx = -32; dx <= 32 && !tpPos.isPresent(); dx++) {
-                        for(int dz = -32; dz <= 32 && !tpPos.isPresent(); dz++) {
-                            for(int i = 1; i < iterations; i++) {
-                                mutable.setY(center + i);
-                                tpPos = BedBlock.canWakeUpAt(EntityType.PLAYER, nether, mutable);
-                                if(tpPos.isPresent()) {
-                                    break;
-                                }
-                                mutable.setY(center - i);
-                                tpPos = BedBlock.canWakeUpAt(EntityType.PLAYER, nether, mutable);
-                                if(tpPos.isPresent()) {
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    if(tpPos.isPresent()) {
-                        BlockPos netherSpawn = mutable;
-                        serverPlayer.setSpawnPoint(World.NETHER, netherSpawn, true, false);
-                        serverPlayer.teleport(nether, tpPos.get().x, tpPos.get().y, tpPos.get().z, player.pitch, player.yaw);
-                        netherSpawnPosCache = netherSpawn;
-                        netherSpawnTpCache = tpPos.get();
-                    } else {
-                        Origins.LOGGER.warn("Could not spawn player with NetherSpawnPower in the nether.");
-                    }
+                    Origins.LOGGER.warn("Could not spawn player with NetherSpawnPower in the nether.");
                 }
             }
         }
+    }
+
+    public Pair<ServerWorld, BlockPos> getSpawn(boolean isSpawnObstructed) {
+        if(player instanceof ServerPlayerEntity) {
+            ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
+            ServerWorld nether = serverPlayer.getServerWorld().getServer().getWorld(World.NETHER);
+            BlockPos regularSpawn = serverPlayer.getServer().getWorld(World.OVERWORLD).getSpawnPos();
+            BlockPos spawnToNetherPos = new BlockPos(regularSpawn.getX() / 8, regularSpawn.getY(), regularSpawn.getZ() / 8);
+            int iterations = (nether.getDimensionHeight() / 2) - 8;
+            int center = nether.getDimensionHeight() / 2;
+            BlockPos.Mutable mutable = spawnToNetherPos.mutableCopy();
+            mutable.setY(center);
+            Optional<Vec3d> tpPos = BedBlock.canWakeUpAt(EntityType.PLAYER, nether, mutable);
+            int range = 256;
+            for(int dx = -range; dx <= range && !tpPos.isPresent(); dx++) {
+                for(int dz = -range; dz <= range && !tpPos.isPresent(); dz++) {
+                    for(int i = 1; i < iterations; i++) {
+                        mutable.setX(spawnToNetherPos.getX() + dx);
+                        mutable.setZ(spawnToNetherPos.getZ() + dz);
+                        mutable.setY(center + i);
+                        tpPos = BedBlock.canWakeUpAt(EntityType.PLAYER, nether, mutable);
+                        if(tpPos.isPresent()) {
+                            break;
+                        }
+                        mutable.setY(center - i);
+                        tpPos = BedBlock.canWakeUpAt(EntityType.PLAYER, nether, mutable);
+                        if(tpPos.isPresent()) {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if(tpPos.isPresent()) {
+                BlockPos netherSpawn = mutable;
+                nether.getChunkManager().addTicket(ChunkTicketType.START, new ChunkPos(netherSpawn), 11, Unit.INSTANCE);
+                return new Pair(nether, netherSpawn);
+            } else {
+                Origins.LOGGER.warn("Could not find spawn for player with NetherSpawnPower in the nether in range " + range + " of " + spawnToNetherPos.toString() + ".");
+            }
+        }
+        return null;
     }
 }
