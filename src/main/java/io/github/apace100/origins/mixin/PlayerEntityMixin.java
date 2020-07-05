@@ -7,6 +7,8 @@ import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.power.WaterVulnerabilityPower;
 import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -36,6 +38,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
     @Shadow protected boolean isSubmergedInWater;
 
     @Shadow public abstract HungerManager getHungerManager();
+
+    @Shadow public abstract EntityDimensions getDimensions(EntityPose pose);
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -90,7 +94,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
                 this.getHungerManager().addExhaustion(0.12F);
             }
             if(PowerTypes.BURN_IN_DAYLIGHT.isActive(this) && PowerTypes.BURN_IN_DAYLIGHT.get(this).isActive() && !this.hasStatusEffect(StatusEffects.INVISIBILITY)) {
-                if (this.world.isDay() && !this.world.isClient) {
+                if (this.world.isDay() && !this.isRainingAtPlayerPosition()) {
                     float f = this.getBrightnessAtEyes();
                     BlockPos blockPos = this.getVehicle() instanceof BoatEntity ? (new BlockPos(this.getX(), (double)Math.round(this.getY()), this.getZ())).up() : new BlockPos(this.getX(), (double)Math.round(this.getY()), this.getZ());
                     if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.isSkyVisible(blockPos)) {
@@ -109,25 +113,36 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
         }
         if(PowerTypes.WATER_BREATHING.isActive(this)) {
             if(!this.isSubmergedIn(FluidTags.WATER) && !this.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
-                int landGain = this.getNextAirOnLand(0);
-                this.setAir(this.getNextAirUnderwater(this.getAir()) - landGain);
-                if (this.getAir() == -20) {
-                    this.setAir(0);
-                    Vec3d vec3d = this.getVelocity();
+                if(!this.isRainingAtPlayerPosition()) {
+                    int landGain = this.getNextAirOnLand(0);
+                    this.setAir(this.getNextAirUnderwater(this.getAir()) - landGain);
+                    if (this.getAir() == -20) {
+                        this.setAir(0);
+                        Vec3d vec3d = this.getVelocity();
 
-                    for(int i = 0; i < 8; ++i) {
-                        double f = this.random.nextDouble() - this.random.nextDouble();
-                        double g = this.random.nextDouble() - this.random.nextDouble();
-                        double h = this.random.nextDouble() - this.random.nextDouble();
-                        this.world.addParticle(ParticleTypes.BUBBLE, this.getX() + f, this.getY() + g, this.getZ() + h, vec3d.x, vec3d.y, vec3d.z);
+                        for(int i = 0; i < 8; ++i) {
+                            double f = this.random.nextDouble() - this.random.nextDouble();
+                            double g = this.random.nextDouble() - this.random.nextDouble();
+                            double h = this.random.nextDouble() - this.random.nextDouble();
+                            this.world.addParticle(ParticleTypes.BUBBLE, this.getX() + f, this.getY() + g, this.getZ() + h, vec3d.x, vec3d.y, vec3d.z);
+                        }
+
+                        this.damage(ModDamageSources.NO_WATER_FOR_GILLS, 2.0F);
                     }
-
-                    this.damage(ModDamageSources.NO_WATER_FOR_GILLS, 2.0F);
+                } else {
+                    int landGain = this.getNextAirOnLand(0);
+                    this.setAir(this.getAir() - landGain);
                 }
             } else if(this.getAir() < this.getMaxAir()){
                 this.setAir(this.getNextAirOnLand(this.getAir()));
             }
         }
+    }
+
+    // Copy from Entity#isBeingRainedOn
+    private boolean isRainingAtPlayerPosition() {
+        BlockPos blockPos = this.getBlockPos();
+        return this.world.hasRain(blockPos) || this.world.hasRain(blockPos.add(0.0D, (double)this.getDimensions(this.getPose()).height, 0.0D));
     }
 
     // WATER_BREATHING
