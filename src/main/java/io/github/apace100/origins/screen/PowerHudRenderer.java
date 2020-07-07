@@ -1,5 +1,6 @@
 package io.github.apace100.origins.screen;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.HudRendered;
@@ -39,6 +40,7 @@ public class PowerHudRenderer extends DrawableHelper {
                 if(hudPowers.size() > 0) {
                     client.getTextureManager().bindTexture(OVERLAY_TEXTURE);
                 }
+                RenderSystem.color3f(1f, 1f, 1f);
                 for (HudRendered hudPower : hudPowers) {
                     if(hudPower.shouldRender()) {
                         drawTexture(matrices, x, y, 0, 0, barWidth, barHeight);

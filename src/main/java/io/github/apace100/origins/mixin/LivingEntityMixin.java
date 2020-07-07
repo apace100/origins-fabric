@@ -2,9 +2,7 @@ package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.power.CooldownPower;
-import io.github.apace100.origins.power.PowerTypes;
-import io.github.apace100.origins.power.SetEntityGroupPower;
+import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModBlocks;
 import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.entity.Entity;
@@ -32,6 +30,15 @@ public abstract class LivingEntityMixin extends Entity {
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
+    }
+
+    // ELYTRA
+    @Redirect(method = "initAi", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setFlag(IZ)V"))
+    private void preventStoppingToFly(LivingEntity livingEntity, int index, boolean value) {
+        if(this.getFlag(7) && !value && index == 7 && !this.onGround && !this.hasVehicle()
+            && PowerTypes.ELYTRA.isActive(livingEntity) && !livingEntity.hasStatusEffect(StatusEffects.LEVITATION)) {
+            this.setFlag(index, true);
+        }
     }
 
     // SetEntityGroupPower
@@ -76,6 +83,21 @@ public abstract class LivingEntityMixin extends Entity {
         if(source == DamageSource.FALL && PowerTypes.FALL_IMMUNITY.isActive(this)) {
             info.setReturnValue(false);
         }
+    }
+
+    @ModifyVariable(method = "damage", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;despawnCounter:I"), name = "amount")
+    private float modifyDamageAmount(float originalAmount, DamageSource source, float amount) {
+        if((Object)this instanceof PlayerEntity) {
+            OriginComponent component = ModComponents.ORIGIN.get(this);
+            float f = originalAmount;
+            for (ModifyDamageTakenPower p : component.getPowers(ModifyDamageTakenPower.class)) {
+                if (p.doesApply(source)) {
+                    f = p.apply(f);
+                }
+            }
+            return f;
+        }
+        return originalAmount;
     }
 
     // CLIMBING

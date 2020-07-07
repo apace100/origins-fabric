@@ -15,7 +15,9 @@
     "AbstractBlockMixin",
     "EntityMixin",
     "CreeperEntityMixin",
-    "AbstractBlockStateMixin"
+    "AbstractBlockStateMixin",
+    "PlayerScreenHandlerMixin",
+    "ArmorItemMixin"
   ],
   "client": [
     "ClientPlayerEntityMixin",

@@ -19,6 +19,7 @@ public interface OriginComponent extends EntitySyncedComponent {
 	<T extends Power> T getPower(PowerType<T> powerType);
 	List<Power> getPowers();
 	<T extends Power> List<T> getPowers(Class<T> powerClass);
+	<T extends Power> List<T> getPowers(Class<T> powerClass, boolean includeInactive);
 
 	void setOrigin(Origin origin);
 

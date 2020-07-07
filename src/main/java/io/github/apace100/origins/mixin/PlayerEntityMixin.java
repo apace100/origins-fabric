@@ -1,22 +1,19 @@
 package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.power.ModDamageSources;
-import io.github.apace100.origins.power.ModifyDamageDealtPower;
-import io.github.apace100.origins.power.PowerTypes;
-import io.github.apace100.origins.power.WaterVulnerabilityPower;
+import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.util.Constants;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.EntityPose;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.command.CommandOutput;
 import net.minecraft.tag.FluidTags;
@@ -29,6 +26,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements Nameable, CommandOutput {
@@ -40,6 +38,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
     @Shadow public abstract HungerManager getHungerManager();
 
     @Shadow public abstract EntityDimensions getDimensions(EntityPose pose);
+
+    @Shadow public abstract void startFallFlying();
+
+    @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -84,6 +86,27 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
         return in;
     }
 
+    // ELYTRA
+    @Inject(method = "checkFallFlying", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/player/PlayerEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"), cancellable = true)
+    private void allowElytrianFlight(CallbackInfoReturnable<Boolean> info) {
+        if(PowerTypes.ELYTRA.isActive(this)) {
+            this.startFallFlying();
+            info.setReturnValue(true);
+        }
+    }
+
+    @Inject(method = "canPickUp", at = @At("HEAD"), cancellable = true)
+    private void preventArmorDispensing(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
+        if(stack.getItem() instanceof ArmorItem) {
+            if(PowerTypes.LIGHT_ARMOR.isActive(this)) {
+                ArmorItem armor = (ArmorItem)stack.getItem();
+                if(armor.getProtection() > Constants.LIGHT_ARMOR_MAX_PROTECTION[armor.getSlotType().getEntitySlotId()]) {
+                    info.setReturnValue(false);
+                }
+            }
+        }
+    }
+
     // HUNGER_OVER_TIME & BURN_IN_DAYLIGHT
     // WATER_BREATHING & WATER_VULNERABILITY
     // PARTICLES
@@ -109,6 +132,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
                 } else {
                     waterCounter.outOfWater();
                 }
+            }
+            if(this.age % 10 == 0) {
+                OriginComponent component = ModComponents.ORIGIN.get(this);
+                component.getPowers(SimpleStatusEffectPower.class).forEach(SimpleStatusEffectPower::applyEffects);
+                component.getPowers(StackingStatusEffectPower.class, true).forEach(StackingStatusEffectPower::tick);
             }
         }
         if(PowerTypes.WATER_BREATHING.isActive(this)) {

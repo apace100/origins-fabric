@@ -28,6 +28,7 @@ public class Origin {
     public static final Origin AVIAN;
     public static final Origin PHANTOM;
     public static final Origin FELINE;
+    public static final Origin ELYTRIAN;
 
     static {
         EMPTY = register("empty", new Origin(Items.AIR, Impact.NONE, -1).setUnchoosable().add(PowerTypes.INVULNERABILITY));
@@ -75,6 +76,14 @@ public class Origin {
             PowerTypes.NINE_LIVES,
             PowerTypes.WEAK_ARMS,
             PowerTypes.SCARE_CREEPERS
+        ));
+        ELYTRIAN = register("elytrian", new Origin(Items.ELYTRA, Impact.LOW, 2).add(
+            PowerTypes.ELYTRA,
+            PowerTypes.LAUNCH_INTO_AIR,
+            PowerTypes.AERIAL_COMBATANT,
+            PowerTypes.LIGHT_ARMOR,
+            PowerTypes.CLAUSTROPHOBIA,
+            PowerTypes.MORE_KINETIC_DAMAGE
         ));
     }
 

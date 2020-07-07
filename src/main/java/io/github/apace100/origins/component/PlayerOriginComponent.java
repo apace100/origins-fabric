@@ -63,9 +63,14 @@ public class PlayerOriginComponent implements OriginComponent {
 
     @Override
     public <T extends Power> List<T> getPowers(Class<T> powerClass) {
+        return getPowers(powerClass, false);
+    }
+
+    @Override
+    public <T extends Power> List<T> getPowers(Class<T> powerClass, boolean includeInactive) {
         List<T> list = new LinkedList<>();
         for(Power power : powers.values()) {
-            if(powerClass.isAssignableFrom(power.getClass())) {
+            if(powerClass.isAssignableFrom(power.getClass()) && (includeInactive || power.isActive())) {
                 list.add((T)power);
             }
         }

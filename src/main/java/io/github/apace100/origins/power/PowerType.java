@@ -1,16 +1,12 @@
 package io.github.apace100.origins.power;
 
-import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModRegistries;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.function.BiFunction;
 
@@ -39,7 +35,9 @@ public class PowerType<T extends Power> {
     public boolean isActive(Entity entity) {
         if(entity instanceof PlayerEntity) {
             OriginComponent component = ModComponents.ORIGIN.get(entity);
-            return component.hasPower(this);
+            if(component.hasPower(this)) {
+                return component.getPower(this).isActive();
+            }
         }
         return false;
     }
