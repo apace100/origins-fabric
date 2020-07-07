@@ -1,0 +1,11 @@
+{
+	"powers": [
+		"origins:slow_falling",
+		"origins:fresh_air",
+		"origins:tailwind",
+		"origins:vegetarian"
+	],
+	"icon": "minecraft:feather",
+	"order": 0,
+	"impact": 1
+}

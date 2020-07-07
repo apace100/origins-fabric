@@ -1,0 +1,13 @@
+{
+	"powers": [
+		"origins:elytra",
+		"origins:launch_into_air",
+		"origins:aerial_combatant",
+		"origins:light_armor",
+		"origins:claustrophobia",
+		"origins:more_kinetic_damage"
+	],
+	"icon": "minecraft:elytra",
+	"order": 3,
+	"impact": 1
+}

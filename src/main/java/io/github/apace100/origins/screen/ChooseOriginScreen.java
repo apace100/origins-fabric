@@ -5,8 +5,8 @@ import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.origin.Impact;
 import io.github.apace100.origins.origin.Origin;
+import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.PowerType;
-import io.github.apace100.origins.registry.ModRegistries;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
@@ -42,7 +42,7 @@ public class ChooseOriginScreen extends Screen {
 	public ChooseOriginScreen() {
 		super(new TranslatableText(Origins.MODID + ".screen.choose_origin"));
 		this.originSelection = new ArrayList<>(10);
-		ModRegistries.ORIGIN.forEach(origin -> {
+		OriginRegistry.values().forEach(origin -> {
 			if(origin.isChoosable()) {
 				this.originSelection.add(origin);
 			}
@@ -73,7 +73,7 @@ public class ChooseOriginScreen extends Screen {
         }));
         addButton(new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20, new TranslatableText(Origins.MODID + ".gui.select"), b -> {
 			PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-			buf.writeString(ModRegistries.ORIGIN.getId(originSelection.get(currentOrigin)).toString());
+			buf.writeString(OriginRegistry.getId(originSelection.get(currentOrigin)).toString());
 			ClientSidePacketRegistry.INSTANCE.sendToServer(ModPackets.CHOOSE_ORIGIN, buf);
 			MinecraftClient.getInstance().openScreen(null);
         }));

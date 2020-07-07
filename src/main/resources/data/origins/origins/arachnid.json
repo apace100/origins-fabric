@@ -1,0 +1,13 @@
+{
+	"powers": [
+		"origins:climbing",
+		"origins:webbing",
+		"origins:no_cobweb_slowdown",
+		"origins:carnivore",
+		"origins:fragile",
+		"origins:arthropod"
+	],
+	"icon": "minecraft:cobweb",
+	"order": 1,
+	"impact": 1
+}

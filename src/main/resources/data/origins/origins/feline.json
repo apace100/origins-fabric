@@ -1,0 +1,13 @@
+{
+	"powers": [
+		"origins:fall_immunity",
+		"origins:sprint_jump",
+		"origins:nine_lives",
+		"origins:weak_arms",
+		"origins:scare_creepers",
+		"origins:cat_vision"
+	],
+	"icon": "minecraft:orange_wool",
+	"order": 2,
+	"impact": 1
+}

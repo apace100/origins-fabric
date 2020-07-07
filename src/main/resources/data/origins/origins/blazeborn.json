@@ -1,0 +1,13 @@
+{
+	"powers": [
+		"origins:fire_immunity",
+		"origins:nether_spawn",
+		"origins:burning_wrath",
+		"origins:hotblooded",
+		"origins:water_vulnerability",
+		"origins:flame_particles"
+	],
+	"icon": "minecraft:blaze_powder",
+	"order": 1,
+	"impact": 3
+}
