@@ -9,7 +9,10 @@ import java.util.Map;
 public class OriginRegistry {
 
     private static HashMap<Identifier, Origin> idToOrigin = new HashMap<>();
-    private static HashMap<Origin, Identifier> originToId = new HashMap<>();
+
+    public static Origin register(Origin origin) {
+        return register(origin.getIdentifier(), origin);
+    }
 
     public static Origin register(Identifier id, Origin origin) {
         if(idToOrigin.containsKey(id)) {
@@ -17,7 +20,6 @@ public class OriginRegistry {
             return null;
         }
         idToOrigin.put(id, origin);
-        originToId.put(origin, id);
         return origin;
     }
 
@@ -25,7 +27,6 @@ public class OriginRegistry {
         if(idToOrigin.containsKey(id)) {
             Origin old = idToOrigin.get(id);
             idToOrigin.remove(id);
-            originToId.remove(old);
         }
         return register(id, origin);
     }
@@ -51,30 +52,21 @@ public class OriginRegistry {
         return origin;
     }
 
-    public static Identifier getId(Origin origin) {
-        if(originToId.containsKey(origin)) {
-            return originToId.get(origin);
-        }
-        Origins.LOGGER.error("Could not get id from origin, as it was not registered! " + origin);
-        return null;
-    }
-
     public static boolean contains(Identifier id) {
         return idToOrigin.containsKey(id);
     }
 
     public static boolean contains(Origin origin) {
-        return originToId.containsKey(origin);
+        return contains(origin.getIdentifier());
     }
 
     public static void clear() {
         idToOrigin.clear();
-        originToId.clear();
     }
 
     public static void reset() {
         clear();
-        register(new Identifier(Origins.MODID, "empty"), Origin.EMPTY);
-        register(new Identifier(Origins.MODID, "human"), Origin.HUMAN);
+        register(Origin.EMPTY);
+        register(Origin.HUMAN);
     }
 }

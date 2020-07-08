@@ -25,7 +25,7 @@ public class OriginManager extends JsonDataLoader implements IdentifiableResourc
 		OriginRegistry.reset();
 		loader.forEach((id, jo) -> {
 			try {
-				Origin origin = Origin.fromJson(jo.getAsJsonObject());
+				Origin origin = Origin.fromJson(id, jo.getAsJsonObject());
 				if(!OriginRegistry.contains(id)) {
 					OriginRegistry.register(id, origin);
 				} else {
@@ -37,7 +37,7 @@ public class OriginManager extends JsonDataLoader implements IdentifiableResourc
 				Origins.LOGGER.error("There was a problem reading Origin file " + id.toString() + " (skipping): " + e.getMessage());
 			}
 		});
-
+		Origins.LOGGER.info("Finished loading origins from data files. Registry contains " + OriginRegistry.size() + " origins.");
 	}
 
 	@Override

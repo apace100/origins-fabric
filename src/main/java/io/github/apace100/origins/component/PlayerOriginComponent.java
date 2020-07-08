@@ -139,7 +139,7 @@ public class PlayerOriginComponent implements OriginComponent {
 
     @Override
     public CompoundTag toTag(CompoundTag compoundTag) {
-        compoundTag.putString("Origin", OriginRegistry.getId(this.origin).toString());
+        compoundTag.putString("Origin", this.origin.getIdentifier().toString());
         ListTag powerList = new ListTag();
         for(Map.Entry<PowerType<?>, Power> powerEntry : powers.entrySet()) {
             CompoundTag powerTag = new CompoundTag();
@@ -171,7 +171,7 @@ public class PlayerOriginComponent implements OriginComponent {
 
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder("OriginComponent:" + OriginRegistry.getId(origin) + "[\n");
+        StringBuilder str = new StringBuilder("OriginComponent(" + this.origin.getIdentifier() + ")[\n");
         for (Map.Entry<PowerType<?>, Power> powerEntry : powers.entrySet()) {
             str.append("\t").append(ModRegistries.POWER_TYPE.getId(powerEntry.getKey())).append(": ").append(powerEntry.getValue().toTag().toString()).append("\n");
         }

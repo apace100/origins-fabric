@@ -2,6 +2,7 @@ package io.github.apace100.origins.networking;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.Active;
 import io.github.apace100.origins.power.Power;
@@ -19,17 +20,24 @@ public class ModPacketsC2S {
                 ServerPlayerEntity player = (ServerPlayerEntity)packetContext.getPlayer();
                 OriginComponent component = ModComponents.ORIGIN.get(player);
                 if(!component.hasOrigin()) {
-                    Origins.LOGGER.info("Player " + player.getDisplayName().asString() + " chose Origin: " + originId);
                     Identifier id = Identifier.tryParse(originId);
                     if(id != null) {
-                        component.setOrigin(OriginRegistry.get(id));
-                        component.sync();
-                        component.getPowers().forEach(Power::onChosen);
+                        Origin origin = OriginRegistry.get(id);
+                        if(origin.isChoosable()) {
+                            component.setOrigin(origin);
+                            component.sync();
+                            component.getPowers().forEach(Power::onChosen);
+                            Origins.LOGGER.info("Player " + player.getDisplayName().asString() + " chose Origin: " + originId);
+                        } else {
+                            Origins.LOGGER.info("Player " + player.getDisplayName().asString() + " tried to choose unchoosable Origin: " + originId + ", setting them to Human.");
+                            component.setOrigin(Origin.HUMAN);
+                            component.sync();
+                        }
                     } else {
-                        Origins.LOGGER.warn("Player " + packetContext.getPlayer().getDisplayName().asString() + " chose unknown origin: " + originId);
+                        Origins.LOGGER.warn("Player " + player.getDisplayName().asString() + " chose unknown origin: " + originId);
                     }
                 } else {
-                    Origins.LOGGER.warn("Player " + packetContext.getPlayer().getDisplayName().asString() + " try to chose origin while having one already.");
+                    Origins.LOGGER.warn("Player " + player.getDisplayName().asString() + " tried to choose origin while having one already.");
                 }
             });
         }));

@@ -31,16 +31,16 @@ public class Origin {
     public static final Origin HUMAN;
 
     static {
-        EMPTY = register("empty", new Origin(Items.AIR, Impact.NONE, -1, Integer.MAX_VALUE).setUnchoosable());
-        HUMAN = register("human", new Origin(Items.PLAYER_HEAD, Impact.NONE, 0, Integer.MAX_VALUE));
+        EMPTY = register(new Origin(new Identifier(Origins.MODID, "empty"), Items.AIR, Impact.NONE, -1, Integer.MAX_VALUE).setUnchoosable());
+        HUMAN = register(new Origin(new Identifier(Origins.MODID, "human"), Items.PLAYER_HEAD, Impact.NONE, 0, Integer.MAX_VALUE));
     }
 
     public static void init() {
 
     }
 
-    private static Origin register(String path, Origin origin) {
-        return OriginRegistry.register(new Identifier(Origins.MODID, path), origin);
+    private static Origin register(Origin origin) {
+        return OriginRegistry.register(origin);
     }
 
     public static Origin get(Entity entity) {
@@ -54,6 +54,7 @@ public class Origin {
         return ModComponents.ORIGIN.get(player).getOrigin();
     }
 
+    private Identifier identifier;
     private List<PowerType<?>> powerTypes = new LinkedList<>();
     private final ItemStack displayItem;
     private final Impact impact;
@@ -61,12 +62,17 @@ public class Origin {
     private final int order;
     private final int loadingPriority;
 
-    protected Origin(ItemConvertible item, Impact impact, int order, int loadingPriority) {
+    protected Origin(Identifier id, ItemConvertible item, Impact impact, int order, int loadingPriority) {
+        this.identifier = id;
         this.displayItem = new ItemStack(item);
         this.impact = impact;
         this.isChoosable = true;
         this.order = order;
         this.loadingPriority = loadingPriority;
+    }
+
+    public Identifier getIdentifier() {
+        return identifier;
     }
 
     protected Origin add(PowerType<?>... powerTypes) {
@@ -104,13 +110,11 @@ public class Origin {
     }
 
     public TranslatableText getName() {
-        Identifier id = OriginRegistry.getId(this);
-        return new TranslatableText("origin." + id.getNamespace() + "." + id.getPath() + ".name");
+        return new TranslatableText("origin." + identifier.getNamespace() + "." + identifier.getPath() + ".name");
     }
 
     public TranslatableText getDescription() {
-        Identifier id = OriginRegistry.getId(this);
-        return new TranslatableText("origin." + id.getNamespace() + "." + id.getPath() + ".description");
+        return new TranslatableText("origin." + identifier.getNamespace() + "." + identifier.getPath() + ".description");
     }
 
     public int getOrder() {
@@ -118,6 +122,7 @@ public class Origin {
     }
 
     public void write(PacketByteBuf buffer) {
+        buffer.writeString(identifier.toString());
         buffer.writeString(Registry.ITEM.getId(displayItem.getItem()).toString());
         buffer.writeInt(impact.getImpactValue());
         buffer.writeInt(order);
@@ -131,6 +136,7 @@ public class Origin {
 
     @Environment(EnvType.CLIENT)
     public static Origin read(PacketByteBuf buffer) {
+        Identifier identifier = Identifier.tryParse(buffer.readString(32767));
         Identifier iconItemId = Identifier.tryParse(buffer.readString(32767));
         Item icon = Items.AIR;
         if(iconItemId != null) {
@@ -139,7 +145,7 @@ public class Origin {
         Impact impact = Impact.getByValue(buffer.readInt());
         int order = buffer.readInt();
         int loadingPriority = buffer.readInt();
-        Origin origin = new Origin(icon, impact, order, loadingPriority);
+        Origin origin = new Origin(identifier, icon, impact, order, loadingPriority);
         if(!buffer.readBoolean()) {
             origin.setUnchoosable();
         }
@@ -164,7 +170,7 @@ public class Origin {
         return origin;
     }
 
-    public static Origin fromJson(JsonObject json) {
+    public static Origin fromJson(Identifier id, JsonObject json) {
         JsonArray powerArray = json.getAsJsonArray("powers");
         PowerType<?>[] powers = new PowerType<?>[powerArray.size()];
         for (int i = 0; i < powers.length; i++) {
@@ -203,7 +209,7 @@ public class Origin {
         }
         Impact impact = Impact.getByValue(impactNum);
         int loadingPriority = JsonHelper.getInt(json, "loading_priority", 0);
-        Origin origin = new Origin(icon, impact, orderNum, loadingPriority);
+        Origin origin = new Origin(id, icon, impact, orderNum, loadingPriority);
         if (isUnchoosable) {
             origin.setUnchoosable();
         }
@@ -213,7 +219,7 @@ public class Origin {
 
     @Override
     public String toString() {
-        String str = "Origin[";
+        String str = "Origin(" + identifier.toString() + ")[";
         for(PowerType<?> pt : powerTypes) {
             str += ModRegistries.POWER_TYPE.getId(pt);
             str += ",";

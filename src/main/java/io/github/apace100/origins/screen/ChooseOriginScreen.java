@@ -73,7 +73,7 @@ public class ChooseOriginScreen extends Screen {
         }));
         addButton(new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20, new TranslatableText(Origins.MODID + ".gui.select"), b -> {
 			PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-			buf.writeString(OriginRegistry.getId(originSelection.get(currentOrigin)).toString());
+			buf.writeString(originSelection.get(currentOrigin).getIdentifier().toString());
 			ClientSidePacketRegistry.INSTANCE.sendToServer(ModPackets.CHOOSE_ORIGIN, buf);
 			MinecraftClient.getInstance().openScreen(null);
         }));
