@@ -38,8 +38,10 @@ public class ChooseOriginScreen extends Screen {
 	private int border = 13;
 	
 	private int guiTop, guiLeft;
+
+	private boolean showDirtBackground;
 	
-	public ChooseOriginScreen() {
+	public ChooseOriginScreen(boolean showDirtBackground) {
 		super(new TranslatableText(Origins.MODID + ".screen.choose_origin"));
 		this.originSelection = new ArrayList<>(10);
 		OriginRegistry.values().forEach(origin -> {
@@ -51,6 +53,7 @@ public class ChooseOriginScreen extends Screen {
 			int impDelta = a.getImpact().getImpactValue() - b.getImpact().getImpactValue();
 			return impDelta == 0 ? a.getOrder() - b.getOrder() : impDelta;
 		});
+		this.showDirtBackground = showDirtBackground;
 	}
 
 	@Override
@@ -82,7 +85,11 @@ public class ChooseOriginScreen extends Screen {
 
 	@Override
 	public void renderBackground(MatrixStack matrices, int vOffset) {
-		super.renderBackgroundTexture(vOffset);
+		if(showDirtBackground) {
+			super.renderBackgroundTexture(vOffset);
+		} else {
+			super.renderBackground(matrices, vOffset);
+		}
 	}
 
 	@Override

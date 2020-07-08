@@ -26,7 +26,9 @@ public class ModItems {
             if(!world.isClient) {
                 OriginComponent component = ModComponents.ORIGIN.get(user);
                 component.setOrigin(Origin.EMPTY);
-                ServerSidePacketRegistry.INSTANCE.sendToPlayer(user, ModPackets.OPEN_ORIGIN_SCREEN, new PacketByteBuf(Unpooled.buffer()));
+                PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
+                data.writeBoolean(false);
+                ServerSidePacketRegistry.INSTANCE.sendToPlayer(user, ModPackets.OPEN_ORIGIN_SCREEN, data);
             }
             ItemStack stack = user.getStackInHand(hand);
             stack.decrement(1);

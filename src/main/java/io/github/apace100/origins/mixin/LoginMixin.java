@@ -30,6 +30,7 @@ public class LoginMixin {
 		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, ModPackets.ORIGIN_LIST, originListData);
 		if(Origin.get(player) == Origin.EMPTY) {
 			PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
+			data.writeBoolean(true);
 			ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, ModPackets.OPEN_ORIGIN_SCREEN, data);
 		}
 	}

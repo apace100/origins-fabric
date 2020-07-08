@@ -14,8 +14,9 @@ public class ModPacketsS2C {
     @Environment(EnvType.CLIENT)
     public static void register() {
         ClientSidePacketRegistry.INSTANCE.register(ModPackets.OPEN_ORIGIN_SCREEN, ((packetContext, packetByteBuf) -> {
+            boolean showDirtBackground = packetByteBuf.readBoolean();
             packetContext.getTaskQueue().execute(() -> {
-                MinecraftClient.getInstance().openScreen(new ChooseOriginScreen());
+                MinecraftClient.getInstance().openScreen(new ChooseOriginScreen(showDirtBackground));
             });
         }));
         ClientSidePacketRegistry.INSTANCE.register(ModPackets.ORIGIN_LIST, (((packetContext, packetByteBuf) -> {
