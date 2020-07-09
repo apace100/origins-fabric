@@ -1,9 +1,7 @@
 package io.github.apace100.origins.origin;
 
 import com.google.common.collect.Lists;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.registry.ModComponents;
@@ -171,15 +169,19 @@ public class Origin {
     }
 
     public static Origin fromJson(Identifier id, JsonObject json) {
+        if(!json.has("powers") || !json.get("powers").isJsonArray()) {
+            throw new JsonParseException("Origin json requires array with key \"powers\".");
+        }
         JsonArray powerArray = json.getAsJsonArray("powers");
         PowerType<?>[] powers = new PowerType<?>[powerArray.size()];
-        boolean invalidPowers = false;
         for (int i = 0; i < powers.length; i++) {
             Identifier powerId = Identifier.tryParse(powerArray.get(i).getAsString());
+            if(powerId == null) {
+                throw new JsonParseException("Invalid power ID in Origin json: " + powerArray.get(i).getAsString());
+            }
             powers[i] = ModRegistries.POWER_TYPE.get(powerId);
             if (powers[i] == null) {
-                Origins.LOGGER.warn("Unknown power ID in json file: " + powerId.toString());
-                invalidPowers = true;
+                throw new JsonParseException("Unregistered power ID in Origin json: " + powerId.toString());
             }
         }
         Identifier iconItemIdentifier = Identifier.tryParse(json.get("icon").getAsString());
@@ -187,18 +189,11 @@ public class Origin {
         if (iconItemIdentifier != null) {
             icon = Registry.ITEM.get(iconItemIdentifier);
         }
-        JsonElement unchoosable = json.get("unchoosable");
-        boolean isUnchoosable = false;
-        if (unchoosable != null) {
-            isUnchoosable = unchoosable.getAsBoolean();
-        }
-        JsonElement order = json.get("order");
-        int orderNum = 10000;
-        if (order != null) {
-            orderNum = order.getAsInt();
-        }
+        boolean isUnchoosable = JsonHelper.getBoolean(json, "unchoosable", false);
+        int orderNum = JsonHelper.getInt(json, "order", Integer.MAX_VALUE);
+
         JsonElement impactJson = json.get("impact");
-        int impactNum = 2;
+        int impactNum = 0;
         if (impactJson != null) {
             impactNum = impactJson.getAsInt();
             if (impactNum < 0) {
@@ -214,9 +209,7 @@ public class Origin {
         if (isUnchoosable) {
             origin.setUnchoosable();
         }
-        if(!invalidPowers) {
-            origin.add(powers);
-        }
+        origin.add(powers);
         return origin;
     }
 
