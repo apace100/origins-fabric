@@ -17,7 +17,8 @@
     "CreeperEntityMixin",
     "AbstractBlockStateMixin",
     "PlayerScreenHandlerMixin",
-    "ArmorItemMixin"
+    "ArmorItemMixin",
+    "ElytraItemMixin"
   ],
   "client": [
     "ClientPlayerEntityMixin",
@@ -26,7 +27,8 @@
     "LightmapTextureManagerMixin",
     "OtherClientPlayerEntityMixin",
     "LivingEntityRendererMixin",
-    "ClientPlayNetworkHandlerMixin"
+    "ClientPlayNetworkHandlerMixin",
+    "ElytraFeatureRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

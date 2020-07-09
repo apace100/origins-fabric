@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.screen.slot.Slot;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,6 +33,11 @@ public abstract class PlayerScreenHandlerMixin extends Slot {
                 if(armor.getProtection() > Constants.LIGHT_ARMOR_MAX_PROTECTION[slot.getEntitySlotId()]) {
                     info.setReturnValue(false);
                 }
+            }
+        }
+        if(PowerTypes.ELYTRA.isActive(player)) {
+            if(stack.getItem() == Items.ELYTRA) {
+                info.setReturnValue(false);
             }
         }
     }

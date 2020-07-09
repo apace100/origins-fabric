@@ -14,6 +14,7 @@ import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.command.CommandOutput;
 import net.minecraft.tag.FluidTags;
@@ -105,6 +106,9 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
                 }
             }
         }
+        if(stack.getItem() == Items.ELYTRA && PowerTypes.ELYTRA.isActive(this)) {
+            info.setReturnValue(false);
+        }
     }
 
     // HUNGER_OVER_TIME & BURN_IN_DAYLIGHT
@@ -170,7 +174,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
     // Copy from Entity#isBeingRainedOn
     private boolean isRainingAtPlayerPosition() {
         BlockPos blockPos = this.getBlockPos();
-        return this.world.hasRain(blockPos) || this.world.hasRain(blockPos.add(0.0D, (double)this.getDimensions(this.getPose()).height, 0.0D));
+        return this.world.hasRain(blockPos) || this.world.hasRain(blockPos.add(0.0D, this.getDimensions(this.getPose()).height, 0.0D));
     }
 
     // WATER_BREATHING
