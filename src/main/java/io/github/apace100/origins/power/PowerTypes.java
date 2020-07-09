@@ -1,6 +1,8 @@
 package io.github.apace100.origins.power;
 
+import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.entity.EnderianPearlEntity;
 import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.registry.ModTags;
 import net.minecraft.entity.EntityGroup;
@@ -9,6 +11,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.world.ServerWorld;
@@ -67,6 +70,13 @@ public class PowerTypes {
     public static final PowerType<ModifyDamageTakenPower> MORE_KINETIC_DAMAGE;
     public static final PowerType<ModifyDamageDealtPower> AERIAL_COMBATANT;
 
+    public static final PowerType<PreventItemUsePower> PUMPKIN_HATE;
+    public static final PowerType<ActiveCooldownPower> THROW_ENDER_PEARL;
+    public static final PowerType<AttributePower> EXTRA_REACH;
+
+    // Unused Powers
+    public static final PowerType<Power> LAVA_STRIDER;
+
     static {
         INVULNERABILITY = register("invulnerability", new PowerType<>(InvulnerablePower::new));
 
@@ -109,18 +119,35 @@ public class PowerTypes {
         CAT_VISION = register("cat_vision", new PowerType<>((type, player) -> (NightVisionPower)new NightVisionPower(type, player, 0.4F).addCondition(p -> !p.isSubmergedIn(FluidTags.WATER))));
 
         LAUNCH_INTO_AIR = register("launch_into_air", new PowerType<>((type, player) -> new ActiveCooldownPower(type, player, 20 * 30, 4, p -> {
-            p.addVelocity(0, 2, 0);
-            p.velocityModified = true;
-            p.world.playSound((PlayerEntity)null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PARROT_FLY, SoundCategory.NEUTRAL, 0.5F, 0.4F / (p.getRandom().nextFloat() * 0.4F + 0.8F));
-            for(int i = 0; i < 4; ++i) {
-                ((ServerWorld)p.world).spawnParticles(ParticleTypes.CLOUD, player.getX(), player.getRandomBodyY(), player.getZ(), 8, p.getRandom().nextGaussian(), 0.0D, p.getRandom().nextGaussian(), 0.5);
+            if(!p.world.isClient) {
+                p.addVelocity(0, 2, 0);
+                p.velocityModified = true;
+                p.world.playSound((PlayerEntity)null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PARROT_FLY, SoundCategory.NEUTRAL, 0.5F, 0.4F / (p.getRandom().nextFloat() * 0.4F + 0.8F));
+                for(int i = 0; i < 4; ++i) {
+                    ((ServerWorld)p.world).spawnParticles(ParticleTypes.CLOUD, player.getX(), player.getRandomBodyY(), player.getZ(), 8, p.getRandom().nextGaussian(), 0.0D, p.getRandom().nextGaussian(), 0.5);
+                }
             }
         })));
         ELYTRA = register("elytra", new PowerType<>(Power::new));
         LIGHT_ARMOR = register("light_armor", new PowerType<>(Power::new));
-        AERIAL_COMBATANT = register("aerial_combatant", new PowerType<>((type, player) -> new ModifyDamageDealtPower(type, player, (p, s) -> p.isFallFlying(), dmg -> dmg * 2.5F)));
+        AERIAL_COMBATANT = register("aerial_combatant", new PowerType<>((type, player) -> new ModifyDamageDealtPower(type, player, (p, s) -> p.isFallFlying(), dmg -> dmg * 2F)));
         CLAUSTROPHOBIA = register("claustrophobia", new PowerType<>((type, player) -> (StackingStatusEffectPower)new StackingStatusEffectPower(type, player, -20, 361, 10).addEffect(StatusEffects.WEAKNESS).addEffect(StatusEffects.SLOWNESS).addCondition(p -> !p.world.doesNotCollide(p.getBoundingBox().stretch(0, 2, 0)))));
         MORE_KINETIC_DAMAGE = register("more_kinetic_damage", new PowerType<>((type, player) -> new ModifyDamageTakenPower(type, player, (p, s) -> s == DamageSource.FALL || s == DamageSource.FLY_INTO_WALL, dmg -> dmg * 1.5F)));
+
+        PUMPKIN_HATE = register("pumpkin_hate", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, stack -> stack.getItem() == Items.PUMPKIN_PIE)));
+        THROW_ENDER_PEARL = register("throw_ender_pearl", new PowerType<>((type, player) -> new ActiveCooldownPower(type, player, 30, 6, p -> {
+            p.world.playSound((PlayerEntity)null, p.getX(), p.getY(), p.getZ(), SoundEvents.ENTITY_ENDER_PEARL_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (p.getRandom().nextFloat() * 0.4F + 0.8F));
+            if (!p.world.isClient) {
+                EnderianPearlEntity enderPearlEntity = new EnderianPearlEntity(p.world, p);
+                enderPearlEntity.setProperties(p, p.pitch, p.yaw, 0.0F, 1.5F, 1.0F);
+                p.world.spawnEntity(enderPearlEntity);
+            }
+        })));
+        EXTRA_REACH = register("extra_reach", new PowerType<>((type, player) -> new AttributePower(type, player)
+            .addModifier(ReachEntityAttributes.REACH, new EntityAttributeModifier("power_type:extra_reach", 1.5, EntityAttributeModifier.Operation.ADDITION))
+            .addModifier(ReachEntityAttributes.ATTACK_RANGE, new EntityAttributeModifier("power_type:extra_reach", 1.5, EntityAttributeModifier.Operation.ADDITION))));
+
+        LAVA_STRIDER = register("lava_strider", new PowerType<>(Power::new));
     }
 
     public static void init() {

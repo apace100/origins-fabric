@@ -80,7 +80,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
     // AQUA_AFFINITY
     @ModifyConstant(method = "getBlockBreakingSpeed", constant = @Constant(ordinal = 1, floatValue = 5.0F))
     private float modifyUngroundedBlockBreakingSpeed(float in) {
-        if(this.isSubmergedIn(FluidTags.WATER) && PowerTypes.AQUA_AFFINITY.isActive(this)) {
+        if(this.isInsideWaterOrBubbleColumn() && PowerTypes.AQUA_AFFINITY.isActive(this)) {
             return 1F;
         }
         return in;

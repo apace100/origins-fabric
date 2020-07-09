@@ -15,6 +15,9 @@ repositories {
 		name = "Jitpack"
 		url = "https://jitpack.io"
 	}
+	maven {
+		url "https://maven.jamieswhiteshirt.com/libs-release/"
+	}
 	mavenLocal()
 }
 
@@ -32,6 +35,9 @@ dependencies {
 
 	modImplementation "io.github.OnyxStudios.Cardinal-Components-API:cardinal-components-entity:${project.cca_version}"
 	include "io.github.OnyxStudios.Cardinal-Components-API:cardinal-components-entity:${project.cca_version}"
+
+	modImplementation "com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}"
+	include "com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}"
 }
 
 processResources {

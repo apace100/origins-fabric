@@ -24,7 +24,8 @@ public abstract class OtherClientPlayerEntityMixin extends AbstractClientPlayerE
 
     @Inject(at = @At("HEAD"), method = "tick")
     private void tick(CallbackInfo info) {
-        if(!this.isInvisibleTo(MinecraftClient.getInstance().player)) {OriginComponent component = ModComponents.ORIGIN.get(this);
+        if(!this.isInvisibleTo(MinecraftClient.getInstance().player)) {
+            OriginComponent component = ModComponents.ORIGIN.get(this);
             List<ParticlePower> particlePowers = component.getPowers(ParticlePower.class);
             for (ParticlePower particlePower : particlePowers) {
                 if(this.age % particlePower.getFrequency() == 0) {

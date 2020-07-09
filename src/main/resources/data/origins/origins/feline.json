@@ -8,6 +8,6 @@
 		"origins:cat_vision"
 	],
 	"icon": "minecraft:orange_wool",
-	"order": 2,
-	"impact": 1
+	"order": 0,
+	"impact": 2
 }

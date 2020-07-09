@@ -1,0 +1,11 @@
+{
+	"powers": [
+		"origins:throw_ender_pearl",
+		"origins:water_vulnerability",
+		"origins:pumpkin_hate",
+		"origins:extra_reach"
+	],
+	"icon": "minecraft:ender_pearl",
+	"order": 1,
+	"impact": 2
+}

@@ -1,8 +1,12 @@
 package io.github.apace100.origins;
 
+import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.networking.ModPacketsS2C;
+import io.github.apace100.origins.power.Active;
 import io.github.apace100.origins.registry.ModBlocks;
+import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModEntities;
 import io.github.apace100.origins.screen.PowerHudRenderer;
 import io.github.apace100.origins.screen.ViewOriginScreen;
 import io.netty.buffer.Unpooled;
@@ -12,11 +16,13 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.keybinding.FabricKeyBinding;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientTickCallback;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -31,6 +37,10 @@ public class OriginsClient implements ClientModInitializer {
     @Environment(EnvType.CLIENT)
     public void onInitializeClient() {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TEMPORARY_COBWEB, RenderLayer.getCutout());
+
+        EntityRendererRegistry.INSTANCE.register(ModEntities.ENDERIAN_PEARL,
+            (dispatcher, context) -> new FlyingItemEntityRenderer(dispatcher, context.getItemRenderer()));
+
         ModPacketsS2C.register();
 
         useActivePowerKeybind = FabricKeyBinding.Builder.create(new Identifier(Origins.MODID, "active_power"),
@@ -42,6 +52,10 @@ public class OriginsClient implements ClientModInitializer {
         ClientTickCallback.EVENT.register(client -> {
             while(useActivePowerKeybind.wasPressed()) {
                 ClientSidePacketRegistry.INSTANCE.sendToServer(ModPackets.USE_ACTIVE_POWER, new PacketByteBuf(Unpooled.buffer()));
+                OriginComponent component = ModComponents.ORIGIN.get(MinecraftClient.getInstance().player);
+                if(component.hasOrigin()) {
+                    component.getPowers().stream().filter(p -> p instanceof Active).forEach(p -> ((Active)p).onUse());
+                }
             }
             while(viewCurrentOriginKeybind.wasPressed()) {
                 if(!(MinecraftClient.getInstance().currentScreen instanceof ViewOriginScreen)) {

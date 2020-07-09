@@ -31,7 +31,9 @@ public class ModItems {
                 ServerSidePacketRegistry.INSTANCE.sendToPlayer(user, ModPackets.OPEN_ORIGIN_SCREEN, data);
             }
             ItemStack stack = user.getStackInHand(hand);
-            stack.decrement(1);
+            if(!user.isCreative()) {
+                stack.decrement(1);
+            }
             return TypedActionResult.consume(stack);
         }
     };

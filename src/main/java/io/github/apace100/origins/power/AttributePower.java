@@ -2,31 +2,53 @@ package io.github.apace100.origins.power;
 
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class AttributePower extends Power {
 
-    private final EntityAttribute attribute;
-    private final EntityAttributeModifier modifier;
+    private final List<Mod> modifiers = new LinkedList<Mod>();
+
+    public AttributePower(PowerType<?> type, PlayerEntity player) {
+        super(type, player);
+    }
 
     public AttributePower(PowerType<?> type, PlayerEntity player, EntityAttribute attribute, EntityAttributeModifier modifier) {
-        super(type, player);
-        this.attribute = attribute;
-        this.modifier = modifier;
+        this(type, player);
+        addModifier(attribute, modifier);
+    }
+
+    public AttributePower addModifier(EntityAttribute attribute, EntityAttributeModifier modifier) {
+        Mod mod = new Mod();
+        mod.attribute = attribute;
+        mod.modifier = modifier;
+        this.modifiers.add(mod);
+        return this;
     }
 
     @Override
     public void onAdded() {
-        if(player.getAttributes().hasAttribute(attribute)) {
-            player.getAttributeInstance(attribute).addTemporaryModifier(modifier);
-        }
+        modifiers.forEach(mod -> {
+            if(player.getAttributes().hasAttribute(mod.attribute)) {
+                player.getAttributeInstance(mod.attribute).addTemporaryModifier(mod.modifier);
+            }
+        });
+
     }
 
     @Override
     public void onRemoved() {
-        if(player.getAttributes().hasAttribute(attribute)) {
-            player.getAttributeInstance(attribute).removeModifier(modifier);
-        }
+        modifiers.forEach(mod -> {
+            if (player.getAttributes().hasAttribute(mod.attribute)) {
+                player.getAttributeInstance(mod.attribute).removeModifier(mod.modifier);
+            }
+        });
+    }
+
+    private static class Mod {
+        public EntityAttribute attribute;
+        public EntityAttributeModifier modifier;
     }
 }

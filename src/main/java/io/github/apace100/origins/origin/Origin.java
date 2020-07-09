@@ -173,12 +173,13 @@ public class Origin {
     public static Origin fromJson(Identifier id, JsonObject json) {
         JsonArray powerArray = json.getAsJsonArray("powers");
         PowerType<?>[] powers = new PowerType<?>[powerArray.size()];
+        boolean invalidPowers = false;
         for (int i = 0; i < powers.length; i++) {
             Identifier powerId = Identifier.tryParse(powerArray.get(i).getAsString());
-            if (powerId != null) {
-                powers[i] = ModRegistries.POWER_TYPE.get(powerId);
-            } else {
+            powers[i] = ModRegistries.POWER_TYPE.get(powerId);
+            if (powers[i] == null) {
                 Origins.LOGGER.warn("Unknown power ID in json file: " + powerId.toString());
+                invalidPowers = true;
             }
         }
         Identifier iconItemIdentifier = Identifier.tryParse(json.get("icon").getAsString());
@@ -213,7 +214,9 @@ public class Origin {
         if (isUnchoosable) {
             origin.setUnchoosable();
         }
-        origin.add(powers);
+        if(!invalidPowers) {
+            origin.add(powers);
+        }
         return origin;
     }
 

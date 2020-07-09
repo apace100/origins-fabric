@@ -39,7 +39,7 @@ public class ViewOriginScreen extends Screen {
 
 	@Override
 	public boolean shouldCloseOnEsc() {
-		return false;
+		return true;
 	}
 
 	@Override

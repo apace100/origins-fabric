@@ -24,7 +24,9 @@
     "GameRendererMixin",
     "BackgroundRendererMixin",
     "LightmapTextureManagerMixin",
-    "OtherClientPlayerEntityMixin"
+    "OtherClientPlayerEntityMixin",
+    "LivingEntityRendererMixin",
+    "ClientPlayNetworkHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
