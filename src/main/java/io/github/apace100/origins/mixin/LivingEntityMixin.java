@@ -94,7 +94,7 @@ public abstract class LivingEntityMixin extends Entity {
         }
     }
 
-    @ModifyVariable(method = "damage", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;despawnCounter:I"), name = "amount")
+    @ModifyVariable(method = "damage", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;despawnCounter:I"), ordinal = 0, argsOnly = true)
     private float modifyDamageAmount(float originalAmount, DamageSource source, float amount) {
         if((Object)this instanceof PlayerEntity) {
             OriginComponent component = ModComponents.ORIGIN.get(this);
