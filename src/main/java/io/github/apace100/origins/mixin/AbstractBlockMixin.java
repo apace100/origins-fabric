@@ -31,7 +31,6 @@ public abstract class AbstractBlockMixin {
                     info.setReturnValue(0F);
                 }
             }
-
         }
     }
 }

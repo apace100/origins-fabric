@@ -131,7 +131,7 @@ public class PowerTypes {
         ELYTRA = register("elytra", new PowerType<>(Power::new));
         LIGHT_ARMOR = register("light_armor", new PowerType<>(Power::new));
         AERIAL_COMBATANT = register("aerial_combatant", new PowerType<>((type, player) -> new ModifyDamageDealtPower(type, player, (p, s) -> p.isFallFlying(), dmg -> dmg * 2F)));
-        CLAUSTROPHOBIA = register("claustrophobia", new PowerType<>((type, player) -> (StackingStatusEffectPower)new StackingStatusEffectPower(type, player, -20, 361, 10).addEffect(StatusEffects.WEAKNESS).addEffect(StatusEffects.SLOWNESS).addCondition(p -> !p.world.doesNotCollide(p.getBoundingBox().stretch(0, 2, 0)))));
+        CLAUSTROPHOBIA = register("claustrophobia", new PowerType<>((type, player) -> (StackingStatusEffectPower)new StackingStatusEffectPower(type, player, -20, 361, 10).addEffect(StatusEffects.WEAKNESS).addEffect(StatusEffects.SLOWNESS).addCondition(p -> p.world.getBlockCollisions(p, p.getBoundingBox().offset(0, p.getBoundingBox().getYLength(), 0)).findAny().isPresent())));
         MORE_KINETIC_DAMAGE = register("more_kinetic_damage", new PowerType<>((type, player) -> new ModifyDamageTakenPower(type, player, (p, s) -> s == DamageSource.FALL || s == DamageSource.FLY_INTO_WALL, dmg -> dmg * 1.5F)));
 
         PUMPKIN_HATE = register("pumpkin_hate", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, stack -> stack.getItem() == Items.PUMPKIN_PIE)));
