@@ -32,7 +32,7 @@ public class StackingStatusEffectPower extends StatusEffectPower {
         } else {
             currentStack -= 1;
             if(currentStack < minStack) {
-                currentStack = 0;
+                currentStack = minStack;
             }
         }
     }
