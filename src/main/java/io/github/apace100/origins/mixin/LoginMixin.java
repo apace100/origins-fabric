@@ -1,5 +1,6 @@
 package io.github.apace100.origins.mixin;
 
+import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginRegistry;
@@ -32,6 +33,8 @@ public class LoginMixin {
 			PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
 			data.writeBoolean(true);
 			ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, ModPackets.OPEN_ORIGIN_SCREEN, data);
+		} else {
+			OriginComponent.sync(player);
 		}
 	}
 }
