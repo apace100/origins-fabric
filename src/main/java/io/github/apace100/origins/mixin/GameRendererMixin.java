@@ -14,6 +14,7 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -48,7 +49,7 @@ public class GameRendererMixin {
     // NightVisionPower
     @Inject(at = @At("HEAD"), method = "getNightVisionStrength", cancellable = true)
     private static void getNightVisionStrength(LivingEntity livingEntity, float f, CallbackInfoReturnable<Float> info) {
-        if (livingEntity != null && !livingEntity.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
+        if (livingEntity != null && livingEntity instanceof PlayerEntity && !livingEntity.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
             List<NightVisionPower> nvs = ModComponents.ORIGIN.get(livingEntity).getPowers(NightVisionPower.class);
             Optional<Float> strength = nvs.stream().filter(NightVisionPower::isActive).map(NightVisionPower::getStrength).max(Float::compareTo);
             if(strength.isPresent()) {

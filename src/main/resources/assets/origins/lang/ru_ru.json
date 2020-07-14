@@ -1,0 +1,160 @@
+{
+  "origin.origins.human.name": "Человек",
+  "origin.origins.human.description": "Обычный Человек. Ваша обычная игра в Майнкрафт ждет вас.",
+
+  "origin.origins.merling.name": "Мерлин",
+  "origin.origins.merling.description": "Эти естественные обитатели океана не привыкли слишком долго находиться на суше.",
+
+  "origin.origins.arachnid.name": "Арахнид",
+  "origin.origins.arachnid.description": "Их способности взбираться и ловить своих врагов в паутину делают Арахнидов идеальными охотниками.",
+
+  "origin.origins.blazeborn.name": "Огнерожденный",
+  "origin.origins.blazeborn.description": "Поздние потомки пламени, Огнерожденные, естественно, невосприимчивы к опасностям Нижнего Мира.",
+
+  "origin.origins.avian.name": "Авианы",
+  "origin.origins.avian.description": "Авианы уже давно потеряли способность летать. Теперь эти мирные существа могут быть замечены скользящими с одного места на другое.",
+
+  "origin.origins.phantom.name": "Фантом",
+  "origin.origins.phantom.description": "Будучи наполовину людьми и наполовину фантомами, эти существа могут переключаться между фантомом и нормальной формой.",
+
+  "origin.origins.feline.name": "Коточеловек",
+  "origin.origins.feline.description": "С их кошачьей внешностью, Котолюди отпугивают ползучих прочь. С кошачьей ловкостью они всегда благополучно приземляются на ноги.",
+
+  "origin.origins.elytrian.name": "Элитрианец",
+  "origin.origins.elytrian.description": "Часто летая по ветру, Элитрианцы чувствуют себя неуютно, когда им не хватает места над головой.",
+
+  "origin.origins.enderian.name": "Эндерианец",
+  "origin.origins.enderian.description": "Рожденные как сыновья и дочери Дракона Края, Эндерианцы способны к телепортации, но уязвимы для воды.",
+
+  "power.origins.water_breathing.name": "Жабры",
+  "power.origins.water_breathing.description": "Ты можешь дышать под водой, но не на суше.",
+
+  "power.origins.aqua_affinity.name": "Родство с Водой",
+  "power.origins.aqua_affinity.description": "Ты можешь ломать блоки под водой так же быстро, как и на земле.",
+
+  "power.origins.water_vision.name": "Мокрые Глаза",
+  "power.origins.water_vision.description": "Твое зрение под водой идеально.",
+
+  "power.origins.swim_speed.name": "Ласты",
+  "power.origins.swim_speed.description": "Твоя подводная скорость увеличена.",
+
+  "power.origins.like_water.name": "Любовь к Воде",
+  "power.origins.like_water.description": "Находясь под водой, ты не опускаешься глубже, если не хочешь этого.",
+
+  "power.origins.fragile.name": "Хрупкость",
+  "power.origins.fragile.description": "У тебя на 3 сердца меньше здоровья, чем у людей.",
+
+  "power.origins.webbing.name": "Плетение",
+  "power.origins.webbing.description": "Когда ты поражаешь врага в ближнем бою, он застревает в паутине.",
+
+  "power.origins.climbing.name": "Карабканье",
+  "power.origins.climbing.description": "Ты можешь взобраться на любую стену, а не только по лестницам.",
+
+  "power.origins.carnivore.name": "Хищничество",
+  "power.origins.carnivore.description": "Твой рацион ограничен мясом, ты не можешь есть овощи.",
+
+  "power.origins.fire_immunity.name": "Иммунитет к Огню",
+  "power.origins.fire_immunity.description": "Ты невосприимчив ко всем видам повреждений от огня.",
+
+  "power.origins.nether_spawn.name": "Обитатель Нижнего Мира",
+  "power.origins.nether_spawn.description": "Твоя естественная точка появления будет в нижнем мире.",
+
+  "power.origins.burning_wrath.name": "Пылающий Гнев",
+  "power.origins.burning_wrath.description": "Когда ты в огне, ты наносишь дополнительный урон своими атаками.",
+
+  "power.origins.hotblooded.name": "Горячая Кровь",
+  "power.origins.hotblooded.description": "Из-за твоего горячего тела, яды сгорают, что делает тебя невосприимчивыми к воздействию яда и голода.",
+
+  "power.origins.water_vulnerability.name": "Гидрофобия",
+  "power.origins.water_vulnerability.description": "Ты получаешь повреждения с течением времени, находясь в контакте с водой.",
+
+  "power.origins.tailwind.name": "Попутный Ветер",
+  "power.origins.tailwind.description": "Ты немного быстрее идешь пешком, чем другие.",
+
+  "power.origins.slow_falling.name": "Легкий Вес",
+  "power.origins.slow_falling.description": "Ты падаешь на землю так же мягко, как перышко, если только не крадешься.",
+
+  "power.origins.vegetarian.name": "Вегетарианец",
+  "power.origins.vegetarian.description": "Ты не можешь есть мясо.",
+
+  "power.origins.fresh_air.name": "Свежий Воздух",
+  "power.origins.fresh_air.description": "Во время сна твоя кровать должна находиться на высоте не менее 86 блоков, чтобы ты мог дышать свежим воздухом.",
+
+  "power.origins.phasing.name": "Этапность",
+  "power.origins.phasing.description": "Будучи фантомизированным, ты можешь пройти сквозь твердый материал, за исключением обсидиана.",
+
+  "power.origins.invisibility.name": "Невидимость",
+  "power.origins.invisibility.description": "Во время фантомизации, ты невидим.",
+
+  "power.origins.hunger_over_time.name": "Быстрый Метаболизм",
+  "power.origins.hunger_over_time.description": "Во время фантомизации ты быстро голодаешь.",
+
+  "power.origins.burn_in_daylight.name": "Фотоаллергия",
+  "power.origins.burn_in_daylight.description": "Ты начинаешь гореть при дневном свете, если ты не невидим.",
+
+  "power.origins.fall_immunity.name": "Акробатика",
+  "power.origins.fall_immunity.description": "Ты никогда не получаешь урон от падения, независимо от того, с какой высоты ты падаешь.",
+
+  "power.origins.sprint_jump.name": "Сильные Лодыжки",
+  "power.origins.sprint_jump.description": "Ты можешь прыгать выше, подпрыгивая во время спринта.",
+
+  "power.origins.nine_lives.name": "У Кошки Девять Жизней",
+  "power.origins.nine_lives.description": "У тебя на 1 сердце меньше чем у людей.",
+
+  "power.origins.cat_vision.name": "Ноктурнал",
+  "power.origins.cat_vision.description": "Ты можешь немного видеть в темноте, когда не находишься в воде.",
+
+  "power.origins.weak_arms.name": "Слабые Руки",
+  "power.origins.weak_arms.description": "Когда ты не находишься под действием зелья силы, ты можешь добывать природный камень только в том случае, если рядом с ним есть не более 2 других природных каменных блоков.",
+
+  "power.origins.scare_creepers.name": "Кошачья Внешность",
+  "power.origins.scare_creepers.description": "Криперы боятся тебя и взорвутся только в том случае, если ты нападешь на них первыми.",
+
+  "power.origins.launch_into_air.name": "Дар Крыльев",
+  "power.origins.launch_into_air.description": "Каждые 30 секунд ты можешь подниматься на расстояние до 20 блоков в воздух.",
+
+  "power.origins.elytra.name": "Крылатый",
+  "power.origins.elytra.description": "У тебя есть крылья Элитр без необходимости их надевать.",
+
+  "power.origins.light_armor.name": "Нужда в Мобильности",
+  "power.origins.light_armor.description": "Ты не можешь носить тяжелую броню (броня с более высокими значениями защиты, чем кольчуга).",
+
+  "power.origins.claustrophobia.name": "Клаустрафобия",
+  "power.origins.claustrophobia.description": "Пребывание где-то с низким потолком слишком долго - ослабит тебя и сделает медленнее.",
+
+  "power.origins.more_kinetic_damage.name": "Хрустальные Кости",
+  "power.origins.more_kinetic_damage.description": "Ты получаешь больше урона от падения и/или полета в блоки.",
+
+  "power.origins.aerial_combatant.name": "Воздушный Боец",
+  "power.origins.aerial_combatant.description": "Ты наносишь значительно больше урона, находясь в полете на Элитрах.",
+
+  "power.origins.throw_ender_pearl.name": "Телепортация",
+  "power.origins.throw_ender_pearl.description": "Всякий раз, когда ты хочешь, ты можешь бросить жемчужину Эндера, которая не наносит никакого урона, позволяя тебе телепортироваться.",
+
+  "power.origins.pumpkin_hate.name": "Боязнь Тыкв",
+  "power.origins.pumpkin_hate.description": "Ты боишься тыкв. По уважительной причине.",
+
+  "power.origins.extra_reach.name": "Стройное Тело",
+  "power.origins.extra_reach.description": "Вы можете дотянуться до далеко стоящих блоков и энтити.",
+
+  "category.origins": "Происхождение",
+  "key.origins.active_power": "Активная Сила",
+  "key.origins.view_origin": "Посмотреть Происхождение",
+
+  "item.origins.orb_of_origin": "Сфера Происхождения",
+
+  "enchantment.origins.water_protection": "Защита от Воды",
+
+  "origins.gui.select": "Выбрать",
+  "origins.gui.close": "Закрыть",
+  "origins.gui.choose_origin.title": "Выберите свое Происхождение",
+  "origins.gui.view_origin.title": "Это ваше Происхождение",
+  "origins.gui.impact.impact": "Влияние",
+  "origins.gui.impact.none": "Нет",
+  "origins.gui.impact.low": "Меньше",
+  "origins.gui.impact.medium": "Средне",
+  "origins.gui.impact.high": "Больше",
+
+  "death.attack.no_water_for_gills": "%s не сумел остаться мокрым.",
+  "death.attack.hurt_by_water": "%s слишком долго принимал ванну."
+}
