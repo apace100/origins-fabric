@@ -15,6 +15,8 @@ public interface OriginComponent extends EntitySyncedComponent {
 
 	Origin getOrigin();
 
+	boolean hadOriginBefore();
+
 	boolean hasPower(PowerType<?> powerType);
 	<T extends Power> T getPower(PowerType<T> powerType);
 	List<Power> getPowers();

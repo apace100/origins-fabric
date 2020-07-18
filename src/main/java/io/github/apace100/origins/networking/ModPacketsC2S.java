@@ -5,7 +5,6 @@ import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.Active;
-import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.registry.ModComponents;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -24,9 +23,10 @@ public class ModPacketsC2S {
                     if(id != null) {
                         Origin origin = OriginRegistry.get(id);
                         if(origin.isChoosable()) {
+                            boolean hadOriginBefore = component.hadOriginBefore();
                             component.setOrigin(origin);
                             component.sync();
-                            component.getPowers().forEach(Power::onChosen);
+                            component.getPowers().forEach(power -> power.onChosen(hadOriginBefore));
                             Origins.LOGGER.info("Player " + player.getDisplayName().asString() + " chose Origin: " + originId);
                         } else {
                             Origins.LOGGER.info("Player " + player.getDisplayName().asString() + " tried to choose unchoosable Origin: " + originId + ", setting them to Human.");

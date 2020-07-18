@@ -27,9 +27,11 @@ public class PlayerOriginComponent implements OriginComponent {
     private Origin origin;
     private HashMap<PowerType<?>, Power> powers = new HashMap<>();
 
+    private boolean hadOriginBefore = false;
+
     public PlayerOriginComponent(PlayerEntity player) {
         this.player = player;
-        this.setOrigin(Origin.EMPTY);
+        this.origin = Origin.EMPTY;
     }
 
     @Override
@@ -40,6 +42,11 @@ public class PlayerOriginComponent implements OriginComponent {
     @Override
     public Origin getOrigin() {
         return origin;
+    }
+
+    @Override
+    public boolean hadOriginBefore() {
+        return hadOriginBefore;
     }
 
     @Override
@@ -95,6 +102,9 @@ public class PlayerOriginComponent implements OriginComponent {
             this.powers.put(powerType, power);
             power.onAdded();
         });
+        if(this.origin != null && this.origin != Origin.EMPTY) {
+            this.hadOriginBefore = true;
+        }
     }
 
     @Override
@@ -115,6 +125,7 @@ public class PlayerOriginComponent implements OriginComponent {
             powers.clear();
         }
         this.origin = OriginRegistry.get(Identifier.tryParse(compoundTag.getString("Origin")));
+        this.hadOriginBefore = compoundTag.getBoolean("HadOriginBefore");
         ListTag powerList = (ListTag)compoundTag.get("Powers");
         for(int i = 0; i < powerList.size(); i++) {
             CompoundTag powerTag = powerList.getCompound(i);
@@ -140,6 +151,7 @@ public class PlayerOriginComponent implements OriginComponent {
     @Override
     public CompoundTag toTag(CompoundTag compoundTag) {
         compoundTag.putString("Origin", this.origin.getIdentifier().toString());
+        compoundTag.putBoolean("HadOriginBefore", this.hadOriginBefore);
         ListTag powerList = new ListTag();
         for(Map.Entry<PowerType<?>, Power> powerEntry : powers.entrySet()) {
             CompoundTag powerTag = new CompoundTag();

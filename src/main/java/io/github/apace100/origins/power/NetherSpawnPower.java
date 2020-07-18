@@ -23,18 +23,29 @@ public class NetherSpawnPower extends Power {
     }
 
     @Override
-    public void onChosen() {
+    public void onChosen(boolean isOrbOfOrigin) {
         if(player instanceof ServerPlayerEntity) {
             ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
             Pair<ServerWorld, BlockPos> spawn = getSpawn(false);
             if(spawn != null) {
-                serverPlayer.setSpawnPoint(World.NETHER, spawn.getRight(), true, false);
-                Optional<Vec3d> tpPos = BedBlock.canWakeUpAt(EntityType.PLAYER, spawn.getLeft(), spawn.getRight());
-                if(tpPos.isPresent()) {
-                    serverPlayer.teleport(spawn.getLeft(), tpPos.get().x, tpPos.get().y, tpPos.get().z, player.pitch, player.yaw);
-                } else {
-                    Origins.LOGGER.warn("Could not spawn player with NetherSpawnPower in the nether.");
+                if(!isOrbOfOrigin) {
+                    Optional<Vec3d> tpPos = BedBlock.canWakeUpAt(EntityType.PLAYER, spawn.getLeft(), spawn.getRight());
+                    if(tpPos.isPresent()) {
+                        serverPlayer.teleport(spawn.getLeft(), tpPos.get().x, tpPos.get().y, tpPos.get().z, player.pitch, player.yaw);
+                    } else {
+                        Origins.LOGGER.warn("Could not spawn player with NetherSpawnPower in the nether.");
+                    }
                 }
+            }
+        }
+    }
+
+    @Override
+    public void onRemoved() {
+        if(player instanceof ServerPlayerEntity) {
+            ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
+            if(serverPlayer.getSpawnPointPosition() != null && serverPlayer.isSpawnPointSet() && serverPlayer.getSpawnPointDimension() == World.NETHER) {
+                serverPlayer.setSpawnPoint(World.OVERWORLD, null, false, false);
             }
         }
     }

@@ -61,10 +61,10 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
     private void modifyBlazebornSpawnPosition(CallbackInfoReturnable<BlockPos> info) {
         if(PowerTypes.NETHER_SPAWN.isActive(this)) {
             if(spawnPointPosition == null) {
-                info.setReturnValue(overrideSpawn());
+                info.setReturnValue(findNetherSpawn());
             } else if(hasObstructedSpawn()) {
                 networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.NO_RESPAWN_BLOCK, 0.0F));
-                info.setReturnValue(overrideSpawn());
+                info.setReturnValue(findNetherSpawn());
             }
         }
     }
@@ -86,12 +86,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
         return false;
     }
 
-    private BlockPos overrideSpawn() {
+    private BlockPos findNetherSpawn() {
         Pair<ServerWorld, BlockPos> spawn = PowerTypes.NETHER_SPAWN.get(this).getSpawn(true);
         if(spawn != null) {
-            spawnPointPosition = spawn.getRight();
-            spawnPointDimension = World.NETHER;
-            spawnPointSet = true;
             return spawn.getRight();
         }
         return null;
