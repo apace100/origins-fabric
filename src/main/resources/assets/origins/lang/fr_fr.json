@@ -1,0 +1,160 @@
+{
+  "origin.origins.human.name": "Humain",
+  "origin.origins.human.description": "Un humain ordinaire. Votre expérience ordinaire de Minecraft vous attend.",
+
+  "origin.origins.merling.name": "Triton",
+  "origin.origins.merling.description": "Ces habitants naturels de l'océan ne sont pas habitués à rester trop longtemps hors de l'eau.",
+
+  "origin.origins.arachnid.name": "Arachnides",
+  "origin.origins.arachnid.description": "Leurs capacités d'escalades et leurs aptitudes à piéger leurs ennemis dans des toiles d'araignées font des arachnides de parfaits chasseurs.",
+
+  "origin.origins.blazeborn.name": "Ardent",
+  "origin.origins.blazeborn.description": "Lointains descendants des Blaze, les Ardents sont naturellement immunisés contre les dangers du Nether.",
+
+  "origin.origins.avian.name": "Piafs",
+  "origin.origins.avian.description": "La race des Piafs a perdu leur capacité de vol il y a longtemps. Maintenant, on peut voir ces créatures pacifiques planées d'un endroit à un autre.",
+
+  "origin.origins.phantom.name": "Fantôme",
+  "origin.origins.phantom.description": "En tant que descendant mi-humaine et mi-fantôme, ces créatures peuvent passer d'une forme fantomatique à une forme humaine.",
+
+  "origin.origins.feline.name": "Félins",
+  "origin.origins.feline.description": "Avec leurs apparences de chat, le Félin fait fuir les Creepers. Ils atterrissent toujours sur leur pattes en toute sécurité.",
+
+  "origin.origins.elytrian.name": "Élytriens",
+  "origin.origins.elytrian.description": "Volant souvent au gré du vent, les Élytriens sont mal à l'aise lorsqu'ils n'ont pas assez de place au-dessus de leur tête.",
+
+  "origin.origins.enderian.name": "Ender",
+  "origin.origins.enderian.description": "Nés fils et filles de l'Ender Dragon, les Enders sont capables de se téléporter mais sont vulnérable à l'eau.",
+
+  "power.origins.water_breathing.name": "Branchies",
+  "power.origins.water_breathing.description": "Vous pouvez respirer sous l'eau, mais pas à la surface.",
+
+  "power.origins.aqua_affinity.name": "Affinité aquatique",
+  "power.origins.aqua_affinity.description": "Vous pouvez casser des blocs à la même vitesse que les autres races à la surface.",
+
+  "power.origins.water_vision.name": "Yeux mouillés",
+  "power.origins.water_vision.description": "Votre vision sous l'eau est parfaite.",
+
+  "power.origins.swim_speed.name": "Nageoires",
+  "power.origins.swim_speed.description": "Votre vitesse sous-l'eau est augmenté.",
+
+  "power.origins.like_water.name": "Comme de l'eau",
+  "power.origins.like_water.description": "Sous l'eau, on ne s'enfonce pas dans le sol, sauf si on le souhaite.",
+
+  "power.origins.fragile.name": "Fragile",
+  "power.origins.fragile.description": "Vous avez trois cœurs en moins qu'un humain.",
+
+  "power.origins.webbing.name": "Toile d'araignée",
+  "power.origins.webbing.description": "Lorsque vous touchez un ennemi avec une attaque de mélée, il reste coincé dans votre toile d'araignée.",
+
+  "power.origins.climbing.name": "Escalade",
+  "power.origins.climbing.description": "Vous êtes capable de grimper n'importe quelle surface, pas juste les échelles.",
+
+  "power.origins.carnivore.name": "Carnivore",
+  "power.origins.carnivore.description": "Votre régime alimentaire est limité à la viande, vous ne pouvez pas mangé de légumes.",
+
+  "power.origins.fire_immunity.name": "Immunité au feu",
+  "power.origins.fire_immunity.description": "Vous êtes immunisé à tout types de dégats de feu, lave comprise.",
+
+  "power.origins.nether_spawn.name": "Habitant du Nether",
+  "power.origins.nether_spawn.description": "Votre spawn naturel sera dans le Nether.",
+
+  "power.origins.burning_wrath.name": "Fureur des flammes",
+  "power.origins.burning_wrath.description": "Quand vous êtes enflammés, vous infligez des dommages supplémentaires avec vos attaques.",
+
+  "power.origins.hotblooded.name": "Sang chaud",
+  "power.origins.hotblooded.description": "En raison de votre corps chaud, tout types de venins brûlent. Ce qui vous immunisent contre les effets de poisons et de faim.",
+
+  "power.origins.water_vulnerability.name": "Hydrophobie",
+  "power.origins.water_vulnerability.description": "Vous subissez des dommages au fil du temps lorsque vous êtes en contact avec l'eau.",
+
+  "power.origins.tailwind.name": "Dos au vent",
+  "power.origins.tailwind.description": "Vous êtes un peu plus rapide à pied que les autres races.",
+
+  "power.origins.slow_falling.name": "Plumeau",
+  "power.origins.slow_falling.description": "Vous tombez aussi doucement qu'une plume, à moins que vous vous accroupissez.",
+
+  "power.origins.vegetarian.name": "Végétarien",
+  "power.origins.vegetarian.description": "Vous ne pouvez digérer aucune viande.",
+
+  "power.origins.fresh_air.name": "Air frais",
+  "power.origins.fresh_air.description": "Lorsque vous dormez, votre lit doit se trouver à une altitude d'au moins 86 blocs, afin que vous puissiez respirer de l'air frais.",
+
+  "power.origins.phasing.name": "Mise en phase",
+  "power.origins.phasing.description": "Lorsque vous êtes en forme fantomatique, vous pouvez traverser tout matériaux solides, sauf l'obsidienne.",
+
+  "power.origins.invisibility.name": "Invisibilité",
+  "power.origins.invisibility.description": "Lorsque vous êtes en forme fantomatique, vous êtes invisible.",
+
+  "power.origins.hunger_over_time.name": "Un métabolisme rapide",
+  "power.origins.hunger_over_time.description": "Le fait d'être en forme fantomatique vous donne faim.",
+
+  "power.origins.burn_in_daylight.name": "Photoallergie",
+  "power.origins.burn_in_daylight.description": "Vous commencez à brûler à la lumière du jour si vous n'êtes pas invisible.",
+
+  "power.origins.fall_immunity.name": "Acrobaties",
+  "power.origins.fall_immunity.description": "Vous ne subissez jamais de dommages dus à une chute, quelle que soit la hauteur à laquelle vous tombez.",
+
+  "power.origins.sprint_jump.name": "Chevilles solides",
+  "power.origins.sprint_jump.description": "Vous êtes capable de sauter plus haut en sautant tout en sprintant.",
+
+  "power.origins.nine_lives.name": "Neuf vies",
+  "power.origins.nine_lives.description": "Vous avez un cœur en moins qu'un humain.",
+
+  "power.origins.cat_vision.name": "Nyctalope",
+  "power.origins.cat_vision.description": "On peut légèrement voir dans le noir quand on n'est pas dans l'eau.",
+
+  "power.origins.weak_arms.name": "Faiblard",
+  "power.origins.weak_arms.description": "Lorsque vous n'êtes pas sous l'effet d'une potion de force, vous ne pouvez seulement casser de la pierre que s'il y a au maximum deux autres blocs de pierres naturelles adjacentes.",
+
+  "power.origins.scare_creepers.name": "Apparence féline",
+  "power.origins.scare_creepers.description": "Les creepers ont peur de vous et n'explosent seulement si vous les attaquer en premier.",
+
+  "power.origins.launch_into_air.name": "Cadeaux des cieux",
+  "power.origins.launch_into_air.description": "Toutes les 30 secondes, vous pouvez vous lancer une vingtaine de blocs en l'air.",
+
+  "power.origins.elytra.name": "Ailée",
+  "power.origins.elytra.description": "Vous avez des Élytres incrusté dans votre corps, vous n'avez donc pas besoin de vous en équipez.",
+
+  "power.origins.light_armor.name": "Besoin de mobilité",
+  "power.origins.light_armor.description": "Vous ne pouvez porter aucunes armures lourdes ( = armures dont les valeurs de protection sont supérieures à celles en mailles).",
+
+  "power.origins.claustrophobia.name": "Claustrophobie",
+  "power.origins.claustrophobia.description": "Vous retrouvez trop longtemps dans un endroit où le plafond est bas vous affaiblira et vous rendra plus lent.",
+
+  "power.origins.more_kinetic_damage.name": "Os fragiles",
+  "power.origins.more_kinetic_damage.description": "Vous prenez plus de dommages en tombant et en volant dans des blocs.",
+
+  "power.origins.aerial_combatant.name": "Combattant aérien",
+  "power.origins.aerial_combatant.description": "Vous faites beaucoup plus de dégâts lorsque vous volez avec des Élytres.",
+
+  "power.origins.throw_ender_pearl.name": "Téléportation",
+  "power.origins.throw_ender_pearl.description": "Vous pouvez lancer une perle de l'ender quand vous le souhaitez, qui ne vous fera aucun dégât, cela vous permettra de vous téléporter.",
+
+  "power.origins.pumpkin_hate.name": "Apeurés des gourdes",
+  "power.origins.pumpkin_hate.description": "Vous êtes effrayés des citrouilles. Pour une bonne raison.",
+
+  "power.origins.extra_reach.name": "Corps mince",
+  "power.origins.extra_reach.description": "Vous pouvez atteindre des blocs et des entités plus éloignés.",
+
+  "category.origins": "Origins",
+  "key.origins.active_power": "Activation du pouvoir",
+  "key.origins.view_origin": "Voir votre race",
+
+  "item.origins.orb_of_origin": "L'orbe originel",
+
+  "enchantment.origins.water_protection": "Protection contre l'eau",
+
+  "origins.gui.select": "Choisir cette race",
+  "origins.gui.close": "Fermez la fenêtre",
+  "origins.gui.choose_origin.title": "Sélectionnez votre race",
+  "origins.gui.view_origin.title": "C'est votre race",
+  "origins.gui.impact.impact": "Impact",
+  "origins.gui.impact.none": "Aucune",
+  "origins.gui.impact.low": "Faible",
+  "origins.gui.impact.medium": "Moyen",
+  "origins.gui.impact.high": "Haut",
+
+  "death.attack.no_water_for_gills": "%s ne s'est pas débrouillé à rester mouillés.",
+  "death.attack.hurt_by_water": "%s à prit son bain trop longtemps."
+}
