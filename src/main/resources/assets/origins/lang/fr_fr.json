@@ -156,5 +156,9 @@
   "origins.gui.impact.high": "Élevé",
 
   "death.attack.no_water_for_gills": "%s ne s'est pas débrouillé(e) à rester mouillé(e).",
-  "death.attack.hurt_by_water": "%s à prit son bain trop longtemps."
+  "death.attack.hurt_by_water": "%s à prit son bain trop longtemps.",
+  
+  "commands.origin.origin_not_found": "Origine inconnue: %s",
+  "commands.origin.set.success.single": "L'origine de %s a été définie à %s.",
+  "commands.origin.set.success.multiple": "Les origines de %s a été définies à %s."
 }
