@@ -2,6 +2,7 @@ package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.*;
+import io.github.apace100.origins.registry.ModBlocks;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.util.Constants;
 import net.minecraft.block.BlockState;
@@ -185,5 +186,22 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
             return !submerged;
         }
         return submerged;
+    }
+
+    // WEBBING
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;onAttacking(Lnet/minecraft/entity/Entity;)V"), method = "attack")
+    public void cobwebOnMeleeAttack(Entity target, CallbackInfo info) {
+        if(target instanceof LivingEntity) {
+            if(PowerTypes.WEBBING.isActive(this) && !this.isSneaking()) {
+                CooldownPower power = PowerTypes.WEBBING.get(this);
+                if(power.canUse()) {
+                    BlockPos targetPos = target.getBlockPos();
+                    if(world.isAir(targetPos) || world.getBlockState(targetPos).getMaterial().isReplaceable()) {
+                        world.setBlockState(targetPos, ModBlocks.TEMPORARY_COBWEB.getDefaultState());
+                        power.use();
+                    }
+                }
+            }
+        }
     }
 }

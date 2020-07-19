@@ -129,7 +129,7 @@
   "power.origins.aerial_combatant.description": "Vous serez plus forts en vol.",
 
   "power.origins.throw_ender_pearl.name": "Téléportation",
-  "power.origins.throw_ender_pearl.description": "Vous pourrez lancer une perle de l'Ender n'importe quand (mais il n'infligera pas de dégâts).",
+  "power.origins.throw_ender_pearl.description": "Vous pourrez lancer une perle de l'Ender n'importe quand – il n'infligera pas de dégâts.",
 
   "power.origins.pumpkin_hate.name": "Les citrouilles effrayants",
   "power.origins.pumpkin_hate.description": "Vous avez raison d'avoir peur des citrouilles.",
@@ -155,6 +155,6 @@
   "origins.gui.impact.medium": "Moyen",
   "origins.gui.impact.high": "Élevé",
 
-  "death.attack.no_water_for_gills": "%s s'est desséché",
-  "death.attack.hurt_by_water": "%s s'est trop mouillé"
+  "death.attack.no_water_for_gills": "%s ne s'est pas débrouillé(e) à rester mouillé(e).",
+  "death.attack.hurt_by_water": "%s à prit son bain trop longtemps."
 }

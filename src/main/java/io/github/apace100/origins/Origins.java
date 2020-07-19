@@ -1,11 +1,13 @@
 package io.github.apace100.origins;
 
+import io.github.apace100.origins.command.OriginCommand;
 import io.github.apace100.origins.networking.ModPacketsC2S;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginManager;
 import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.registry.*;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.resource.ResourceType;
 import org.apache.logging.log4j.LogManager;
@@ -30,6 +32,9 @@ public class Origins implements ModInitializer {
 		ModLoot.register();
 		PowerTypes.init();
 		Origin.init();
+		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
+			OriginCommand.register(dispatcher);
+		});
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginManager());
 	}
 }

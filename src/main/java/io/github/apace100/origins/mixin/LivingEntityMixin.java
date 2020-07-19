@@ -2,8 +2,9 @@ package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.power.*;
-import io.github.apace100.origins.registry.ModBlocks;
+import io.github.apace100.origins.power.ModifyDamageTakenPower;
+import io.github.apace100.origins.power.PowerTypes;
+import io.github.apace100.origins.power.SetEntityGroupPower;
 import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
@@ -15,13 +16,11 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.tag.FluidTags;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
@@ -156,22 +155,5 @@ public abstract class LivingEntityMixin extends Entity {
             return 0.01D;
         }
         return in;
-    }
-
-    // WEBBING
-    @Inject(at = @At("HEAD"), method = "onAttacking")
-    public void onAttacking(Entity target, CallbackInfo info) {
-        if(target instanceof LivingEntity) {
-            if(PowerTypes.WEBBING.isActive(this) && !this.isSneaking()) {
-                CooldownPower power = PowerTypes.WEBBING.get(this);
-                if(power.canUse()) {
-                    BlockPos targetPos = target.getBlockPos();
-                    if(world.isAir(targetPos) || world.getBlockState(targetPos).getMaterial().isReplaceable()) {
-                        world.setBlockState(targetPos, ModBlocks.TEMPORARY_COBWEB.getDefaultState());
-                        power.use();
-                    }
-                }
-            }
-        }
     }
 }

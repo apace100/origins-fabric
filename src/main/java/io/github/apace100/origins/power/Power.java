@@ -25,7 +25,7 @@ public class Power {
         return this;
     }
 
-    public void onChosen() {
+    public void onChosen(boolean isOrbOfOrigin) {
 
     }
 
