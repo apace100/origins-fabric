@@ -1,0 +1,164 @@
+{
+  "origin.origins.human.name": "Mensch",
+  "origin.origins.human.description": "Ein gewöhnlicher Mensch. Dein normales Minecrafterlebnis erwartet dich.",
+
+  "origin.origins.merling.name": "Meerling",
+  "origin.origins.merling.description": "Diese ursprünglichen Bewohner des Ozeans sind es nicht gewohnt zu lange außerhalb des Wassers zu sein.",
+
+  "origin.origins.arachnid.name": "Arachnide",
+  "origin.origins.arachnid.description": "Ihre Kletterkünste und die Fähigkeit ihre Feinde in Spinnennetzen zu fangen machen die Arachniden zu perfekten Jägern.",
+
+  "origin.origins.blazeborn.name": "Lohenwesen",
+  "origin.origins.blazeborn.description": "Als entfernte Verwandte der Lohe besitzen Lohenwesen eine natürliche Immunität gegen die Gefahren des Nether.",
+
+  "origin.origins.avian.name": "Vogelwesen",
+  "origin.origins.avian.description": "Die Vogelwesen haben ihre Flugfähigkeit vor langer Zeit verloren. Heutzutage können diese friedliebenden Kreaturen dabei beobachtet werden wie sie von einem Platz zum nächsten gleiten.",
+
+  "origin.origins.phantom.name": "Phantom",
+  "origin.origins.phantom.description": "Als Kind eines Menschen und eines Phantoms können diese Kraturen zwischen ihrer normalen Gestalt und ihrer Phantomgestalt wechseln.",
+
+  "origin.origins.feline.name": "Samtpfote",
+  "origin.origins.feline.description": "Mit ihrem katzenartigen Aussehen schlagen die Samtpfoten Creeper in die Flucht. Mit der Geschicklichkeit einer Katze landen sie immer sicher auf ihren Füßen.",
+
+  "origin.origins.elytrian.name": "Elytraner",
+  "origin.origins.elytrian.description": "Da sie häufig mit den Winden herumfliegen, fühlen sich Elytraner unwohl, wenn sie nicht genug Platz über ihren Köpfen haben.",
+
+  "origin.origins.enderian.name": "Enderling",
+  "origin.origins.enderian.description": "Als Töchter und Söhne des Enderdrachen können sich Enderlinge teleportieren, nehmen jedoch Schaden im Wasser.",
+
+  "power.origins.water_breathing.name": "Kiemen",
+  "power.origins.water_breathing.description": "Du kannst unter Wasser atmen, jedoch nicht an Land.",
+
+  "power.origins.aqua_affinity.name": "Wasseraffinität",
+  "power.origins.aqua_affinity.description": "Du kannst Blöcke unter Wasser so problemlos zerstören wie andere an Land.",
+
+  "power.origins.water_vision.name": "Feuchte Augen",
+  "power.origins.water_vision.description": "Deine Sicht unter Wasser ist perfekt.",
+
+  "power.origins.swim_speed.name": "Flossen",
+  "power.origins.swim_speed.description": "Deine Geschwindigkeit unter Wasser ist erhöht.",
+
+  "power.origins.like_water.name": "Wie Wasser",
+  "power.origins.like_water.description": "Unter Wasser sinkst du nur zum Grund, wenn du es willst.",
+
+  "power.origins.fragile.name": "Fragil",
+  "power.origins.fragile.description": "Du hast 3 Lebensherzen weniger als Menschen.",
+
+  "power.origins.webbing.name": "Netz",
+  "power.origins.webbing.description": "Wenn du Gegner im Nahkampf schlägst, bleiben sie in einem Spinnennetz kleben.",
+
+  "power.origins.climbing.name": "Klettern",
+  "power.origins.climbing.description": "Du kannst jede Wand hochklettern, nicht nur Leitern.",
+
+  "power.origins.carnivore.name": "Fleischfresser",
+  "power.origins.carnivore.description": "Deine Ernährung beschränkt sich auf Fleisch, du kannst kein Gemüse essen.",
+
+  "power.origins.fire_immunity.name": "Feuerimmunität",
+  "power.origins.fire_immunity.description": "Du bist gegen sämtlichen Feuerschaden immun.",
+
+  "power.origins.nether_spawn.name": "Bewohner des Nethers",
+  "power.origins.nether_spawn.description": "Dein natürlicher Startpunkt ist im Nether.",
+
+  "power.origins.burning_wrath.name": "Flammender Zorn",
+  "power.origins.burning_wrath.description": "Deine Attacken machen mehr Schaden während du brennst.",
+
+  "power.origins.hotblooded.name": "Heißblut",
+  "power.origins.hotblooded.description": "Durch deinen heißen Körper verbrennen Gifte. Dadurch bist du immun zu Gift- und Hungereffekten.",
+
+  "power.origins.water_vulnerability.name": "Hydrophobie",
+  "power.origins.water_vulnerability.description": "Du nimmst mit der Zeit Schaden im Wasser.",
+
+  "power.origins.tailwind.name": "Rückenwind",
+  "power.origins.tailwind.description": "Zu Fuß bist du ein bisschen schneller unterwegs als andere.",
+
+  "power.origins.slow_falling.name": "Federgewicht",
+  "power.origins.slow_falling.description": "Du sinkst langsam wie eine Feder zum Boden, außer wenn du schleichst.",
+
+  "power.origins.vegetarian.name": "Vegetarier",
+  "power.origins.vegetarian.description": "Du kannst kein Fleisch verdauen.",
+
+  "power.origins.fresh_air.name": "Frische Luft",
+  "power.origins.fresh_air.description": "Zum Schlafen muss dein Bett sich auf einer Höhe von mindestens 86 Blöcken befinden, damit du frische Luft atmen kannst.",
+
+  "power.origins.phasing.name": "Schemenform",
+  "power.origins.phasing.description": "In der Phantomform kannst du durch festes Material, mit Ausnahme von Obsidian, laufen.",
+
+  "power.origins.invisibility.name": "Unsichtbarkeit",
+  "power.origins.invisibility.description": "In der Phantomform bist du unsichtbar.",
+
+  "power.origins.hunger_over_time.name": "Schneller Stoffwechsel",
+  "power.origins.hunger_over_time.description": "In der Phantomform zu sein macht dich hungrig.",
+
+  "power.origins.burn_in_daylight.name": "Lichtempfindlich",
+  "power.origins.burn_in_daylight.description": "Du fängst im Tageslicht an zu brennen, wenn du nicht unsichtbar bist.",
+
+  "power.origins.fall_immunity.name": "Akrobatik",
+  "power.origins.fall_immunity.description": "Du nimmst keinen Fallschaden, egal von welcher Höhe du fällst.",
+
+  "power.origins.sprint_jump.name": "Starke Knöchel",
+  "power.origins.sprint_jump.description": "Während du sprintest kannst du höher springen.",
+
+  "power.origins.nine_lives.name": "Neun Leben",
+  "power.origins.nine_lives.description": "Du hast ein Lebensherz weniger als Menschen.",
+
+  "power.origins.cat_vision.name": "Nachtaktiv",
+  "power.origins.cat_vision.description": "Du kannst etwas besser im Dunkeln sehen solange du nicht im Wasser bist.",
+
+  "power.origins.weak_arms.name": "Schwache Arme",
+  "power.origins.weak_arms.description": "Solange du nicht under dem Effekt eines Stärketranks stehst, kannst du nur natürliche Steine abbauen, wenn maximal 2 natürliche Steine angrenzen.",
+
+  "power.origins.scare_creepers.name": "Katzenähnliche Gestalt",
+  "power.origins.scare_creepers.description": "Creeper haben Angst vor dir und explodieren nur, wenn du sie zuerst angreifst.",
+
+  "power.origins.launch_into_air.name": "Geschenk der Winde",
+  "power.origins.launch_into_air.description": "Alle 30 Sekunden kannst du dich ungefähr 20 Blöcke in die Luft schießen.",
+
+  "power.origins.elytra.name": "Geflügelt",
+  "power.origins.elytra.description": "Du hast Elytren ohne sie ausrüsten zu müssen.",
+
+  "power.origins.light_armor.name": "Bedürfnis nach Bewegung",
+  "power.origins.light_armor.description": "Du kannst keine schwere Rüstung tragen (Rüstungswerte über denen von Kettenrüstung).",
+
+  "power.origins.claustrophobia.name": "Klaustrophobie",
+  "power.origins.claustrophobia.description": "Zu lange irgendwo mit einer niedrigen Decke zu sein wird dich schwächen und verlangsamen.",
+
+  "power.origins.more_kinetic_damage.name": "Brüchige Knochen",
+  "power.origins.more_kinetic_damage.description": "Du nimmst mehr Schaden vom Fallen und Fliegen gegen Blöcke.",
+
+  "power.origins.aerial_combatant.name": "Luftiger Kämpfer",
+  "power.origins.aerial_combatant.description": "Du machst deutlich mehr Schaden während du im Elytrenflug bist.",
+
+  "power.origins.throw_ender_pearl.name": "Teleportation",
+  "power.origins.throw_ender_pearl.description": "Wenn du willst, kannst du eine Enderperle, welche es dir erlaubt dich zu teleportieren und keinen Schaden macht, werfen.",
+
+  "power.origins.pumpkin_hate.name": "Angst vor Kürbissen",
+  "power.origins.pumpkin_hate.description": "Du hast Angst vor Kürbissen. Aus gutem Grund.",
+
+  "power.origins.extra_reach.name": "Feingliedriger Körper",
+  "power.origins.extra_reach.description": "Du kannst Blöcke und Wesen weiter weg erreichen.",
+
+  "category.origins": "Origins",
+  "key.origins.active_power": "Aktive Fähigkeit",
+  "key.origins.view_origin": "Zeige Ursprung",
+
+  "item.origins.orb_of_origin": "Kugel des Ursprungs",
+
+  "enchantment.origins.water_protection": "Wasserschutz",
+
+  "origins.gui.select": "Auswählen",
+  "origins.gui.close": "Schließen",
+  "origins.gui.choose_origin.title": "Wähle deinen Ursprung",
+  "origins.gui.view_origin.title": "Dies ist dein Ursprung",
+  "origins.gui.impact.impact": "Auswirkung",
+  "origins.gui.impact.none": "Keine",
+  "origins.gui.impact.low": "Niedrig",
+  "origins.gui.impact.medium": "Mittel",
+  "origins.gui.impact.high": "Hoch",
+
+  "death.attack.no_water_for_gills": "%s hat es nicht geschafft nass zu bleiben.",
+  "death.attack.hurt_by_water": "%s hat zu lange gebadet.",
+
+  "commands.origin.origin_not_found": "Unbekannter Ursprung: %s",
+  "commands.origin.set.success.single": "Ursprung von %s wurde auf %s gesetzt.",
+  "commands.origin.set.success.multiple": "Ursprung von %s Zielen wurde auf %s gesetzt."
+}

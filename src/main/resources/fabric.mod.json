@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "Origins",
-  "description": "This mod adds several races with passive abilities to the game.",
+  "description": "This mod adds several origins with passive abilities to the game, which you can choose from at the beginning of the game.",
   "authors": [
     "Apace"
   ],
