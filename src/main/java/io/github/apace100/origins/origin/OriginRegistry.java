@@ -1,6 +1,5 @@
 package io.github.apace100.origins.origin;
 
-import io.github.apace100.origins.Origins;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -17,8 +16,7 @@ public class OriginRegistry {
 
     public static Origin register(Identifier id, Origin origin) {
         if(idToOrigin.containsKey(id)) {
-            Origins.LOGGER.error("Duplicate origin id tried to register: '" + id.toString() + "'");
-            return null;
+            throw new IllegalArgumentException("Duplicate origin id tried to register: '" + id.toString() + "'");
         }
         idToOrigin.put(id, origin);
         return origin;
@@ -50,8 +48,7 @@ public class OriginRegistry {
 
     public static Origin get(Identifier id) {
         if(!idToOrigin.containsKey(id)) {
-            Origins.LOGGER.error("Could not get origin from id '" + id.toString() + "', as it was not registered!");
-            return Origin.EMPTY;
+            throw new IllegalArgumentException("Could not get origin from id '" + id.toString() + "', as it was not registered!");
         }
         Origin origin = idToOrigin.get(id);
         return origin;

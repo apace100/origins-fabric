@@ -124,7 +124,12 @@ public class PlayerOriginComponent implements OriginComponent {
             }
             powers.clear();
         }
-        this.origin = OriginRegistry.get(Identifier.tryParse(compoundTag.getString("Origin")));
+        try {
+            this.origin = OriginRegistry.get(Identifier.tryParse(compoundTag.getString("Origin")));
+        } catch(IllegalArgumentException e) {
+            Origins.LOGGER.warn("Player " + player.getDisplayName().asString() + " had unregistered origin: " + compoundTag.getString("Origin"));
+            this.origin = Origin.EMPTY;
+        }
         this.hadOriginBefore = compoundTag.getBoolean("HadOriginBefore");
         ListTag powerList = (ListTag)compoundTag.get("Powers");
         for(int i = 0; i < powerList.size(); i++) {

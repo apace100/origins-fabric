@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class OriginArgument implements ArgumentType<Origin> {
    public static final DynamicCommandExceptionType ORIGIN_NOT_FOUND = new DynamicCommandExceptionType((p_208663_0_) -> {
-      return new TranslatableText("origin.origin_not_found", p_208663_0_);
+      return new TranslatableText("commands.origin.origin_not_found", p_208663_0_);
    });
 
    public static OriginArgument origin() {

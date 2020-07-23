@@ -10,6 +10,8 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -26,12 +28,13 @@ public class PowerHudRenderer extends DrawableHelper {
             OriginComponent component = ModComponents.ORIGIN.get(client.player);
             if(component.hasOrigin()) {
                 int x = client.getWindow().getScaledWidth() / 2 + 20;
-                int y = client.getWindow().getScaledHeight() - 48;
-                if(client.player.getAir() < client.player.getMaxAir()) {
+                int y = client.getWindow().getScaledHeight() - 47;
+                Entity vehicle = client.player.getVehicle();
+                if(vehicle instanceof LivingEntity && ((LivingEntity)vehicle).getMaxHealth() > 20F) {
                     y -= 8;
                 }
-                if(client.player.isCreative()) {
-                    y += 8;
+                if(client.player.getAir() < client.player.getMaxAir()) {
+                    y -= 8;
                 }
                 int barWidth = 71;
                 int barHeight = 5;
