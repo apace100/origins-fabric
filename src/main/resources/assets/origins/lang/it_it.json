@@ -1,0 +1,164 @@
+{
+  "origin.origins.human.name": "Umano",
+  "origin.origins.human.description": "Un umano normale. La tua normale esperienza di minecraft ti aspetta.",
+
+  "origin.origins.merling.name": "Merling",
+  "origin.origins.merling.description": "Questi naturali abitanti dell'oceano non sono fatti per stare fuori dall'acqua per troppo tempo.",
+
+  "origin.origins.arachnid.name": "Aracnide",
+  "origin.origins.arachnid.description": "La loro abilità di arrampicarsi e di intrappolare le loro prede nelle ragnatele fa degli aracnidi dei perfetti cacciatori.",
+
+  "origin.origins.blazeborn.name": "Blazeborn",
+  "origin.origins.blazeborn.description": "discendendi lontani dei blaze, i Blazeborn sono naturalmente immuni ai pericoli del Nether.",
+
+  "origin.origins.avian.name": "Avian",
+  "origin.origins.avian.description": "La razza degli Avian ha perso la loro abilità di volare molto tempo fa. Adesso queste creature pacifiche possono essere viste planare da un posto all'altro.",
+
+  "origin.origins.phantom.name": "Fantasma",
+  "origin.origins.phantom.description": "essendo per metà umani e per metà fantasmi, queste creature possono passare dalla forma di Fantasma a quella umana e viceversa.",
+
+  "origin.origins.feline.name": "Felino",
+  "origin.origins.feline.description": "Con la loro forma simile ad un gatto, i Felini spaventano i creeper. Con la destrezza dei gatti, atterano sempre tranquillamente sui loro piedi.",
+
+  "origin.origins.elytrian.name": "Elytrian",
+  "origin.origins.elytrian.description": "Volano spesso nel vento e per questo gli Elytrian sono scomodi quando non hanno abbastanza spazio sopra la loro testa.",
+
+  "origin.origins.enderian.name": "Enderian",
+  "origin.origins.enderian.description": "Nati come figli e figlie dell'Ender Dragon, Gli Enderian sono capaci di teletrasporstarsi ma sono vulnerabili all'acqua.",
+
+  "power.origins.water_breathing.name": "Branchie",
+  "power.origins.water_breathing.description": "Puoi respirare sott'acqua, ma non sualla terra.",
+
+  "power.origins.aqua_affinity.name": "Affinità Acquatica",
+  "power.origins.aqua_affinity.description": "Puoi rompere i blocchi sott'acqua come se fossi sulla terra.",
+
+  "power.origins.water_vision.name": "Occhi bagnati ",
+  "power.origins.water_vision.description": "La tua vista sott'acqua è perfetta.",
+
+  "power.origins.swim_speed.name": "Pinne",
+  "power.origins.swim_speed.description": "la tua velocità sott'acqua è aumentata.",
+
+  "power.origins.like_water.name": "Come l'Acqua",
+  "power.origins.like_water.description": "Quando sei sott'acqua, non affondi finchè non lo decidi tu.",
+
+  "power.origins.fragile.name": "Fragile",
+  "power.origins.fragile.description": "Hai solo 7 cuori di vita.",
+
+  "power.origins.webbing.name": "Tessitura",
+  "power.origins.webbing.description": "Quando colpisci un nemico corpo a corpo, rimane bloccato in una ragnatela.",
+
+  "power.origins.climbing.name": "Arrampicata",
+  "power.origins.climbing.description": "Puoi arrampicatri su qualsiasi tipo di muro, non solo sulle scale a pioli.",
+
+  "power.origins.carnivore.name": "Carnivoro",
+  "power.origins.carnivore.description": "Puoi mangiare solo carne.",
+
+  "power.origins.fire_immunity.name": "Immunità al Fuoco",
+  "power.origins.fire_immunity.description": "Sei immune ad ogni tipo di danno da fuoco.",
+
+  "power.origins.nether_spawn.name": "Abitante del Nether",
+  "power.origins.nether_spawn.description": "Il tuo spawn naturale è nel Nether.",
+
+  "power.origins.burning_wrath.name": "Ira Infuocata",
+  "power.origins.burning_wrath.description": "Quando vai a fuoco, i tuoi colpi fanno piu danno.",
+
+  "power.origins.hotblooded.name": "Sangue Bollente",
+  "power.origins.hotblooded.description": "A causa del tuo corpo bollente, i veleni bruciano, immunizzandoti dagli status di fame e veleno.",
+
+  "power.origins.water_vulnerability.name": "Idrofobia",
+  "power.origins.water_vulnerability.description": "Si subiscono danni nel tempo se si sta troppo in acqua.",
+
+  "power.origins.tailwind.name": "Vento di Coda",
+  "power.origins.tailwind.description": "Sei leggermente più veloce degli altri mentre cammini.",
+
+  "power.origins.slow_falling.name": "Peso Piuma",
+  "power.origins.slow_falling.description": "Cadi lentamente sul suolo per merito delle piume, finchè non ti abbassi.",
+
+  "power.origins.vegetarian.name": "Vegetariano",
+  "power.origins.vegetarian.description": "Non digerisci la carne.",
+
+  "power.origins.fresh_air.name": "Aria Fresca",
+  "power.origins.fresh_air.description": "Quando dormi, il tuo letto deve essere ad un'altitudine di almeno 86 blocchi, così puoi respirare aria fresca.",
+
+  "power.origins.phasing.name": "Phasing",
+  "power.origins.phasing.description": "Quando sei nella forma di Fantasma, puoi attraversare i blocchi solidi, tranne l'Ossidiana.",
+
+  "power.origins.invisibility.name": "Invisibilità",
+  "power.origins.invisibility.description": "Quando sei nella forma di Fantasma, sei invisibile.",
+
+  "power.origins.hunger_over_time.name": "Metabolismo Veloce",
+  "power.origins.hunger_over_time.description": "Quando sei nella forma di Fantasma ti viene fame più velocemente.",
+
+  "power.origins.burn_in_daylight.name": "Fotoallergico",
+  "power.origins.burn_in_daylight.description": "Bruci durante il giorno se non sei invisibile.",
+
+  "power.origins.fall_immunity.name": "Acrobatico",
+  "power.origins.fall_immunity.description": "Non prenderai mai danno da caduta, non importa da che altezza.",
+
+  "power.origins.sprint_jump.name": "Caviglie Forti",
+  "power.origins.sprint_jump.description": "Puoi saltare in alto se corri.",
+
+  "power.origins.nine_lives.name": "Nove Vite",
+  "power.origins.nine_lives.description": "Hai solo 9 cuori.",
+
+  "power.origins.cat_vision.name": "Notturno",
+  "power.origins.cat_vision.description": "Puoi vedere bene nel buio se non sei sott'acqua.",
+
+  "power.origins.weak_arms.name": "Braccia Deboli",
+  "power.origins.weak_arms.description": "Se non hai l'effetto di Forza, puoi minare la roccia naturale solo se è adiacente ad altre due rocce naturali.",
+
+  "power.origins.scare_creepers.name": "Aspetto da Gatto",
+  "power.origins.scare_creepers.description": "I Creeper sono spaventati da te ed esplodono solo se tu li attachi per primo.",
+
+  "power.origins.launch_into_air.name": "Dono dai Venti",
+  "power.origins.launch_into_air.description": "Ogni 30 secondi, sei capace di lanciarti a 20 blocchi verso l'alto.",
+
+  "power.origins.elytra.name": "Alato",
+  "power.origins.elytra.description": "Hai già le Elytra anche senza equipagiarle.",
+
+  "power.origins.light_armor.name": "Necessità di Mobilità",
+  "power.origins.light_armor.description": "Puoi solo indossare armature leggere (armature con protezione equivalenti o inferiori all'armatura di Chainmail).",
+
+  "power.origins.claustrophobia.name": "Claustrofobia",
+  "power.origins.claustrophobia.description": "Stare troppo tempo sotto un soffitto basso ti da lentezza.",
+
+  "power.origins.more_kinetic_damage.name": "Ossa Fragili",
+  "power.origins.more_kinetic_damage.description": "Ti fai più male quando cadi o sbatti contro un blocco mentre voli.",
+
+  "power.origins.aerial_combatant.name": "Combattente Aereo",
+  "power.origins.aerial_combatant.description": "Fai molto più danno mentre voli con l'Elytra.",
+
+  "power.origins.throw_ender_pearl.name": "Teletrasporto",
+  "power.origins.throw_ender_pearl.description": "Qando vuoi, puoi tirare le ender pearl senza farti del danno, Facendoti così teletrasportare.",
+
+  "power.origins.pumpkin_hate.name": "Paura delle Zucche",
+  "power.origins.pumpkin_hate.description": "Sei spaventato dalle zucche. Per una buona ragione.",
+
+  "power.origins.extra_reach.name": "Corpo Snello",
+  "power.origins.extra_reach.description": "Puoi raggiungere blocchi piuù lontani.",
+
+  "category.origins": "Origini",
+  "key.origins.active_power": "Attiva Potere",
+  "key.origins.view_origin": "Mostra Origine",
+
+  "item.origins.orb_of_origin": "Globo delle Origini",
+
+  "enchantment.origins.water_protection": "Protezione dall'Acqua",
+
+  "origins.gui.select": "Seleziona",
+  "origins.gui.close": "Chiudi",
+  "origins.gui.choose_origin.title": "Scegli la tua Origine",
+  "origins.gui.view_origin.title": "Questa è la tua Origine",
+  "origins.gui.impact.impact": "Impatto",
+  "origins.gui.impact.none": "Nessuno",
+  "origins.gui.impact.low": "Basso",
+  "origins.gui.impact.medium": "Medio",
+  "origins.gui.impact.high": "Alto",
+
+  "death.attack.no_water_for_gills": "%s Ha dimenticato di restare bagnato.",
+  "death.attack.hurt_by_water": "%s Ha fatto un bagno per troppo tempo.",
+
+  "commands.origin.origin_not_found": "Origine Sconosciuta: %s",
+  "commands.origin.set.success.single": "Impostato l'origine di %s a %s.",
+  "commands.origin.set.success.multiple": "Impostato l'origine degli %s obbiettivi a %s."
+}
