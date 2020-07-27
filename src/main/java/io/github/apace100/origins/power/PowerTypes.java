@@ -13,7 +13,6 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -91,7 +90,7 @@ public class PowerTypes {
         WEBBING = register("webbing", new PowerType<>((type, player) -> new CooldownPower(type, player, 6 * 20, 5)));
         CLIMBING = register("climbing", new PowerType<>((type, player) -> new TogglePower(type, player, true)));
         NO_COBWEB_SLOWDOWN = register("no_cobweb_slowdown", new PowerType<>(Power::new).setHidden());
-        CARNIVORE = register("carnivore", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, (stack -> stack.isFood() && !stack.getItem().isIn(ModTags.MEAT)))));
+        CARNIVORE = register("carnivore", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, (stack -> stack.isFood() && !(stack.getItem().getFoodComponent().isMeat() || stack.getItem().isIn(ModTags.MEAT))))));
         ARTHROPOD = register("arthropod", new PowerType<>((type, player) -> new SetEntityGroupPower(type, player, EntityGroup.ARTHROPOD)).setHidden());
 
         FIRE_IMMUNITY = register("fire_immunity", new PowerType<>(Power::new));
@@ -103,7 +102,7 @@ public class PowerTypes {
 
         SLOW_FALLING = register("slow_falling", new PowerType<>(Power::new));
         TAILWIND = register("tailwind", new PowerType<>((type, player) -> new AttributePower(type, player, EntityAttributes.GENERIC_MOVEMENT_SPEED, new EntityAttributeModifier("power_type:tailwind", 0.02, EntityAttributeModifier.Operation.ADDITION))));
-        VEGETARIAN = register("vegetarian", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, Ingredient.fromTag(ModTags.MEAT))));
+        VEGETARIAN = register("vegetarian", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, (stack -> stack.isFood() && (stack.getItem().getFoodComponent().isMeat() || stack.getItem().isIn(ModTags.MEAT))))));
         FRESH_AIR = register("fresh_air", new PowerType<>(Power::new));
 
         PHASING = register("phasing", new PowerType<>(TogglePower::new));
