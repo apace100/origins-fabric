@@ -31,6 +31,9 @@ public abstract class AbstractBlockMixin {
                     info.setReturnValue(0F);
                 }
             }
+            if(PowerTypes.STRONG_ARMS.isActive(player) && !player.inventory.getMainHandStack().isEffectiveOn(state)) {
+                info.setReturnValue(0.09F);
+            }
         }
     }
 }

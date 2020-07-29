@@ -12,6 +12,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.tag.FluidTags;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class PowerHudRenderer extends DrawableHelper {
                 if(vehicle instanceof LivingEntity && ((LivingEntity)vehicle).getMaxHealth() > 20F) {
                     y -= 8;
                 }
-                if(client.player.getAir() < client.player.getMaxAir()) {
+                if(client.player.isSubmergedIn(FluidTags.WATER) || client.player.getAir() < client.player.getMaxAir()) {
                     y -= 8;
                 }
                 int barWidth = 71;

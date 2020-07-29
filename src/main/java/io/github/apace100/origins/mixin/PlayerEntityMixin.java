@@ -4,6 +4,7 @@ import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModBlocks;
 import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModTags;
 import io.github.apace100.origins.util.Constants;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
@@ -47,6 +48,23 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
+    }
+
+    // ModifyExhaustion
+    @ModifyVariable(at = @At("HEAD"), method = "addExhaustion", ordinal = 0, name = "exhaustion")
+    private float modifyExhaustion(float exhaustionIn) {
+        OriginComponent component = ModComponents.ORIGIN.get(this);
+        for (ModifyExhaustionPower p : component.getPowers(ModifyExhaustionPower.class)) {
+            exhaustionIn = exhaustionIn * p.value;
+        }
+        return exhaustionIn;
+    }
+
+    @Inject(at = @At("HEAD"), method = "isUsingEffectiveTool", cancellable = true)
+    private void modifyEffectiveTool(BlockState state, CallbackInfoReturnable<Boolean> info) {
+        if(state.getBlock().isIn(ModTags.NATURAL_STONE) && PowerTypes.STRONG_ARMS.isActive(this)) {
+            info.setReturnValue(true);
+        }
     }
 
     // ModifyDamageDealt
@@ -114,7 +132,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
 
     // HUNGER_OVER_TIME & BURN_IN_DAYLIGHT
     // WATER_BREATHING & WATER_VULNERABILITY
-    // PARTICLES
+    // PARTICLES & EXHAUSTING_WATER_BREATHING
     @Inject(at = @At("TAIL"), method = "tick")
     private void tick(CallbackInfo info) {
         if(!world.isClient) {

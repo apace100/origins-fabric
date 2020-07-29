@@ -13,6 +13,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -72,9 +73,17 @@ public class PowerTypes {
     public static final PowerType<PreventItemUsePower> PUMPKIN_HATE;
     public static final PowerType<ActiveCooldownPower> THROW_ENDER_PEARL;
     public static final PowerType<AttributePower> EXTRA_REACH;
+    public static final PowerType<ParticlePower> ENDER_PARTICLES;
+
+    public static final PowerType<InventoryPower> INVENTORY;
+    public static final PowerType<AttributePower> NATURAL_ARMOR;
+    public static final PowerType<PreventItemUsePower> NO_SHIELD;
+    public static final PowerType<ModifyExhaustionPower> MORE_EXHAUSTION;
+    public static final PowerType<Power> STRONG_ARMS;
 
     // Unused Powers
     public static final PowerType<Power> LAVA_STRIDER;
+    public static final PowerType<PreventItemUsePower> NO_RANGED_WEAPONS;
 
     static {
         INVULNERABILITY = register("invulnerability", new PowerType<>(InvulnerablePower::new));
@@ -145,8 +154,17 @@ public class PowerTypes {
         EXTRA_REACH = register("extra_reach", new PowerType<>((type, player) -> new AttributePower(type, player)
             .addModifier(ReachEntityAttributes.REACH, new EntityAttributeModifier("power_type:extra_reach", 1.5, EntityAttributeModifier.Operation.ADDITION))
             .addModifier(ReachEntityAttributes.ATTACK_RANGE, new EntityAttributeModifier("power_type:extra_reach", 1.5, EntityAttributeModifier.Operation.ADDITION))));
+        ENDER_PARTICLES = register("ender_particles", new PowerType<>((type, player) -> new ParticlePower(type, player, ParticleTypes.PORTAL, 4)).setHidden());
 
         LAVA_STRIDER = register("lava_strider", new PowerType<>(Power::new));
+
+        INVENTORY = register("shulker_inventory", new PowerType<>((type, player) -> new InventoryPower(type, player, "container.shulker_inventory_power")));
+        NATURAL_ARMOR = register("natural_armor", new PowerType<>((type, player) -> new AttributePower(type, player, EntityAttributes.GENERIC_ARMOR, new EntityAttributeModifier("power_type:natural_armor", 8.0, EntityAttributeModifier.Operation.ADDITION))));
+        NO_SHIELD = register("no_shield", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, Ingredient.ofItems(Items.SHIELD))));
+        MORE_EXHAUSTION = register("more_exhaustion", new PowerType<>((type, player) -> new ModifyExhaustionPower(type, player, 1.6F)));
+        STRONG_ARMS = register("strong_arms", new PowerType<>(Power::new));
+
+        NO_RANGED_WEAPONS = register("no_ranged_weapons", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, Ingredient.fromTag(ModTags.RANGED_WEAPONS))));
     }
 
     public static void init() {

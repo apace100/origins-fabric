@@ -26,6 +26,9 @@
   "origin.origins.enderian.name": "Enderian",
   "origin.origins.enderian.description": "Born as sons and daughters of the Ender Dragon, Enderians are capable of teleporting but are vulnerable to water.",
 
+  "origin.origins.shulk.name": "Shulk",
+  "origin.origins.shulk.description": "Related to Shulkers, the bodies of the Shulk are outfitted with a protective shell-like skin.",
+
   "power.origins.water_breathing.name": "Gills",
   "power.origins.water_breathing.description": "You can breathe underwater, but not on land.",
 
@@ -137,6 +140,21 @@
   "power.origins.extra_reach.name": "Slender Body",
   "power.origins.extra_reach.description": "You can reach blocks and entities further away.",
 
+  "power.origins.shulker_inventory.name": "Hoarder",
+  "power.origins.shulker_inventory.description": "You have access to an additional 9 slots of inventory, which keep the items on death.",
+
+  "power.origins.natural_armor.name": "Sturdy Skin",
+  "power.origins.natural_armor.description": "Even without wearing armor, your skin provides natural protection.",
+
+  "power.origins.more_exhaustion.name": "Large appetite",
+  "power.origins.more_exhaustion.description": "You exhaust much quicker than others, thus requiring you to eat more.",
+
+  "power.origins.no_shield.name": "Unwieldy",
+  "power.origins.no_shield.description": "The way your hands are formed provide no way of holding a shield upright.",
+
+  "power.origins.strong_arms.name": "Strong Arms",
+  "power.origins.strong_arms.description": "You are strong enough to break natural stones without using a pickaxe.",
+
   "category.origins": "Origins",
   "key.origins.active_power": "Active Power",
   "key.origins.view_origin": "View Origin",
@@ -144,6 +162,8 @@
   "item.origins.orb_of_origin": "Orb of Origin",
 
   "enchantment.origins.water_protection": "Water Protection",
+
+  "container.shulker_inventory_power": "Shulker Inventory",
 
   "origins.gui.select": "Select",
   "origins.gui.close": "Close",
