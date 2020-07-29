@@ -15,7 +15,7 @@ public class PowerType<T extends Power> {
     private BiFunction<PowerType, PlayerEntity, T> factory;
     private boolean isHidden = false;
 
-    protected PowerType(BiFunction<PowerType, PlayerEntity, T> factory) {
+    public PowerType(BiFunction<PowerType, PlayerEntity, T> factory) {
         this.factory = factory;
     }
 

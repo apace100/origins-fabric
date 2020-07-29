@@ -26,7 +26,7 @@ public class PowerTypes {
 
     public static final PowerType<Power> WATER_BREATHING;
     public static final PowerType<Power> AQUA_AFFINITY;
-    public static final PowerType<NightVisionPower> WATER_VISION;
+    public static final PowerType<ToggleNightVisionPower> WATER_VISION;
     public static final PowerType<FloatPower> SWIM_SPEED;
     public static final PowerType<Power> LIKE_WATER;
     public static final PowerType<SetEntityGroupPower> AQUATIC;
@@ -81,7 +81,7 @@ public class PowerTypes {
 
         WATER_BREATHING = register("water_breathing", new PowerType<>(Power::new));
         AQUA_AFFINITY = register("aqua_affinity", new PowerType<>(Power::new));
-        WATER_VISION = register("water_vision", new PowerType<>((type, player) -> (NightVisionPower)new NightVisionPower(type, player).addCondition(p -> p.isSubmergedIn(FluidTags.WATER))));
+        WATER_VISION = register("water_vision", new PowerType<>((type, player) -> (ToggleNightVisionPower)new ToggleNightVisionPower(type, player).addCondition(p -> p.isSubmergedIn(FluidTags.WATER))));
         SWIM_SPEED = register("swim_speed", new PowerType<>((type, player) -> new FloatPower(type, player, 0.04F)));
         LIKE_WATER = register("like_water", new PowerType<>(Power::new));
         AQUATIC = register("aquatic", new PowerType<>((type, player) -> new SetEntityGroupPower(type, player, EntityGroup.AQUATIC)).setHidden());
