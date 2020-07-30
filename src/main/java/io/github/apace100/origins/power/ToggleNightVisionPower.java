@@ -30,6 +30,8 @@ public class ToggleNightVisionPower extends NightVisionPower implements Active {
 
     @Override
     public void fromTag(Tag tag) {
-        isActive = ((ByteTag)tag).getByte() > 0;
+        if(tag instanceof ByteTag) {
+            isActive = ((ByteTag)tag).getByte() > 0;
+        }
     }
 }
