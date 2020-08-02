@@ -59,6 +59,7 @@ public class Origin {
     private boolean isChoosable;
     private final int order;
     private final int loadingPriority;
+    private OriginUpgrade upgrade;
 
     protected Origin(Identifier id, ItemConvertible item, Impact impact, int order, int loadingPriority) {
         this.identifier = id;
@@ -67,6 +68,19 @@ public class Origin {
         this.isChoosable = true;
         this.order = order;
         this.loadingPriority = loadingPriority;
+    }
+
+    private Origin setUpgrade(OriginUpgrade upgrade) {
+        this.upgrade = upgrade;
+        return this;
+    }
+
+    public boolean hasUpgrade() {
+        return this.upgrade != null;
+    }
+
+    public OriginUpgrade getUpgrade() {
+        return this.upgrade;
     }
 
     public Identifier getIdentifier() {
@@ -130,6 +144,10 @@ public class Origin {
         for (PowerType<?> powerType : this.powerTypes) {
             buffer.writeString(ModRegistries.POWER_TYPE.getId(powerType).toString());
         }
+        buffer.writeBoolean(this.hasUpgrade());
+        if(this.hasUpgrade()) {
+            this.getUpgrade().write(buffer);
+        }
     }
 
     @Environment(EnvType.CLIENT)
@@ -164,6 +182,10 @@ public class Origin {
             }
         }
         origin.add(powers);
+
+        if(buffer.readBoolean()) {
+            origin.setUpgrade(OriginUpgrade.read(buffer));
+        }
 
         return origin;
     }
@@ -210,6 +232,9 @@ public class Origin {
             origin.setUnchoosable();
         }
         origin.add(powers);
+        if(json.has("upgrade")) {
+            origin.setUpgrade(OriginUpgrade.fromJson(json.get("upgrade")));
+        }
         return origin;
     }
 

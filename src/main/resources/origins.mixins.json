@@ -20,7 +20,8 @@
     "PlayerScreenHandlerMixin",
     "PotionItemMixin",
     "RegistryAccessor",
-    "ServerPlayerEntityMixin"
+    "ServerPlayerEntityMixin",
+    "PlayerAdvancementTrackerMixin"
   ],
   "client": [
     "BackgroundRendererMixin",
