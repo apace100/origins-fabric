@@ -1,6 +1,9 @@
 package io.github.apace100.origins.mixin;
 
+import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.PowerTypes;
+import io.github.apace100.origins.power.RestrictArmorPower;
+import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.util.Constants;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,6 +23,10 @@ public class ArmorItemMixin {
 
     @Inject(method = "use", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"), cancellable = true)
     private void preventArmorEquipping(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> info, ItemStack itemStack, EquipmentSlot equipmentSlot) {
+        OriginComponent component = ModComponents.ORIGIN.get(user);
+        if(component.getPowers(RestrictArmorPower.class).stream().anyMatch(rap -> !rap.canEquip(itemStack, equipmentSlot))) {
+            info.setReturnValue(TypedActionResult.fail(itemStack));
+        }
         if(PowerTypes.LIGHT_ARMOR.isActive(user)) {
             if(itemStack.getItem() instanceof ArmorItem) {
                 if(((ArmorItem)itemStack.getItem()).getProtection() > Constants.LIGHT_ARMOR_MAX_PROTECTION[equipmentSlot.getEntitySlotId()]) {

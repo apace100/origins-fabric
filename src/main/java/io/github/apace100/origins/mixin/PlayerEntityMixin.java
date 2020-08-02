@@ -10,6 +10,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
@@ -117,6 +118,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
 
     @Inject(method = "canPickUp", at = @At("HEAD"), cancellable = true)
     private void preventArmorDispensing(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
+        EquipmentSlot slot = MobEntity.getPreferredEquipmentSlot(stack);
+        OriginComponent component = ModComponents.ORIGIN.get(this);
+        if(component.getPowers(RestrictArmorPower.class).stream().anyMatch(rap -> !rap.canEquip(stack, slot))) {
+            info.setReturnValue(false);
+        }
         if(stack.getItem() instanceof ArmorItem) {
             if(PowerTypes.LIGHT_ARMOR.isActive(this)) {
                 ArmorItem armor = (ArmorItem)stack.getItem();

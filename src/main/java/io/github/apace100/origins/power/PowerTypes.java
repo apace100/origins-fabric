@@ -5,12 +5,14 @@ import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.entity.EnderianPearlEntity;
 import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.registry.ModTags;
+import io.github.apace100.origins.util.Constants;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.Ingredient;
@@ -65,7 +67,7 @@ public class PowerTypes {
 
     public static final PowerType<ActiveCooldownPower> LAUNCH_INTO_AIR;
     public static final PowerType<Power> ELYTRA;
-    public static final PowerType<Power> LIGHT_ARMOR;
+    public static final PowerType<RestrictArmorPower> LIGHT_ARMOR;
     public static final PowerType<StackingStatusEffectPower> CLAUSTROPHOBIA;
     public static final PowerType<ModifyDamageTakenPower> MORE_KINETIC_DAMAGE;
     public static final PowerType<ModifyDamageDealtPower> AERIAL_COMBATANT;
@@ -137,7 +139,7 @@ public class PowerTypes {
             }
         })));
         ELYTRA = register("elytra", new PowerType<>(Power::new));
-        LIGHT_ARMOR = register("light_armor", new PowerType<>(Power::new));
+        LIGHT_ARMOR = register("light_armor", new PowerType<>((type, player) -> new RestrictArmorPower(type, player, (is, pl, slt) -> is.getItem() instanceof ArmorItem && ((ArmorItem)is.getItem()).getProtection() > Constants.LIGHT_ARMOR_MAX_PROTECTION[slt.getEntitySlotId()])));
         AERIAL_COMBATANT = register("aerial_combatant", new PowerType<>((type, player) -> new ModifyDamageDealtPower(type, player, (p, s) -> p.isFallFlying(), dmg -> dmg * 2F)));
         CLAUSTROPHOBIA = register("claustrophobia", new PowerType<>((type, player) -> (StackingStatusEffectPower)new StackingStatusEffectPower(type, player, -20, 361, 10).addEffect(StatusEffects.WEAKNESS).addEffect(StatusEffects.SLOWNESS).addCondition(p -> p.world.getBlockCollisions(p, p.getBoundingBox().offset(0, p.getBoundingBox().getYLength(), 0)).findAny().isPresent())));
         MORE_KINETIC_DAMAGE = register("more_kinetic_damage", new PowerType<>((type, player) -> new ModifyDamageTakenPower(type, player, (p, s) -> s == DamageSource.FALL || s == DamageSource.FLY_INTO_WALL, dmg -> dmg * 1.5F)));

@@ -1,12 +1,14 @@
 package io.github.apace100.origins.mixin;
 
+import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.PowerTypes;
-import io.github.apace100.origins.util.Constants;
+import io.github.apace100.origins.power.RestrictArmorPower;
+import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.slot.Slot;
@@ -25,15 +27,10 @@ public abstract class PlayerScreenHandlerMixin extends Slot {
     @Inject(method = "Lnet/minecraft/screen/PlayerScreenHandler$1;canInsert(Lnet/minecraft/item/ItemStack;)Z", at = @At("HEAD"), cancellable = true)
     private void preventArmorInsertion(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
         PlayerEntity player = ((PlayerInventory)inventory).player;
-        if(PowerTypes.LIGHT_ARMOR.isActive(player)) {
-            if(stack.getItem() instanceof ArmorItem) {
-                ArmorItem armor = ((ArmorItem)stack.getItem());
-                EquipmentSlot slot = armor.getSlotType();
-
-                if(armor.getProtection() > Constants.LIGHT_ARMOR_MAX_PROTECTION[slot.getEntitySlotId()]) {
-                    info.setReturnValue(false);
-                }
-            }
+        OriginComponent component = ModComponents.ORIGIN.get(player);
+        EquipmentSlot slot = MobEntity.getPreferredEquipmentSlot(stack);
+        if(component.getPowers(RestrictArmorPower.class).stream().anyMatch(rap -> !rap.canEquip(stack, slot))) {
+            info.setReturnValue(false);
         }
         if(PowerTypes.ELYTRA.isActive(player)) {
             if(stack.getItem() == Items.ELYTRA) {
