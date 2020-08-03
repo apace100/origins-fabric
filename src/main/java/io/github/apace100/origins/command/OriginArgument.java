@@ -8,11 +8,14 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.github.apace100.origins.origin.Origin;
+import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginRegistry;
 import net.minecraft.server.command.CommandSource;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class OriginArgument implements ArgumentType<Origin> {
@@ -35,6 +38,18 @@ public class OriginArgument implements ArgumentType<Origin> {
 
    @Override
    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-      return CommandSource.suggestIdentifiers(OriginRegistry.identifiers(), builder);
+      OriginLayer layer = null;
+      try {
+         layer = context.getArgument("layer", OriginLayer.class);
+      } catch(Exception e) {
+         // no-op :)
+      }
+      if(layer != null) {
+         List<Identifier> ids = new LinkedList<>(layer.getOrigins());
+         ids.add(Origin.EMPTY.getIdentifier());
+         return CommandSource.suggestIdentifiers(ids.stream(), builder);
+      } else {
+         return CommandSource.suggestIdentifiers(OriginRegistry.identifiers(), builder);
+      }
    }
 }

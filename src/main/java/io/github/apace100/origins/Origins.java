@@ -1,5 +1,6 @@
 package io.github.apace100.origins;
 
+import io.github.apace100.origins.command.LayerArgument;
 import io.github.apace100.origins.command.OriginArgument;
 import io.github.apace100.origins.command.OriginCommand;
 import io.github.apace100.origins.networking.ModPacketsC2S;
@@ -40,6 +41,7 @@ public class Origins implements ModInitializer {
 			OriginCommand.register(dispatcher);
 		});
 		ArgumentTypes.register("origin", OriginArgument.class, new ConstantArgumentSerializer(OriginArgument::origin));
+		ArgumentTypes.register("layer", LayerArgument.class, new ConstantArgumentSerializer<>(LayerArgument::layer));
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginManager());
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginLayers());
 	}
