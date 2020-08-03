@@ -59,4 +59,5 @@ public class PowerType<T extends Power> {
         Identifier id = ModRegistries.POWER_TYPE.getId(this);
         return new TranslatableText("power." + id.getNamespace() + "." + id.getPath() + ".description");
     }
+
 }

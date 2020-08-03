@@ -1,7 +1,10 @@
 package io.github.apace100.origins.origin;
 
 import com.google.common.collect.Lists;
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.registry.ModComponents;
@@ -20,17 +23,16 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Origin {
 
     public static final Origin EMPTY;
-    public static final Origin HUMAN;
 
     static {
         EMPTY = register(new Origin(new Identifier(Origins.MODID, "empty"), Items.AIR, Impact.NONE, -1, Integer.MAX_VALUE).setUnchoosable());
-        HUMAN = register(new Origin(new Identifier(Origins.MODID, "human"), Items.PLAYER_HEAD, Impact.NONE, 0, Integer.MAX_VALUE));
     }
 
     public static void init() {
@@ -41,15 +43,15 @@ public class Origin {
         return OriginRegistry.register(origin);
     }
 
-    public static Origin get(Entity entity) {
+    public static HashMap<OriginLayer, Origin> get(Entity entity) {
         if(entity instanceof PlayerEntity) {
             return get((PlayerEntity)entity);
         }
-        return Origin.EMPTY;
+        return new HashMap<>();
     }
 
-    public static Origin get(PlayerEntity player) {
-        return ModComponents.ORIGIN.get(player).getOrigin();
+    public static HashMap<OriginLayer, Origin> get(PlayerEntity player) {
+        return ModComponents.ORIGIN.get(player).getOrigins();
     }
 
     private Identifier identifier;

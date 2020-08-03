@@ -4,6 +4,8 @@ import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.origin.Origin;
+import io.github.apace100.origins.origin.OriginLayer;
+import io.github.apace100.origins.origin.OriginLayers;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,7 +27,12 @@ public class ModItems {
         public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
             if(!world.isClient) {
                 OriginComponent component = ModComponents.ORIGIN.get(user);
-                component.setOrigin(Origin.EMPTY);
+                for (OriginLayer layer : OriginLayers.getLayers()) {
+                    if(layer.isEnabled()) {
+                        component.setOrigin(layer, Origin.EMPTY);
+                    }
+                }
+                component.sync();
                 PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
                 data.writeBoolean(false);
                 ServerSidePacketRegistry.INSTANCE.sendToPlayer(user, ModPackets.OPEN_ORIGIN_SCREEN, data);

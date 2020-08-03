@@ -27,7 +27,7 @@ public class PowerHudRenderer extends DrawableHelper {
         HudRenderCallback.EVENT.register(((matrices, delta) -> {
             MinecraftClient client = MinecraftClient.getInstance();
             OriginComponent component = ModComponents.ORIGIN.get(client.player);
-            if(component.hasOrigin()) {
+            if(component.hasAllOrigins()) {
                 int x = client.getWindow().getScaledWidth() / 2 + 20;
                 int y = client.getWindow().getScaledHeight() - 47;
                 Entity vehicle = client.player.getVehicle();

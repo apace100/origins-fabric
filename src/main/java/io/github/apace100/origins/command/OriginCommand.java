@@ -3,7 +3,6 @@ package io.github.apace100.origins.command;
 import com.mojang.brigadier.CommandDispatcher;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.origin.Origin;
-import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.command.arguments.EntityArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.ServerCommandSource;
@@ -41,7 +40,7 @@ public class OriginCommand {
 	}
 
 	private static void setOrigin(PlayerEntity player, Origin origin) {
-		ModComponents.ORIGIN.get(player).setOrigin(origin);
+		//ModComponents.ORIGIN.get(player).setOrigin(origin);
 		OriginComponent.sync(player);
 	}
 }

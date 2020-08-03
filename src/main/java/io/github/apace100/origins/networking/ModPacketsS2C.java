@@ -1,13 +1,20 @@
 package io.github.apace100.origins.networking;
 
+import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.origin.Origin;
+import io.github.apace100.origins.origin.OriginLayer;
+import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
+import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.screen.ChooseOriginScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class ModPacketsS2C {
 
@@ -16,7 +23,15 @@ public class ModPacketsS2C {
         ClientSidePacketRegistry.INSTANCE.register(ModPackets.OPEN_ORIGIN_SCREEN, ((packetContext, packetByteBuf) -> {
             boolean showDirtBackground = packetByteBuf.readBoolean();
             packetContext.getTaskQueue().execute(() -> {
-                MinecraftClient.getInstance().openScreen(new ChooseOriginScreen(showDirtBackground));
+                ArrayList<OriginLayer> layers = new ArrayList<>();
+                OriginComponent component = ModComponents.ORIGIN.get(MinecraftClient.getInstance().player);
+                OriginLayers.getLayers().forEach(layer -> {
+                    if(layer.isEnabled() && !component.hasOrigin(layer)) {
+                        layers.add(layer);
+                    }
+                });
+                Collections.sort(layers);
+                MinecraftClient.getInstance().openScreen(new ChooseOriginScreen(layers, 0, showDirtBackground));
             });
         }));
         ClientSidePacketRegistry.INSTANCE.register(ModPackets.ORIGIN_LIST, (((packetContext, packetByteBuf) -> {
@@ -33,5 +48,17 @@ public class ModPacketsS2C {
                 }
             });
         })));
+        ClientSidePacketRegistry.INSTANCE.register(ModPackets.LAYER_LIST, ((((packetContext, packetByteBuf) -> {
+            int layerCount = packetByteBuf.readInt();
+            OriginLayer[] layers = new OriginLayer[layerCount];
+            for(int i = 0; i < layerCount; i++) {
+                layers[i] = OriginLayer.read(packetByteBuf);
+            }
+            packetContext.getTaskQueue().execute(() -> {
+                for(int i = 0; i < layerCount; i++) {
+                    OriginLayers.add(layers[i]);
+                }
+            });
+        }))));
     }
 }

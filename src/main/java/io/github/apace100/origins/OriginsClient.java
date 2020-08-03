@@ -53,7 +53,7 @@ public class OriginsClient implements ClientModInitializer {
             while(useActivePowerKeybind.wasPressed()) {
                 ClientSidePacketRegistry.INSTANCE.sendToServer(ModPackets.USE_ACTIVE_POWER, new PacketByteBuf(Unpooled.buffer()));
                 OriginComponent component = ModComponents.ORIGIN.get(MinecraftClient.getInstance().player);
-                if(component.hasOrigin()) {
+                if(component.hasAllOrigins()) {
                     component.getPowers().stream().filter(p -> p instanceof Active).forEach(p -> ((Active)p).onUse());
                 }
             }

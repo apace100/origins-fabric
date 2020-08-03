@@ -69,6 +69,5 @@ public class OriginRegistry {
     public static void reset() {
         clear();
         register(Origin.EMPTY);
-        register(Origin.HUMAN);
     }
 }

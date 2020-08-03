@@ -5,6 +5,7 @@ import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.origin.Impact;
 import io.github.apace100.origins.origin.Origin;
+import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.PowerType;
 import io.netty.buffer.Unpooled;
@@ -14,6 +15,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.StringRenderable;
@@ -28,7 +30,9 @@ import java.util.List;
 public class ChooseOriginScreen extends Screen {
 
 	private static final Identifier WINDOW = new Identifier(Origins.MODID, "textures/gui/choose_origin.png");
-	
+
+	private ArrayList<OriginLayer> layerList;
+	private int currentLayerIndex = 0;
 	private int currentOrigin = 0;
 	private List<Origin> originSelection;
 	private static final int windowWidth = 176;
@@ -41,11 +45,17 @@ public class ChooseOriginScreen extends Screen {
 
 	private boolean showDirtBackground;
 	
-	public ChooseOriginScreen(boolean showDirtBackground) {
+	public ChooseOriginScreen(ArrayList<OriginLayer> layerList, int currentLayerIndex, boolean showDirtBackground) {
 		super(new TranslatableText(Origins.MODID + ".screen.choose_origin"));
+		this.layerList = layerList;
+		this.currentLayerIndex = currentLayerIndex;
 		this.originSelection = new ArrayList<>(10);
-		OriginRegistry.values().forEach(origin -> {
+		layerList.get(currentLayerIndex).getOrigins().forEach(originId -> {
+			Origin origin = OriginRegistry.get(originId);
 			if(origin.isChoosable()) {
+				if(origin.getDisplayItem().getItem() == Items.PLAYER_HEAD) {
+					origin.getDisplayItem().getOrCreateTag().putString("SkullOwner", MinecraftClient.getInstance().player.getDisplayName().getString());
+				}
 				this.originSelection.add(origin);
 			}
 		});
@@ -77,10 +87,14 @@ public class ChooseOriginScreen extends Screen {
         addButton(new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20, new TranslatableText(Origins.MODID + ".gui.select"), b -> {
 			PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 			buf.writeString(originSelection.get(currentOrigin).getIdentifier().toString());
+			buf.writeString(layerList.get(currentLayerIndex).getIdentifier().toString());
 			ClientSidePacketRegistry.INSTANCE.sendToServer(ModPackets.CHOOSE_ORIGIN, buf);
-			MinecraftClient.getInstance().openScreen(null);
+			if(currentLayerIndex + 1 >= layerList.size()) {
+				MinecraftClient.getInstance().openScreen(null);
+			} else {
+				MinecraftClient.getInstance().openScreen(new ChooseOriginScreen(layerList, currentLayerIndex + 1, showDirtBackground));
+			}
         }));
-        Origin.HUMAN.getDisplayItem().getOrCreateTag().putString("SkullOwner", MinecraftClient.getInstance().player.getDisplayName().getString());
 	}
 
 	@Override
@@ -108,7 +122,7 @@ public class ChooseOriginScreen extends Screen {
 		renderOriginName(matrices);
 		this.client.getTextureManager().bindTexture(WINDOW);
 		this.renderOriginImpact(matrices, mouseX, mouseY);
-		Text title = new TranslatableText(Origins.MODID + ".gui.choose_origin.title");
+		Text title = new TranslatableText(Origins.MODID + ".gui.choose_origin.title", new TranslatableText(layerList.get(currentLayerIndex).getTranslationKey()));
 		this.drawCenteredString(matrices, this.textRenderer, title.getString(), width / 2, guiTop - 15, 0xFFFFFF);
 		RenderSystem.disableBlend();
 	}

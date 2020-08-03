@@ -167,13 +167,15 @@
 
   "origins.gui.select": "Select",
   "origins.gui.close": "Close",
-  "origins.gui.choose_origin.title": "Choose your Origin",
-  "origins.gui.view_origin.title": "This is your Origin",
+  "origins.gui.choose_origin.title": "Choose your %s.",
+  "origins.gui.view_origin.title": "This is your %s.",
   "origins.gui.impact.impact": "Impact",
   "origins.gui.impact.none": "None",
   "origins.gui.impact.low": "Low",
   "origins.gui.impact.medium": "Medium",
   "origins.gui.impact.high": "High",
+
+  "layer.origins.origin": "Origin",
 
   "death.attack.no_water_for_gills": "%s didn't manage to keep wet.",
   "death.attack.hurt_by_water": "%s took a bath for too long.",

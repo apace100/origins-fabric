@@ -4,6 +4,7 @@ import io.github.apace100.origins.command.OriginArgument;
 import io.github.apace100.origins.command.OriginCommand;
 import io.github.apace100.origins.networking.ModPacketsC2S;
 import io.github.apace100.origins.origin.Origin;
+import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginManager;
 import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.registry.*;
@@ -40,5 +41,6 @@ public class Origins implements ModInitializer {
 		});
 		ArgumentTypes.register("origin", OriginArgument.class, new ConstantArgumentSerializer(OriginArgument::origin));
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginManager());
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginLayers());
 	}
 }
