@@ -36,6 +36,7 @@ public class LoginMixin {
 		OriginLayers.getLayers().forEach((layer) -> {
 			layer.write(originLayerData);
 		});
+		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, ModPackets.LAYER_LIST, originLayerData);
 		OriginComponent.sync(player);
 		if(!ModComponents.ORIGIN.get(player).hasAllOrigins()) {
 			PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());

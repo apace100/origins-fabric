@@ -55,6 +55,7 @@ public class ModPacketsS2C {
                 layers[i] = OriginLayer.read(packetByteBuf);
             }
             packetContext.getTaskQueue().execute(() -> {
+                OriginLayers.clear();
                 for(int i = 0; i < layerCount; i++) {
                     OriginLayers.add(layers[i]);
                 }
