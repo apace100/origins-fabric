@@ -3,6 +3,7 @@ package io.github.apace100.origins.origin;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import io.github.apace100.origins.Origins;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.PacketByteBuf;
@@ -11,7 +12,6 @@ import net.minecraft.util.JsonHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class OriginLayer implements Comparable<OriginLayer> {
 
@@ -40,10 +40,21 @@ public class OriginLayer implements Comparable<OriginLayer> {
         return origin == Origin.EMPTY || origins.contains(origin.getIdentifier());
     }
 
-    public void merge(OriginLayer layer) {
-        origins.addAll(layer.origins.stream().filter(o -> !origins.contains(o)).collect(Collectors.toList()));
-        this.order = layer.order;
-        this.enabled = layer.enabled;
+    public void merge(JsonObject json) {
+        if(json.has("order")) {
+            this.order = json.get("order").getAsInt();
+        }
+        if(json.has("enabled")) {
+            this.enabled = json.get("enabled").getAsBoolean();
+        }
+        if(json.has("origins")) {
+            JsonArray originArray = json.getAsJsonArray("origins");
+            originArray.forEach(je -> {
+                Identifier identifier = Identifier.tryParse(je.getAsString());
+                this.origins.add(identifier);
+                Origins.LOGGER.info("Added origin " + identifier.toString() + " to layer " + this.identifier.toString());
+            });
+        }
     }
 
     @Override

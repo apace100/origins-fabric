@@ -4,15 +4,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.util.MultiJsonDataLoader;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
-import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 
+import java.util.List;
 import java.util.Map;
 
-public class OriginManager extends JsonDataLoader implements IdentifiableResourceReloadListener {
+public class OriginManager extends MultiJsonDataLoader implements IdentifiableResourceReloadListener {
 	
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 
@@ -21,21 +22,23 @@ public class OriginManager extends JsonDataLoader implements IdentifiableResourc
 	}
 
 	@Override
-	protected void apply(Map<Identifier, JsonElement> loader, ResourceManager manager, Profiler profiler) {
+	protected void apply(Map<Identifier, List<JsonElement>> loader, ResourceManager manager, Profiler profiler) {
 		OriginRegistry.reset();
-		loader.forEach((id, jo) -> {
-			try {
-				Origin origin = Origin.fromJson(id, jo.getAsJsonObject());
-				if(!OriginRegistry.contains(id)) {
-					OriginRegistry.register(id, origin);
-				} else {
-					if(OriginRegistry.get(id).getLoadingPriority() < origin.getLoadingPriority()) {
-						OriginRegistry.update(id, origin);
+		loader.forEach((id, jel) -> {
+			jel.forEach(je -> {
+				try {
+					Origin origin = Origin.fromJson(id, je.getAsJsonObject());
+					if(!OriginRegistry.contains(id)) {
+						OriginRegistry.register(id, origin);
+					} else {
+						if(OriginRegistry.get(id).getLoadingPriority() < origin.getLoadingPriority()) {
+							OriginRegistry.update(id, origin);
+						}
 					}
+				} catch(Exception e) {
+					Origins.LOGGER.error("There was a problem reading Origin file " + id.toString() + " (skipping): " + e.getMessage());
 				}
-			} catch(Exception e) {
-				Origins.LOGGER.error("There was a problem reading Origin file " + id.toString() + " (skipping): " + e.getMessage());
-			}
+			});
 		});
 		Origins.LOGGER.info("Finished loading origins from data files. Registry contains " + OriginRegistry.size() + " origins.");
 	}

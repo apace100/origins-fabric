@@ -5,8 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.util.MultiJsonDataLoader;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
-import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
@@ -14,9 +14,10 @@ import net.minecraft.util.profiler.Profiler;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class OriginLayers extends JsonDataLoader implements IdentifiableResourceReloadListener {
+public class OriginLayers extends MultiJsonDataLoader implements IdentifiableResourceReloadListener {
 
     private static HashMap<Identifier, OriginLayer> layers = new HashMap<>();
 
@@ -27,25 +28,30 @@ public class OriginLayers extends JsonDataLoader implements IdentifiableResource
     }
 
     @Override
-    protected void apply(Map<Identifier, JsonElement> loader, ResourceManager manager, Profiler profiler) {
+    protected void apply(Map<Identifier, List<JsonElement>> loader, ResourceManager manager, Profiler profiler) {
         clear();
-        loader.forEach((id, je) -> {
-            try {
-                JsonObject jo = je.getAsJsonObject();
-                boolean replace = JsonHelper.getBoolean(jo, "replace", false);
-                OriginLayer layer = OriginLayer.fromJson(id, jo);
-                if(layers.containsKey(layer.getIdentifier())) {
-                    if(replace) {
-                        layers.get(layer.getIdentifier()).merge(layer);
+        loader.forEach((id, jel) -> {
+            jel.forEach(je -> {
+                try {
+                    Origins.LOGGER.info("Trying to read layer file: " + id);
+                    JsonObject jo = je.getAsJsonObject();
+                    boolean replace = JsonHelper.getBoolean(jo, "replace", false);
+                    if (layers.containsKey(id)) {
+                        if (replace) {
+                            OriginLayer layer = OriginLayer.fromJson(id, jo);
+                            layers.put(id, layer);
+                        } else {
+                            Origins.LOGGER.info("Merging origin layer " + id.toString());
+                            layers.get(id).merge(jo);
+                        }
                     } else {
-                        Origins.LOGGER.warn("Duplicate origin layer ID: " + layer.getIdentifier().toString());
+                        OriginLayer layer = OriginLayer.fromJson(id, jo);
+                        layers.put(id, layer);
                     }
-                } else {
-                    layers.put(layer.getIdentifier(), layer);
+                } catch (Exception e) {
+                    Origins.LOGGER.error("There was a problem reading Origin layer file " + id.toString() + " (skipping): " + e.getMessage());
                 }
-            } catch(Exception e) {
-                Origins.LOGGER.error("There was a problem reading Origin layer file " + id.toString() + " (skipping): " + e.getMessage());
-            }
+            });
         });
         Origins.LOGGER.info("Finished loading origin layers from data files. Read " + layers.size() + " layers.");
     }
