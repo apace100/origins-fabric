@@ -42,15 +42,13 @@ public abstract class LoginMixin {
 			layer.write(originLayerData);
 		});
 		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, ModPackets.LAYER_LIST, originLayerData);
+		List<ServerPlayerEntity> playerList = getPlayerList();
+		playerList.forEach(spe -> ModComponents.ORIGIN.get(spe).syncWith(player));
 		OriginComponent.sync(player);
 		if(!ModComponents.ORIGIN.get(player).hasAllOrigins()) {
 			PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
 			data.writeBoolean(true);
 			ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, ModPackets.OPEN_ORIGIN_SCREEN, data);
 		}
-		List<ServerPlayerEntity> playerList = getPlayerList();
-		playerList.forEach(spe -> {
-			ModComponents.ORIGIN.get(spe).syncWith(player);
-		});
 	}
 }
