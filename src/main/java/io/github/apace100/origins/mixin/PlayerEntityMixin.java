@@ -169,7 +169,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
             }
         }
         if(PowerTypes.WATER_BREATHING.isActive(this)) {
-            if(!this.isSubmergedIn(FluidTags.WATER) && !this.hasStatusEffect(StatusEffects.WATER_BREATHING)) {
+            if(!this.isSubmergedIn(FluidTags.WATER) && !this.hasStatusEffect(StatusEffects.WATER_BREATHING) && !this.hasStatusEffect(StatusEffects.CONDUIT_POWER)) {
                 if(!this.isRainingAtPlayerPosition()) {
                     int landGain = this.getNextAirOnLand(0);
                     this.setAir(this.getNextAirUnderwater(this.getAir()) - landGain);
