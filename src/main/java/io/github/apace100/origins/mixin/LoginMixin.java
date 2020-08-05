@@ -13,12 +13,17 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.List;
+
 @Mixin(PlayerManager.class)
-public class LoginMixin {
+public abstract class LoginMixin {
+
+	@Shadow public abstract List<ServerPlayerEntity> getPlayerList();
 
 	@Inject(at = @At("TAIL"), method = "Lnet/minecraft/server/PlayerManager;onPlayerConnect(Lnet/minecraft/network/ClientConnection;Lnet/minecraft/server/network/ServerPlayerEntity;)V")
 	private void openOriginsGui(ClientConnection connection, ServerPlayerEntity player, CallbackInfo info) {
@@ -43,5 +48,9 @@ public class LoginMixin {
 			data.writeBoolean(true);
 			ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, ModPackets.OPEN_ORIGIN_SCREEN, data);
 		}
+		List<ServerPlayerEntity> playerList = getPlayerList();
+		playerList.forEach(spe -> {
+			ModComponents.ORIGIN.get(spe).syncWith(player);
+		});
 	}
 }
