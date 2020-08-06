@@ -11,6 +11,7 @@ import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModRegistries;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.advancement.Advancement;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -26,6 +27,7 @@ import net.minecraft.util.registry.Registry;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class Origin {
 
@@ -61,7 +63,7 @@ public class Origin {
     private boolean isChoosable;
     private final int order;
     private final int loadingPriority;
-    private OriginUpgrade upgrade;
+    private List<OriginUpgrade> upgrades = new LinkedList<>();
 
     protected Origin(Identifier id, ItemConvertible item, Impact impact, int order, int loadingPriority) {
         this.identifier = id;
@@ -72,17 +74,22 @@ public class Origin {
         this.loadingPriority = loadingPriority;
     }
 
-    private Origin setUpgrade(OriginUpgrade upgrade) {
-        this.upgrade = upgrade;
+    private Origin addUpgrade(OriginUpgrade upgrade) {
+        this.upgrades.add(upgrade);
         return this;
     }
 
     public boolean hasUpgrade() {
-        return this.upgrade != null;
+        return this.upgrades.size() > 0;
     }
 
-    public OriginUpgrade getUpgrade() {
-        return this.upgrade;
+    public Optional<OriginUpgrade> getUpgrade(Advancement advancement) {
+        for(OriginUpgrade upgrade : upgrades) {
+            if(upgrade.getAdvancementCondition().equals(advancement.getId())) {
+                return Optional.of(upgrade);
+            }
+        }
+        return Optional.empty();
     }
 
     public Identifier getIdentifier() {
@@ -146,10 +153,8 @@ public class Origin {
         for (PowerType<?> powerType : this.powerTypes) {
             buffer.writeString(ModRegistries.POWER_TYPE.getId(powerType).toString());
         }
-        buffer.writeBoolean(this.hasUpgrade());
-        if(this.hasUpgrade()) {
-            this.getUpgrade().write(buffer);
-        }
+        buffer.writeInt(this.upgrades.size());
+        this.upgrades.forEach(upgrade -> upgrade.write(buffer));
     }
 
     @Environment(EnvType.CLIENT)
@@ -185,8 +190,9 @@ public class Origin {
         }
         origin.add(powers);
 
-        if(buffer.readBoolean()) {
-            origin.setUpgrade(OriginUpgrade.read(buffer));
+        int upgradeCount = buffer.readInt();
+        for(int i = 0; i < upgradeCount; i++) {
+            origin.addUpgrade(OriginUpgrade.read(buffer));
         }
 
         return origin;
@@ -234,8 +240,9 @@ public class Origin {
             origin.setUnchoosable();
         }
         origin.add(powers);
-        if(json.has("upgrade")) {
-            origin.setUpgrade(OriginUpgrade.fromJson(json.get("upgrade")));
+        if(json.has("upgrades") && json.get("upgrades").isJsonArray()) {
+            JsonArray array = json.getAsJsonArray("upgrades");
+            array.forEach(jsonElement -> origin.addUpgrade(OriginUpgrade.fromJson(jsonElement)));
         }
         return origin;
     }

@@ -19,6 +19,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import java.util.Optional;
+
 @Mixin(PlayerAdvancementTracker.class)
 public class PlayerAdvancementTrackerMixin {
 
@@ -27,22 +29,21 @@ public class PlayerAdvancementTrackerMixin {
     @Inject(method = "grantCriterion", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancement/PlayerAdvancementTracker;endTrackingCompleted(Lnet/minecraft/advancement/Advancement;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void checkOriginUpgrade(Advancement advancement, String criterionName, CallbackInfoReturnable<Boolean> info, boolean bl, AdvancementProgress advancementProgress, boolean bl2) {
         Origin.get(owner).forEach((layer, o) -> {
-            if(o.hasUpgrade()) {
-                OriginUpgrade upgrade = o.getUpgrade();
-                if(upgrade.getAdvancementCondition().equals(advancement.getId())) {
-                    try {
-                        Origin upgradeTo = OriginRegistry.get(upgrade.getUpgradeToOrigin());
-                        if(upgradeTo != null) {
-                            OriginComponent component = ModComponents.ORIGIN.get(owner);
-                            component.setOrigin(layer, upgradeTo);
-                            component.sync();
-                            if(!upgrade.getAnnouncement().isEmpty()) {
-                                owner.sendMessage(new TranslatableText(upgrade.getAnnouncement()).formatted(Formatting.GOLD), false);
-                            }
+            Optional<OriginUpgrade> upgrade = o.getUpgrade(advancement);
+            if(upgrade.isPresent()) {
+                try {
+                    Origin upgradeTo = OriginRegistry.get(upgrade.get().getUpgradeToOrigin());
+                    if(upgradeTo != null) {
+                        OriginComponent component = ModComponents.ORIGIN.get(owner);
+                        component.setOrigin(layer, upgradeTo);
+                        component.sync();
+                        String announcement = upgrade.get().getAnnouncement();
+                        if (!announcement.isEmpty()) {
+                            owner.sendMessage(new TranslatableText(announcement).formatted(Formatting.GOLD), false);
                         }
-                    } catch(IllegalArgumentException e) {
-                        Origins.LOGGER.error("Could not perform Origins upgrade from " + o.getIdentifier().toString() + " to " + upgrade.getUpgradeToOrigin().toString() + ", as the upgrade origin did not exist!");
                     }
+                } catch(IllegalArgumentException e) {
+                    Origins.LOGGER.error("Could not perform Origins upgrade from " + o.getIdentifier().toString() + " to " + upgrade.get().getUpgradeToOrigin().toString() + ", as the upgrade origin did not exist!");
                 }
             }
         });
