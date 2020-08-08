@@ -31,4 +31,16 @@ public class PlayerEntityRendererMixin {
         }
         modelPart.render(matrices, vertices, light, overlay);
     }
+
+    @Environment(EnvType.CLIENT)
+    @Redirect(method = "renderArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelPart;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;II)V", ordinal = 1))
+    private void makeSleeveTranslucent(ModelPart modelPart, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, MatrixStack matrices2, VertexConsumerProvider vertexConsumers, int light2, AbstractClientPlayerEntity player) {
+        List<ModelTranslucencyPower> modelTranslucencyPowers = ModComponents.ORIGIN.get(player).getPowers(ModelTranslucencyPower.class);
+        if (modelTranslucencyPowers.size() > 0) {
+            float alpha = modelTranslucencyPowers.stream().map(p -> p.value).min(Float::compare).get();
+            modelPart.render(matrices, vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(player.getSkinTexture())), light, overlay, 1F, 1F, 1F, alpha);
+            return;
+        }
+        modelPart.render(matrices, vertices, light, overlay);
+    }
 }

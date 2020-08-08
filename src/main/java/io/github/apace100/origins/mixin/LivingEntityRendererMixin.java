@@ -35,7 +35,7 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<LivingEnt
         }
     }
 
-    @ModifyVariable(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/LivingEntityRenderer;getRenderLayer(Lnet/minecraft/entity/LivingEntity;ZZZ)Lnet/minecraft/client/render/RenderLayer;"), name = "bl2")
+    @ModifyVariable(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/LivingEntityRenderer;getRenderLayer(Lnet/minecraft/entity/LivingEntity;ZZZ)Lnet/minecraft/client/render/RenderLayer;"), ordinal = 1)
     private boolean modifyTranslucency(boolean original, LivingEntity livingEntity) {
         if(livingEntity instanceof PlayerEntity) {
             if(ModComponents.ORIGIN.get(livingEntity).getPowers(ModelTranslucencyPower.class).size() > 0) {
