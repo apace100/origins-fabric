@@ -1,5 +1,6 @@
 {
 	"powers": [
+		"origins:translucent",
 		"origins:phasing",
 		"origins:invisibility",
 		"origins:burn_in_daylight",

@@ -155,6 +155,9 @@
   "power.origins.strong_arms.name": "Strong Arms",
   "power.origins.strong_arms.description": "You are strong enough to break natural stones without using a pickaxe.",
 
+  "power.origins.translucent.name": "Translucent",
+  "power.origins.translucent.description": "Your skin is translucent.",
+
   "category.origins": "Origins",
   "key.origins.active_power": "Active Power",
   "key.origins.view_origin": "View Origin",

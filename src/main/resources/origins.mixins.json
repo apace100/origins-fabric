@@ -31,7 +31,8 @@
     "GameRendererMixin",
     "LightmapTextureManagerMixin",
     "LivingEntityRendererMixin",
-    "OtherClientPlayerEntityMixin"
+    "OtherClientPlayerEntityMixin",
+    "PlayerEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

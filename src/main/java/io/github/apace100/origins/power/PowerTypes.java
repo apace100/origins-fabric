@@ -57,6 +57,7 @@ public class PowerTypes {
     public static final PowerType<TogglePower> INVISIBILITY;
     public static final PowerType<TogglePower> HUNGER_OVER_TIME;
     public static final PowerType<TogglePower> BURN_IN_DAYLIGHT;
+    public static final PowerType<ModelTranslucencyPower> TRANSLUCENT;
 
     public static final PowerType<Power> FALL_IMMUNITY;
     public static final PowerType<Power> SPRINT_JUMP;
@@ -120,6 +121,7 @@ public class PowerTypes {
         INVISIBILITY = register("invisibility", new PowerType<>(TogglePower::new));
         HUNGER_OVER_TIME = register("hunger_over_time", new PowerType<>(TogglePower::new));
         BURN_IN_DAYLIGHT = register("burn_in_daylight", new PowerType<>((type, player) -> new TogglePower(type, player, true)));
+        TRANSLUCENT = register("translucent", new PowerType<>((type, player) -> new ModelTranslucencyPower(type, player, 0.5F)));
 
         FALL_IMMUNITY = register("fall_immunity", new PowerType<>(Power::new));
         SPRINT_JUMP = register("sprint_jump", new PowerType<>(Power::new));
