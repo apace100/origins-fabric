@@ -21,7 +21,8 @@
     "PotionItemMixin",
     "RegistryAccessor",
     "ServerPlayerEntityMixin",
-    "PlayerAdvancementTrackerMixin"
+    "PlayerAdvancementTrackerMixin",
+    "ConduitBlockEntityMixin"
   ],
   "client": [
     "BackgroundRendererMixin",
