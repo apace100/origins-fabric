@@ -65,6 +65,9 @@ public class Origin {
     private final int loadingPriority;
     private List<OriginUpgrade> upgrades = new LinkedList<>();
 
+    private String nameTranslationKey;
+    private String descriptionTranslationKey;
+
     protected Origin(Identifier id, ItemConvertible item, Impact impact, int order, int loadingPriority) {
         this.identifier = id;
         this.displayItem = new ItemStack(item);
@@ -106,6 +109,16 @@ public class Origin {
         return this;
     }
 
+    private Origin setName(String name) {
+        this.nameTranslationKey = name;
+        return this;
+    }
+
+    private Origin setDescription(String description) {
+        this.descriptionTranslationKey = description;
+        return this;
+    }
+
     public boolean hasPowerType(PowerType<?> powerType) {
         return this.powerTypes.contains(powerType);
     }
@@ -130,12 +143,28 @@ public class Origin {
         return displayItem;
     }
 
+    public String getOrCreateNameTranslationKey() {
+        if(nameTranslationKey == null || nameTranslationKey.isEmpty()) {
+            nameTranslationKey =
+                "origin." + identifier.getNamespace() + "." + identifier.getPath() + ".name";
+        }
+        return nameTranslationKey;
+    }
+
     public TranslatableText getName() {
-        return new TranslatableText("origin." + identifier.getNamespace() + "." + identifier.getPath() + ".name");
+        return new TranslatableText(getOrCreateNameTranslationKey());
+    }
+
+    public String getOrCreateDescriptionTranslationKey() {
+        if(descriptionTranslationKey == null || descriptionTranslationKey.isEmpty()) {
+            descriptionTranslationKey =
+                "origin." + identifier.getNamespace() + "." + identifier.getPath() + ".description";
+        }
+        return descriptionTranslationKey;
     }
 
     public TranslatableText getDescription() {
-        return new TranslatableText("origin." + identifier.getNamespace() + "." + identifier.getPath() + ".description");
+        return new TranslatableText(getOrCreateDescriptionTranslationKey());
     }
 
     public int getOrder() {
@@ -155,6 +184,8 @@ public class Origin {
         }
         buffer.writeInt(this.upgrades.size());
         this.upgrades.forEach(upgrade -> upgrade.write(buffer));
+        buffer.writeString(getOrCreateNameTranslationKey());
+        buffer.writeString(getOrCreateDescriptionTranslationKey());
     }
 
     @Environment(EnvType.CLIENT)
@@ -194,6 +225,9 @@ public class Origin {
         for(int i = 0; i < upgradeCount; i++) {
             origin.addUpgrade(OriginUpgrade.read(buffer));
         }
+
+        origin.setName(buffer.readString());
+        origin.setDescription(buffer.readString());
 
         return origin;
     }
@@ -243,6 +277,14 @@ public class Origin {
         if(json.has("upgrades") && json.get("upgrades").isJsonArray()) {
             JsonArray array = json.getAsJsonArray("upgrades");
             array.forEach(jsonElement -> origin.addUpgrade(OriginUpgrade.fromJson(jsonElement)));
+        }
+
+        if(json.has("name")) {
+            origin.setName(JsonHelper.getString(json, "name", ""));
+        }
+
+        if(json.has("description")) {
+            origin.setDescription(JsonHelper.getString(json, "description", ""));
         }
         return origin;
     }

@@ -12,6 +12,7 @@ import net.minecraft.util.JsonHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class OriginLayer implements Comparable<OriginLayer> {
 
@@ -20,8 +21,17 @@ public class OriginLayer implements Comparable<OriginLayer> {
     private List<Identifier> origins;
     private boolean enabled = false;
 
+    private String nameTranslationKey;
+
+    public String getOrCreateTranslationKey() {
+        if(nameTranslationKey == null || nameTranslationKey.isEmpty()) {
+            this.nameTranslationKey = "layer." + identifier.getNamespace() + "." + identifier.getPath();
+        }
+        return nameTranslationKey;
+    }
+
     public String getTranslationKey() {
-        return "layer." + identifier.getNamespace() + "." + identifier.getPath();
+        return getOrCreateTranslationKey();
     }
 
     public Identifier getIdentifier() {
@@ -33,7 +43,15 @@ public class OriginLayer implements Comparable<OriginLayer> {
     }
 
     public List<Identifier> getOrigins() {
-        return origins;
+        List<Identifier> filteredOrigins = origins.stream().filter(OriginRegistry::contains).collect(Collectors.toList());
+        if(filteredOrigins.size() < origins.size()) {
+            for (Identifier id : origins) {
+                if(!OriginRegistry.contains(id)) {
+                    Origins.LOGGER.error("Origin layer \"" + identifier.toString() + "\" contained unregistered origin: \"" + id.toString() + "\" (skipping)");
+                }
+            }
+        }
+        return filteredOrigins;
     }
 
     public boolean contains(Origin origin) {
@@ -54,6 +72,9 @@ public class OriginLayer implements Comparable<OriginLayer> {
                 this.origins.add(identifier);
                 Origins.LOGGER.info("Added origin " + identifier.toString() + " to layer " + this.identifier.toString());
             });
+        }
+        if(json.has("name")) {
+            this.nameTranslationKey = JsonHelper.getString(json, "name", "");
         }
     }
 
@@ -84,6 +105,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
         buffer.writeBoolean(enabled);
         buffer.writeInt(origins.size());
         origins.forEach(id -> buffer.writeString(id.toString()));
+        buffer.writeString(getOrCreateTranslationKey());
     }
 
     @Environment(EnvType.CLIENT)
@@ -97,6 +119,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
         for(int i = 0; i < originCount; i++) {
             layer.origins.add(Identifier.tryParse(buffer.readString()));
         }
+        layer.nameTranslationKey = buffer.readString();
         return layer;
     }
 
@@ -117,6 +140,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
         layer.origins = list;
         layer.enabled = enabled;
         layer.identifier = id;
+        layer.nameTranslationKey = JsonHelper.getString(json, "name", "");
         return layer;
     }
 }

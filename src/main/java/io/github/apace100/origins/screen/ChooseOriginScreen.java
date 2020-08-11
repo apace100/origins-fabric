@@ -20,6 +20,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Language;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -189,7 +190,7 @@ public class ChooseOriginScreen extends Screen {
 			if(p.isHidden()) {
 				continue;
 			}
-			MutableText name = (MutableText) textRenderer.trimToWidth(p.getName().formatted(Formatting.UNDERLINE), windowWidth - 36);
+			OrderedText name = Language.getInstance().reorder(textRenderer.trimToWidth(p.getName().formatted(Formatting.UNDERLINE), windowWidth - 36));
 			Text desc = p.getDescription();
 			List<OrderedText> drawLines = textRenderer.wrapLines(desc, windowWidth - 36);
 			if(y >= startY - 24 && y <= endY + 12) {
