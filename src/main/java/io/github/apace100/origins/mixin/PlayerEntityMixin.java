@@ -116,7 +116,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
         }
     }
 
-    @Inject(method = "canPickUp", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "canEquip", at = @At("HEAD"), cancellable = true)
     private void preventArmorDispensing(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
         EquipmentSlot slot = MobEntity.getPreferredEquipmentSlot(stack);
         OriginComponent component = ModComponents.ORIGIN.get(this);

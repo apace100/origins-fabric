@@ -38,8 +38,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
 
     @Shadow public ServerPlayNetworkHandler networkHandler;
 
-    public ServerPlayerEntityMixin(World world, BlockPos blockPos, GameProfile gameProfile) {
-        super(world, blockPos, gameProfile);
+    public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile profile) {
+        super(world, pos, yaw, profile);
     }
 
     // FRESH_AIR
@@ -80,7 +80,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
     private boolean hasObstructedSpawn() {
         ServerWorld world = server.getWorld(spawnPointDimension);
         if(spawnPointPosition != null && world != null) {
-            Optional optional = PlayerEntity.findRespawnPosition(world, spawnPointPosition, spawnPointSet, true);
+            Optional optional = PlayerEntity.findRespawnPosition(world, spawnPointPosition, 0F, spawnPointSet, true);
             return !optional.isPresent();
         }
         return false;

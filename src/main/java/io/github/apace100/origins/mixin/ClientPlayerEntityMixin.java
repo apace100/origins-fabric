@@ -38,11 +38,4 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
             info.setReturnValue(1.0F);
         }
     }
-
-    @Inject(at = @At("HEAD"), method = "pushOutOfBlocks", cancellable = true)
-    protected void pushOutOfBlocks(double x, double y, double z, CallbackInfo info) {
-        if(PowerTypes.PHASING.isActive(this) && PowerTypes.PHASING.get(this).isActive()) {
-            info.cancel();
-        }
-    }
 }

@@ -13,10 +13,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.StringRenderable;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
@@ -121,7 +118,7 @@ public class ViewOriginScreen extends Screen {
 	
 	private void renderOriginName(MatrixStack matrices) {
 		Origin origin = getCurrentOrigin();
-		StringRenderable originName = textRenderer.trimToWidth(origin.getName(), windowWidth - 36);
+		StringVisitable originName = textRenderer.trimToWidth(origin.getName(), windowWidth - 36);
 		this.drawStringWithShadow(matrices, textRenderer, originName.getString(), guiLeft + 39, guiTop + 19, 0xFFFFFF);
 		ItemStack is = origin.getDisplayItem();
 		this.itemRenderer.renderInGui(is, guiLeft + 15, guiTop + 15);
@@ -156,8 +153,8 @@ public class ViewOriginScreen extends Screen {
 		Origin origin = getCurrentOrigin();
 
 		Text orgDesc = origin.getDescription();
-		List<StringRenderable> descLines = textRenderer.wrapLines(orgDesc, windowWidth - 36);
-		for(StringRenderable line : descLines) {
+		List<OrderedText> descLines = textRenderer.wrapLines(orgDesc, windowWidth - 36);
+		for(OrderedText line : descLines) {
 			if(y >= startY - 18 && y <= endY + 12) {
 				textRenderer.draw(matrices, line, x + 2, y - 6, 0xCCCCCC);
 			}
@@ -168,13 +165,13 @@ public class ViewOriginScreen extends Screen {
 			if(p.isHidden()) {
 				continue;
 			}
-			StringRenderable name = textRenderer.trimToWidth(p.getName().formatted(Formatting.UNDERLINE), windowWidth - 36);
+			MutableText name = (MutableText) textRenderer.trimToWidth(p.getName().formatted(Formatting.UNDERLINE), windowWidth - 36);
 			Text desc = p.getDescription();
-			List<StringRenderable> drawLines = textRenderer.wrapLines(desc, windowWidth - 36);
+			List<OrderedText> drawLines = textRenderer.wrapLines(desc, windowWidth - 36);
 			if(y >= startY - 24 && y <= endY + 12) {
 				textRenderer.draw(matrices, name, x, y, 0xFFFFFF);
 			}
-			for(StringRenderable line : drawLines) {
+			for(OrderedText line : drawLines) {
 				y += 12;
 				if(y >= startY - 24 && y <= endY + 12) {
 					textRenderer.draw(matrices, line, x + 2, y, 0xCCCCCC);

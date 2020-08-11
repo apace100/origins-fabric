@@ -1,7 +1,7 @@
 package io.github.apace100.origins.power;
 
 import io.github.apace100.origins.Origins;
-import net.minecraft.block.BedBlock;
+import net.minecraft.entity.Dismounting;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -13,8 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-
-import java.util.Optional;
 
 public class NetherSpawnPower extends Power {
 
@@ -29,9 +27,9 @@ public class NetherSpawnPower extends Power {
             Pair<ServerWorld, BlockPos> spawn = getSpawn(false);
             if(spawn != null) {
                 if(!isOrbOfOrigin) {
-                    Optional<Vec3d> tpPos = BedBlock.canWakeUpAt(EntityType.PLAYER, spawn.getLeft(), spawn.getRight());
-                    if(tpPos.isPresent()) {
-                        serverPlayer.teleport(spawn.getLeft(), tpPos.get().x, tpPos.get().y, tpPos.get().z, player.pitch, player.yaw);
+                    Vec3d tpPos = Dismounting.method_30769(EntityType.PLAYER, spawn.getLeft(), spawn.getRight(), false);
+                    if(tpPos != null) {
+                        serverPlayer.teleport(spawn.getLeft(), tpPos.x, tpPos.y, tpPos.z, player.pitch, player.yaw);
                     } else {
                         Origins.LOGGER.warn("Could not spawn player with NetherSpawnPower in the nether.");
                     }
@@ -45,7 +43,7 @@ public class NetherSpawnPower extends Power {
         if(player instanceof ServerPlayerEntity) {
             ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
             if(serverPlayer.getSpawnPointPosition() != null && serverPlayer.isSpawnPointSet() && serverPlayer.getSpawnPointDimension() == World.NETHER) {
-                serverPlayer.setSpawnPoint(World.OVERWORLD, null, false, false);
+                serverPlayer.setSpawnPoint(World.OVERWORLD, null, 0F, false, false);
             }
         }
     }
@@ -60,28 +58,28 @@ public class NetherSpawnPower extends Power {
             int center = nether.getDimensionHeight() / 2;
             BlockPos.Mutable mutable = spawnToNetherPos.mutableCopy();
             mutable.setY(center);
-            Optional<Vec3d> tpPos = BedBlock.canWakeUpAt(EntityType.PLAYER, nether, mutable);
+            Vec3d tpPos = Dismounting.method_30769(EntityType.PLAYER, nether, mutable, false);
             int range = 64;
-            for(int dx = -range; dx <= range && !tpPos.isPresent(); dx++) {
-                for(int dz = -range; dz <= range && !tpPos.isPresent(); dz++) {
+            for(int dx = -range; dx <= range && tpPos == null; dx++) {
+                for(int dz = -range; dz <= range && tpPos == null; dz++) {
                     for(int i = 1; i < iterations; i++) {
                         mutable.setX(spawnToNetherPos.getX() + dx);
                         mutable.setZ(spawnToNetherPos.getZ() + dz);
                         mutable.setY(center + i);
-                        tpPos = BedBlock.canWakeUpAt(EntityType.PLAYER, nether, mutable);
-                        if(tpPos.isPresent()) {
+                        tpPos = Dismounting.method_30769(EntityType.PLAYER, nether, mutable, false);
+                        if(tpPos != null) {
                             break;
                         }
                         mutable.setY(center - i);
-                        tpPos = BedBlock.canWakeUpAt(EntityType.PLAYER, nether, mutable);
-                        if(tpPos.isPresent()) {
+                        tpPos = Dismounting.method_30769(EntityType.PLAYER, nether, mutable, false);
+                        if(tpPos != null) {
                             break;
                         }
                     }
                 }
             }
 
-            if(tpPos.isPresent()) {
+            if(tpPos != null) {
                 BlockPos netherSpawn = mutable;
                 nether.getChunkManager().addTicket(ChunkTicketType.START, new ChunkPos(netherSpawn), 11, Unit.INSTANCE);
                 return new Pair(nether, netherSpawn);

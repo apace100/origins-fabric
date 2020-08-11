@@ -74,12 +74,12 @@ public class EnderianPearlEntity extends ThrownItemEntity {
 
    }
 
-   public Entity changeDimension(ServerWorld destination) {
+   public Entity moveToWorld(ServerWorld destination) {
       Entity entity = this.getOwner();
       if (entity != null && entity.world.getRegistryKey() != destination.getRegistryKey()) {
          this.setOwner((Entity)null);
       }
 
-      return super.changeDimension(destination);
+      return super.moveToWorld(destination);
    }
 }
