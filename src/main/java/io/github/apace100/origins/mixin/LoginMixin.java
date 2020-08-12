@@ -27,6 +27,8 @@ public abstract class LoginMixin {
 
 	@Inject(at = @At("TAIL"), method = "Lnet/minecraft/server/PlayerManager;onPlayerConnect(Lnet/minecraft/network/ClientConnection;Lnet/minecraft/server/network/ServerPlayerEntity;)V")
 	private void openOriginsGui(ClientConnection connection, ServerPlayerEntity player, CallbackInfo info) {
+		OriginComponent component = ModComponents.ORIGIN.get(player);
+
 		PacketByteBuf originListData = new PacketByteBuf(Unpooled.buffer());
 		originListData.writeInt(OriginRegistry.size() - 1);
 		OriginRegistry.entries().forEach((entry) -> {
@@ -40,12 +42,17 @@ public abstract class LoginMixin {
 		originLayerData.writeInt(OriginLayers.size());
 		OriginLayers.getLayers().forEach((layer) -> {
 			layer.write(originLayerData);
+			if(layer.isEnabled()) {
+				if(!component.hasOrigin(layer)) {
+					component.setOrigin(layer, Origin.EMPTY);
+				}
+			}
 		});
 		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, ModPackets.LAYER_LIST, originLayerData);
 		List<ServerPlayerEntity> playerList = getPlayerList();
 		playerList.forEach(spe -> ModComponents.ORIGIN.get(spe).syncWith(player));
 		OriginComponent.sync(player);
-		if(!ModComponents.ORIGIN.get(player).hasAllOrigins()) {
+		if(!component.hasAllOrigins()) {
 			PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
 			data.writeBoolean(true);
 			ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, ModPackets.OPEN_ORIGIN_SCREEN, data);

@@ -1,20 +1,20 @@
 package io.github.apace100.origins.power;
 
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+
+import java.util.function.Predicate;
 
 public class InvulnerablePower extends Power {
 
-    public InvulnerablePower(PowerType<?> type, PlayerEntity player) {
+    private final Predicate<DamageSource> damageSources;
+
+    public InvulnerablePower(PowerType<?> type, PlayerEntity player, Predicate<DamageSource> damageSourcePredicate) {
         super(type, player);
+        this.damageSources = damageSourcePredicate;
     }
 
-    @Override
-    public void onAdded() {
-        player.setInvulnerable(true);
-    }
-
-    @Override
-    public void onRemoved() {
-        player.setInvulnerable(player.isCreative() || player.isSpectator());
+    public boolean doesApply(DamageSource source) {
+        return damageSources.test(source);
     }
 }

@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.power.PowerType;
+import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModRegistries;
 import net.fabricmc.api.EnvType;
@@ -34,7 +35,7 @@ public class Origin {
     public static final Origin EMPTY;
 
     static {
-        EMPTY = register(new Origin(new Identifier(Origins.MODID, "empty"), Items.AIR, Impact.NONE, -1, Integer.MAX_VALUE).setUnchoosable());
+        EMPTY = register(new Origin(new Identifier(Origins.MODID, "empty"), Items.AIR, Impact.NONE, -1, Integer.MAX_VALUE).add(PowerTypes.INVULNERABILITY).setUnchoosable());
     }
 
     public static void init() {

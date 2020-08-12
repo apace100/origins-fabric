@@ -28,9 +28,14 @@ public class ModPacketsC2S {
                         Origin origin = OriginRegistry.get(id);
                         if(origin.isChoosable() && layer.contains(origin)) {
                             boolean hadOriginBefore = component.hadOriginBefore();
+                            boolean hadAllOrigins = component.hasAllOrigins();
                             component.setOrigin(layer, origin);
                             component.sync();
-                            origin.getPowerTypes().forEach(powerType -> component.getPower(powerType).onChosen(hadOriginBefore));
+                            if(component.hasAllOrigins() && !hadAllOrigins) {
+                                component.getOrigins().values().forEach(o -> {
+                                    o.getPowerTypes().forEach(powerType -> component.getPower(powerType).onChosen(hadOriginBefore));
+                                });
+                            }
                             Origins.LOGGER.info("Player " + player.getDisplayName().asString() + " chose Origin: " + originId + ", for layer: " + layerId);
                         } else {
                             Origins.LOGGER.info("Player " + player.getDisplayName().asString() + " tried to choose unchoosable Origin for layer " + layerId + ": " + originId + ".");

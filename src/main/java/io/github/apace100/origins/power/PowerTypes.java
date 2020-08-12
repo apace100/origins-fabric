@@ -41,7 +41,7 @@ public class PowerTypes {
     public static final PowerType<PreventItemUsePower> CARNIVORE;
     public static final PowerType<SetEntityGroupPower> ARTHROPOD;
 
-    public static final PowerType<Power> FIRE_IMMUNITY;
+    public static final PowerType<InvulnerablePower> FIRE_IMMUNITY;
     public static final PowerType<NetherSpawnPower> NETHER_SPAWN;
     public static final PowerType<ModifyDamageDealtPower> BURNING_WRATH;
     public static final PowerType<WaterVulnerabilityPower> WATER_VULNERABILITY;
@@ -59,7 +59,7 @@ public class PowerTypes {
     public static final PowerType<TogglePower> BURN_IN_DAYLIGHT;
     public static final PowerType<ModelTranslucencyPower> TRANSLUCENT;
 
-    public static final PowerType<Power> FALL_IMMUNITY;
+    public static final PowerType<InvulnerablePower> FALL_IMMUNITY;
     public static final PowerType<Power> SPRINT_JUMP;
     public static final PowerType<Power> WEAK_ARMS;
     public static final PowerType<Power> SCARE_CREEPERS;
@@ -89,7 +89,7 @@ public class PowerTypes {
     public static final PowerType<PreventItemUsePower> NO_RANGED_WEAPONS;
 
     static {
-        INVULNERABILITY = register("invulnerability", new PowerType<>(InvulnerablePower::new));
+        INVULNERABILITY = register("invulnerability", new PowerType<>((type, player) -> new InvulnerablePower(type, player, ds -> true)));
 
         WATER_BREATHING = register("water_breathing", new PowerType<>(Power::new));
         AQUA_AFFINITY = register("aqua_affinity", new PowerType<>(Power::new));
@@ -105,7 +105,7 @@ public class PowerTypes {
         CARNIVORE = register("carnivore", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, (stack -> stack.isFood() && !(stack.getItem().getFoodComponent().isMeat() || stack.getItem().isIn(ModTags.MEAT))))));
         ARTHROPOD = register("arthropod", new PowerType<>((type, player) -> new SetEntityGroupPower(type, player, EntityGroup.ARTHROPOD)).setHidden());
 
-        FIRE_IMMUNITY = register("fire_immunity", new PowerType<>(Power::new));
+        FIRE_IMMUNITY = register("fire_immunity", new PowerType<>((type, player) -> new InvulnerablePower(type, player, DamageSource::isFire)));
         NETHER_SPAWN = register("nether_spawn", new PowerType<>(NetherSpawnPower::new));
         BURNING_WRATH = register("burning_wrath", new PowerType<>((type, player) -> new ModifyDamageDealtPower(type, player, (p, s) -> p.isOnFire(), dmg -> dmg + 3.0F)));
         WATER_VULNERABILITY = register("water_vulnerability", new PowerType<>((type, player) -> new WaterVulnerabilityPower(type, player, 20, 0,20)));
@@ -123,7 +123,7 @@ public class PowerTypes {
         BURN_IN_DAYLIGHT = register("burn_in_daylight", new PowerType<>((type, player) -> new TogglePower(type, player, true)));
         TRANSLUCENT = register("translucent", new PowerType<>((type, player) -> new ModelTranslucencyPower(type, player, 0.5F)));
 
-        FALL_IMMUNITY = register("fall_immunity", new PowerType<>(Power::new));
+        FALL_IMMUNITY = register("fall_immunity", new PowerType<>((type, player) -> new InvulnerablePower(type, player, ds -> ds == DamageSource.FALL)));
         SPRINT_JUMP = register("sprint_jump", new PowerType<>(Power::new));
         WEAK_ARMS = register("weak_arms", new PowerType<>(Power::new));
         SCARE_CREEPERS = register("scare_creepers", new PowerType<>(Power::new));

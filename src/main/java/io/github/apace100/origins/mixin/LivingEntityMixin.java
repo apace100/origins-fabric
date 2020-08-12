@@ -82,17 +82,6 @@ public abstract class LivingEntityMixin extends Entity {
         }
     }
 
-    // FIRE_IMMUNITY & FALL_IMMUNITY
-    @Inject(at = @At("HEAD"), method = "damage", cancellable = true)
-    public void damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
-        if(source.isFire() && PowerTypes.FIRE_IMMUNITY.isActive(this)) {
-            info.setReturnValue(false);
-        }
-        if(source == DamageSource.FALL && PowerTypes.FALL_IMMUNITY.isActive(this)) {
-            info.setReturnValue(false);
-        }
-    }
-
     @ModifyVariable(method = "damage", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;despawnCounter:I"), ordinal = 0, argsOnly = true)
     private float modifyDamageAmount(float originalAmount, DamageSource source, float amount) {
         if((Object)this instanceof PlayerEntity) {

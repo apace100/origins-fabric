@@ -14,6 +14,8 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import java.util.Optional;
+
 public class NetherSpawnPower extends Power {
 
     public NetherSpawnPower(PowerType<?> type, PlayerEntity player) {
@@ -27,7 +29,7 @@ public class NetherSpawnPower extends Power {
             Pair<ServerWorld, BlockPos> spawn = getSpawn(false);
             if(spawn != null) {
                 if(!isOrbOfOrigin) {
-                    Vec3d tpPos = Dismounting.method_30769(EntityType.PLAYER, spawn.getLeft(), spawn.getRight(), false);
+                    Vec3d tpPos = Dismounting.method_30769(EntityType.PLAYER, spawn.getLeft(), spawn.getRight(), true);
                     if(tpPos != null) {
                         serverPlayer.teleport(spawn.getLeft(), tpPos.x, tpPos.y, tpPos.z, player.pitch, player.yaw);
                     } else {
@@ -58,7 +60,7 @@ public class NetherSpawnPower extends Power {
             int center = nether.getDimensionHeight() / 2;
             BlockPos.Mutable mutable = spawnToNetherPos.mutableCopy();
             mutable.setY(center);
-            Vec3d tpPos = Dismounting.method_30769(EntityType.PLAYER, nether, mutable, false);
+            Vec3d tpPos = Dismounting.method_30769(EntityType.PLAYER, nether, mutable, true);
             int range = 64;
             for(int dx = -range; dx <= range && tpPos == null; dx++) {
                 for(int dz = -range; dz <= range && tpPos == null; dz++) {
@@ -66,12 +68,12 @@ public class NetherSpawnPower extends Power {
                         mutable.setX(spawnToNetherPos.getX() + dx);
                         mutable.setZ(spawnToNetherPos.getZ() + dz);
                         mutable.setY(center + i);
-                        tpPos = Dismounting.method_30769(EntityType.PLAYER, nether, mutable, false);
+                        tpPos = Dismounting.method_30769(EntityType.PLAYER, nether, mutable, true);
                         if(tpPos != null) {
                             break;
                         }
                         mutable.setY(center - i);
-                        tpPos = Dismounting.method_30769(EntityType.PLAYER, nether, mutable, false);
+                        tpPos = Dismounting.method_30769(EntityType.PLAYER, nether, mutable, true);
                         if(tpPos != null) {
                             break;
                         }
@@ -88,5 +90,10 @@ public class NetherSpawnPower extends Power {
             }
         }
         return null;
+    }
+
+    private Optional<Vec3d> getValidPosition(World world, BlockPos pos) {
+         Vec3d p = Dismounting.method_30769(EntityType.PLAYER, world, pos, false);
+         return Optional.of(p);
     }
 }
