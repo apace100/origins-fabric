@@ -180,7 +180,7 @@
   "layer.origins.origin": "起源",
 
   "death.attack.no_water_for_gills": "%s没能保持湿润",
-  "death.attack.hurt_by_water": "%s洗澡的时间太长了"
+  "death.attack.hurt_by_water": "%s洗澡的时间太长了",
   
   "commands.origin.origin_not_found": "未知起源：%s",
   "commands.origin.set.success.single": "已将%s的起源设置为：%s.",
