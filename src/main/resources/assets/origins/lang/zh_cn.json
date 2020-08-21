@@ -14,11 +14,11 @@
   "origin.origins.avian.name": "羽人族",
   "origin.origins.avian.description": "羽人族人早在很久以前就失去了飞行的能力。现在仅能看到这些平和的生物四处滑翔。",
 
-  "origin.origins.phantom.name": "幻翼族",
-  "origin.origins.phantom.description": "作为人与幻翼的混血，这些生物可以在幻翼和正常形态之间转换。",
+  "origin.origins.phantom.name": "幻影族",
+  "origin.origins.phantom.description": "作为人与幻翼的混血，这些生物可以幻化自如。",
 
   "origin.origins.feline.name": "猫科",
-  "origin.origins.feline.description": "猫科可以凭他们猫一样的外表吓跑苦力怕。猫科的灵巧使他们总能安全着陆。",
+  "origin.origins.feline.description": "猫科可以凭他们猫一样的外表吓跑苦力怕。灵活的动作使他们总能安全着陆。",
 
   "origin.origins.elytrian.name": "翼人族",
   "origin.origins.elytrian.description": "翼人族常常随风飞翔。如果头顶不够宽阔，翼人族会感到不舒服。",
@@ -27,16 +27,16 @@
   "origin.origins.enderian.description": "作为末影龙的子嗣，末影族能够传送，但会受到水的伤害。",
   
   "origin.origins.shulk.name": "潜影族",
-  "origin.origins.shulk.description": "潜影贝的近亲, 潜影族的身体有一层保护性的壳状皮肤.",
+  "origin.origins.shulk.description": "潜影贝的近亲, 身体被一层保护性的壳状皮肤所覆盖",
 
   "power.origins.water_breathing.name": "鳃",
   "power.origins.water_breathing.description": "你可以在水下呼吸，但不能在陆地上呼吸。",
 
   "power.origins.aqua_affinity.name": "水下速掘",
-  "power.origins.aqua_affinity.description": "你在水下可以像其他人在陆地上一样破坏方块。",
+  "power.origins.aqua_affinity.description": "你在水下破坏方块的速度和正常时相同。",
 
   "power.origins.water_vision.name": "水下视野",
-  "power.origins.water_vision.description": "你在水下的有完美的视力。",
+  "power.origins.water_vision.description": "你在水下的视力可谓完美。",
 
   "power.origins.swim_speed.name": "鳍",
   "power.origins.swim_speed.description": "你在水下的移动速度提升。",
@@ -45,7 +45,7 @@
   "power.origins.like_water.description": "除非你想，否则你在水下的时候不会沉底。",
 
   "power.origins.fragile.name": "脆弱",
-  "power.origins.fragile.description": "你比人类少3颗心的生命上限。",
+  "power.origins.fragile.description": "你的生命上限少了3颗心。",
 
   "power.origins.webbing.name": "织网",
   "power.origins.webbing.description": "当你以近战击中一个敌人时，他们会被困在蛛网里。",
@@ -71,10 +71,10 @@
   "power.origins.water_vulnerability.name": "恐水",
   "power.origins.water_vulnerability.description": "当你接触水时，你会逐渐受到伤害。",
 
-  "power.origins.tailwind.name": "顺风",
-  "power.origins.tailwind.description": "你的步伐比其他人快一点。",
+  "power.origins.tailwind.name": "顺风腿",
+  "power.origins.tailwind.description": "你的步伐比其他人要快一些。",
 
-  "power.origins.slow_falling.name": "轻量",
+  "power.origins.slow_falling.name": "轻如鸿毛",
   "power.origins.slow_falling.description": "除非你潜行，不然你会像羽毛一样轻轻地飘落到地上。",
 
   "power.origins.vegetarian.name": "食草动物",
@@ -84,13 +84,13 @@
   "power.origins.fresh_air.description": "睡觉时，你的床必须处于至少86格的高度，这样才能呼吸新鲜空气。",
 
   "power.origins.phasing.name": "相位",
-  "power.origins.phasing.description": "当你幻翼化时，你可以穿过任何除了黑曜石的固体。",
+  "power.origins.phasing.description": "当你幻化时，你可以穿过任何除了黑曜石的固体。",
 
   "power.origins.invisibility.name": "隐身",
-  "power.origins.invisibility.description": "当你幻翼化时，你是隐形的。",
+  "power.origins.invisibility.description": "当你幻化时，你是隐形的。",
 
   "power.origins.hunger_over_time.name": "代谢快速",
-  "power.origins.hunger_over_time.description": "幻翼化会让你感到饥饿。",
+  "power.origins.hunger_over_time.description": "幻化会让你感到饥饿。",
 
   "power.origins.burn_in_daylight.name": "对光过敏",
   "power.origins.burn_in_daylight.description": "如果不隐形，你会被日光点燃。",
