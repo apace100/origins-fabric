@@ -1,0 +1,189 @@
+{
+  "origin.origins.human.name": "Humano",
+  "origin.origins.human.description": "Um humano qualquer. Sua aventura qualquer te aguarda.",
+
+  "origin.origins.merling.name": "Oceânico",
+  "origin.origins.merling.description": "Estes habitantes naturais do oceano não estão acostumados a ficar fora d'água por muito tempo.",
+
+  "origin.origins.arachnid.name": "Aracnídeo",
+  "origin.origins.arachnid.description": "Suas habilidades de escalada e a habilidade de prender seus inimigos em uma teia de aranha faz dos Aracnídeos caçadores perfeitos.",
+
+  "origin.origins.blazeborn.name": "Incandescente",
+  "origin.origins.blazeborn.description": "Descendentes distantes dos Blazes, os Incandescentes são naturalmente imunes aos perigos do Nether.",
+
+  "origin.origins.avian.name": "Aviário",
+  "origin.origins.avian.description": "A raça Aviária perdeu sua habilidade de voar há muito tempo. Agora estas criaturas pacíficas podem ser vistas planando de um lugar ao outro.",
+
+  "origin.origins.phantom.name": "Vulto",
+  "origin.origins.phantom.description": "Como uma cria metade-humana e metade-fantasma, essas criaturas podem intercalar entre uma forma fantasma e uma normal.",
+
+  "origin.origins.feline.name": "Felino",
+  "origin.origins.feline.description": "Com sua aparência gatal, os Felinos assustam os creepers. Com a destreza dos gatos, eles sempre caem em pé sem qualquer arranhão.",
+
+  "origin.origins.elytrian.name": "Elitriano",
+  "origin.origins.elytrian.description": "Acostumados a voar pelos céus, Elitrianos ficam angustiados quando estão em ambientes fechados.",
+
+  "origin.origins.enderian.name": "Enderiano",
+  "origin.origins.enderian.description": "Nascidos do Dragão do End, Enderianos são capazes de teletransportar, mas são vulneráveis à água.",
+
+  "origin.origins.shulk.name": "Shulk",
+  "origin.origins.shulk.description": "Parentes dos Shulkers, os corpos dos Shulks são protegidos por uma pele semelhante a um casco.",
+
+  "power.origins.water_breathing.name": "Guelrras",
+  "power.origins.water_breathing.description": "Você respira debaixo d'água, mas não em terra firme.",
+
+  "power.origins.aqua_affinity.name": "Afinidade Aquática",
+  "power.origins.aqua_affinity.description": "Mesmo submerso, você pode quebrar blocos como se estivesse fora d'água.",
+
+  "power.origins.water_vision.name": "Olhos Úmidos",
+  "power.origins.water_vision.description": "Sua visão debaixo d'água é perfeita.",
+
+  "power.origins.swim_speed.name": "Barbatanas",
+  "power.origins.swim_speed.description": "Sua velocidade de nado é aumentada.",
+
+  "power.origins.like_water.name": "Como Água",
+  "power.origins.like_water.description": "Enquanto submerso, você não afunda (a menos que você queira).",
+
+  "power.origins.fragile.name": "Frágil",
+  "power.origins.fragile.description": "Você possui 3 corações a menos do que um Humano.",
+
+  "power.origins.webbing.name": "Tecejo de Fios",
+  "power.origins.webbing.description": "Quando você golpeia um inimigo, ele fica preso em uma teia de aranha.",
+
+  "power.origins.climbing.name": "Escalada",
+  "power.origins.climbing.description": "Você é capaz de escalar qualquer parede, não apenas escadas de mão.",
+
+  "power.origins.carnivore.name": "Carnívoro",
+  "power.origins.carnivore.description": "Sua dieta é restrita a carnes, você não pode comer vegetais.",
+
+  "power.origins.fire_immunity.name": "Imunidade a Fogo",
+  "power.origins.fire_immunity.description": "Você é imune a todos os tipos de dano por fogo.",
+
+  "power.origins.nether_spawn.name": "Habitante do Nether",
+  "power.origins.nether_spawn.description": "Seu spawn natural será no Nether.",
+
+  "power.origins.burning_wrath.name": "Fúria Flamejante",
+  "power.origins.burning_wrath.description": "Quando estiver pegando fogo, seus ataques causam mais dano.",
+
+  "power.origins.hotblooded.name": "Sangue Quente",
+  "power.origins.hotblooded.description": "Devido às temperaturas de seu corpo, venenos evaporam, fazendo-te imune a qualquer tipo de efeito venenoso.",
+
+  "power.origins.water_vulnerability.name": "Hidrofobia",
+  "power.origins.water_vulnerability.description": "Você recebe dano enquanto em contato com a água.",
+
+  "power.origins.tailwind.name": "A Favor do Vento",
+  "power.origins.tailwind.description": "Você é um pouco mais rápido a pé do que os outros.",
+
+  "power.origins.slow_falling.name": "Peso Pena",
+  "power.origins.slow_falling.description": "Você cai gentilmente ao chão como uma pena, a menos que você agache.",
+
+  "power.origins.vegetarian.name": "Vegetariano",
+  "power.origins.vegetarian.description": "Você não consegue digerir carnes.",
+
+  "power.origins.fresh_air.name": "Ar fresco",
+  "power.origins.fresh_air.description": "Quando dormir, sua cama precisa estar no mínimo a 86 blocos de altura, para que você respire ar fresco.",
+
+  "power.origins.phasing.name": "Etéreo",
+  "power.origins.phasing.description": "Enquanto fantasma, você pode atravessar materiais sólidos, exceto Obsidiana.",
+
+  "power.origins.invisibility.name": "Invisibilidade",
+  "power.origins.invisibility.description": "Enquanto fantasma, você é invisível.",
+
+  "power.origins.hunger_over_time.name": "Metabolismo Rápido",
+  "power.origins.hunger_over_time.description": "Estar na forma fantasma aumenta gradativamente sua fome.",
+
+  "power.origins.burn_in_daylight.name": "Alérgico à Luz",
+  "power.origins.burn_in_daylight.description": "Você queima na luz do dia se não estiver invisível.",
+
+  "power.origins.fall_immunity.name": "Acrobacia",
+  "power.origins.fall_immunity.description": "Você nunca recebe dano por queda, independentemente da altura que você caiu.",
+
+  "power.origins.sprint_jump.name": "Tornozelos Fortes",
+  "power.origins.sprint_jump.description": "Você é apto a pular mais alto enquanto corre.",
+
+  "power.origins.nine_lives.name": "Nove Vidas",
+  "power.origins.nine_lives.description": "Você possui um coração a menos do que um Humano.",
+
+  "power.origins.cat_vision.name": "Noturno",
+  "power.origins.cat_vision.description": "Você pode levemente ver no escuro quando não estiver dentro d'água.",
+
+  "power.origins.weak_arms.name": "Braços Fracos",
+  "power.origins.weak_arms.description": "Quando não sob efeito de uma poção de força, você não pode minerar blocos de pedra ligados a mais de dois outros blocos de pedra.",
+
+  "power.origins.scare_creepers.name": "Aparência Gatal",
+  "power.origins.scare_creepers.description": "Creepers têm medo de você e só irão explodir se você atacá-los primeiro.",
+
+  "power.origins.launch_into_air.name": "Bênção do Vento",
+  "power.origins.launch_into_air.description": "A cada 30 segundos, você pode lançar-se 20 blocos ao ar.",
+
+  "power.origins.elytra.name": "Alado",
+  "power.origins.elytra.description": "Você possui asas de Élitros sem ter que equipar nada.",
+
+  "power.origins.light_armor.name": "Necessidade por Mobilidade",
+  "power.origins.light_armor.description": "Você não pode vestir armadura pesada (armadura com valores de proteção maiores do que malha).",
+
+  "power.origins.claustrophobia.name": "Claustrofobia",
+  "power.origins.claustrophobia.description": "Estando em lugares com tetos baixos por muito tempo irá enfraquecer você e te deixar lento.",
+
+  "power.origins.more_kinetic_damage.name": "Ossos de Vidro",
+  "power.origins.more_kinetic_damage.description": "Você recebe mais dano por queda e por \"acidentes aéreos\".",
+
+  "power.origins.aerial_combatant.name": "Combatente dos Ares",
+  "power.origins.aerial_combatant.description": "Você causa consideravelmente mais dano enquanto estiver voando.",
+
+  "power.origins.throw_ender_pearl.name": "Teletransporte",
+  "power.origins.throw_ender_pearl.description": "Quando quiser, você pode atirar uma pérola do ender que não te causa dano, possibilitanto você de teletransportar.",
+
+  "power.origins.pumpkin_hate.name": "Abóborofobia",
+  "power.origins.pumpkin_hate.description": "Você tem medo de abóboras. Por um bom motivo.",
+
+  "power.origins.extra_reach.name": "Corpo Esbelto",
+  "power.origins.extra_reach.description": "Você consegue alcançar blocos e entidades distantes.",
+
+  "power.origins.shulker_inventory.name": "Ganancioso",
+  "power.origins.shulker_inventory.description": "Você possui acesso a 9 espaços bônus em seu inventário, que mantêm os itens após a morte.",
+
+  "power.origins.natural_armor.name": "Pele Impenetrável",
+  "power.origins.natural_armor.description": "Mesmo sem estar vestindo armadura, sua pele possui proteção natural.",
+
+  "power.origins.more_exhaustion.name": "Bom de Boca",
+  "power.origins.more_exhaustion.description": "Você cansa mais rápido do que os outros, fazendo com que precise comer mais.",
+
+  "power.origins.no_shield.name": "Desajeitado",
+  "power.origins.no_shield.description": "A maneira com a qual suas mãos são formadas te impossibilita de utilizar escudos.",
+
+  "power.origins.strong_arms.name": "Braços Fortes",
+  "power.origins.strong_arms.description": "Você é forte o suficiente para quebrar pedras sem precisar de uma picareta.",
+
+  "power.origins.translucent.name": "Translucidez",
+  "power.origins.translucent.description": "Sua pele é translúcida.",
+
+  "category.origins": "Origens",
+  "key.origins.active_power": "Poder Ativo",
+  "key.origins.view_origin": "Ver origem",
+
+  "item.origins.orb_of_origin": "Orbe de Origem",
+
+  "enchantment.origins.water_protection": "Proteção contra a água",
+
+  "container.shulker_inventory_power": "Inventário Shulker",
+
+  "origins.gui.select": "Selecionar",
+  "origins.gui.close": "Fechar",
+  "origins.gui.choose_origin.title": "Escolha sua %s.",
+  "origins.gui.view_origin.title": "Esta é sua %s.",
+  "origins.gui.impact.impact": "Impacto",
+  "origins.gui.impact.none": "Nenhum",
+  "origins.gui.impact.low": "Baixo",
+  "origins.gui.impact.medium": "Médio",
+  "origins.gui.impact.high": "Alto",
+
+  "layer.origins.origin": "Origem",
+
+  "death.attack.no_water_for_gills": "%s se esqueceu de tomar água.",
+  "death.attack.hurt_by_water": "%s demorou demais no banho.",
+
+  "commands.origin.origin_not_found": "Origem desconhecida: %s",
+  "commands.origin.set.success.single": "Origem de %s definida para %s.",
+  "commands.origin.set.success.multiple": "Origens de %s alvos para %s."
+}
