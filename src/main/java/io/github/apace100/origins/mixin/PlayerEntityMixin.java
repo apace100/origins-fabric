@@ -17,7 +17,6 @@ import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.command.CommandOutput;
 import net.minecraft.tag.FluidTags;
@@ -107,15 +106,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
         return in;
     }
 
-    // ELYTRA
-    @Inject(method = "checkFallFlying", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/player/PlayerEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"), cancellable = true)
-    private void allowElytrianFlight(CallbackInfoReturnable<Boolean> info) {
-        if(PowerTypes.ELYTRA.isActive(this)) {
-            this.startFallFlying();
-            info.setReturnValue(true);
-        }
-    }
-
     @Inject(method = "canEquip", at = @At("HEAD"), cancellable = true)
     private void preventArmorDispensing(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
         EquipmentSlot slot = MobEntity.getPreferredEquipmentSlot(stack);
@@ -130,9 +120,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
                     info.setReturnValue(false);
                 }
             }
-        }
-        if(stack.getItem() == Items.ELYTRA && PowerTypes.ELYTRA.isActive(this)) {
-            info.setReturnValue(false);
         }
     }
 

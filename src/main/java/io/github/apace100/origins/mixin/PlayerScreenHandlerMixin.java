@@ -1,7 +1,6 @@
 package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.power.RestrictArmorPower;
 import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.entity.EquipmentSlot;
@@ -10,7 +9,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.screen.slot.Slot;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,11 +29,6 @@ public abstract class PlayerScreenHandlerMixin extends Slot {
         EquipmentSlot slot = MobEntity.getPreferredEquipmentSlot(stack);
         if(component.getPowers(RestrictArmorPower.class).stream().anyMatch(rap -> !rap.canEquip(stack, slot))) {
             info.setReturnValue(false);
-        }
-        if(PowerTypes.ELYTRA.isActive(player)) {
-            if(stack.getItem() == Items.ELYTRA) {
-                info.setReturnValue(false);
-            }
         }
     }
 }

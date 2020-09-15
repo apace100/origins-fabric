@@ -162,6 +162,11 @@
   "key.origins.active_power": "Active Power",
   "key.origins.view_origin": "View Origin",
 
+  "text.autoconfig.origins.title": "Origins Configuration",
+  "text.autoconfig.origins.option.xOffset": "Cooldown Bar Offset X",
+  "text.autoconfig.origins.option.yOffset": "Cooldown Bar Offset Y",
+  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Phantomized Overlay Strength",
+
   "item.origins.orb_of_origin": "Orb of Origin",
 
   "enchantment.origins.water_protection": "Water Protection",

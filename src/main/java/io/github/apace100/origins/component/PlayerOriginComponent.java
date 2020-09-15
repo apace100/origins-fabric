@@ -9,6 +9,8 @@ import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModRegistries;
+import io.github.apace100.origins.util.ChoseOriginCriterion;
+import io.github.apace100.origins.util.GainedPowerCriterion;
 import nerdhub.cardinal.components.api.ComponentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,6 +18,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
 import java.util.*;
@@ -119,6 +122,10 @@ public class PlayerOriginComponent implements OriginComponent {
             return;
         }
         this.origins.put(layer, origin);
+        boolean isServer = !player.world.isClient;
+        if(isServer) {
+            ChoseOriginCriterion.INSTANCE.trigger((ServerPlayerEntity)player, origin);
+        }
         if(oldOrigin != null) {
             List<PowerType<?>> powersToRemove = new LinkedList<>();
             for (Map.Entry<PowerType<?>, Power> powerEntry: powers.entrySet()) {
@@ -133,6 +140,9 @@ public class PlayerOriginComponent implements OriginComponent {
         }
         origin.getPowerTypes().forEach(powerType -> {
             if(!powers.containsKey(powerType)) {
+                if(isServer) {
+                    GainedPowerCriterion.INSTANCE.trigger((ServerPlayerEntity)player, powerType);
+                }
                 Power power = powerType.create(player);
                 this.powers.put(powerType, power);
                 power.onAdded();

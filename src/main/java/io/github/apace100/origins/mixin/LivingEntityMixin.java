@@ -33,15 +33,6 @@ public abstract class LivingEntityMixin extends Entity {
         super(type, world);
     }
 
-    // ELYTRA
-    @Redirect(method = "initAi", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setFlag(IZ)V"))
-    private void preventStoppingToFly(LivingEntity livingEntity, int index, boolean value) {
-        if(this.getFlag(7) && !value && index == 7 && !this.onGround && !this.hasVehicle()
-            && PowerTypes.ELYTRA.isActive(livingEntity) && !livingEntity.hasStatusEffect(StatusEffects.LEVITATION)) {
-            this.setFlag(index, true);
-        }
-    }
-
     @Inject(method = "canWalkOnFluid", at = @At("HEAD"), cancellable = true)
     private void modifyWalkableFluids(Fluid fluid, CallbackInfoReturnable<Boolean> info) {
         if(PowerTypes.LAVA_STRIDER.isActive(this) && fluid.isIn(FluidTags.LAVA)) {

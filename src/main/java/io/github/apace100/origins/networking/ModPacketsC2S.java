@@ -8,6 +8,7 @@ import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.Active;
 import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.util.ChoseOriginCriterion;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
