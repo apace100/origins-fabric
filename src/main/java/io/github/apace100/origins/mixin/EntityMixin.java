@@ -1,20 +1,28 @@
 package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.power.InvisibilityPower;
 import io.github.apace100.origins.power.InvulnerablePower;
-import io.github.apace100.origins.power.PowerTypes;
+import io.github.apace100.origins.power.PhasingPower;
 import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
+
 @Mixin(Entity.class)
 public class EntityMixin {
+
+    @Shadow public World world;
 
     @Inject(at = @At("HEAD"), method = "isInvulnerableTo", cancellable = true)
     private void makeOriginInvulnerable(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
@@ -28,15 +36,18 @@ public class EntityMixin {
 
     @Inject(at = @At("HEAD"), method = "isInvisible", cancellable = true)
     private void phantomInvisibility(CallbackInfoReturnable<Boolean> info) {
-        if(PowerTypes.INVISIBILITY.isActive((Entity)(Object)this) && PowerTypes.INVISIBILITY.get((Entity)(Object)this).isActive()) {
+        if(OriginComponent.getPowers((Entity)(Object)this, InvisibilityPower.class).size() > 0) {
             info.setReturnValue(true);
         }
     }
 
-    @Inject(at = @At("HEAD"), method = "pushOutOfBlocks", cancellable = true)
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/BlockPos;<init>(DDD)V"), method = "pushOutOfBlocks", cancellable = true)
     protected void pushOutOfBlocks(double x, double y, double z, CallbackInfo info) {
-        if(PowerTypes.PHASING.isActive((Entity)(Object)this) && PowerTypes.PHASING.get((Entity)(Object)this).isActive()) {
-            info.cancel();
+        List<PhasingPower> powers = OriginComponent.getPowers((Entity)(Object)this, PhasingPower.class);
+        if(powers.size() > 0) {
+            if(powers.stream().anyMatch(phasingPower -> phasingPower.doesApply(new BlockPos(x, y, z)))) {
+                info.cancel();
+            }
         }
     }
 }

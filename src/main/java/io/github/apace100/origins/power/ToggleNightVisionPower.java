@@ -9,8 +9,12 @@ public class ToggleNightVisionPower extends NightVisionPower implements Active {
     private boolean isActive;
 
     public ToggleNightVisionPower(PowerType<?> type, PlayerEntity player) {
-        super(type, player);
-        this.isActive = true;
+        this(type, player, 1.0F, true);
+    }
+
+    public ToggleNightVisionPower(PowerType<?> type, PlayerEntity player, float strength, boolean activeByDefault) {
+        super(type, player, strength);
+        this.isActive = activeByDefault;
     }
 
     @Override

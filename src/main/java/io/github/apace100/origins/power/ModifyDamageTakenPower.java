@@ -1,27 +1,22 @@
 package io.github.apace100.origins.power;
 
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Pair;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
-public class ModifyDamageTakenPower extends Power {
+public class ModifyDamageTakenPower extends FloatModifyingPower {
 
-    private final BiFunction<PlayerEntity, DamageSource, Boolean> condition;
-    private final Function<Float, Float> modifier;
+    private final Predicate<Pair<DamageSource, Float>> condition;
 
-    public ModifyDamageTakenPower(PowerType<?> type, PlayerEntity player, BiFunction<PlayerEntity, DamageSource, Boolean> condition, Function<Float, Float> modifier) {
-        super(type, player);
+    public ModifyDamageTakenPower(PowerType<?> type, PlayerEntity player, Predicate<Pair<DamageSource, Float>> condition, EntityAttributeModifier modifier) {
+        super(type, player, modifier);
         this.condition = condition;
-        this.modifier = modifier;
     }
 
-    public boolean doesApply(DamageSource source) {
-        return condition.apply(this.player, source);
-    }
-
-    public float apply(float damageAmount) {
-        return modifier.apply(damageAmount);
+    public boolean doesApply(DamageSource source, float damageAmount) {
+        return condition.test(new Pair(source, damageAmount));
     }
 }

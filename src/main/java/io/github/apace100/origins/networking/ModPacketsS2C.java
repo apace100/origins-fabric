@@ -5,6 +5,9 @@ import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
+import io.github.apace100.origins.power.PowerType;
+import io.github.apace100.origins.power.PowerTypeRegistry;
+import io.github.apace100.origins.power.factory.PowerFactory;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.screen.ChooseOriginScreen;
 import net.fabricmc.api.EnvType;
@@ -15,6 +18,8 @@ import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ModPacketsS2C {
 
@@ -61,5 +66,20 @@ public class ModPacketsS2C {
                 }
             });
         }))));
+        ClientSidePacketRegistry.INSTANCE.register(ModPackets.POWER_LIST, (((((packetContext, packetByteBuf) -> {
+            int powerCount = packetByteBuf.readInt();
+            HashMap<Identifier, PowerFactory> factories = new HashMap<>();
+            for(int i = 0; i < powerCount; i++) {
+                Identifier id = packetByteBuf.readIdentifier();
+                PowerFactory factory = PowerFactory.read(packetByteBuf);
+                factories.put(id, factory);
+            }
+            packetContext.getTaskQueue().execute(() -> {
+                PowerTypeRegistry.clear();
+                for(Map.Entry<Identifier, PowerFactory> factory : factories.entrySet()) {
+                    PowerTypeRegistry.register(factory.getKey(), new PowerType(factory.getKey(), factory.getValue()));
+                }
+            });
+        })))));
     }
 }

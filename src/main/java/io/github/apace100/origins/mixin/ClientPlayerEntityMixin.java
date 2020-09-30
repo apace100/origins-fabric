@@ -1,6 +1,8 @@
 package io.github.apace100.origins.mixin;
 
 import com.mojang.authlib.GameProfile;
+import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.power.ElytraFlightPower;
 import io.github.apace100.origins.power.PowerTypes;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -27,7 +29,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     // ELYTRA
     @Inject(method = "tickMovement", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"))
     private void allowElytrianFlight(CallbackInfo info) {
-        if(!this.isFallFlying() && PowerTypes.ELYTRA.isActive(this)) {
+        if(!this.isFallFlying() && OriginComponent.getPowers(this, ElytraFlightPower.class).size() > 0) {
             this.networkHandler.sendPacket(new ClientCommandC2SPacket(this, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
         }
     }

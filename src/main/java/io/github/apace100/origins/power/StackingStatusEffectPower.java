@@ -40,8 +40,11 @@ public class StackingStatusEffectPower extends StatusEffectPower {
     @Override
     public void applyEffects() {
         effects.forEach(sei -> {
-            StatusEffectInstance applySei = new StatusEffectInstance(sei.getEffectType(), durationPerStack * currentStack, sei.getAmplifier(), sei.isAmbient(), sei.shouldShowParticles(), sei.shouldShowIcon());
-            player.addStatusEffect(applySei);
+            int duration = durationPerStack * currentStack;
+            if(duration > 0) {
+                StatusEffectInstance applySei = new StatusEffectInstance(sei.getEffectType(), duration, sei.getAmplifier(), sei.isAmbient(), sei.shouldShowParticles(), sei.shouldShowIcon());
+                player.addStatusEffect(applySei);
+            }
         });
     }
 

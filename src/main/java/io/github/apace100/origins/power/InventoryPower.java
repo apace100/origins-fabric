@@ -7,28 +7,32 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.screen.Generic3x3ContainerScreenHandler;
+import net.minecraft.screen.ScreenHandlerFactory;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 
 public class InventoryPower extends Power implements Active, Inventory {
 
-    private static final int SIZE = 3 * 3;
-    private DefaultedList<ItemStack> inventory;
-    private TranslatableText containerName;
+    private final int size;
+    private final DefaultedList<ItemStack> inventory;
+    private final TranslatableText containerName;
+    private final ScreenHandlerFactory factory;
 
-    public InventoryPower(PowerType<?> type, PlayerEntity player, String containerName) {
+    public InventoryPower(PowerType<?> type, PlayerEntity player, String containerName, int size) {
         super(type, player);
-        this.inventory = DefaultedList.ofSize(SIZE, ItemStack.EMPTY);
+        this.size = size;
+        this.inventory = DefaultedList.ofSize(size, ItemStack.EMPTY);
         this.containerName = new TranslatableText(containerName);
+        this.factory = (i, playerInventory, playerEntity) -> {
+            return new Generic3x3ContainerScreenHandler(i, playerInventory, this);
+        };
     }
 
     @Override
     public void onUse() {
         if(!player.world.isClient) {
-            player.openHandledScreen(new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) -> {
-                return new Generic3x3ContainerScreenHandler(i, playerInventory, this);
-            }, containerName));
+            player.openHandledScreen(new SimpleNamedScreenHandlerFactory(factory, containerName));
         }
     }
 
@@ -46,7 +50,7 @@ public class InventoryPower extends Power implements Active, Inventory {
 
     @Override
     public int size() {
-        return SIZE;
+        return size;
     }
 
     @Override
@@ -88,7 +92,7 @@ public class InventoryPower extends Power implements Active, Inventory {
 
     @Override
     public void clear() {
-        for(int i = 0; i < SIZE; i++) {
+        for(int i = 0; i < size; i++) {
             setStack(i, ItemStack.EMPTY);
         }
     }

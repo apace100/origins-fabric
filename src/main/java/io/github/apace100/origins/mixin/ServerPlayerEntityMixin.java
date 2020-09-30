@@ -2,7 +2,9 @@ package io.github.apace100.origins.mixin;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Either;
-import io.github.apace100.origins.power.PowerTypes;
+import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.power.NetherSpawnPower;
+import io.github.apace100.origins.power.PreventSleepPower;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
 import net.minecraft.screen.ScreenHandlerListener;
@@ -10,6 +12,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Pair;
 import net.minecraft.util.Unit;
 import net.minecraft.util.math.BlockPos;
@@ -38,6 +42,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
 
     @Shadow public ServerPlayNetworkHandler networkHandler;
 
+    @Shadow public abstract void sendMessage(Text message, boolean actionBar);
+
     public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile profile) {
         super(world, pos, yaw, profile);
     }
@@ -45,21 +51,25 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
     // FRESH_AIR
     @Inject(at = @At("HEAD"), method = "trySleep", cancellable = true)
     public void preventAvianSleep(BlockPos pos, CallbackInfoReturnable<Either<PlayerEntity.SleepFailureReason, Unit>> info) {
-        if (PowerTypes.FRESH_AIR.isActive(this) && pos.getY() < 86) {
-            info.setReturnValue(Either.left(PlayerEntity.SleepFailureReason.NOT_POSSIBLE_HERE));
-        }
+        OriginComponent.getPowers(this, PreventSleepPower.class).forEach(p -> {
+                if(p.doesPrevent(world, pos)) {
+                    info.setReturnValue(Either.left(null));
+                    this.sendMessage(new TranslatableText(p.getMessage()), true);
+                }
+            }
+        );
     }
 
     @Inject(at = @At("HEAD"), method = "getSpawnPointDimension", cancellable = true)
     private void modifyBlazebornSpawnDimension(CallbackInfoReturnable<RegistryKey<World>> info) {
-        if ((spawnPointPosition == null || hasObstructedSpawn()) && PowerTypes.NETHER_SPAWN.isActive(this)) {
+        if ((spawnPointPosition == null || hasObstructedSpawn()) && OriginComponent.getPowers(this, NetherSpawnPower.class).size() > 0) {
             info.setReturnValue(World.NETHER);
         }
     }
 
     @Inject(at = @At("HEAD"), method = "getSpawnPointPosition", cancellable = true)
     private void modifyBlazebornSpawnPosition(CallbackInfoReturnable<BlockPos> info) {
-        if(PowerTypes.NETHER_SPAWN.isActive(this)) {
+        if(OriginComponent.getPowers(this, NetherSpawnPower.class).size() > 0) {
             if(spawnPointPosition == null) {
                 info.setReturnValue(findNetherSpawn());
             } else if(hasObstructedSpawn()) {
@@ -72,7 +82,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
 
     @Inject(at = @At("HEAD"), method = "isSpawnPointSet", cancellable = true)
     private void modifyBlazebornSpawnPointSet(CallbackInfoReturnable<Boolean> info) {
-        if((spawnPointPosition == null || hasObstructedSpawn()) && PowerTypes.NETHER_SPAWN.isActive(this)) {
+        if((spawnPointPosition == null || hasObstructedSpawn()) && OriginComponent.getPowers(this, NetherSpawnPower.class).size() > 0) {
             info.setReturnValue(true);
         }
     }
@@ -87,7 +97,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
     }
 
     private BlockPos findNetherSpawn() {
-        Pair<ServerWorld, BlockPos> spawn = PowerTypes.NETHER_SPAWN.get(this).getSpawn(true);
+        NetherSpawnPower power = OriginComponent.getPowers(this, NetherSpawnPower.class).get(0);
+        Pair<ServerWorld, BlockPos> spawn = power.getSpawn(true);
         if(spawn != null) {
             return spawn.getRight();
         }

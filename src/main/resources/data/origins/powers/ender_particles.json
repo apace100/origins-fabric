@@ -1,0 +1,6 @@
+{
+  "type": "origins:particle",
+  "particle": "minecraft:portal",
+  "frequency": 4,
+  "hidden": true
+}

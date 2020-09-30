@@ -13,6 +13,8 @@ public class Power {
     protected PlayerEntity player;
     protected PowerType<?> type;
 
+    private boolean shouldTick = false;
+
     private List<Predicate<PlayerEntity>> conditions;
 
     public Power(PowerType<?> type, PlayerEntity player) {
@@ -23,6 +25,18 @@ public class Power {
     public Power addCondition(Predicate<PlayerEntity> condition) {
         this.conditions.add(condition);
         return this;
+    }
+
+    protected void setTicking() {
+        this.shouldTick = true;
+    }
+
+    public boolean shouldTick() {
+        return shouldTick;
+    }
+
+    public void tick() {
+
     }
 
     public void onChosen(boolean isOrbOfOrigin) {

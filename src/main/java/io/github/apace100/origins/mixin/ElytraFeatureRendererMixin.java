@@ -1,6 +1,7 @@
 package io.github.apace100.origins.mixin;
 
-import io.github.apace100.origins.power.PowerTypes;
+import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.power.ElytraFlightPower;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.ElytraFeatureRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -17,7 +18,7 @@ public class ElytraFeatureRendererMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"))
     private Item modifyEquippedStackToElytra(ItemStack itemStack, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, LivingEntity livingEntity, float f, float g, float h, float j, float k, float l) {
-        if(PowerTypes.ELYTRA.isActive(livingEntity) && !livingEntity.isInvisible()) {
+        if(OriginComponent.getPowers(livingEntity, ElytraFlightPower.class).size() > 0 && !livingEntity.isInvisible()) {
             return Items.ELYTRA;
         }
         return itemStack.getItem();

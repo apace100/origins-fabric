@@ -1,0 +1,10 @@
+{
+  "type": "origins:invulnerability",
+  "damage_condition": [
+    [
+      {
+        "type": "origins:is_fire"
+      }
+    ]
+  ]
+}

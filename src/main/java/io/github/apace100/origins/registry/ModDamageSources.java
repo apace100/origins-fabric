@@ -1,4 +1,4 @@
-package io.github.apace100.origins.power;
+package io.github.apace100.origins.registry;
 
 import io.github.apace100.origins.mixin.DamageSourceAccessor;
 import net.minecraft.entity.damage.DamageSource;

@@ -7,9 +7,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.power.PowerType;
-import io.github.apace100.origins.power.PowerTypes;
+import io.github.apace100.origins.power.PowerTypeRegistry;
 import io.github.apace100.origins.registry.ModComponents;
-import io.github.apace100.origins.registry.ModRegistries;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.advancement.Advancement;
@@ -35,7 +34,7 @@ public class Origin {
     public static final Origin EMPTY;
 
     static {
-        EMPTY = register(new Origin(new Identifier(Origins.MODID, "empty"), Items.AIR, Impact.NONE, -1, Integer.MAX_VALUE).add(PowerTypes.INVULNERABILITY).setUnchoosable());
+        EMPTY = register(new Origin(new Identifier(Origins.MODID, "empty"), Items.AIR, Impact.NONE, -1, Integer.MAX_VALUE).setUnchoosable());
     }
 
     public static void init() {
@@ -121,6 +120,9 @@ public class Origin {
     }
 
     public boolean hasPowerType(PowerType<?> powerType) {
+        if(powerType.getIdentifier() == null) {
+            return false;
+        }
         return this.powerTypes.contains(powerType);
     }
 
@@ -181,7 +183,7 @@ public class Origin {
         buffer.writeBoolean(this.isChoosable);
         buffer.writeInt(this.powerTypes.size());
         for (PowerType<?> powerType : this.powerTypes) {
-            buffer.writeString(ModRegistries.POWER_TYPE.getId(powerType).toString());
+            buffer.writeString(PowerTypeRegistry.getId(powerType).toString());
         }
         buffer.writeInt(this.upgrades.size());
         this.upgrades.forEach(upgrade -> upgrade.write(buffer));
@@ -211,7 +213,7 @@ public class Origin {
             try {
                 Identifier id = Identifier.tryParse(s);
                 if(id != null) {
-                    powers[i] = ModRegistries.POWER_TYPE.get(id);
+                    powers[i] = PowerTypeRegistry.get(id);
                 } else {
                     Origins.LOGGER.error("Received invalid power type from server in origin: '" + s + "'.");
                 }
@@ -244,7 +246,7 @@ public class Origin {
             if(powerId == null) {
                 throw new JsonParseException("Invalid power ID in Origin json: " + powerArray.get(i).getAsString());
             }
-            powers[i] = ModRegistries.POWER_TYPE.get(powerId);
+            powers[i] = PowerTypeRegistry.get(powerId);
             if (powers[i] == null) {
                 throw new JsonParseException("Unregistered power ID in Origin json: " + powerId.toString());
             }
@@ -294,7 +296,7 @@ public class Origin {
     public String toString() {
         String str = "Origin(" + identifier.toString() + ")[";
         for(PowerType<?> pt : powerTypes) {
-            str += ModRegistries.POWER_TYPE.getId(pt);
+            str += PowerTypeRegistry.getId(pt);
             str += ",";
         }
         str = str.substring(0, str.length() - 1) + "]";

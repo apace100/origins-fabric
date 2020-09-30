@@ -8,6 +8,11 @@ import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginManager;
 import io.github.apace100.origins.power.PowerTypes;
+import io.github.apace100.origins.power.factory.PowerFactorySerializers;
+import io.github.apace100.origins.power.factory.condition.block.BlockConditionSerializers;
+import io.github.apace100.origins.power.factory.condition.damage.DamageConditionSerializers;
+import io.github.apace100.origins.power.factory.condition.item.ItemConditionSerializers;
+import io.github.apace100.origins.power.factory.condition.player.PlayerConditionSerializers;
 import io.github.apace100.origins.registry.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
@@ -23,7 +28,6 @@ public class Origins implements ModInitializer {
 	public static final String MODID = "origins";
 	public static final Logger LOGGER = LogManager.getLogger(Origins.class);
 
-
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Origins is initializing. Have fun!");
@@ -35,13 +39,18 @@ public class Origins implements ModInitializer {
 		ModEnchantments.register();
 		ModEntities.register();
 		ModLoot.register();
-		PowerTypes.init();
+		PowerFactorySerializers.register();
+		PlayerConditionSerializers.register();
+		ItemConditionSerializers.register();
+		BlockConditionSerializers.register();
+		DamageConditionSerializers.register();
 		Origin.init();
 		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
 			OriginCommand.register(dispatcher);
 		});
 		ArgumentTypes.register("origin", OriginArgument.class, new ConstantArgumentSerializer(OriginArgument::origin));
 		ArgumentTypes.register("layer", LayerArgument.class, new ConstantArgumentSerializer<>(LayerArgument::layer));
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new PowerTypes());
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginManager());
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginLayers());
 	}

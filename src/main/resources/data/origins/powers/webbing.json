@@ -1,0 +1,5 @@
+{
+  "type": "origins:cooldown",
+  "cooldown": 120,
+  "bar_index": 5
+}

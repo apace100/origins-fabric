@@ -1,11 +1,13 @@
 package io.github.apace100.origins.component;
 
+import com.google.common.collect.Lists;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.registry.ModComponents;
 import nerdhub.cardinal.components.api.util.sync.EntitySyncedComponent;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.HashMap;
@@ -31,5 +33,12 @@ public interface OriginComponent extends EntitySyncedComponent {
 
 	static void sync(PlayerEntity player) {
 		ModComponents.ORIGIN.get(player).sync();
+	}
+
+	static <T extends Power> List<T> getPowers(Entity entity, Class<T> powerClass) {
+		if(entity instanceof PlayerEntity) {
+			return ModComponents.ORIGIN.get(entity).getPowers(powerClass);
+		}
+		return Lists.newArrayList();
 	}
 }

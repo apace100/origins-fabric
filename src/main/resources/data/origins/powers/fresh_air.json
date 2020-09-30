@@ -1,0 +1,9 @@
+{
+  "type": "origins:prevent_sleep",
+  "bed_condition": {
+    "type": "origins:height",
+    "comparison": "<",
+    "compare_to": 86
+  },
+  "message": "You need fresh air to sleep."
+}

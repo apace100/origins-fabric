@@ -1,10 +1,8 @@
 package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.power.RestrictArmorPower;
 import io.github.apace100.origins.registry.ModComponents;
-import io.github.apace100.origins.util.Constants;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
@@ -26,13 +24,6 @@ public class ArmorItemMixin {
         OriginComponent component = ModComponents.ORIGIN.get(user);
         if(component.getPowers(RestrictArmorPower.class).stream().anyMatch(rap -> !rap.canEquip(itemStack, equipmentSlot))) {
             info.setReturnValue(TypedActionResult.fail(itemStack));
-        }
-        if(PowerTypes.LIGHT_ARMOR.isActive(user)) {
-            if(itemStack.getItem() instanceof ArmorItem) {
-                if(((ArmorItem)itemStack.getItem()).getProtection() > Constants.LIGHT_ARMOR_MAX_PROTECTION[equipmentSlot.getEntitySlotId()]) {
-                    info.setReturnValue(TypedActionResult.fail(itemStack));
-                }
-            }
         }
     }
 }

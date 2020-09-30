@@ -1,0 +1,18 @@
+{
+  "type": "origins:prevent_item_use",
+  "item_condition": [
+    [
+      {
+        "type": "origins:ingredient",
+        "ingredient":{
+          "tag": "origins:meat"
+        }
+      }
+    ],
+    [
+      {
+        "type": "origins:is_food"
+      }
+    ]
+  ]
+}

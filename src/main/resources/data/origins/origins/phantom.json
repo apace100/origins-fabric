@@ -1,5 +1,6 @@
 {
 	"powers": [
+		"origins:phantomize",
 		"origins:translucent",
 		"origins:phasing",
 		"origins:invisibility",

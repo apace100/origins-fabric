@@ -7,8 +7,8 @@ import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.power.PowerType;
+import io.github.apace100.origins.power.PowerTypeRegistry;
 import io.github.apace100.origins.registry.ModComponents;
-import io.github.apace100.origins.registry.ModRegistries;
 import nerdhub.cardinal.components.api.ComponentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -205,7 +205,7 @@ public class PlayerOriginComponent implements OriginComponent {
         ListTag powerList = (ListTag)compoundTag.get("Powers");
         for(int i = 0; i < powerList.size(); i++) {
             CompoundTag powerTag = powerList.getCompound(i);
-            PowerType<?> type = ModRegistries.POWER_TYPE.get(Identifier.tryParse(powerTag.getString("Type")));
+            PowerType<?> type = PowerTypeRegistry.get(Identifier.tryParse(powerTag.getString("Type")));
             if(hasPowerType(type)) {
                 Tag data = powerTag.get("Data");
                 Power power = type.create(player);
@@ -238,7 +238,7 @@ public class PlayerOriginComponent implements OriginComponent {
         ListTag powerList = new ListTag();
         for(Map.Entry<PowerType<?>, Power> powerEntry : powers.entrySet()) {
             CompoundTag powerTag = new CompoundTag();
-            powerTag.putString("Type", ModRegistries.POWER_TYPE.getId(powerEntry.getKey()).toString());
+            powerTag.putString("Type", PowerTypeRegistry.getId(powerEntry.getKey()).toString());
             powerTag.put("Data", powerEntry.getValue().toTag());
             powerList.add(powerTag);
         }
@@ -268,7 +268,7 @@ public class PlayerOriginComponent implements OriginComponent {
     public String toString() {
         StringBuilder str = new StringBuilder("OriginComponent[\n");
         for (Map.Entry<PowerType<?>, Power> powerEntry : powers.entrySet()) {
-            str.append("\t").append(ModRegistries.POWER_TYPE.getId(powerEntry.getKey())).append(": ").append(powerEntry.getValue().toTag().toString()).append("\n");
+            str.append("\t").append(PowerTypeRegistry.getId(powerEntry.getKey())).append(": ").append(powerEntry.getValue().toTag().toString()).append("\n");
         }
         str.append("]");
         return str.toString();

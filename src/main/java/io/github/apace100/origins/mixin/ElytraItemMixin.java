@@ -1,6 +1,7 @@
 package io.github.apace100.origins.mixin;
 
-import io.github.apace100.origins.power.PowerTypes;
+import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.power.ElytraFlightPower;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ElytraItem;
 import net.minecraft.item.ItemStack;
@@ -20,7 +21,7 @@ public class ElytraItemMixin {
     public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> info) {
         if(user != null) {
             ItemStack stackInHand = user.getStackInHand(hand);
-            if(PowerTypes.ELYTRA.isActive(user) && stackInHand.getItem() == Items.ELYTRA) {
+            if(OriginComponent.getPowers(user, ElytraFlightPower.class).size() > 0 && stackInHand.getItem() == Items.ELYTRA) {
                 info.setReturnValue(TypedActionResult.fail(stackInHand));
             }
         }

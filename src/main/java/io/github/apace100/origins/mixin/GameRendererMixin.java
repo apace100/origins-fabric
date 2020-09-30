@@ -1,7 +1,8 @@
 package io.github.apace100.origins.mixin;
 
+import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.NightVisionPower;
-import io.github.apace100.origins.power.PowerTypes;
+import io.github.apace100.origins.power.PhasingPower;
 import io.github.apace100.origins.registry.ModComponents;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -60,11 +61,13 @@ public class GameRendererMixin {
 
     private HashMap<BlockPos, BlockState> savedStates = new HashMap<>();
 
-    // PHASING
+    // PHASING: remove_blocks
     @Inject(at = @At(value = "HEAD"), method = "render")
     private void beforeRender(float tickDelta, long startTime, boolean tick, CallbackInfo info) {
-        if (PowerTypes.PHASING.isActive(camera.getFocusedEntity()) && PowerTypes.PHASING.get(camera.getFocusedEntity()).isActive()) {
-            Set<BlockPos> eyePositions = getEyePos();
+        List<PhasingPower> phasings = OriginComponent.getPowers(camera.getFocusedEntity(), PhasingPower.class);
+        if (phasings.stream().anyMatch(pp -> pp.getRenderType() == PhasingPower.RenderType.REMOVE_BLOCKS)) {
+            float view = phasings.stream().filter(pp -> pp.getRenderType() == PhasingPower.RenderType.REMOVE_BLOCKS).map(PhasingPower::getViewDistance).min(Float::compareTo).get();
+            Set<BlockPos> eyePositions = getEyePos(0.25F, 0.05F, 0.25F);
             Set<BlockPos> noLongerEyePositions = new HashSet<>();
             for (BlockPos p : savedStates.keySet()) {
                 if (!eyePositions.contains(p)) {
@@ -96,17 +99,17 @@ public class GameRendererMixin {
     // PHASING
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Camera;update(Lnet/minecraft/world/BlockView;Lnet/minecraft/entity/Entity;ZZF)V"), method = "renderWorld")
     private void preventThirdPerson(Camera camera, BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta) {
-        if (PowerTypes.PHASING.isActive(camera.getFocusedEntity()) && PowerTypes.PHASING.get(camera.getFocusedEntity()).isActive()) {
+        if (OriginComponent.getPowers(camera.getFocusedEntity(), PhasingPower.class).stream().anyMatch(pp -> pp.getRenderType() == PhasingPower.RenderType.REMOVE_BLOCKS)) {
             camera.update(area, focusedEntity, false, false, tickDelta);
         } else {
             camera.update(area, focusedEntity, thirdPerson, inverseView, tickDelta);
         }
     }
 
-    private Set<BlockPos> getEyePos() {
+    private Set<BlockPos> getEyePos(float rangeX, float rangeY, float rangeZ) {
         Vec3d pos = camera.getFocusedEntity().getPos().add(0, camera.getFocusedEntity().getEyeHeight(camera.getFocusedEntity().getPose()), 0);
         Box cameraBox = new Box(pos, pos);
-        cameraBox = cameraBox.expand(0.25, 0.05, 0.25);
+        cameraBox = cameraBox.expand(rangeX, rangeY, rangeZ);
         HashSet<BlockPos> set = new HashSet<>();
         BlockPos.method_29715(cameraBox).forEach(p -> set.add(p.toImmutable()));
         return set;

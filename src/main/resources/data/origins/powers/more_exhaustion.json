@@ -1,0 +1,8 @@
+{
+  "type": "origins:modify_exhaustion",
+  "modifier": {
+    "name": "Extra exhaustion from large appetite",
+    "value": 0.6,
+    "operation": "multiply_base"
+  }
+}

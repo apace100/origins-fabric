@@ -1,0 +1,15 @@
+{
+  "type": "origins:modify_damage_dealt",
+  "condition": [
+    [
+      {
+        "type": "origins:on_fire"
+      }
+    ]
+  ],
+  "modifier": {
+    "name": "Additional damage while on fire",
+    "value": 3,
+    "operation": "addition"
+  }
+}

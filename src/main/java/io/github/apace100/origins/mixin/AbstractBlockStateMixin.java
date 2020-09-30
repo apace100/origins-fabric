@@ -1,8 +1,8 @@
 package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.access.EntityShapeContextAccess;
-import io.github.apace100.origins.power.PowerTypes;
-import io.github.apace100.origins.registry.ModTags;
+import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.power.PhasingPower;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
@@ -31,13 +31,15 @@ public abstract class AbstractBlockStateMixin {
     @Inject(at = @At("HEAD"), method = "getCollisionShape(Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/ShapeContext;)Lnet/minecraft/util/shape/VoxelShape;", cancellable = true)
     private void phaseThroughBlocks(BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> info) {
         VoxelShape blockShape = getBlock().getCollisionShape(asBlockState(), world, pos, context);
-        if(!blockShape.isEmpty() && context instanceof EntityShapeContext && !getBlock().isIn(ModTags.UNPHASABLE)) {
+        if(!blockShape.isEmpty() && context instanceof EntityShapeContext) {
             EntityShapeContext entityContext = (EntityShapeContext)context;
             Entity entity = ((EntityShapeContextAccess)context).getEntity();
             if(entity != null) {
                 if(!isAbove(entity, blockShape, pos, false) || entityContext.isDescending()) {
-                    if(PowerTypes.PHASING.isActive(entity) && PowerTypes.PHASING.get(entity).isActive()) {
-                        info.setReturnValue(VoxelShapes.empty());
+                    for (PhasingPower phasingPower : OriginComponent.getPowers(entity, PhasingPower.class)) {
+                        if(phasingPower.doesApply(pos)) {
+                            info.setReturnValue(VoxelShapes.empty());
+                        }
                     }
                 }
             }

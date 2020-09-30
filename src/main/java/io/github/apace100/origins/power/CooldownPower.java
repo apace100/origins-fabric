@@ -7,16 +7,21 @@ import net.minecraft.nbt.Tag;
 
 public class CooldownPower extends Power implements HudRendered {
 
-    public final int cooldownDuration;
-
     private long lastUseTime;
 
+    public final int cooldownDuration;
     private final int barIndex;
+    private final boolean shouldRender;
 
     public CooldownPower(PowerType<?> type, PlayerEntity player, int cooldownDuration, int barIndex) {
+        this(type, player, cooldownDuration, barIndex, true);
+    }
+
+    public CooldownPower(PowerType<?> type, PlayerEntity player, int cooldownDuration, int barIndex, boolean shouldRender) {
         super(type, player);
         this.cooldownDuration = cooldownDuration;
         this.barIndex = barIndex;
+        this.shouldRender = shouldRender;
     }
 
     public boolean canUse() {
@@ -55,6 +60,6 @@ public class CooldownPower extends Power implements HudRendered {
 
     @Override
     public boolean shouldRender() {
-        return (player.getEntityWorld().getTime() - lastUseTime) <= cooldownDuration;
+        return shouldRender && barIndex > 0 && (player.getEntityWorld().getTime() - lastUseTime) <= cooldownDuration;
     }
 }

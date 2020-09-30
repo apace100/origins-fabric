@@ -2,9 +2,7 @@ package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.power.ModifyDamageTakenPower;
-import io.github.apace100.origins.power.PowerTypes;
-import io.github.apace100.origins.power.SetEntityGroupPower;
+import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
@@ -37,7 +35,7 @@ public abstract class LivingEntityMixin extends Entity {
     @Redirect(method = "initAi", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setFlag(IZ)V"))
     private void preventStoppingToFly(LivingEntity livingEntity, int index, boolean value) {
         if(this.getFlag(7) && !value && index == 7 && !this.onGround && !this.hasVehicle()
-            && PowerTypes.ELYTRA.isActive(livingEntity) && !livingEntity.hasStatusEffect(StatusEffects.LEVITATION)) {
+            && OriginComponent.getPowers(livingEntity, ElytraFlightPower.class).size() > 0 && !livingEntity.hasStatusEffect(StatusEffects.LEVITATION)) {
             this.setFlag(index, true);
         }
     }
@@ -67,18 +65,22 @@ public abstract class LivingEntityMixin extends Entity {
     // SPRINT_JUMP
     @Inject(at = @At("HEAD"), method = "getJumpVelocity", cancellable = true)
     private void modifyJumpVelocity(CallbackInfoReturnable<Float> info) {
-        if(this.isSprinting() && PowerTypes.SPRINT_JUMP.isActive(this)) {
-            float vanilla = 0.42F * this.getJumpVelocityMultiplier();
-            vanilla *= 1.5F;
-            info.setReturnValue(vanilla);
+        float base = 0.42F * this.getJumpVelocityMultiplier();
+        float modified = base;
+        for (ModifyJumpPower mjp : OriginComponent.getPowers(this, ModifyJumpPower.class)) {
+            modified = mjp.apply(base, modified);
         }
+        info.setReturnValue(modified);
     }
 
     // HOTBLOODED
     @Inject(at = @At("HEAD"), method= "canHaveStatusEffect", cancellable = true)
     private void preventStatusEffects(StatusEffectInstance effect, CallbackInfoReturnable<Boolean> info) {
-        if(PowerTypes.HOTBLOODED.isActive(this) && (effect.getEffectType() == StatusEffects.POISON || effect.getEffectType() == StatusEffects.HUNGER)) {
-            info.setReturnValue(false);
+        for (EffectImmunityPower power : OriginComponent.getPowers(this, EffectImmunityPower.class)) {
+            if(power.doesApply(effect)) {
+                info.setReturnValue(false);
+                return;
+            }
         }
     }
 
@@ -88,8 +90,8 @@ public abstract class LivingEntityMixin extends Entity {
             OriginComponent component = ModComponents.ORIGIN.get(this);
             float f = originalAmount;
             for (ModifyDamageTakenPower p : component.getPowers(ModifyDamageTakenPower.class)) {
-                if (p.doesApply(source)) {
-                    f = p.apply(f);
+                if (p.doesApply(source, originalAmount)) {
+                    f = p.apply(originalAmount, f);
                 }
             }
             return f;
@@ -118,10 +120,11 @@ public abstract class LivingEntityMixin extends Entity {
     // SWIM_SPEED
     @ModifyConstant(method = "travel", constant = @Constant(floatValue = 0.02F, ordinal = 0))
     public float modifyBaseUnderwaterSpeed(float in) {
-        if(PowerTypes.SWIM_SPEED.isActive(this)) {
-            return in + PowerTypes.SWIM_SPEED.get(this).value;
+        float f = in;
+        for (SwimSpeedPower p : OriginComponent.getPowers(this, SwimSpeedPower.class)) {
+            f = p.apply(in, f);
         }
-        return in;
+        return f;
     }
 
     // LIKE_WATER

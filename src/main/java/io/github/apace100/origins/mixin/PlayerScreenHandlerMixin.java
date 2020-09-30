@@ -1,7 +1,7 @@
 package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.power.PowerTypes;
+import io.github.apace100.origins.power.ElytraFlightPower;
 import io.github.apace100.origins.power.RestrictArmorPower;
 import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.entity.EquipmentSlot;
@@ -32,7 +32,7 @@ public abstract class PlayerScreenHandlerMixin extends Slot {
         if(component.getPowers(RestrictArmorPower.class).stream().anyMatch(rap -> !rap.canEquip(stack, slot))) {
             info.setReturnValue(false);
         }
-        if(PowerTypes.ELYTRA.isActive(player)) {
+        if(OriginComponent.getPowers(player, ElytraFlightPower.class).size() > 0) {
             if(stack.getItem() == Items.ELYTRA) {
                 info.setReturnValue(false);
             }

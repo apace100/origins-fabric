@@ -1,10 +1,11 @@
 package io.github.apace100.origins.power;
 
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
 
-public class ModifyExhaustionPower extends FloatPower {
+public class ModifyExhaustionPower extends FloatModifyingPower {
 
-    public ModifyExhaustionPower(PowerType<?> type, PlayerEntity player, float exhaustionMultiplier) {
-        super(type, player, exhaustionMultiplier);
+    public ModifyExhaustionPower(PowerType<?> type, PlayerEntity player, EntityAttributeModifier modifier) {
+        super(type, player, modifier);
     }
 }

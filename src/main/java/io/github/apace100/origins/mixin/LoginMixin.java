@@ -5,6 +5,8 @@ import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
+import io.github.apace100.origins.power.PowerTypeRegistry;
+import io.github.apace100.origins.power.factory.PowerFactory;
 import io.github.apace100.origins.registry.ModComponents;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
@@ -29,6 +31,16 @@ public abstract class LoginMixin {
 	private void openOriginsGui(ClientConnection connection, ServerPlayerEntity player, CallbackInfo info) {
 		OriginComponent component = ModComponents.ORIGIN.get(player);
 
+		PacketByteBuf powerListData = new PacketByteBuf(Unpooled.buffer());
+		powerListData.writeInt(PowerTypeRegistry.size());
+		PowerTypeRegistry.entries().forEach((entry) -> {
+			PowerFactory factory = entry.getValue().getFactory();
+			if(factory != null) {
+				powerListData.writeIdentifier(entry.getKey());
+				PowerFactory.write(factory, powerListData);
+			}
+		});
+
 		PacketByteBuf originListData = new PacketByteBuf(Unpooled.buffer());
 		originListData.writeInt(OriginRegistry.size() - 1);
 		OriginRegistry.entries().forEach((entry) -> {
@@ -37,7 +49,7 @@ public abstract class LoginMixin {
 				entry.getValue().write(originListData);
 			}
 		});
-		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, ModPackets.ORIGIN_LIST, originListData);
+
 		PacketByteBuf originLayerData = new PacketByteBuf(Unpooled.buffer());
 		originLayerData.writeInt(OriginLayers.size());
 		OriginLayers.getLayers().forEach((layer) -> {
@@ -48,7 +60,11 @@ public abstract class LoginMixin {
 				}
 			}
 		});
+
+		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, ModPackets.POWER_LIST, powerListData);
+		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, ModPackets.ORIGIN_LIST, originListData);
 		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, ModPackets.LAYER_LIST, originLayerData);
+
 		List<ServerPlayerEntity> playerList = getPlayerList();
 		playerList.forEach(spe -> ModComponents.ORIGIN.get(spe).syncWith(player));
 		OriginComponent.sync(player);

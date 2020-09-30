@@ -14,7 +14,7 @@ public class ModEntities {
     public static final EntityType ENDERIAN_PEARL;
 
     static {
-        ENDERIAN_PEARL = FabricEntityTypeBuilder.<EnderianPearlEntity>create(SpawnGroup.MISC, (type, world) -> new EnderianPearlEntity(type, world)).dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build();
+        ENDERIAN_PEARL = FabricEntityTypeBuilder.<EnderianPearlEntity>create(SpawnGroup.MISC, (type, world) -> new EnderianPearlEntity(type, world)).dimensions(EntityDimensions.fixed(0.25f, 0.25f)).trackable(64, 10).build();
     }
 
     public static void register() {

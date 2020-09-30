@@ -1,8 +1,8 @@
 package io.github.apace100.origins.power;
 
 import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.power.factory.PowerFactory;
 import io.github.apace100.origins.registry.ModComponents;
-import io.github.apace100.origins.registry.ModRegistries;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.TranslatableText;
@@ -12,16 +12,40 @@ import java.util.function.BiFunction;
 
 public class PowerType<T extends Power> {
 
-    private BiFunction<PowerType, PlayerEntity, T> factory;
+    private Identifier identifier;
+    private PowerFactory<T> actualFactory;
+    private BiFunction<PowerType<T>, PlayerEntity, T> factory;
     private boolean isHidden = false;
 
-    public PowerType(BiFunction<PowerType, PlayerEntity, T> factory) {
+    private String nameTranslationKey;
+    private String descriptionTranslationKey;
+
+    public PowerType(BiFunction<PowerType<T>, PlayerEntity, T> factory) {
         this.factory = factory;
+    }
+
+    public PowerType(Identifier id, PowerFactory<T> factory) {
+        this.identifier = id;
+        this.factory = factory;
+        this.actualFactory = factory;
+    }
+
+    public Identifier getIdentifier() {
+        return identifier;
+    }
+
+    public PowerFactory<T> getFactory() {
+        return actualFactory;
     }
 
     public PowerType setHidden() {
         this.isHidden = true;
         return this;
+    }
+
+    public void setTranslationKeys(String name, String description) {
+        this.nameTranslationKey = name;
+        this.descriptionTranslationKey = description;
     }
 
     public T create(PlayerEntity player) {
@@ -33,7 +57,7 @@ public class PowerType<T extends Power> {
     }
 
     public boolean isActive(Entity entity) {
-        if(entity instanceof PlayerEntity) {
+        if(entity instanceof PlayerEntity && identifier != null) {
             OriginComponent component = ModComponents.ORIGIN.get(entity);
             if(component.hasPower(this)) {
                 return component.getPower(this).isActive();
@@ -50,14 +74,44 @@ public class PowerType<T extends Power> {
         return null;
     }
 
+    public String getOrCreateNameTranslationKey() {
+        if(nameTranslationKey == null || nameTranslationKey.isEmpty()) {
+            nameTranslationKey =
+                "power." + identifier.getNamespace() + "." + identifier.getPath() + ".name";
+        }
+        return nameTranslationKey;
+    }
+
     public TranslatableText getName() {
-        Identifier id = ModRegistries.POWER_TYPE.getId(this);
-        return new TranslatableText("power." + id.getNamespace() + "." + id.getPath() + ".name");
+        return new TranslatableText(getOrCreateNameTranslationKey());
+    }
+
+    public String getOrCreateDescriptionTranslationKey() {
+        if(descriptionTranslationKey == null || descriptionTranslationKey.isEmpty()) {
+            descriptionTranslationKey =
+                "power." + identifier.getNamespace() + "." + identifier.getPath() + ".description";
+        }
+        return descriptionTranslationKey;
     }
 
     public TranslatableText getDescription() {
-        Identifier id = ModRegistries.POWER_TYPE.getId(this);
-        return new TranslatableText("power." + id.getNamespace() + "." + id.getPath() + ".description");
+        return new TranslatableText(getOrCreateDescriptionTranslationKey());
     }
 
+    @Override
+    public int hashCode() {
+        return this.identifier.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this) {
+            return true;
+        }
+        if(!(obj instanceof PowerType)) {
+            return false;
+        }
+        Identifier id = ((PowerType)obj).getIdentifier();
+        return identifier.equals(id);
+    }
 }
