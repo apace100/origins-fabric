@@ -37,7 +37,7 @@ import java.util.function.Predicate;
 public class SerializationHelper {
 
     public static Tag<Fluid> getFluidTagFromId(Identifier id) {
-        Optional<? extends Tag.Identified<Fluid>> tag = FluidTags.all().stream().filter(f -> f.getId().equals(id)).findAny();
+        Optional<? extends Tag.Identified<Fluid>> tag = FluidTags.getRequiredTags().stream().filter(f -> f.getId().equals(id)).findAny();
         if(tag.isPresent()) {
             return tag.get();
         }

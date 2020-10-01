@@ -1,6 +1,7 @@
 package io.github.apace100.origins.util;
 
-import io.github.apace100.origins.power.PowerTypes;
+import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.power.ElytraFlightPower;
 import net.adriantodt.fallflyinglib.FallFlyingAbility;
 import net.minecraft.entity.LivingEntity;
 
@@ -14,7 +15,7 @@ public class ElytraPowerFallFlying implements FallFlyingAbility {
 
     @Override
     public boolean allowFallFlying() {
-        return PowerTypes.ELYTRA.isActive(entity);
+        return OriginComponent.getPowers(entity, ElytraFlightPower.class).size() > 0;
     }
 
     @Override

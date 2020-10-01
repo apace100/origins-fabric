@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.power.PowerType;
-import io.github.apace100.origins.registry.ModRegistries;
 import net.minecraft.advancement.criterion.AbstractCriterion;
 import net.minecraft.advancement.criterion.AbstractCriterionConditions;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
@@ -44,7 +43,7 @@ public class GainedPowerCriterion extends AbstractCriterion<GainedPowerCriterion
         }
 
         public boolean matches(PowerType powerType) {
-            return ModRegistries.POWER_TYPE.getId(powerType).equals(powerId);
+            return powerType.getIdentifier().equals(powerId);
         }
 
         public JsonObject toJson(AdvancementEntityPredicateSerializer predicateSerializer) {

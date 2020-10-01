@@ -4,8 +4,8 @@ import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModBlocks;
 import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModDamageSources;
 import io.github.apace100.origins.registry.ModTags;
-import io.github.apace100.origins.util.Constants;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
@@ -13,9 +13,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
@@ -129,15 +127,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
         if(!world.isClient) {
             OriginComponent component = ModComponents.ORIGIN.get(this);
             component.getPowers(Power.class).stream().filter(Power::shouldTick).forEach(Power::tick);
-            /*if(PowerTypes.BURN_IN_DAYLIGHT.isActive(this) && PowerTypes.BURN_IN_DAYLIGHT.get(this).isActive() && !this.hasStatusEffect(StatusEffects.INVISIBILITY)) {
-                if (this.world.isDay() && !this.isRainingAtPlayerPosition()) {
-                    float f = this.getBrightnessAtEyes();
-                    BlockPos blockPos = this.getVehicle() instanceof BoatEntity ? (new BlockPos(this.getX(), (double)Math.round(this.getY()), this.getZ())).up() : new BlockPos(this.getX(), (double)Math.round(this.getY()), this.getZ());
-                    if (f > 0.5F && this.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.isSkyVisible(blockPos)) {
-                        this.setOnFireFor(6);
-                    }
-                }
-            }*/
             component.getPowers(WaterVulnerabilityPower.class).forEach(waterCounter -> {
                 if(this.isWet()) {
                     waterCounter.inWater();

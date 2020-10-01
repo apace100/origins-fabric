@@ -1,7 +1,9 @@
 package io.github.apace100.origins.mixin;
 
+import io.github.apace100.origins.OriginsClient;
+import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.NightVisionPower;
-import io.github.apace100.origins.power.PowerTypes;
+import io.github.apace100.origins.power.PhasingPower;
 import io.github.apace100.origins.registry.ModComponents;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -33,7 +35,7 @@ import java.util.*;
 
 @Environment(EnvType.CLIENT)
 @Mixin(GameRenderer.class)
-public class GameRendererMixin {
+public abstract class GameRendererMixin {
 
     @Shadow
     @Final
@@ -45,6 +47,8 @@ public class GameRendererMixin {
 
     @Shadow
     private ItemStack floatingItem;
+
+    @Shadow protected abstract void method_31136(float f);
 
     // NightVisionPower
     @Inject(at = @At("HEAD"), method = "getNightVisionStrength", cancellable = true)
@@ -116,7 +120,7 @@ public class GameRendererMixin {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F"))
     private void drawPhantomizedOverlay(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
-        if(OriginComponent.getPowers(camera.getFocusedEntity(), PhasingPower.class)(this.client.player) && !this.client.player.hasStatusEffect(StatusEffects.NAUSEA)) {
+        if(OriginComponent.getPowers(this.client.player, PhasingPower.class).size() > 0 && !this.client.player.hasStatusEffect(StatusEffects.NAUSEA)) {
             this.method_31136(OriginsClient.config.phantomizedOverlayStrength);
         }
     }
