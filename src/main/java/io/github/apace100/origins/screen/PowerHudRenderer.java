@@ -2,6 +2,7 @@ package io.github.apace100.origins.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.OriginsClient;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.HudRendered;
 import io.github.apace100.origins.registry.ModComponents;
@@ -28,8 +29,8 @@ public class PowerHudRenderer extends DrawableHelper {
             MinecraftClient client = MinecraftClient.getInstance();
             OriginComponent component = ModComponents.ORIGIN.get(client.player);
             if(component.hasAllOrigins()) {
-                int x = client.getWindow().getScaledWidth() / 2 + 20;
-                int y = client.getWindow().getScaledHeight() - 47;
+                int x = client.getWindow().getScaledWidth() / 2 + 20 + OriginsClient.config.xOffset;
+                int y = client.getWindow().getScaledHeight() - 47 + OriginsClient.config.yOffset;
                 Entity vehicle = client.player.getVehicle();
                 if(vehicle instanceof LivingEntity && ((LivingEntity)vehicle).getMaxHealth() > 20F) {
                     y -= 8;

@@ -1,8 +1,7 @@
 package io.github.apace100.origins.mixin;
 
-import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.NightVisionPower;
-import io.github.apace100.origins.power.PhasingPower;
+import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.registry.ModComponents;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -113,5 +112,12 @@ public class GameRendererMixin {
         HashSet<BlockPos> set = new HashSet<>();
         BlockPos.method_29715(cameraBox).forEach(p -> set.add(p.toImmutable()));
         return set;
+    }
+
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F"))
+    private void drawPhantomizedOverlay(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+        if(OriginComponent.getPowers(camera.getFocusedEntity(), PhasingPower.class)(this.client.player) && !this.client.player.hasStatusEffect(StatusEffects.NAUSEA)) {
+            this.method_31136(OriginsClient.config.phantomizedOverlayStrength);
+        }
     }
 }

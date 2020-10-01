@@ -26,6 +26,9 @@
     ],
     "server": [
       "io.github.apace100.origins.OriginsServer"
+    ],
+    "modmenu": [
+      "io.github.apace100.origins.integration.ModMenuIntegration"
     ]
   },
   "mixins": [

@@ -1,7 +1,7 @@
 package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.power.ElytraFlightPower;
+import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.power.RestrictArmorPower;
 import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.entity.EquipmentSlot;

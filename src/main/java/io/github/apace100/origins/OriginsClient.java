@@ -9,7 +9,10 @@ import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModEntities;
 import io.github.apace100.origins.screen.PowerHudRenderer;
 import io.github.apace100.origins.screen.ViewOriginScreen;
+import io.github.apace100.origins.util.OriginsConfig;
 import io.netty.buffer.Unpooled;
+import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
+import me.sargunvohra.mcmods.autoconfig1u.serializer.Toml4jConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -33,6 +36,8 @@ public class OriginsClient implements ClientModInitializer {
     public static KeyBinding useActivePowerKeybind;
     public static KeyBinding viewCurrentOriginKeybind;
 
+    public static OriginsConfig config;
+
     @Override
     @Environment(EnvType.CLIENT)
     public void onInitializeClient() {
@@ -42,6 +47,9 @@ public class OriginsClient implements ClientModInitializer {
             (dispatcher, context) -> new FlyingItemEntityRenderer(dispatcher, context.getItemRenderer()));
 
         ModPacketsS2C.register();
+
+        AutoConfig.register(OriginsConfig.class, Toml4jConfigSerializer::new);
+        config = AutoConfig.getConfigHolder(OriginsConfig.class).getConfig();
 
         useActivePowerKeybind = FabricKeyBinding.Builder.create(new Identifier(Origins.MODID, "active_power"),
             InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_G, "category." + Origins.MODID).build();

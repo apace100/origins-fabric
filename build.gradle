@@ -16,12 +16,17 @@ repositories {
 		url = 'https://dl.bintray.com/ladysnake/libs'
 	}
 	maven {
+		name = "AdrianTodt's Maven"
+		url = "https://dl.bintray.com/adriantodt/maven"
+	}
+	maven {
 		name = "Jitpack"
 		url = "https://jitpack.io"
 	}
 	maven {
 		url "https://maven.jamieswhiteshirt.com/libs-release/"
 	}
+	jcenter()
 	mavenLocal()
 }
 
@@ -42,6 +47,21 @@ dependencies {
 
 	modImplementation "com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}"
 	include "com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}"
+
+	modImplementation "net.adriantodt.fabricmc:fallflyinglib:${project.ffl_version}"
+	include "net.adriantodt.fabricmc:fallflyinglib:${project.ffl_version}"
+
+	modApi("me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+	include "me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}"
+
+	modApi("me.shedaniel.cloth:config-2:${project.clothconfig_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+	include "me.shedaniel.cloth:config-2:${project.clothconfig_version}"
+
+	modImplementation "io.github.prospector:modmenu:${project.modmenu_version}"
 }
 
 processResources {

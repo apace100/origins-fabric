@@ -4,7 +4,8 @@ import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModBlocks;
 import io.github.apace100.origins.registry.ModComponents;
-import io.github.apace100.origins.registry.ModDamageSources;
+import io.github.apace100.origins.registry.ModTags;
+import io.github.apace100.origins.util.Constants;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
@@ -12,7 +13,9 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
@@ -58,24 +61,13 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
         }
         return modified;
     }
-/*
+
     @Inject(at = @At("HEAD"), method = "isUsingEffectiveTool", cancellable = true)
     private void modifyEffectiveTool(BlockState state, CallbackInfoReturnable<Boolean> info) {
-        Origins.LOGGER.info("1");
-        if((Object)this instanceof ServerPlayerEntity) {
-            Origins.LOGGER.info("2");
-            ServerPlayerEntity server = (ServerPlayerEntity)(Object)this;
-            BlockPos pos = ((ServerPlayerInteractionManagerAccessor)server.interactionManager).getMiningPos();
-            int index = 3;
-            for (ModifyHarvestPower mhp : OriginComponent.getPowers(this, ModifyHarvestPower.class)) {
-                Origins.LOGGER.info(index + ": " + pos);
-                if (mhp.doesApply(pos)) {
-                    Origins.LOGGER.info("is allowing? " + mhp.isHarvestAllowed());
-                    info.setReturnValue(mhp.isHarvestAllowed());
-                }
-            }
+        if(state.getBlock().isIn(ModTags.NATURAL_STONE) && PowerTypes.STRONG_ARMS.isActive(this)) {
+            info.setReturnValue(true);
         }
-    }*/
+    }
 
     // ModifyDamageDealt
     @ModifyVariable(method = "attack", at = @At(value = "STORE", ordinal = 0), name = "f", ordinal = 0)
@@ -115,15 +107,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
             return 1F;
         }
         return in;
-    }
-
-    // ELYTRA
-    @Inject(method = "checkFallFlying", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/player/PlayerEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"), cancellable = true)
-    private void allowElytrianFlight(CallbackInfoReturnable<Boolean> info) {
-        if(OriginComponent.getPowers(this, ElytraFlightPower.class).size() > 0) {
-            this.startFallFlying();
-            info.setReturnValue(true);
-        }
     }
 
     @Inject(method = "canEquip", at = @At("HEAD"), cancellable = true)
