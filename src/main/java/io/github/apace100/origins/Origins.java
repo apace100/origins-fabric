@@ -10,10 +10,10 @@ import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginManager;
 import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.power.factory.PowerFactorySerializers;
+import io.github.apace100.origins.power.factory.condition.PlayerConditions;
 import io.github.apace100.origins.power.factory.condition.block.BlockConditionSerializers;
 import io.github.apace100.origins.power.factory.condition.damage.DamageConditionSerializers;
 import io.github.apace100.origins.power.factory.condition.item.ItemConditionSerializers;
-import io.github.apace100.origins.power.factory.condition.player.PlayerConditionSerializers;
 import io.github.apace100.origins.registry.*;
 import io.github.apace100.origins.util.ChoseOriginCriterion;
 import io.github.apace100.origins.util.ElytraPowerFallFlying;
@@ -25,6 +25,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.command.argument.ArgumentTypes;
 import net.minecraft.command.argument.serialize.ConstantArgumentSerializer;
 import net.minecraft.resource.ResourceType;
+import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -45,7 +46,8 @@ public class Origins implements ModInitializer {
 		ModEntities.register();
 		ModLoot.register();
 		PowerFactorySerializers.register();
-		PlayerConditionSerializers.register();
+		//PlayerConditionSerializers.register();
+		PlayerConditions.register();
 		ItemConditionSerializers.register();
 		BlockConditionSerializers.register();
 		DamageConditionSerializers.register();
@@ -61,5 +63,9 @@ public class Origins implements ModInitializer {
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new PowerTypes());
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginManager());
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginLayers());
+	}
+
+	public static Identifier identifier(String path) {
+		return new Identifier(Origins.MODID, path);
 	}
 }

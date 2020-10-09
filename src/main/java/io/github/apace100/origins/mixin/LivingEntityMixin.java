@@ -12,7 +12,6 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.tag.FluidTags;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,9 +31,9 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Inject(method = "canWalkOnFluid", at = @At("HEAD"), cancellable = true)
     private void modifyWalkableFluids(Fluid fluid, CallbackInfoReturnable<Boolean> info) {
-        if(PowerTypes.LAVA_STRIDER.isActive(this) && fluid.isIn(FluidTags.LAVA)) {
-            info.setReturnValue(true);
-        }
+        //if(PowerTypes.LAVA_STRIDER.isActive(this) && fluid.isIn(FluidTags.LAVA)) {
+        //    info.setReturnValue(true);
+        //}
     }
 
     // SetEntityGroupPower

@@ -14,7 +14,7 @@ public class PowerTypeReference<T extends Power> extends PowerType<T> {
     }
 
     @Override
-    public PowerFactory<T> getFactory() {
+    public PowerFactory<T>.Instance getFactory() {
         getReferencedPowerType();
         if(referencedPowerType == null) {
             return null;

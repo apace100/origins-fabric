@@ -7,9 +7,9 @@ public enum Comparison {
     NONE("", (a, b) -> false),
     EQUAL("==", (a, b) -> a == b),
     LESS_THAN("<", (a, b) -> a < b),
-    GREATHER_THAN(">", (a, b) -> a > b),
+    GREATER_THAN(">", (a, b) -> a > b),
     LESS_THAN_OR_EQUAL("<=", (a, b) -> a <= b),
-    GREATHER_THAN_OR_EQUAL(">=", (a, b) -> a >= b);
+    GREATER_THAN_OR_EQUAL(">=", (a, b) -> a >= b);
 
     private final String comparisonString;
     private final BiFunction<Double, Double, Boolean> comparison;
@@ -34,11 +34,11 @@ public enum Comparison {
             case "<":
                 return LESS_THAN;
             case ">":
-                return GREATHER_THAN;
+                return GREATER_THAN;
             case "<=":
                 return LESS_THAN_OR_EQUAL;
             case ">=":
-                return GREATHER_THAN_OR_EQUAL;
+                return GREATER_THAN_OR_EQUAL;
         }
         return NONE;
     }

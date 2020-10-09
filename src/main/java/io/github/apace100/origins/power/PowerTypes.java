@@ -6,16 +6,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.power.factory.PowerFactory;
-import io.github.apace100.origins.registry.ModTags;
+import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.util.MultiJsonDataLoader;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.profiler.Profiler;
@@ -25,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResourceReloadListener {
-    public static final PowerType<InvulnerablePower> INVULNERABILITY;
+    //public static final PowerType<InvulnerablePower> INVULNERABILITY;
 
     public static final PowerType<Power> WATER_BREATHING;
     public static final PowerType<Power> AQUA_AFFINITY;
@@ -50,7 +44,7 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
 //    public static final PowerType<PreventItemUsePower> VEGETARIAN;
 //    public static final PowerType<Power> FRESH_AIR;
 
-    public static final PowerType<TogglePower> PHASING;
+    //public static final PowerType<TogglePower> PHASING;
     //public static final PowerType<TogglePower> INVISIBILITY;
     //public static final PowerType<TogglePower> HUNGER_OVER_TIME;
     //public static final PowerType<TogglePower> BURN_IN_DAYLIGHT;
@@ -63,7 +57,7 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
 //    public static final PowerType<AttributePower> NINE_LIVES;
 //    public static final PowerType<NightVisionPower> CAT_VISION;
 
-    public static final PowerType<ActiveCooldownPower> LAUNCH_INTO_AIR;
+    //public static final PowerType<ActiveCooldownPower> LAUNCH_INTO_AIR;
     //public static final PowerType<Power> ELYTRA;
     //public static final PowerType<RestrictArmorPower> LIGHT_ARMOR;
     //public static final PowerType<StackingStatusEffectPower> CLAUSTROPHOBIA;
@@ -79,13 +73,13 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
     //public static final PowerType<AttributePower> NATURAL_ARMOR;
     //public static final PowerType<PreventItemUsePower> NO_SHIELD;
     //public static final PowerType<ModifyExhaustionPower> MORE_EXHAUSTION;
-    public static final PowerType<Power> STRONG_ARMS;
+    //public static final PowerType<Power> STRONG_ARMS;
 
     // Unused Powers
-    public static final PowerType<Power> LAVA_STRIDER;
-    public static final PowerType<PreventItemUsePower> NO_RANGED_WEAPONS;
+    //public static final PowerType<Power> LAVA_STRIDER;
+    //public static final PowerType<PreventItemUsePower> NO_RANGED_WEAPONS;
     static {
-        INVULNERABILITY = register("invulnerability", new PowerType<>((type, player) -> new InvulnerablePower(type, player, ds -> true)));
+        //INVULNERABILITY = register("invulnerability", new PowerType<>((type, player) -> new InvulnerablePower(type, player, ds -> true)));
 
         WATER_BREATHING = new PowerTypeReference<>(new Identifier(Origins.MODID, "water_breathing")); //register("water_breathing", new PowerType<>(Power::new));
         AQUA_AFFINITY = new PowerTypeReference<>(new Identifier(Origins.MODID, "aqua_affinity")); //register("aqua_affinity", new PowerType<>(Power::new));
@@ -113,7 +107,7 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
         //VEGETARIAN = register("vegetarian", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, (stack -> stack.isFood() && (stack.getItem().getFoodComponent().isMeat() || stack.getItem().isIn(ModTags.MEAT))))));
         //FRESH_AIR = register("fresh_air", new PowerType<>(Power::new));
 
-        PHASING = register("phasing", new PowerType<>(TogglePower::new));
+        //PHASING = register("phasing", new PowerType<>(TogglePower::new));
         //INVISIBILITY = register("invisibility", new PowerType<>(TogglePower::new));
         //HUNGER_OVER_TIME = register("hunger_over_time", new PowerType<>(TogglePower::new));
         //BURN_IN_DAYLIGHT = register("burn_in_daylight", new PowerType<>((type, player) -> new TogglePower(type, player, true)));
@@ -126,7 +120,7 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
         //NINE_LIVES = register("nine_lives", new PowerType<>((type, player) -> new AttributePower(type, player, EntityAttributes.GENERIC_MAX_HEALTH, new EntityAttributeModifier("power_type:nine_lives", -2.0, EntityAttributeModifier.Operation.ADDITION))));
         //CAT_VISION = register("cat_vision", new PowerType<>((type, player) -> (NightVisionPower)new NightVisionPower(type, player, 0.4F).addCondition(p -> !p.isSubmergedIn(FluidTags.WATER))));
 
-        LAUNCH_INTO_AIR = register("launch_into_air", new PowerType<>((type, player) -> new ActiveCooldownPower(type, player, 20 * 30, 4, p -> {
+        /*LAUNCH_INTO_AIR = register("launch_into_air", new PowerType<>((type, player) -> new ActiveCooldownPower(type, player, 20 * 30, 4, p -> {
             if(!p.world.isClient) {
                 p.addVelocity(0, 2, 0);
                 p.velocityModified = true;
@@ -135,7 +129,7 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
                     ((ServerWorld)p.world).spawnParticles(ParticleTypes.CLOUD, player.getX(), player.getRandomBodyY(), player.getZ(), 8, p.getRandom().nextGaussian(), 0.0D, p.getRandom().nextGaussian(), 0.5);
                 }
             }
-        })));
+        })));*/
         //ELYTRA = register("elytra", new PowerType<>(Power::new));
         //LIGHT_ARMOR = register("light_armor", new PowerType<>((type, player) -> new RestrictArmorPower(type, player, (is, pl, slt) -> is.getItem() instanceof ArmorItem && ((ArmorItem)is.getItem()).getProtection() > Constants.LIGHT_ARMOR_MAX_PROTECTION[slt.getEntitySlotId()])));
         //AERIAL_COMBATANT = register("aerial_combatant", new PowerType<>((type, player) -> new ModifyDamageDealtPower(type, player, (p, s) -> p.isFallFlying(), dmg -> dmg * 2F)));
@@ -156,15 +150,15 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
         //    .addModifier(ReachEntityAttributes.ATTACK_RANGE, new EntityAttributeModifier("power_type:extra_reach", 1.5, EntityAttributeModifier.Operation.ADDITION))));
         //ENDER_PARTICLES = register("ender_particles", new PowerType<>((type, player) -> new ParticlePower(type, player, ParticleTypes.PORTAL, 4)).setHidden());
 
-        LAVA_STRIDER = register("lava_strider", new PowerType<>(Power::new));
+        //LAVA_STRIDER = register("lava_strider", new PowerType<>(Power::new));
 
         //INVENTORY = register("shulker_inventory", new PowerType<>((type, player) -> new InventoryPower(type, player, "container.shulker_inventory_power")));
         //NATURAL_ARMOR = register("natural_armor", new PowerType<>((type, player) -> new AttributePower(type, player, EntityAttributes.GENERIC_ARMOR, new EntityAttributeModifier("power_type:natural_armor", 8.0, EntityAttributeModifier.Operation.ADDITION))));
         //NO_SHIELD = register("no_shield", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, Ingredient.ofItems(Items.SHIELD))));
         //MORE_EXHAUSTION = register("more_exhaustion", new PowerType<>((type, player) -> new ModifyExhaustionPower(type, player, 1.6F)));
-        STRONG_ARMS = register("strong_arms", new PowerType<>(Power::new));
+        //STRONG_ARMS = register("strong_arms", new PowerType<>(Power::new));
 
-        NO_RANGED_WEAPONS = register("no_ranged_weapons", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, Ingredient.fromTag(ModTags.RANGED_WEAPONS))));
+        //NO_RANGED_WEAPONS = register("no_ranged_weapons", new PowerType<>((type, player) -> new PreventItemUsePower(type, player, Ingredient.fromTag(ModTags.RANGED_WEAPONS))));
     }
 
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
@@ -182,9 +176,11 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
         loader.forEach((id, jel) -> {
             jel.forEach(je -> {
                 try {
-                    PowerFactory factory = PowerFactory.read(je);
-                    PowerType type = new PowerType(id, factory);
                     JsonObject jo = je.getAsJsonObject();
+                    Identifier factoryId = Identifier.tryParse(JsonHelper.getString(jo, "type"));
+                    PowerFactory factory = ModRegistries.POWER_FACTORY.get(factoryId);//PowerFactory.read(je);
+                    PowerFactory.Instance factoryInstance = factory.read(jo);
+                    PowerType type = new PowerType(id, factoryInstance);
                     int priority = JsonHelper.getInt(jo, "loading_priority", 0);
                     String name = JsonHelper.getString(jo, "name", "");
                     String description = JsonHelper.getString(jo, "description", "");

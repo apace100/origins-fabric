@@ -1,7 +1,18 @@
 package io.github.apace100.origins.power.factory.condition;
 
+import io.github.apace100.origins.registry.ModRegistries;
+import net.minecraft.block.pattern.CachedBlockPosition;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Pair;
+
 public class ConditionTypes {
 
     //public static ConditionType<PlayerEntity, PlayerCondition, PlayerCondition.Serializer>
-    //public static ConditionType<CachedBlockPosition, Condition<CachedBlockPosition>, BlockConditionSerializer> BLOCK = new ConditionType<>(ModRegistries.BLOCK_CONDITION_SERIALIZER);
+    public static ConditionType<PlayerEntity> PLAYER = new ConditionType<>(ModRegistries.PLAYER_CONDITION);
+    public static ConditionType<ItemStack> ITEM = new ConditionType<>(ModRegistries.ITEM_CONDITION);
+    public static ConditionType<CachedBlockPosition> BLOCK = new ConditionType<>(ModRegistries.BLOCK_CONDITION);
+    public static ConditionType<Pair<DamageSource, Float>> DAMAGE = new ConditionType<>(ModRegistries.DAMAGE_CONDITION);
+
 }

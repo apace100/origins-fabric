@@ -5,7 +5,6 @@ import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModBlocks;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModDamageSources;
-import io.github.apace100.origins.registry.ModTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
@@ -60,12 +59,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
         return modified;
     }
 
-    @Inject(at = @At("HEAD"), method = "isUsingEffectiveTool", cancellable = true)
+    /*@Inject(at = @At("HEAD"), method = "isUsingEffectiveTool", cancellable = true)
     private void modifyEffectiveTool(BlockState state, CallbackInfoReturnable<Boolean> info) {
         if(state.getBlock().isIn(ModTags.NATURAL_STONE) && PowerTypes.STRONG_ARMS.isActive(this)) {
             info.setReturnValue(true);
         }
-    }
+    }*/
 
     // ModifyDamageDealt
     @ModifyVariable(method = "attack", at = @At(value = "STORE", ordinal = 0), name = "f", ordinal = 0)

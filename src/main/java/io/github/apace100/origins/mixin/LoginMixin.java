@@ -34,10 +34,10 @@ public abstract class LoginMixin {
 		PacketByteBuf powerListData = new PacketByteBuf(Unpooled.buffer());
 		powerListData.writeInt(PowerTypeRegistry.size());
 		PowerTypeRegistry.entries().forEach((entry) -> {
-			PowerFactory factory = entry.getValue().getFactory();
+			PowerFactory.Instance factory = entry.getValue().getFactory();
 			if(factory != null) {
 				powerListData.writeIdentifier(entry.getKey());
-				PowerFactory.write(factory, powerListData);
+				factory.write(powerListData);
 			}
 		});
 

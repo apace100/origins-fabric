@@ -1,13 +1,47 @@
 package io.github.apace100.origins.power.factory;
 
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.power.AttributePower;
+import io.github.apace100.origins.power.Power;
+import io.github.apace100.origins.power.TogglePower;
 import io.github.apace100.origins.registry.ModRegistries;
-import net.minecraft.util.Identifier;
+import io.github.apace100.origins.util.AttributedEntityAttributeModifier;
+import io.github.apace100.origins.util.SerializableData;
+import io.github.apace100.origins.util.SerializableDataType;
 import net.minecraft.util.registry.Registry;
+
+import java.util.List;
 
 public class PowerFactorySerializers {
 
     public static void register() {
+        register(new PowerFactory<>(Origins.identifier("simple"), new SerializableData(), data -> Power::new).allowCondition());
+        register(new PowerFactory<>(Origins.identifier("toggle"),
+            new SerializableData()
+                .add("active_by_default", SerializableDataType.BOOLEAN, false),
+            data ->
+                (type, player) ->
+                    new TogglePower(type, player, data.getBoolean("active_by_default")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("attribute"),
+            new SerializableData()
+                .add("modifier", SerializableDataType.ATTRIBUTED_ATTRIBUTE_MODIFIER, null)
+                .add("modifiers", SerializableDataType.ATTRIBUTED_ATTRIBUTE_MODIFIERS, null),
+            data ->
+                (type, player) -> {
+                    AttributePower ap = new AttributePower(type, player);
+                    if(data.isPresent("modifier")) {
+                        ap.addModifier((AttributedEntityAttributeModifier)data.get("modifier"));
+                    }
+                    if(data.isPresent("modifiers")) {
+                        List<AttributedEntityAttributeModifier> modifierList = (List<AttributedEntityAttributeModifier>)data.get("modifiers");
+                        modifierList.forEach(ap::addModifier);
+                    }
+                    return ap;
+                })
+            .allowCondition());
+
+        /*
         register("simple", new SimplePowerFactory.Serializer());
         register("toggle", new TogglePowerFactory.Serializer());
         register("attribute", new AttributePowerFactory.Serializer());
@@ -39,10 +73,13 @@ public class PowerFactorySerializers {
         register("modify_exhaustion", new ModifyExhaustionPowerFactory.Serializer());
         register("inventory", new InventoryPowerFactory.Serializer());
         register("modify_harvest", new ModifyHarvestPowerFactory.Serializer());
-        register("launch", new LaunchPowerFactory.Serializer());
+        register("launch", new LaunchPowerFactory.Serializer());*/
     }
-
+/*
     private static void register(String path, PowerFactory.Serializer serializer) {
         Registry.register(ModRegistries.POWER_FACTORY_SERIALIZER, new Identifier(Origins.MODID, path), serializer);
+    }*/
+    private static void register(PowerFactory serializer) {
+        Registry.register(ModRegistries.POWER_FACTORY, serializer.getSerializerId(), serializer);
     }
 }

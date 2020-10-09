@@ -8,34 +8,26 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
-import java.util.function.BiFunction;
-
 public class PowerType<T extends Power> {
 
     private Identifier identifier;
-    private PowerFactory<T> actualFactory;
-    private BiFunction<PowerType<T>, PlayerEntity, T> factory;
+    private PowerFactory<T>.Instance factory;
     private boolean isHidden = false;
 
     private String nameTranslationKey;
     private String descriptionTranslationKey;
 
-    public PowerType(BiFunction<PowerType<T>, PlayerEntity, T> factory) {
-        this.factory = factory;
-    }
-
-    public PowerType(Identifier id, PowerFactory<T> factory) {
+    public PowerType(Identifier id, PowerFactory<T>.Instance factory) {
         this.identifier = id;
         this.factory = factory;
-        this.actualFactory = factory;
     }
 
     public Identifier getIdentifier() {
         return identifier;
     }
 
-    public PowerFactory<T> getFactory() {
-        return actualFactory;
+    public PowerFactory<T>.Instance getFactory() {
+        return factory;
     }
 
     public PowerType setHidden() {

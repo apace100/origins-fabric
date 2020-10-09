@@ -1,44 +1,79 @@
 package io.github.apace100.origins.power.factory;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.power.PowerType;
-import io.github.apace100.origins.power.factory.condition.player.PlayerCondition;
-import io.github.apace100.origins.registry.ModRegistries;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import io.github.apace100.origins.power.factory.condition.Condition;
+import io.github.apace100.origins.util.SerializableData;
+import io.github.apace100.origins.util.SerializableDataType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.JsonHelper;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
-public abstract class PowerFactory<P extends Power> implements BiFunction<PowerType<P>, PlayerEntity, P> {
+public class PowerFactory<P extends Power> {
 
-    protected List<List<PlayerCondition>> conditions = new LinkedList<>();
+    private final Identifier id;
+    private boolean hasConditions = false;
+    protected SerializableData data;
+    protected Function<SerializableData.Instance, BiFunction<PowerType<P>, PlayerEntity, P>> factoryConstructor;
 
-    @Override
-    public abstract P apply(PowerType<P> powerType, PlayerEntity playerEntity);
-
-    protected void addConditions(P power) {
-        power.addCondition(player ->
-            conditions.size() == 0 || conditions.stream().allMatch(ors -> ors.size() == 0 || ors.stream().anyMatch(condition -> condition.test(player)))
-        );
+    public PowerFactory(Identifier id, SerializableData data, Function<SerializableData.Instance, BiFunction<PowerType<P>, PlayerEntity, P>> factoryConstructor) {
+        this.id = id;
+        this.data = data;
+        this.factoryConstructor = factoryConstructor;
     }
 
-    public abstract Identifier getSerializerId();
+    public PowerFactory<P> allowCondition() {
+        if(!hasConditions) {
+            hasConditions = true;
+            data.add("condition", SerializableDataType.PLAYER_CONDITION, null);
+        }
+        return this;
+    }
 
+    public Identifier getSerializerId() {
+        return id;
+    }
+
+    public class Instance implements BiFunction<PowerType<P>, PlayerEntity, P> {
+
+        private final SerializableData.Instance dataInstance;
+
+        private Instance(SerializableData.Instance data) {
+            this.dataInstance = data;
+        }
+
+        public void write(PacketByteBuf buf) {
+            buf.writeIdentifier(id);
+            data.write(buf, dataInstance);
+        }
+
+        @Override
+        public P apply(PowerType<P> pPowerType, PlayerEntity playerEntity) {
+            BiFunction<PowerType<P>, PlayerEntity, P> powerFactory = factoryConstructor.apply(dataInstance);
+            P p = powerFactory.apply(pPowerType, playerEntity);
+            if(hasConditions && dataInstance.isPresent("condition")) {
+                p.addCondition((Condition<PlayerEntity>.Instance) dataInstance.get("condition"));
+            }
+            return p;
+        }
+    }
+
+    public Instance read(JsonObject json) {
+        return new Instance(data.read(json));
+    }
+
+    public Instance read(PacketByteBuf buffer) {
+        return new Instance(data.read(buffer));
+    }
+
+/*
     public static abstract class Serializer<T extends PowerFactory<?>> {
-
         public abstract void write(T factory, PacketByteBuf buf);
+
         @Environment(EnvType.CLIENT)
         public abstract T read(PacketByteBuf buf);
 
@@ -46,9 +81,9 @@ public abstract class PowerFactory<P extends Power> implements BiFunction<PowerT
 
         protected void writeConditions(T factory, PacketByteBuf buf) {
             buf.writeInt(factory.conditions.size());
-            for(List<PlayerCondition> conditionListInner : factory.conditions) {
+            for (List<PlayerCondition> conditionListInner : factory.conditions) {
                 buf.writeInt(conditionListInner.size());
-                for(PlayerCondition condition : conditionListInner) {
+                for (PlayerCondition condition : conditionListInner) {
                     PlayerCondition.write(condition, buf);
                 }
             }
@@ -58,10 +93,10 @@ public abstract class PowerFactory<P extends Power> implements BiFunction<PowerT
         protected void readConditions(T factory, PacketByteBuf buf) {
             factory.conditions.clear();
             int innerListCount = buf.readInt();
-            for(int i = 0; i < innerListCount; i++) {
+            for (int i = 0; i < innerListCount; i++) {
                 int conditionCount = buf.readInt();
                 List<PlayerCondition> innerList = new ArrayList<>(conditionCount);
-                for(int j = 0; j < conditionCount; j++) {
+                for (int j = 0; j < conditionCount; j++) {
                     innerList.add(PlayerCondition.read(buf));
                 }
                 factory.conditions.add(innerList);
@@ -69,36 +104,36 @@ public abstract class PowerFactory<P extends Power> implements BiFunction<PowerT
         }
 
         protected void readConditions(T factory, JsonObject json) {
-            if(json.has("condition")) {
+            if (json.has("condition")) {
                 JsonElement condElem = json.get("condition");
-                if(condElem.isJsonObject()) {
+                if (condElem.isJsonObject()) {
                     PlayerCondition cond = PlayerCondition.read(condElem);
                     factory.conditions = new LinkedList<>();
                     LinkedList<PlayerCondition> innerList = new LinkedList<>();
                     innerList.add(cond);
                     factory.conditions.add(innerList);
-                } else if(condElem.isJsonArray()) {
+                } else if (condElem.isJsonArray()) {
                     JsonArray condAndArray = condElem.getAsJsonArray();
                     factory.conditions = new LinkedList<>();
                     condAndArray.forEach(e0 -> {
                         LinkedList<PlayerCondition> orList = new LinkedList<>();
-                        if(e0.isJsonArray()) {
+                        if (e0.isJsonArray()) {
                             JsonArray condOrArray = e0.getAsJsonArray();
                             condOrArray.forEach(e1 -> {
-                                if(e1.isJsonObject()) {
+                                if (e1.isJsonObject()) {
                                     orList.add(PlayerCondition.read(e1));
                                 }
                             });
                         }
-                        if(orList.size() > 0) {
+                        if (orList.size() > 0) {
                             factory.conditions.add(orList);
                         }
                     });
                 }
             }
         }
-    }
-
+    }*/
+/*
     public static void write(PowerFactory factory, PacketByteBuf buf) {
         Identifier serializerId = factory.getSerializerId();
         buf.writeString(serializerId.toString());
@@ -131,5 +166,5 @@ public abstract class PowerFactory<P extends Power> implements BiFunction<PowerT
             return factory;
         }
         throw new JsonParseException("PowerFactory has to be a JsonObject!");
-    }
+    }*/
 }

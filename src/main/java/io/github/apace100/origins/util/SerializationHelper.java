@@ -1,38 +1,26 @@
 package io.github.apace100.origins.util;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import io.github.apace100.origins.power.factory.condition.block.BlockCondition;
-import io.github.apace100.origins.power.factory.condition.damage.DamageCondition;
-import io.github.apace100.origins.power.factory.condition.item.ItemCondition;
-import io.github.apace100.origins.power.factory.condition.player.PlayerCondition;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
-import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.tag.ServerTagManagerHolder;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Optional;
-import java.util.function.Predicate;
+import java.util.function.Function;
 
 public class SerializationHelper {
 
@@ -48,11 +36,15 @@ public class SerializationHelper {
         return ServerTagManagerHolder.getTagManager().getBlocks().getTag(id);//BlockTags.getTagGroup().getTag(id);
     }
 
-    public static EntityAttributeModifier readAttributeModifier(JsonObject json) {
-        String name = JsonHelper.getString(json, "name", "Unnamed attribute modifier");
-        String operation = JsonHelper.getString(json, "operation").toUpperCase();
-        double value = JsonHelper.getFloat(json, "value");
-        return new EntityAttributeModifier(name, value, EntityAttributeModifier.Operation.valueOf(operation));
+    public static EntityAttributeModifier readAttributeModifier(JsonElement jsonElement) {
+        if(jsonElement.isJsonObject()) {
+            JsonObject json = jsonElement.getAsJsonObject();
+            String name = JsonHelper.getString(json, "name", "Unnamed attribute modifier");
+            String operation = JsonHelper.getString(json, "operation").toUpperCase();
+            double value = JsonHelper.getFloat(json, "value");
+            return new EntityAttributeModifier(name, value, EntityAttributeModifier.Operation.valueOf(operation));
+        }
+        throw new JsonSyntaxException("Attribute modifier needs to be a JSON object.");
     }
 
     @Environment(EnvType.CLIENT)
@@ -61,6 +53,12 @@ public class SerializationHelper {
         double modValue = buf.readDouble();
         int operation = buf.readInt();
         return new EntityAttributeModifier(modName, modValue, EntityAttributeModifier.Operation.fromId(operation));
+    }
+
+    public static void writeAttributeModifier(PacketByteBuf buf, EntityAttributeModifier modifier) {
+        buf.writeString(modifier.getName());
+        buf.writeDouble(modifier.getValue());
+        buf.writeInt(modifier.getOperation().getId());
     }
 
     public static void writeAttributeModifier(EntityAttributeModifier modifier, PacketByteBuf buf) {
@@ -102,7 +100,7 @@ public class SerializationHelper {
         buf.writeBoolean(modifier.shouldShowParticles());
         buf.writeBoolean(modifier.shouldShowIcon());
     }
-
+/*
     public static List<List<PlayerCondition>> readPlayerConditions(JsonElement element) {
         List<List<PlayerCondition>> list = new LinkedList<>();
         if(element.isJsonObject()) {
@@ -130,7 +128,7 @@ public class SerializationHelper {
         return list;
     }
 
-    public static void writePlayerConditions(List<List<PlayerCondition>> conditions, PacketByteBuf buf) {
+    public static void writePlayerConditions(PacketByteBuf buf, List<List<PlayerCondition>> conditions) {
         buf.writeInt(conditions.size());
         for(List<PlayerCondition> conditionListInner : conditions) {
             buf.writeInt(conditionListInner.size());
@@ -341,5 +339,13 @@ public class SerializationHelper {
             return conditions.size() == 0
                 || conditions.stream().allMatch(ors -> ors.size() == 0 || ors.stream().anyMatch(condition -> condition.test(damagePair)));
         };
+    }*/
+
+    public static <T extends Enum<T>> HashMap<String, T> buildEnumMap(Class<T> enumClass, Function<T, String> enumToString) {
+        HashMap<String, T> map = new HashMap<>();
+        for (T enumConstant : enumClass.getEnumConstants()) {
+            map.put(enumToString.apply(enumConstant), enumConstant);
+        }
+        return map;
     }
 }
