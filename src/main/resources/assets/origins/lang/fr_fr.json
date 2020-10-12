@@ -3,109 +3,112 @@
   "origin.origins.human.description": "Un être humain ordinaire, qui aura une expérience Minecraft ordinaire.",
 
   "origin.origins.merling.name": "Sirènet(te)",
-  "origin.origins.merling.description": "Ces habitant(e)s de la mer aura du mal s'ils restent sur sol.",
+  "origin.origins.merling.description": "Ces habitants de la mer ne sont pas habitués à rester hors de l'eau.",
 
   "origin.origins.arachnid.name": "Arachnide",
-  "origin.origins.arachnid.description": "Grimpeurs et trappeurs naturel(le)s, les arachnides faites des chasseurs et chasseuses excellent(e)s.",
+  "origin.origins.arachnid.description": "Grimpeurs et trappeurs naturels, les arachnides font des chasseurs hors pair.",
 
   "origin.origins.blazeborn.name": "Enfantage du Blaze",
-  "origin.origins.blazeborn.description": "Quelques personnes rares sont descendants des Blazes ; ils seront à l'aise aux mers de lave du Nether.",
+  "origin.origins.blazeborn.description": "Quelques personnes rares sont descendants des Blazes ; elles seront à l'aise dans les mers de lave du Nether.",
 
   "origin.origins.avian.name": "Aviaire",
-  "origin.origins.avian.description": "Il était une fois, les aviaires ont pu voler – aujourd'hui, on les voit glissant de place en place.",
+  "origin.origins.avian.description": "Il était une époque où les aviaires pouvaient voler – aujourd'hui, on ne les voit que planant d'un endroit à l'autre.",
 
   "origin.origins.phantom.name": "Demi-Phantom",
-  "origin.origins.phantom.description": "Comme hybrides des hommes et des Phantoms, ils peuvent adopter chaque forme.",
+  "origin.origins.phantom.description": "En tant qu'hybrides des hommes et des Phantoms, ils peuvent alterner entre chaque forme.",
 
   "origin.origins.feline.name": "Félin(e)",
-  "origin.origins.feline.description": "Les Creepers ont peur de leur apparence féline et leur instinct acrobatique permet de poser toujours sur les pieds.",
+  "origin.origins.feline.description": "Les Creepers ont peur de leur apparence féline et leur instinct acrobatique leur permet de toujours retomber sur leurs pieds.",
 
-  "origin.origins.elytrian.name": "Elytrien",
-  "origin.origins.elytrian.description": "Toujours volant dans l'air, les Elytriens n'aiment pas se trouver longtemps sous des plafonds.",
+  "origin.origins.elytrian.name": "Élytrien",
+  "origin.origins.elytrian.description": "Habitués à virevolter dans le vent, les Élytriens ne se sentent pas à l'aise sous les plafonds bas.",
 
   "origin.origins.enderian.name": "Enderien",
-  "origin.origins.enderian.description": "Les fils et filles de l'Ender Dragon peuvent téléporter, mais l'eau les nuira.",
+  "origin.origins.enderian.description": "Les fils et filles de l'Ender Dragon peuvent se téléporter, mais l'eau leur nuira.",
+
+  "origin.origins.shulk.name": "Shulk",
+  "origin.origins.shulk.description": "Apparentés aux Shulkers, les corps de Shulk sont habillés d'une peau protectrice telle une coquille.",
 
   "power.origins.water_breathing.name": "Branchies",
   "power.origins.water_breathing.description": "Vous ne pourrez respirer que sous l'eau.",
 
   "power.origins.aqua_affinity.name": "Affinité aquatique",
-  "power.origins.aqua_affinity.description": "Vous pourrez détruire les blocs sous l'eau comme au surface.",
+  "power.origins.aqua_affinity.description": "Vous pourrez détruire les blocs sous l'eau comme d'autres le font sur la surface.",
 
   "power.origins.water_vision.name": "Yeux mouillés",
   "power.origins.water_vision.description": "Votre vision sous l'eau sera parfaite.",
 
   "power.origins.swim_speed.name": "Nageoires",
-  "power.origins.swim_speed.description": "Vous serez rapides sous l'eau.",
+  "power.origins.swim_speed.description": "Vous serez plus rapide sous l'eau.",
 
   "power.origins.like_water.name": "Comme l'eau",
-  "power.origins.like_water.description": "Vous ne coulerez pas sous l'eau sauf si vous le voulez.",
+  "power.origins.like_water.description": "Vous ne coulerez pas sous l'eau, sauf si vous le voulez.",
 
   "power.origins.fragile.name": "Fragile",
-  "power.origins.fragile.description": "Vous avez trois cœurs en moins que la plupart.",
+  "power.origins.fragile.description": "Vous avez trois cœurs de moins que la plupart.",
 
   "power.origins.webbing.name": "Toile d'araignée",
   "power.origins.webbing.description": "Si vous attaquez un monstre, il se trouvera coincé dans votre toile.",
 
   "power.origins.climbing.name": "Grimpe-partout",
-  "power.origins.climbing.description": "Vous pourrez grimper n'importe quel mur.",
+  "power.origins.climbing.description": "Vous pourrez grimper à n'importe quel mur.",
 
   "power.origins.carnivore.name": "Carnivore",
-  "power.origins.carnivore.description": "Vous ne pourrez manger que du viande.",
+  "power.origins.carnivore.description": "Vous ne pourrez manger que de la viande.",
 
   "power.origins.fire_immunity.name": "Immunité au feu",
-  "power.origins.fire_immunity.description": "Vous ne serez jamais endommagé par feu.",
+  "power.origins.fire_immunity.description": "Vous ne serez jamais endommagé par le feu.",
 
-  "power.origins.nether_spawn.name": "Né au Nether",
+  "power.origins.nether_spawn.name": "Résident du Nether",
   "power.origins.nether_spawn.description": "Vous trouverez votre point de réapparition au Nether.",
 
-  "power.origins.burning_wrath.name": "Corroux du Blaze",
-  "power.origins.burning_wrath.description": "Quand en feu, vos coups serez plus puissants.",
+  "power.origins.burning_wrath.name": "Courroux du Blaze",
+  "power.origins.burning_wrath.description": "Vos coups seront plus puissants si vous êtes en feu.",
 
-  "power.origins.hotblooded.name": "Homéotherme",
-  "power.origins.hotblooded.description": "Votre sang sera si chaud que ni les poisons ni la putréfaction vous affecterez.",
+  "power.origins.hotblooded.name": "Hypertherme",
+  "power.origins.hotblooded.description": "Votre sang sera si chaud que ni les poisons ni la putréfaction vous affecteront.",
 
   "power.origins.water_vulnerability.name": "Hydrophobie",
   "power.origins.water_vulnerability.description": "Rester dans l'eau vous endommagera.",
 
-  "power.origins.tailwind.name": "Vif-argent",
-  "power.origins.tailwind.description": "Vous serez plus rapide à pied que la moyenne.",
+  "power.origins.tailwind.name": "Vent arrière",
+  "power.origins.tailwind.description": "Vous serez un peu plus rapide à pied que la moyenne.",
 
-  "power.origins.slow_falling.name": "Légèrité",
-  "power.origins.slow_falling.description": "Vous tomberez lentement comme une plume gentille, si vous ne s'accroupissez pas.",
+  "power.origins.slow_falling.name": "Légèreté",
+  "power.origins.slow_falling.description": "Vous tomberez doucement comme une plume, tant que vous ne vous accroupissez pas.",
 
   "power.origins.vegetarian.name": "Végétarien(ne)",
   "power.origins.vegetarian.description": "Vous ne pourrez manger que les végétaux.",
 
   "power.origins.fresh_air.name": "L'air frais",
-  "power.origins.fresh_air.description": "S'endormir nécessite un lit dont la hauteur est au moins 86 blocs, alors que vous pouvez respirer l'air vraiment frais.",
+  "power.origins.fresh_air.description": "S'endormir nécessite un lit dont la hauteur est au moins 86 blocs, afin que vous puissiez respirer l'air vraiment frais.",
 
   "power.origins.phasing.name": "Incorporel(le)",
-  "power.origins.phasing.description": "Quand en forme d'un Phantom, vous pourrez passer dans des blocs solides (sauf l'obsidienne).",
+  "power.origins.phasing.description": "Adopter une forme de Phantom vous laisse passer dans des blocs solides (sauf l'obsidienne).",
 
-  "power.origins.invisibility.name": "Invisible",
-  "power.origins.invisibility.description": "Quand en forme d'un Phantom, vous êtes invisibles.",
+  "power.origins.invisibility.name": "Invisibilité",
+  "power.origins.invisibility.description": "Adopter une forme de Phantom vous rend invisible.",
 
   "power.origins.hunger_over_time.name": "Métabolisme rapide",
-  "power.origins.hunger_over_time.description": "Quand en forme d'un Phantom, vous devenez plus faim.",
+  "power.origins.hunger_over_time.description": "Adopter une forme de Phantom vous donne faim.",
 
   "power.origins.burn_in_daylight.name": "Colère du soleil",
   "power.origins.burn_in_daylight.description": "Si vous ne restez pas invisible, le soleil vous brûlera.",
 
-  "power.origins.fall_immunity.name": "Acrobatique",
-  "power.origins.fall_immunity.description": "Tomber ne vous endommagera jamais.",
+  "power.origins.fall_immunity.name": "Acrobaties",
+  "power.origins.fall_immunity.description": "Vous avez l'art de ne jamais vous blesser en tombant.",
 
   "power.origins.sprint_jump.name": "Chevilles fortes",
-  "power.origins.sprint_jump.description": "Les sauts seront plus hauts si vous sprintez.",
+  "power.origins.sprint_jump.description": "Vos sauts seront plus hauts si vous sprintez.",
 
   "power.origins.nine_lives.name": "Neuf vies?",
   "power.origins.nine_lives.description": "Vous avez un cœur en moins que la plupart.",
 
   "power.origins.cat_vision.name": "Nocturne",
-  "power.origins.cat_vision.description": "Vous pourrez voir dans le noir (sauf dans l'eau).",
+  "power.origins.cat_vision.description": "Vous pouvez voir dans le noir (sauf dans l'eau).",
 
   "power.origins.weak_arms.name": "Bras faibles",
-  "power.origins.weak_arms.description": "Si vous ne buvez pas une potion de force, vous ne pourrez miner des blocs de roche naturelle sauf s'il y a moins que deux autres à ses côtés.",
+  "power.origins.weak_arms.description": "Si vous ne buvez pas une potion de force, vous ne pourrez miner que des blocs de roche naturelle isolés (moins de deux blocs de roche naturelle adjacents).",
 
   "power.origins.scare_creepers.name": "Visage du chat",
   "power.origins.scare_creepers.description": "Votre apparence effraie les Creepers ; ils n'exploseront qu'après que vous les frappez.",
@@ -113,37 +116,56 @@
   "power.origins.launch_into_air.name": "Don du vent",
   "power.origins.launch_into_air.description": "Vous pourrez sauter peut-être vingt blocs dans l'air toutes les trente secondes.",
 
-  "power.origins.elytra.name": "Ailé",
-  "power.origins.elytra.description": "Vous avez des ailes d'Élytres sans même les porter.",
+  "power.origins.elytra.name": "Ailé(e)",
+  "power.origins.elytra.description": "Vous avez des ailes d'Élytres sans même en équiper.",
 
   "power.origins.light_armor.name": "20 Minutes du Mans",
-  "power.origins.light_armor.description": "Les armures plus lourdes que ceux de mailles ne vous convient pas.",
+  "power.origins.light_armor.description": "Les armures plus lourdes que la maille ne vous conviennent pas.",
 
   "power.origins.claustrophobia.name": "Claustrophobie",
-  "power.origins.claustrophobia.description": "Rester sous un plafond bas pour longtemps vous ralentira et vous affaiblira.",
+  "power.origins.claustrophobia.description": "Rester sous un plafond bas trop longtemps vous ralentira et vous affaiblira.",
 
   "power.origins.more_kinetic_damage.name": "Os cassants",
-  "power.origins.more_kinetic_damage.description": "Vous serez plus blessé si vous tombez, ou si vous impactez un bloc en vol.",
+  "power.origins.more_kinetic_damage.description": "Vous serez blessé plus lourdement si vous tombez, ou si vous percutez un bloc en vol.",
 
   "power.origins.aerial_combatant.name": "Chasseur extraordinaire",
-  "power.origins.aerial_combatant.description": "Vous serez plus forts en vol.",
+  "power.origins.aerial_combatant.description": "Vous serez considérablement plus fort lorsque vous volez avec des élytres.",
 
   "power.origins.throw_ender_pearl.name": "Téléportation",
-  "power.origins.throw_ender_pearl.description": "Vous pourrez lancer une perle de l'Ender n'importe quand – il n'infligera pas de dégâts.",
+  "power.origins.throw_ender_pearl.description": "Vous pouvez lancer une perle de l'Ender pour vous téléporter n'importe quand – elle n'infligera pas de dégâts.",
 
-  "power.origins.pumpkin_hate.name": "Les citrouilles effrayants",
+  "power.origins.pumpkin_hate.name": "Citrouilles effrayantes",
   "power.origins.pumpkin_hate.description": "Vous avez raison d'avoir peur des citrouilles.",
 
   "power.origins.extra_reach.name": "Mince et souple",
-  "power.origins.extra_reach.description": "Vous pourrez atteindre les choses distantes.",
+  "power.origins.extra_reach.description": "Vous pourrez atteindre les choses de plus loin.",
+
+
+  "power.origins.shulker_inventory.name": "Thésauriseur",
+  "power.origins.shulker_inventory.description": "Vous avez accès à 9 emplacements d'inventaire supplémentaires, gardant leurs contenus après la mort.",
+
+  "power.origins.natural_armor.name": "Peau robuste",
+  "power.origins.natural_armor.description": "Même sans armure, votre peau offre une protection naturelle.",
+
+  "power.origins.more_exhaustion.name": "Gros mangeur",
+  "power.origins.more_exhaustion.description": "Les tâches du quotidien vous affament plus rapidement que la moyenne.",
+
+  "power.origins.no_shield.name": "Malhabile",
+  "power.origins.no_shield.description": "La façon dont vos mains sont formées vous empêche de tenir un bouclier correctement.",
+
+  "power.origins.strong_arms.name": "Costaud",
+  "power.origins.strong_arms.description": "Vous êtes suffisamment fort pour briser de la roche naturelle à main nue.",
+
+  "power.origins.translucent.name": "Translucent(e)",
+  "power.origins.translucent.description": "Votre peau est translucente.",
 
   "category.origins": "Origines",
-  "key.origins.active_power": "Puissance actif",
-  "key.origins.view_origin": "Affiche l'origine",
+  "key.origins.active_power": "Pouvoir actif",
+  "key.origins.view_origin": "Afficher l'origine",
 
   "item.origins.orb_of_origin": "Orbe d'origine",
 
-  "enchantment.origins.water_protection": "Protection d'eau",
+  "enchantment.origins.water_protection": "Protection contre l'eau",
 
   "origins.gui.select": "Choisir",
   "origins.gui.close": "Fermer",
@@ -155,10 +177,10 @@
   "origins.gui.impact.medium": "Moyen",
   "origins.gui.impact.high": "Élevé",
 
-  "death.attack.no_water_for_gills": "%s ne s'est pas débrouillé(e) à rester mouillé(e).",
-  "death.attack.hurt_by_water": "%s à prit son bain trop longtemps.",
+  "death.attack.no_water_for_gills": "%s n'a pas réussi à rester mouillé(e).",
+  "death.attack.hurt_by_water": "%s a pris son bain trop longtemps.",
   
   "commands.origin.origin_not_found": "Origine inconnue: %s",
   "commands.origin.set.success.single": "L'origine de %s a été définie à %s.",
-  "commands.origin.set.success.multiple": "Les origines de %s a été définies à %s."
+  "commands.origin.set.success.multiple": "Les origines de %s ont été définies à %s."
 }
