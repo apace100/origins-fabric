@@ -2,7 +2,7 @@ package io.github.apace100.origins.power.factory.condition;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.PacketByteBuf;
@@ -14,38 +14,40 @@ import java.util.Optional;
 
 public class ConditionType<T> {
 
-    private final Registry<Condition<T>> conditionRegistry;
+    private final String conditionTypeName;
+    private final Registry<ConditionFactory<T>> conditionRegistry;
 
-    public ConditionType(Registry<Condition<T>> conditionRegistry) {
+    public ConditionType(String conditionTypeName, Registry<ConditionFactory<T>> conditionRegistry) {
+        this.conditionTypeName = conditionTypeName;
         this.conditionRegistry = conditionRegistry;
     }
 
-    public void write(PacketByteBuf buf, Condition.Instance conditionInstance) {
+    public void write(PacketByteBuf buf, ConditionFactory.Instance conditionInstance) {
         conditionInstance.write(buf);
     }
 
     @Environment(EnvType.CLIENT)
-    public Condition<T>.Instance read(PacketByteBuf buf) {
+    public ConditionFactory<T>.Instance read(PacketByteBuf buf) {
         Identifier type = Identifier.tryParse(buf.readString());
-        Condition<T> condition = conditionRegistry.get(type);
-        Condition<T>.Instance conditionInstance = condition.read(buf);
+        ConditionFactory<T> conditionFactory = conditionRegistry.get(type);
+        ConditionFactory<T>.Instance conditionInstance = conditionFactory.read(buf);
         return conditionInstance;
     }
 
-    public Condition<T>.Instance read(JsonElement jsonElement) {
+    public ConditionFactory<T>.Instance read(JsonElement jsonElement) {
         if(jsonElement.isJsonObject()) {
             JsonObject obj = jsonElement.getAsJsonObject();
             if(!obj.has("type")) {
-                throw new JsonParseException("Condition json requires \"type\" identifier.");
+                throw new JsonSyntaxException(conditionTypeName + " json requires \"type\" identifier.");
             }
             String typeIdentifier = JsonHelper.getString(obj, "type");
             Identifier type = Identifier.tryParse(typeIdentifier);
-            Optional<Condition<T>> optionalCondition = conditionRegistry.getOrEmpty(type);
+            Optional<ConditionFactory<T>> optionalCondition = conditionRegistry.getOrEmpty(type);
             if(!optionalCondition.isPresent()) {
-                throw new JsonParseException("Condition json \"type\" is not defined.");
+                throw new JsonSyntaxException(conditionTypeName + " json type \"" + type.toString() + "\" is not defined.");
             }
             return optionalCondition.get().read(obj);
         }
-        throw new JsonParseException("Condition has to be a JsonObject!");
+        throw new JsonSyntaxException(conditionTypeName + " has to be a JsonObject!");
     }
 }

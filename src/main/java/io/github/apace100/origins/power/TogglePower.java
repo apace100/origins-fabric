@@ -25,7 +25,7 @@ public class TogglePower extends Power implements Active {
     }
 
     public boolean isActive() {
-        return this.isActive;
+        return this.isActive && super.isActive();
     }
 
     @Override

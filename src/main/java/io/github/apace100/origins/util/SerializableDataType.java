@@ -1,22 +1,37 @@
 package io.github.apace100.origins.util;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
+import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.PowerTypeReference;
-import io.github.apace100.origins.power.factory.condition.Condition;
+import io.github.apace100.origins.power.factory.condition.ConditionFactory;
 import io.github.apace100.origins.power.factory.condition.ConditionType;
 import io.github.apace100.origins.power.factory.condition.ConditionTypes;
+import net.minecraft.block.Block;
+import net.minecraft.block.pattern.CachedBlockPosition;
+import net.minecraft.entity.EntityGroup;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.particle.ParticleType;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.tag.ServerTagManagerHolder;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
 
 import java.util.HashMap;
@@ -107,15 +122,89 @@ public class SerializableDataType<T> {
 
     public static final SerializableDataType<StatusEffect> STATUS_EFFECT = SerializableDataType.registry(StatusEffect.class, Registry.STATUS_EFFECT);
 
+    public static final SerializableDataType<List<StatusEffect>> STATUS_EFFECTS =
+        SerializableDataType.list(STATUS_EFFECT);
+
+    public static final SerializableDataType<StatusEffectInstance> STATUS_EFFECT_INSTANCE = new SerializableDataType<>(
+        StatusEffectInstance.class,
+        SerializationHelper::writeStatusEffect,
+        SerializationHelper::readStatusEffect,
+        SerializationHelper::readStatusEffect);
+
+    public static final SerializableDataType<List<StatusEffectInstance>> STATUS_EFFECT_INSTANCES =
+        SerializableDataType.list(STATUS_EFFECT_INSTANCE);
+
     public static final SerializableDataType<Tag<Fluid>> FLUID_TAG = SerializableDataType.wrap(ClassUtil.castClass(Tag.class), IDENTIFIER,
         fluid -> ServerTagManagerHolder.getTagManager().getFluids().getTagId(fluid),
         SerializationHelper::getFluidTagFromId);
 
+    public static final SerializableDataType<Tag<Block>> BLOCK_TAG = SerializableDataType.wrap(ClassUtil.castClass(Tag.class), IDENTIFIER,
+        block -> ServerTagManagerHolder.getTagManager().getBlocks().getTagId(block),
+        SerializationHelper::getBlockTagFromId);
+
     public static final SerializableDataType<Comparison> COMPARISON = SerializableDataType.enumValue(Comparison.class,
         SerializationHelper.buildEnumMap(Comparison.class, Comparison::getComparisonString));
 
-    public static final SerializableDataType<Condition<PlayerEntity>.Instance> PLAYER_CONDITION =
-        SerializableDataType.condition(ClassUtil.castClass(Condition.Instance.class), ConditionTypes.PLAYER);
+    public static final SerializableDataType<ConditionFactory<PlayerEntity>.Instance> PLAYER_CONDITION =
+        SerializableDataType.condition(ClassUtil.castClass(ConditionFactory.Instance.class), ConditionTypes.PLAYER);
+
+    public static final SerializableDataType<List<ConditionFactory<PlayerEntity>.Instance>> PLAYER_CONDITIONS =
+        SerializableDataType.list(PLAYER_CONDITION);
+
+    public static final SerializableDataType<ConditionFactory<ItemStack>.Instance> ITEM_CONDITION =
+        SerializableDataType.condition(ClassUtil.castClass(ConditionFactory.Instance.class), ConditionTypes.ITEM);
+
+    public static final SerializableDataType<List<ConditionFactory<ItemStack>.Instance>> ITEM_CONDITIONS =
+        SerializableDataType.list(ITEM_CONDITION);
+
+    public static final SerializableDataType<ConditionFactory<CachedBlockPosition>.Instance> BLOCK_CONDITION =
+        SerializableDataType.condition(ClassUtil.castClass(ConditionFactory.Instance.class), ConditionTypes.BLOCK);
+
+    public static final SerializableDataType<List<ConditionFactory<CachedBlockPosition>.Instance>> BLOCK_CONDITIONS =
+        SerializableDataType.list(BLOCK_CONDITION);
+
+    public static final SerializableDataType<ConditionFactory<Pair<DamageSource, Float>>.Instance> DAMAGE_CONDITION =
+        SerializableDataType.condition(ClassUtil.castClass(ConditionFactory.Instance.class), ConditionTypes.DAMAGE);
+
+    public static final SerializableDataType<List<ConditionFactory<Pair<DamageSource, Float>>.Instance>> DAMAGE_CONDITIONS =
+        SerializableDataType.list(DAMAGE_CONDITION);
+
+    public static final SerializableDataType<Ingredient> INGREDIENT = new SerializableDataType<>(
+        Ingredient.class,
+        (buffer, ingredient) -> ingredient.write(buffer),
+        Ingredient::fromPacket,
+        Ingredient::fromJson);
+
+    public static final SerializableDataType<Block> BLOCK = SerializableDataType.registry(Block.class, Registry.BLOCK);
+
+    public static final SerializableDataType<HudRender> HUD_RENDER = SerializableDataType.compound(HudRender.class, new
+        SerializableData()
+            .add("should_render", BOOLEAN, true)
+            .add("bar_index", INT)
+            .add("sprite_location", IDENTIFIER, Origins.identifier("textures/gui/resource_bar.png")),
+        (dataInst) -> new HudRender(dataInst.getBoolean("should_render"), dataInst.getInt("bar_index"), dataInst.getId("sprite_location")),
+        (data, inst) -> {
+            SerializableData.Instance dataInst = data.new Instance();
+            dataInst.set("should_render", inst.shouldRender());
+            dataInst.set("bar_index", inst.getBarIndex());
+            dataInst.set("sprite_location", inst.getSpriteLocation());
+            return dataInst;
+        });
+
+    public static final SerializableDataType<EntityGroup> ENTITY_GROUP =
+        SerializableDataType.mapped(EntityGroup.class, HashBiMap.create(ImmutableMap.of(
+            "default", EntityGroup.DEFAULT,
+            "undead", EntityGroup.UNDEAD,
+            "arthropod", EntityGroup.ARTHROPOD,
+            "illager", EntityGroup.ILLAGER,
+            "aquatic", EntityGroup.AQUATIC
+        )));
+
+    public static final SerializableDataType<SoundEvent> SOUND_EVENT = SerializableDataType.registry(SoundEvent.class, Registry.SOUND_EVENT);
+
+    public static final SerializableDataType<EntityType<?>> ENTITY_TYPE = SerializableDataType.registry(ClassUtil.castClass(EntityType.class), Registry.ENTITY_TYPE);
+
+    public static final SerializableDataType<ParticleType<?>> PARTICLE_TYPE = SerializableDataType.registry(ClassUtil.castClass(ParticleType.class), Registry.PARTICLE_TYPE);
 
     private final Class<T> dataClass;
     private final BiConsumer<PacketByteBuf, T> send;
@@ -238,7 +327,31 @@ public class SerializableDataType<T> {
             });
     }
 
-    public static <T> SerializableDataType<Condition<T>.Instance> condition(Class<Condition<T>.Instance> dataClass, ConditionType<T> conditionType) {
+    public static <T> SerializableDataType<T> mapped(Class<T> dataClass, BiMap<String, T> map) {
+        return new SerializableDataType<>(dataClass,
+            (buf, t) -> buf.writeString(map.inverse().get(t)),
+            (buf) -> map.get(buf.readString(32767)),
+            (json) -> {
+                if(json.isJsonPrimitive()) {
+                    JsonPrimitive primitive = json.getAsJsonPrimitive();
+                    if(primitive.isString()) {
+                        String name = primitive.getAsString();
+                        try {
+                            if(map == null || !map.containsKey(name)) {
+                                throw new IllegalArgumentException();
+                            }
+                            T t = map.get(name);
+                            return t;
+                        } catch (IllegalArgumentException e2) {
+                            throw new JsonSyntaxException("Expected value to be a string of: " + map.keySet().stream().reduce((s0, s1) -> s0 + ", " + s1));
+                        }
+                    }
+                }
+                throw new JsonSyntaxException("Expected value to be either a string.");
+            });
+    }
+
+    public static <T> SerializableDataType<ConditionFactory<T>.Instance> condition(Class<ConditionFactory<T>.Instance> dataClass, ConditionType<T> conditionType) {
         return new SerializableDataType<>(dataClass, conditionType::write, conditionType::read, conditionType::read);
     }
 

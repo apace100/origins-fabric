@@ -1,12 +1,8 @@
 {
   "type": "origins:modify_harvest",
   "allow": true,
-  "block_condition": [
-    [
-      {
-        "type": "origins:is_in_tag",
-        "tag": "origins:natural_stone"
-      }
-    ]
-  ]
+  "block_condition": {
+    "type": "origins:is_in_tag",
+    "tag": "origins:natural_stone"
+  }
 }

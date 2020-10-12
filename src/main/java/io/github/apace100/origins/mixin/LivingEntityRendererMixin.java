@@ -42,7 +42,8 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<LivingEnt
                 info.cancel();
             }
         }
-        if(OriginComponent.getPowers(livingEntity, InvisibilityPower.class).stream().anyMatch(InvisibilityPower::shouldRenderArmor)) {
+        List<InvisibilityPower> invisibilityPowers = OriginComponent.getPowers(livingEntity, InvisibilityPower.class);
+        if(invisibilityPowers.size() > 0 && invisibilityPowers.stream().noneMatch(InvisibilityPower::shouldRenderArmor)) {
             info.cancel();
         }
     }

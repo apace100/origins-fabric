@@ -9,13 +9,13 @@ import net.minecraft.util.Identifier;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
-public class Condition<T> {
+public class ConditionFactory<T> {
 
     private final Identifier identifier;
     protected SerializableData data;
     private final BiFunction<SerializableData.Instance, T, Boolean> condition;
 
-    public Condition(Identifier identifier, SerializableData data, BiFunction<SerializableData.Instance, T, Boolean> condition) {
+    public ConditionFactory(Identifier identifier, SerializableData data, BiFunction<SerializableData.Instance, T, Boolean> condition) {
         this.identifier = identifier;
         this.condition = condition;
         this.data = data;
@@ -28,7 +28,6 @@ public class Condition<T> {
 
         private Instance(SerializableData.Instance data) {
             this.dataInstance = data;
-            data.debugPrint();
         }
 
         public final boolean test(T t) {

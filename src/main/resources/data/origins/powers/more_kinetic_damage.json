@@ -5,8 +5,9 @@
     "value": 0.5,
     "operation": "multiply_base"
   },
-  "damage_condition": [
-    [
+  "damage_condition": {
+    "type": "origins:or",
+    "conditions": [
       {
         "type": "origins:name",
         "name": "fall"
@@ -16,5 +17,5 @@
         "name": "flyIntoWall"
       }
     ]
-  ]
+  }
 }

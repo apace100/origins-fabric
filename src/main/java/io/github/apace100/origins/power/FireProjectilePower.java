@@ -1,6 +1,7 @@
 package io.github.apace100.origins.power;
 
 import io.github.apace100.origins.mixin.EyeHeightAccess;
+import io.github.apace100.origins.util.HudRender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,8 +18,8 @@ public class FireProjectilePower extends ActiveCooldownPower {
     private final float divergence;
     private final SoundEvent soundEvent;
 
-    public FireProjectilePower(PowerType<?> type, PlayerEntity player, int cooldownDuration, int barIndex, EntityType entityType, int projectileCount, float speed, float divergence, SoundEvent soundEvent) {
-        super(type, player, cooldownDuration, barIndex, null);
+    public FireProjectilePower(PowerType<?> type, PlayerEntity player, int cooldownDuration, HudRender hudRender, EntityType entityType, int projectileCount, float speed, float divergence, SoundEvent soundEvent) {
+        super(type, player, cooldownDuration, hudRender, null);
         this.entityType = entityType;
         this.projectileCount = projectileCount;
         this.speed = speed;

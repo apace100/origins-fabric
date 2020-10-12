@@ -10,10 +10,10 @@ import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginManager;
 import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.power.factory.PowerFactorySerializers;
+import io.github.apace100.origins.power.factory.condition.BlockConditions;
+import io.github.apace100.origins.power.factory.condition.DamageConditions;
+import io.github.apace100.origins.power.factory.condition.ItemConditions;
 import io.github.apace100.origins.power.factory.condition.PlayerConditions;
-import io.github.apace100.origins.power.factory.condition.block.BlockConditionSerializers;
-import io.github.apace100.origins.power.factory.condition.damage.DamageConditionSerializers;
-import io.github.apace100.origins.power.factory.condition.item.ItemConditionSerializers;
 import io.github.apace100.origins.registry.*;
 import io.github.apace100.origins.util.ChoseOriginCriterion;
 import io.github.apace100.origins.util.ElytraPowerFallFlying;
@@ -46,11 +46,10 @@ public class Origins implements ModInitializer {
 		ModEntities.register();
 		ModLoot.register();
 		PowerFactorySerializers.register();
-		//PlayerConditionSerializers.register();
 		PlayerConditions.register();
-		ItemConditionSerializers.register();
-		BlockConditionSerializers.register();
-		DamageConditionSerializers.register();
+		ItemConditions.register();
+		BlockConditions.register();
+		DamageConditions.register();
 		Origin.init();
 		FallFlyingLib.registerAccessor((le) -> new ElytraPowerFallFlying(le));
 		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {

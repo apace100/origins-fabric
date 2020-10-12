@@ -3,16 +3,12 @@
   "blacklist": true,
   "render_type": "remove_blocks",
   "view_distance": 3,
-  "block_condition": [[
-    {
-      "type": "origins:is_in_tag",
-      "tag": "origins:unphasable"
-    }
-  ]],
-  "condition": [[
-    {
-      "type": "origins:power_active",
-      "power": "origins:phantomize"
-    }
-  ]]
+  "block_condition": {
+    "type": "origins:is_in_tag",
+    "tag": "origins:unphasable"
+  },
+  "condition": {
+    "type": "origins:power_active",
+    "power": "origins:phantomize"
+  }
 }

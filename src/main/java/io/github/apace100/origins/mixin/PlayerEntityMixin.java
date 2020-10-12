@@ -59,13 +59,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
         return modified;
     }
 
-    /*@Inject(at = @At("HEAD"), method = "isUsingEffectiveTool", cancellable = true)
-    private void modifyEffectiveTool(BlockState state, CallbackInfoReturnable<Boolean> info) {
-        if(state.getBlock().isIn(ModTags.NATURAL_STONE) && PowerTypes.STRONG_ARMS.isActive(this)) {
-            info.setReturnValue(true);
-        }
-    }*/
-
     // ModifyDamageDealt
     @ModifyVariable(method = "attack", at = @At(value = "STORE", ordinal = 0), name = "f", ordinal = 0)
     public float modifyDamage(float f) {
@@ -138,6 +131,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
                 component.getPowers(StackingStatusEffectPower.class, true).forEach(StackingStatusEffectPower::tick);
             }
         }
+
         if(PowerTypes.WATER_BREATHING.isActive(this)) {
             if(!this.isSubmergedIn(FluidTags.WATER) && !this.hasStatusEffect(StatusEffects.WATER_BREATHING) && !this.hasStatusEffect(StatusEffects.CONDUIT_POWER)) {
                 if(!this.isRainingAtPlayerPosition()) {
@@ -145,7 +139,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
                     this.setAir(this.getNextAirUnderwater(this.getAir()) - landGain);
                     if (this.getAir() == -20) {
                         this.setAir(0);
-                        Vec3d vec3d = this.getVelocity();
 
                         for(int i = 0; i < 8; ++i) {
                             double f = this.random.nextDouble() - this.random.nextDouble();

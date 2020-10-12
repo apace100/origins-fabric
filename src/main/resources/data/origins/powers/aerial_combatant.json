@@ -5,11 +5,7 @@
     "value": 2,
     "operation": "multiply_base"
   },
-  "condition": [
-    [
-      {
-        "type": "origins:is_fall_flying"
-      }
-    ]
-  ]
+  "condition": {
+    "type": "origins:is_fall_flying"
+  }
 }

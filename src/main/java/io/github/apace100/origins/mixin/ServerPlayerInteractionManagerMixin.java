@@ -24,7 +24,6 @@ public class ServerPlayerInteractionManagerMixin {
     @Inject(method = "tryBreakBlock", at = @At("HEAD"))
     private void cacheBlock(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         this.cachedBlockPosition = new CachedBlockPosition(world, pos, false);
-        cachedBlockPosition.getBlockState();
     }
 
     @ModifyVariable(method = "tryBreakBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;postMine(Lnet/minecraft/world/World;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/player/PlayerEntity;)V"), ordinal = 1)

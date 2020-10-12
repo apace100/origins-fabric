@@ -5,9 +5,7 @@
     "value": 0.5,
     "operation": "multiply_base"
   },
-  "condition": [[
-    {
-      "type": "origins:is_sprinting"
-    }
-  ]]
+  "condition": {
+    "type": "origins:is_sprinting"
+  }
 }

@@ -1,13 +1,9 @@
 {
   "type": "origins:prevent_item_use",
-  "item_condition": [
-    [
-      {
-        "type": "origins:ingredient",
-        "ingredient":{
-          "item": "minecraft:shield"
-        }
-      }
-    ]
-  ]
+  "item_condition": {
+    "type": "origins:ingredient",
+    "ingredient": {
+      "item": "minecraft:shield"
+    }
+  }
 }

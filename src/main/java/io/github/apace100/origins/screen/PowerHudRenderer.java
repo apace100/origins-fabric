@@ -1,11 +1,11 @@
 package io.github.apace100.origins.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.OriginsClient;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.HudRendered;
 import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.util.HudRender;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -16,12 +16,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.util.Identifier;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class PowerHudRenderer extends DrawableHelper {
-
-    public static final Identifier OVERLAY_TEXTURE = new Identifier(Origins.MODID, "textures/gui/resource_bar.png");
 
     @Environment(EnvType.CLIENT)
     public void register() {
@@ -41,15 +40,21 @@ public class PowerHudRenderer extends DrawableHelper {
                 int barWidth = 71;
                 int barHeight = 5;
                 int iconSize = 8;
-                List<HudRendered> hudPowers = component.getPowers().stream().filter(p -> p instanceof HudRendered).map(p -> (HudRendered)p).collect(Collectors.toList());
-                if(hudPowers.size() > 0) {
-                    client.getTextureManager().bindTexture(OVERLAY_TEXTURE);
-                }
+                List<HudRendered> hudPowers = component.getPowers().stream().filter(p -> p instanceof HudRendered).map(p -> (HudRendered)p).sorted(
+                    Comparator.comparing(hudRenderedA -> hudRenderedA.getRenderSettings().getSpriteLocation())
+                ).collect(Collectors.toList());
+                Identifier lastLocation = null;
                 RenderSystem.color3f(1f, 1f, 1f);
                 for (HudRendered hudPower : hudPowers) {
-                    if(hudPower.shouldRender()) {
+                    HudRender render = hudPower.getRenderSettings();
+                    if(render.shouldRender() && hudPower.shouldRender()) {
+                        Identifier currentLocation = render.getSpriteLocation();
+                        if(currentLocation != lastLocation) {
+                            client.getTextureManager().bindTexture(currentLocation);
+                            lastLocation = currentLocation;
+                        }
                         drawTexture(matrices, x, y, 0, 0, barWidth, barHeight);
-                        int v = 10 + hudPower.getBarIndex() * 10;
+                        int v = 10 + render.getBarIndex() * 10;
                         int w = (int)(hudPower.getFill() * barWidth);
                         drawTexture(matrices, x, y, 0, v, w, barHeight);
                         setZOffset(getZOffset() + 1);

@@ -2,14 +2,16 @@
   "type": "origins:burn",
   "interval": 20,
   "burn_duration": 6,
-  "condition": [[
-    {
-      "type": "origins:is_in_daylight"
-    }
-  ], [
-    {
-      "type": "origins:is_invisible",
-      "inverted": true
-    }
-  ]]
+  "condition": {
+    "type": "origins:and",
+    "conditions": [
+      {
+        "type": "origins:is_in_daylight"
+      },
+      {
+        "type": "origins:is_invisible",
+        "inverted": true
+      }
+    ]
+  }
 }

@@ -1,6 +1,6 @@
 {
   "type": "origins:prevent_sleep",
-  "bed_condition": {
+  "block_condition": {
     "type": "origins:height",
     "comparison": "<",
     "compare_to": 86

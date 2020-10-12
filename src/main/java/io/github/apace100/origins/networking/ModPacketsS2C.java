@@ -26,7 +26,7 @@ public class ModPacketsS2C {
 
     @Environment(EnvType.CLIENT)
     public static void register() {
-        ClientSidePacketRegistry.INSTANCE.register(ModPackets.OPEN_ORIGIN_SCREEN, ((packetContext, packetByteBuf) -> {
+        ClientSidePacketRegistry.INSTANCE.register(ModPackets.OPEN_ORIGIN_SCREEN, (packetContext, packetByteBuf) -> {
             boolean showDirtBackground = packetByteBuf.readBoolean();
             packetContext.getTaskQueue().execute(() -> {
                 ArrayList<OriginLayer> layers = new ArrayList<>();
@@ -39,8 +39,8 @@ public class ModPacketsS2C {
                 Collections.sort(layers);
                 MinecraftClient.getInstance().openScreen(new ChooseOriginScreen(layers, 0, showDirtBackground));
             });
-        }));
-        ClientSidePacketRegistry.INSTANCE.register(ModPackets.ORIGIN_LIST, (((packetContext, packetByteBuf) -> {
+        });
+        ClientSidePacketRegistry.INSTANCE.register(ModPackets.ORIGIN_LIST, (packetContext, packetByteBuf) -> {
             Identifier[] ids = new Identifier[packetByteBuf.readInt()];
             Origin[] origins = new Origin[ids.length];
             for(int i = 0; i < origins.length; i++) {
@@ -53,8 +53,8 @@ public class ModPacketsS2C {
                     OriginRegistry.register(ids[i], origins[i]);
                 }
             });
-        })));
-        ClientSidePacketRegistry.INSTANCE.register(ModPackets.LAYER_LIST, ((((packetContext, packetByteBuf) -> {
+        });
+        ClientSidePacketRegistry.INSTANCE.register(ModPackets.LAYER_LIST, (packetContext, packetByteBuf) -> {
             int layerCount = packetByteBuf.readInt();
             OriginLayer[] layers = new OriginLayer[layerCount];
             for(int i = 0; i < layerCount; i++) {
@@ -66,14 +66,14 @@ public class ModPacketsS2C {
                     OriginLayers.add(layers[i]);
                 }
             });
-        }))));
-        ClientSidePacketRegistry.INSTANCE.register(ModPackets.POWER_LIST, (((((packetContext, packetByteBuf) -> {
+        });
+        ClientSidePacketRegistry.INSTANCE.register(ModPackets.POWER_LIST, (packetContext, packetByteBuf) -> {
             int powerCount = packetByteBuf.readInt();
             HashMap<Identifier, PowerFactory.Instance> factories = new HashMap<>();
             for(int i = 0; i < powerCount; i++) {
                 Identifier powerId = packetByteBuf.readIdentifier();
                 Identifier factoryId = packetByteBuf.readIdentifier();
-                PowerFactory factory = ModRegistries.POWER_FACTORY.get(factoryId);//PowerFactory.read(packetByteBuf);
+                PowerFactory factory = ModRegistries.POWER_FACTORY.get(factoryId);
                 PowerFactory.Instance factoryInstance = factory.read(packetByteBuf);
                 factories.put(powerId, factoryInstance);
             }
@@ -83,6 +83,6 @@ public class ModPacketsS2C {
                     PowerTypeRegistry.register(factory.getKey(), new PowerType(factory.getKey(), factory.getValue()));
                 }
             });
-        })))));
+        });
     }
 }

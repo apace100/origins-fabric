@@ -15,6 +15,7 @@
     "ElytraFeatureRendererMixin",
     "EntityMixin",
     "EntityShapeContextMixin",
+    "EyeHeightAccess",
     "ItemStackMixin",
     "LivingEntityMixin",
     "LoginMixin",
@@ -23,11 +24,14 @@
     "PlayerScreenHandlerMixin",
     "PotionItemMixin",
     "RegistryAccessor",
-    "ServerPlayerEntityMixin"
+    "ServerPlayerEntityMixin",
+    "ServerPlayerInteractionManagerAccessor",
+    "ServerPlayerInteractionManagerMixin"
   ],
   "client": [
     "BackgroundRendererMixin",
     "ClientPlayerEntityMixin",
+    "ClientPlayerInteractionManagerAccessor",
     "ClientPlayNetworkHandlerMixin",
     "GameRendererMixin",
     "LightmapTextureManagerMixin",

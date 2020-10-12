@@ -4,7 +4,14 @@ import net.minecraft.entity.player.PlayerEntity;
 
 public class ElytraFlightPower extends Power {
 
-    public ElytraFlightPower(PowerType<?> type, PlayerEntity player) {
+    private final boolean renderElytra;
+
+    public ElytraFlightPower(PowerType<?> type, PlayerEntity player, boolean renderElytra) {
         super(type, player);
+        this.renderElytra = renderElytra;
+    }
+
+    public boolean shouldRenderElytra() {
+        return renderElytra;
     }
 }

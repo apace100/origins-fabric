@@ -10,4 +10,7 @@ public interface ServerPlayerInteractionManagerAccessor {
 
     @Accessor
     BlockPos getMiningPos();
+
+    @Accessor
+    boolean getMining();
 }

@@ -1,6 +1,7 @@
 package io.github.apace100.origins.power;
 
 import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.util.HudRender;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.LongTag;
 import net.minecraft.nbt.Tag;
@@ -10,18 +11,12 @@ public class CooldownPower extends Power implements HudRendered {
     private long lastUseTime;
 
     public final int cooldownDuration;
-    private final int barIndex;
-    private final boolean shouldRender;
+    private final HudRender hudRender;
 
-    public CooldownPower(PowerType<?> type, PlayerEntity player, int cooldownDuration, int barIndex) {
-        this(type, player, cooldownDuration, barIndex, true);
-    }
-
-    public CooldownPower(PowerType<?> type, PlayerEntity player, int cooldownDuration, int barIndex, boolean shouldRender) {
+    public CooldownPower(PowerType<?> type, PlayerEntity player, int cooldownDuration, HudRender hudRender) {
         super(type, player);
         this.cooldownDuration = cooldownDuration;
-        this.barIndex = barIndex;
-        this.shouldRender = shouldRender;
+        this.hudRender = hudRender;
     }
 
     public boolean canUse() {
@@ -49,8 +44,8 @@ public class CooldownPower extends Power implements HudRendered {
     }
 
     @Override
-    public int getBarIndex() {
-        return barIndex;
+    public HudRender getRenderSettings() {
+        return hudRender;
     }
 
     @Override
@@ -60,6 +55,6 @@ public class CooldownPower extends Power implements HudRendered {
 
     @Override
     public boolean shouldRender() {
-        return shouldRender && barIndex > 0 && (player.getEntityWorld().getTime() - lastUseTime) <= cooldownDuration;
+        return (player.getEntityWorld().getTime() - lastUseTime) <= cooldownDuration;
     }
 }

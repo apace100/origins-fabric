@@ -17,12 +17,10 @@
       "show_icon": true
     }
   ],
-  "condition": [[
-    {
-      "type": "origins:block_collision",
-      "offset_x": 0,
-      "offset_y": 1,
-      "offset_z": 0
-    }
-  ]]
+  "condition": {
+    "type": "origins:block_collision",
+    "offset_x": 0,
+    "offset_y": 1,
+    "offset_z": 0
+  }
 }

@@ -5,14 +5,13 @@
     "value": 0,
     "operation": "multiply_total"
   },
-  "block_condition": [
-    [
+  "block_condition": {
+    "type": "origins:and",
+    "conditions": [
       {
         "type": "origins:is_in_tag",
         "tag": "origins:natural_stone"
-      }
-    ],
-    [
+      },
       {
         "type": "origins:adjacent",
         "adjacent_condition": {
@@ -22,12 +21,11 @@
         "comparison": ">",
         "compare_to": 2
       }
-    ]],
-  "condition": [[
-    {
-      "type": "origins:status_effect",
-      "effect": "minecraft:strength",
-      "inverted": true
-    }
-  ]]
+    ]
+  },
+  "condition": {
+    "type": "origins:status_effect",
+    "effect": "minecraft:strength",
+    "inverted": true
+  }
 }

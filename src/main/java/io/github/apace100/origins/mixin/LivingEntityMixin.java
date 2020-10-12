@@ -91,7 +91,7 @@ public abstract class LivingEntityMixin extends Entity {
     // CLIMBING
     @Inject(at = @At("HEAD"), method = "isClimbing", cancellable = true)
     public void doSpiderClimbing(CallbackInfoReturnable<Boolean> info) {
-        if(PowerTypes.CLIMBING.isActive(this) && PowerTypes.CLIMBING.get(this).isActive()) {
+        if(PowerTypes.CLIMBING.isActive(this)) {
             if(this.horizontalCollision) {
                 info.setReturnValue(true);
             }
@@ -110,7 +110,7 @@ public abstract class LivingEntityMixin extends Entity {
     @ModifyConstant(method = "travel", constant = @Constant(floatValue = 0.02F, ordinal = 0))
     public float modifyBaseUnderwaterSpeed(float in) {
         float f = in;
-        for (SwimSpeedPower p : OriginComponent.getPowers(this, SwimSpeedPower.class)) {
+        for (ModifySwimSpeedPower p : OriginComponent.getPowers(this, ModifySwimSpeedPower.class)) {
             f = p.apply(in, f);
         }
         return f;

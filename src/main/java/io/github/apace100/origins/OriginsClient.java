@@ -4,6 +4,7 @@ import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.networking.ModPacketsS2C;
 import io.github.apace100.origins.power.Active;
+import io.github.apace100.origins.power.factory.condition.PlayerConditionsClient;
 import io.github.apace100.origins.registry.ModBlocks;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModEntities;
@@ -47,6 +48,8 @@ public class OriginsClient implements ClientModInitializer {
             (dispatcher, context) -> new FlyingItemEntityRenderer(dispatcher, context.getItemRenderer()));
 
         ModPacketsS2C.register();
+
+        PlayerConditionsClient.register();
 
         AutoConfig.register(OriginsConfig.class, Toml4jConfigSerializer::new);
         config = AutoConfig.getConfigHolder(OriginsConfig.class).getConfig();

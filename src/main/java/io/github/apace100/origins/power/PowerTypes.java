@@ -1,9 +1,6 @@
 package io.github.apace100.origins.power;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.power.factory.PowerFactory;
 import io.github.apace100.origins.registry.ModRegistries;
@@ -17,6 +14,7 @@ import net.minecraft.util.profiler.Profiler;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResourceReloadListener {
     //public static final PowerType<InvulnerablePower> INVULNERABILITY;
@@ -178,8 +176,11 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
                 try {
                     JsonObject jo = je.getAsJsonObject();
                     Identifier factoryId = Identifier.tryParse(JsonHelper.getString(jo, "type"));
-                    PowerFactory factory = ModRegistries.POWER_FACTORY.get(factoryId);//PowerFactory.read(je);
-                    PowerFactory.Instance factoryInstance = factory.read(jo);
+                    Optional<PowerFactory> optionalFactory = ModRegistries.POWER_FACTORY.getOrEmpty(factoryId);
+                    if(!optionalFactory.isPresent()) {
+                        throw new JsonSyntaxException("Power type \"" + factoryId.toString() + "\" is not defined.");
+                    }
+                    PowerFactory.Instance factoryInstance = optionalFactory.get().read(jo);
                     PowerType type = new PowerType(id, factoryInstance);
                     int priority = JsonHelper.getInt(jo, "loading_priority", 0);
                     String name = JsonHelper.getString(jo, "name", "");

@@ -1,19 +1,20 @@
 package io.github.apace100.origins.power;
 
+import io.github.apace100.origins.util.HudRender;
 import net.minecraft.entity.player.PlayerEntity;
 
 public class HudRenderedVariableIntPower extends VariableIntPower implements HudRendered {
 
-    private final int barIndex;
+    private final HudRender hudRender;
 
-    public HudRenderedVariableIntPower(PowerType<?> type, PlayerEntity player, int barIndex, int startValue, int min, int max) {
+    public HudRenderedVariableIntPower(PowerType<?> type, PlayerEntity player, HudRender hudRender, int startValue, int min, int max) {
         super(type, player, startValue, min, max);
-        this.barIndex = barIndex;
+        this.hudRender = hudRender;
     }
 
     @Override
-    public int getBarIndex() {
-        return barIndex;
+    public HudRender getRenderSettings() {
+        return hudRender;
     }
 
     @Override

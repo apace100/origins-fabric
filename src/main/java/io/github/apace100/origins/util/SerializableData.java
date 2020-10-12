@@ -3,11 +3,11 @@ package io.github.apace100.origins.util;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
-import io.github.apace100.origins.Origins;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
-import java.util.Map;
+import java.util.function.Function;
 
 public class SerializableData {
 
@@ -20,6 +20,11 @@ public class SerializableData {
 
     public <T> SerializableData add(String name, SerializableDataType<T> type, T defaultValue) {
         dataFields.put(name, new Entry<>(type, defaultValue));
+        return this;
+    }
+
+    public <T> SerializableData addFunctionedDefault(String name, SerializableDataType<T> type, Function<Instance, T> defaultFunction) {
+        dataFields.put(name, new Entry<>(type, defaultFunction));
         return this;
     }
 
@@ -62,8 +67,7 @@ public class SerializableData {
                 }
             });
         } catch(JsonParseException | ClassCastException e) {
-            throw new JsonSyntaxException("A problem occured while reading data of "
-                + getClass().getSimpleName() + ": " + e.getMessage());
+            throw new JsonSyntaxException(e.getClass().getSimpleName() + ": " + e.getMessage());
         }
         return instance;
     }
@@ -73,15 +77,6 @@ public class SerializableData {
 
         Instance() {
 
-        }
-
-        public void debugPrint() {
-            Origins.LOGGER.info("Debug Printing Data Instance:");
-            Origins.LOGGER.info("-----------------------------");
-            for (Map.Entry<String, Object> entry: data.entrySet()) {
-                Origins.LOGGER.info(entry.getKey() + "\t=\t" + entry.getValue().toString());
-            }
-            Origins.LOGGER.info("-----------------------------");
         }
 
         public boolean isPresent(String name) {
@@ -124,23 +119,55 @@ public class SerializableData {
         public String getString(String name) {
             return (String)get(name);
         }
+
+        public Identifier getId(String name) {
+            return (Identifier)get(name);
+        }
     }
 
     private static class Entry<T> {
         public final SerializableDataType<T> dataType;
-        public final Object defaultValue;
-        public final boolean hasDefault;
+        public final T defaultValue;
+        private final Function<Instance, T> defaultFunction;
+        private final boolean hasDefault;
+        private final boolean hasDefaultFunction;
 
         public Entry(SerializableDataType<T> dataType) {
             this.dataType = dataType;
             this.defaultValue = null;
+            this.defaultFunction = null;
             this.hasDefault = false;
+            this.hasDefaultFunction = false;
         }
 
         public Entry(SerializableDataType<T> dataType, T defaultValue) {
             this.dataType = dataType;
             this.defaultValue = defaultValue;
+            this.defaultFunction = null;
             this.hasDefault = true;
+            this.hasDefaultFunction = false;
+        }
+
+        public Entry(SerializableDataType<T> dataType, Function<Instance, T> defaultFunction) {
+            this.dataType = dataType;
+            this.defaultValue = null;
+            this.defaultFunction = defaultFunction;
+            this.hasDefault = false;
+            this.hasDefaultFunction = true;
+        }
+
+        public boolean hasDefault() {
+            return hasDefault || hasDefaultFunction;
+        }
+
+        public T getDefault(Instance dataInstance) {
+            if(hasDefaultFunction) {
+                return defaultFunction.apply(dataInstance);
+            } else if(hasDefault) {
+                return defaultValue;
+            } else {
+                throw new IllegalStateException("Tried to access default value of serializable data entry, when no default was provided.");
+            }
         }
     }
 }
