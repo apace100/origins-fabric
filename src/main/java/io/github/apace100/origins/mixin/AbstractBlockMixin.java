@@ -18,28 +18,7 @@ public abstract class AbstractBlockMixin {
     @Inject(at = @At("RETURN"), method = "calcBlockBreakingDelta", cancellable = true)
     private void modifyBlockBreakSpeed(BlockState state, PlayerEntity player, BlockView world, BlockPos pos, CallbackInfoReturnable<Float> info) {
         float base = info.getReturnValue();
-        float modified = base;
-        for (ModifyBreakSpeedPower power : OriginComponent.getPowers(player, ModifyBreakSpeedPower.class)) {
-            if(power.doesApply(player.world, pos)) {
-                modified = power.apply(base, modified);
-            }
-        }
-        info.setReturnValue(modified);/*
-        if(state.getBlock().isIn(ModTags.NATURAL_STONE)) {
-            int adjacent = 0;
-            for(Direction d : Direction.values()) {
-                if(world.getBlockState(pos.offset(d)).getBlock().isIn(ModTags.NATURAL_STONE)) {
-                    adjacent++;
-                }
-            }
-            if(adjacent > 2) {
-                if(PowerTypes.WEAK_ARMS.isActive(player) && !player.hasStatusEffect(StatusEffects.STRENGTH)) {
-                    info.setReturnValue(0F);
-                }
-            }
-            if(PowerTypes.STRONG_ARMS.isActive(player) && !player.inventory.getMainHandStack().isEffectiveOn(state)) {
-                info.setReturnValue(0.09F);
-            }
-        }*/
+        float modified = OriginComponent.modify(player, ModifyBreakSpeedPower.class, base);
+        info.setReturnValue(modified);
     }
 }

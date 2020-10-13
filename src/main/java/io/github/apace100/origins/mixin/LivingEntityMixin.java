@@ -25,6 +25,8 @@ import java.util.List;
 public abstract class LivingEntityMixin extends Entity {
     @Shadow protected abstract float getJumpVelocity();
 
+    @Shadow public abstract float getMovementSpeed();
+
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
     }
@@ -34,6 +36,16 @@ public abstract class LivingEntityMixin extends Entity {
         //if(PowerTypes.LAVA_STRIDER.isActive(this) && fluid.isIn(FluidTags.LAVA)) {
         //    info.setReturnValue(true);
         //}
+    }
+
+    // ModifyLavaSpeedPower
+    @ModifyConstant(method = "travel", constant = {
+        @Constant(doubleValue = 0.5D, ordinal = 0),
+        @Constant(doubleValue = 0.5D, ordinal = 1),
+        @Constant(doubleValue = 0.5D, ordinal = 2)
+    })
+    private double modifyLavaSpeed(double original) {
+        return OriginComponent.modify(this, ModifyLavaSpeedPower.class, original);
     }
 
     // SetEntityGroupPower
@@ -55,10 +67,7 @@ public abstract class LivingEntityMixin extends Entity {
     @Inject(at = @At("HEAD"), method = "getJumpVelocity", cancellable = true)
     private void modifyJumpVelocity(CallbackInfoReturnable<Float> info) {
         float base = 0.42F * this.getJumpVelocityMultiplier();
-        float modified = base;
-        for (ModifyJumpPower mjp : OriginComponent.getPowers(this, ModifyJumpPower.class)) {
-            modified = mjp.apply(base, modified);
-        }
+        float modified = OriginComponent.modify(this, ModifyJumpPower.class, base);
         info.setReturnValue(modified);
     }
 
@@ -76,14 +85,7 @@ public abstract class LivingEntityMixin extends Entity {
     @ModifyVariable(method = "damage", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;despawnCounter:I"), ordinal = 0, argsOnly = true)
     private float modifyDamageAmount(float originalAmount, DamageSource source, float amount) {
         if((Object)this instanceof PlayerEntity) {
-            OriginComponent component = ModComponents.ORIGIN.get(this);
-            float f = originalAmount;
-            for (ModifyDamageTakenPower p : component.getPowers(ModifyDamageTakenPower.class)) {
-                if (p.doesApply(source, originalAmount)) {
-                    f = p.apply(originalAmount, f);
-                }
-            }
-            return f;
+            return OriginComponent.modify(this, ModifyDamageTakenPower.class, originalAmount, p -> p.doesApply(source, amount));
         }
         return originalAmount;
     }
@@ -109,11 +111,7 @@ public abstract class LivingEntityMixin extends Entity {
     // SWIM_SPEED
     @ModifyConstant(method = "travel", constant = @Constant(floatValue = 0.02F, ordinal = 0))
     public float modifyBaseUnderwaterSpeed(float in) {
-        float f = in;
-        for (ModifySwimSpeedPower p : OriginComponent.getPowers(this, ModifySwimSpeedPower.class)) {
-            f = p.apply(in, f);
-        }
-        return f;
+        return OriginComponent.modify(this, ModifySwimSpeedPower.class, in);
     }
 
     // LIKE_WATER

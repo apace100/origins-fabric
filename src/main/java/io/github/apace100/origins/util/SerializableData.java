@@ -3,6 +3,7 @@ package io.github.apace100.origins.util;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
@@ -122,6 +123,10 @@ public class SerializableData {
 
         public Identifier getId(String name) {
             return (Identifier)get(name);
+        }
+
+        public EntityAttributeModifier getModifier(String name) {
+            return (EntityAttributeModifier)get(name);
         }
     }
 

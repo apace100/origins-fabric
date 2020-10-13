@@ -10,7 +10,6 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
@@ -34,13 +33,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
 
     @Shadow public abstract boolean damage(DamageSource source, float amount);
 
-    @Shadow protected boolean isSubmergedInWater;
-
-    @Shadow public abstract HungerManager getHungerManager();
-
     @Shadow public abstract EntityDimensions getDimensions(EntityPose pose);
-
-    @Shadow public abstract void startFallFlying();
 
     @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
 
@@ -48,29 +41,30 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
         super(entityType, world);
     }
 
+    @Inject(method = "updateSwimming", at = @At("TAIL"))
+    private void updateSwimmingPower(CallbackInfo ci) {
+        if(OriginComponent.hasPower(this, SwimmingPower.class)) {
+            this.setSwimming(this.isSprinting() && !this.hasVehicle());
+            this.touchingWater = this.isSwimming();
+            if (this.isSwimming()) {
+                this.fallDistance = 0.0F;
+                Vec3d look = this.getRotationVector();
+                move(MovementType.SELF, new Vec3d(look.x/4, look.y/4, look.z/4));
+            }
+        }
+    }
+
     // ModifyExhaustion
     @ModifyVariable(at = @At("HEAD"), method = "addExhaustion", ordinal = 0, name = "exhaustion")
     private float modifyExhaustion(float exhaustionIn) {
-        OriginComponent component = ModComponents.ORIGIN.get(this);
-        float modified = exhaustionIn;
-        for (ModifyExhaustionPower p : component.getPowers(ModifyExhaustionPower.class)) {
-            modified = p.apply(exhaustionIn, modified);
-        }
-        return modified;
+        return OriginComponent.modify(this, ModifyExhaustionPower.class, exhaustionIn);
     }
 
     // ModifyDamageDealt
     @ModifyVariable(method = "attack", at = @At(value = "STORE", ordinal = 0), name = "f", ordinal = 0)
     public float modifyDamage(float f) {
-        OriginComponent component = ModComponents.ORIGIN.get(this);
         DamageSource source = DamageSource.player((PlayerEntity)(Object)this);
-        float base = f;
-        for (ModifyDamageDealtPower p : component.getPowers(ModifyDamageDealtPower.class)) {
-            if (p.doesApply(source, base)) {
-                f = p.apply(base, f);
-            }
-        }
-        return f;
+        return OriginComponent.modify(this, ModifyDamageDealtPower.class, f, p -> p.doesApply(source, f));
     }
 
     // NO_COBWEB_SLOWDOWN
@@ -129,6 +123,23 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
             if(this.age % 10 == 0) {
                 component.getPowers(SimpleStatusEffectPower.class).forEach(SimpleStatusEffectPower::applyEffects);
                 component.getPowers(StackingStatusEffectPower.class, true).forEach(StackingStatusEffectPower::tick);
+                /*if(PowerTypes.HEAT.isActive(this)) {
+                    VariableIntPower heat = component.getPower(PowerTypes.HEAT);
+                    int value = 0;
+                    if(this.isInLava()) {
+                        value = heat.increment();
+                        component.syncWith((ServerPlayerEntity)(Object)this);
+                    } else {
+                        value = heat.decrement();
+                        component.syncWith((ServerPlayerEntity)(Object)this);
+                    }
+                    EntityAttributeInstance moveSpeed = this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
+                    if(value == heat.getMin() && !moveSpeed.hasModifier(Constants.NO_HEAT_SLOWNESS)) {
+                        moveSpeed.addTemporaryModifier(Constants.NO_HEAT_SLOWNESS);
+                    } else if(value > heat.getMin() && moveSpeed.hasModifier(Constants.NO_HEAT_SLOWNESS)){
+                        moveSpeed.removeModifier(Constants.NO_HEAT_SLOWNESS);
+                    }
+                }*/
             }
         }
 

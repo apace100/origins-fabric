@@ -1,6 +1,7 @@
 package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.power.FireImmunityPower;
 import io.github.apace100.origins.power.InvisibilityPower;
 import io.github.apace100.origins.power.InvulnerablePower;
 import io.github.apace100.origins.power.PhasingPower;
@@ -20,7 +21,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 @Mixin(Entity.class)
-public class EntityMixin {
+public abstract class EntityMixin {
+
+    @Inject(method = "isFireImmune", at = @At("HEAD"), cancellable = true)
+    private void makeFullyFireImmune(CallbackInfoReturnable<Boolean> cir) {
+        if(OriginComponent.hasPower((Entity)(Object)this, FireImmunityPower.class)) {
+            cir.setReturnValue(true);
+        }
+    }
 
     @Shadow public World world;
 

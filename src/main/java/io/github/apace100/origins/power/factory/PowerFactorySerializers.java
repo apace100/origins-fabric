@@ -189,39 +189,71 @@ public class PowerFactorySerializers {
         register(new PowerFactory<>(Origins.identifier("modify_break_speed"),
             new SerializableData()
                 .add("block_condition", SerializableDataType.BLOCK_CONDITION, null)
-                .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER),
+                .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
+                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null),
             data ->
-                (type, player) ->
-                    new ModifyBreakSpeedPower(type, player,
-                        data.isPresent("block_condition") ? (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition") : cbp -> true,
-                        (EntityAttributeModifier)data.get("modifier")))
+                (type, player) -> {
+                    ModifyBreakSpeedPower power = new ModifyBreakSpeedPower(type, player, data.isPresent("block_condition") ? (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition") : cbp -> true);
+                    if(data.isPresent("modifier")) {
+                        power.addModifier(data.getModifier("modifier"));
+                    }
+                    if(data.isPresent("modifiers")) {
+                        ((List<EntityAttributeModifier>)data.get("modifiers")).forEach(power::addModifier);
+                    }
+                    return power;
+                })
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("modify_damage_dealt"),
             new SerializableData()
                 .add("damage_condition", SerializableDataType.BLOCK_CONDITION, null)
-                .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER),
+                .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
+                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null),
             data ->
-                (type, player) ->
-                    new ModifyDamageDealtPower(type, player,
-                        data.isPresent("damage_condition") ? (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition") : dmg -> true,
-                        (EntityAttributeModifier)data.get("modifier")))
+                (type, player) -> {
+                    ModifyDamageDealtPower power = new ModifyDamageDealtPower(type, player,
+                        data.isPresent("damage_condition") ? (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition") : dmg -> true);
+                    if(data.isPresent("modifier")) {
+                        power.addModifier(data.getModifier("modifier"));
+                    }
+                    if(data.isPresent("modifiers")) {
+                        ((List<EntityAttributeModifier>)data.get("modifiers")).forEach(power::addModifier);
+                    }
+                    return power;
+                })
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("modify_damage_taken"),
             new SerializableData()
                 .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
-                .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER),
+                .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
+                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null),
             data ->
-                (type, player) ->
-                    new ModifyDamageTakenPower(type, player,
-                        data.isPresent("damage_condition") ? (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition") : dmg -> true,
-                        (EntityAttributeModifier)data.get("modifier")))
+                (type, player) -> {
+                    ModifyDamageTakenPower power = new ModifyDamageTakenPower(type, player,
+                        data.isPresent("damage_condition") ? (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition") : dmg -> true);
+                    if(data.isPresent("modifier")) {
+                        power.addModifier(data.getModifier("modifier"));
+                    }
+                    if(data.isPresent("modifiers")) {
+                        ((List<EntityAttributeModifier>)data.get("modifiers")).forEach(power::addModifier);
+                    }
+                    return power;
+                })
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("modify_exhaustion"),
             new SerializableData()
-                .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER),
+                .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
+                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null),
             data ->
-                (type, player) ->
-                    new ModifyExhaustionPower(type, player, (EntityAttributeModifier)data.get("modifier")))
+                (type, player) -> {
+                    ModifyExhaustionPower power = new ModifyExhaustionPower(type, player);
+                    if(data.isPresent("modifier")) {
+                        power.addModifier(data.getModifier("modifier"));
+                    }
+                    if(data.isPresent("modifiers")) {
+                        ((List<EntityAttributeModifier>)data.get("modifiers")).forEach(power::addModifier);
+                    }
+                    return power;
+                })
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("modify_harvest"),
             new SerializableData()
@@ -235,10 +267,19 @@ public class PowerFactorySerializers {
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("modify_jump"),
             new SerializableData()
-                .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER),
+                .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
+                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null),
             data ->
-                (type, player) ->
-                    new ModifyJumpPower(type, player, (EntityAttributeModifier)data.get("modifier")))
+                (type, player) -> {
+                    ModifyJumpPower power = new ModifyJumpPower(type, player);
+                    if(data.isPresent("modifier")) {
+                        power.addModifier(data.getModifier("modifier"));
+                    }
+                    if(data.isPresent("modifiers")) {
+                        ((List<EntityAttributeModifier>)data.get("modifiers")).forEach(power::addModifier);
+                    }
+                    return power;
+                })
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("nether_spawn"),
             new SerializableData(),
@@ -334,10 +375,19 @@ public class PowerFactorySerializers {
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("modify_swim_speed"),
             new SerializableData()
-                .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER),
+                .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
+                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null),
             data ->
-                (type, player) ->
-                    new ModifySwimSpeedPower(type, player, (EntityAttributeModifier)data.get("modifier")))
+                (type, player) -> {
+                    ModifySwimSpeedPower power = new ModifySwimSpeedPower(type, player);
+                    if(data.isPresent("modifier")) {
+                        power.addModifier(data.getModifier("modifier"));
+                    }
+                    if(data.isPresent("modifiers")) {
+                        ((List<EntityAttributeModifier>)data.get("modifiers")).forEach(power::addModifier);
+                    }
+                    return power;
+                })
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("toggle_night_vision"),
             new SerializableData()
@@ -361,6 +411,34 @@ public class PowerFactorySerializers {
                     data.getFloat("damage_easy"),
                     data.getFloat("damage"),
                     data.getFloat("water_protection")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("swimming"),
+            new SerializableData(), data -> SwimmingPower::new).allowCondition());
+        register(new PowerFactory<>(Origins.identifier("fire_immunity"),
+            new SerializableData(), data -> FireImmunityPower::new).allowCondition());
+        register(new PowerFactory<>(Origins.identifier("modify_lava_speed"),
+            new SerializableData()
+                .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
+                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null),
+            data ->
+                (type, player) -> {
+                    ModifyLavaSpeedPower power = new ModifyLavaSpeedPower(type, player);
+                    if(data.isPresent("modifier")) {
+                        power.addModifier(data.getModifier("modifier"));
+                    }
+                    if(data.isPresent("modifiers")) {
+                        ((List<EntityAttributeModifier>)data.get("modifiers")).forEach(power::addModifier);
+                    }
+                    return power;
+                })
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("lava_vision"),
+            new SerializableData()
+                .add("s", SerializableDataType.FLOAT)
+                .add("v", SerializableDataType.FLOAT),
+            data ->
+                (type, player) ->
+                    new LavaVisionPower(type, player, data.getFloat("s"), data.getFloat("v")))
             .allowCondition());
     }
 
