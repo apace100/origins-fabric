@@ -26,7 +26,7 @@ public class ItemConditions {
             (data, stack) -> ((List<ConditionFactory<ItemStack>.Instance>)data.get("conditions")).stream().anyMatch(
                 condition -> condition.test(stack)
             )));
-        register(new ConditionFactory<>(Origins.identifier("is_food"), new SerializableData(),
+        register(new ConditionFactory<>(Origins.identifier("food"), new SerializableData(),
             (data, stack) -> stack.isFood()));
         register(new ConditionFactory<>(Origins.identifier("ingredient"), new SerializableData()
             .add("ingredient", SerializableDataType.INGREDIENT),

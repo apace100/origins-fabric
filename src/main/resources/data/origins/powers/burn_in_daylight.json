@@ -6,10 +6,10 @@
     "type": "origins:and",
     "conditions": [
       {
-        "type": "origins:is_in_daylight"
+        "type": "origins:exposed_to_sun"
       },
       {
-        "type": "origins:is_invisible",
+        "type": "origins:invisible",
         "inverted": true
       }
     ]

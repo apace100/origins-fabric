@@ -30,7 +30,7 @@ public class DamageConditions {
             .add("compare_to", SerializableDataType.FLOAT),
             (data, dmg) -> ((Comparison)data.get("comparison")).compare(dmg.getRight(), data.getFloat("compare_to"))));
 
-        register(new ConditionFactory<>(Origins.identifier("is_fire"), new SerializableData(),
+        register(new ConditionFactory<>(Origins.identifier("fire"), new SerializableData(),
             (data, dmg) -> dmg.getLeft().isFire()));
         register(new ConditionFactory<>(Origins.identifier("name"), new SerializableData()
             .add("name", SerializableDataType.STRING),

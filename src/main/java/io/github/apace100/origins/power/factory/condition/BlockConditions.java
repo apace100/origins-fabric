@@ -32,10 +32,10 @@ public class BlockConditions {
             .add("compare_to", SerializableDataType.INT),
             (data, block) -> ((Comparison)data.get("comparison")).compare(block.getBlockPos().getY(), data.getInt("compare_to"))));
 
-        register(new ConditionFactory<>(Origins.identifier("is_block"), new SerializableData()
+        register(new ConditionFactory<>(Origins.identifier("block"), new SerializableData()
             .add("block", SerializableDataType.BLOCK),
             (data, block) -> block.getBlockState().isOf((Block)data.get("block"))));
-        register(new ConditionFactory<>(Origins.identifier("is_in_tag"), new SerializableData()
+        register(new ConditionFactory<>(Origins.identifier("in_tag"), new SerializableData()
             .add("tag", SerializableDataType.BLOCK_TAG),
             (data, block) -> block.getBlockState().isIn((Tag<Block>)data.get("tag"))));
         register(new ConditionFactory<>(Origins.identifier("adjacent"), new SerializableData()

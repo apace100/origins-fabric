@@ -4,7 +4,7 @@
   "render_type": "remove_blocks",
   "view_distance": 3,
   "block_condition": {
-    "type": "origins:is_in_tag",
+    "type": "origins:in_tag",
     "tag": "origins:unphasable"
   },
   "condition": {

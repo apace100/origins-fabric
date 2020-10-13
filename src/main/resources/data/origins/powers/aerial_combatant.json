@@ -6,6 +6,6 @@
     "operation": "multiply_base"
   },
   "condition": {
-    "type": "origins:is_fall_flying"
+    "type": "origins:fall_flying"
   }
 }

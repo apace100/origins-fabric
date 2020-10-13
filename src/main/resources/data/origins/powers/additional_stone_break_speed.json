@@ -1,7 +1,7 @@
 {
   "type": "origins:modify_break_speed",
   "block_condition": {
-    "type": "origins:is_in_tag",
+    "type": "origins:in_tag",
     "tag": "origins:natural_stone"
   },
   "condition": {

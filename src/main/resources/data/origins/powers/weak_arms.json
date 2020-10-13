@@ -9,13 +9,13 @@
     "type": "origins:and",
     "conditions": [
       {
-        "type": "origins:is_in_tag",
+        "type": "origins:in_tag",
         "tag": "origins:natural_stone"
       },
       {
         "type": "origins:adjacent",
         "adjacent_condition": {
-          "type": "origins:is_in_tag",
+          "type": "origins:in_tag",
           "tag": "origins:natural_stone"
         },
         "comparison": ">",

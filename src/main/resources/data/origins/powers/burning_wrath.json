@@ -1,7 +1,7 @@
 {
   "type": "origins:modify_damage_dealt",
   "condition": {
-    "type": "origins:is_on_fire"
+    "type": "origins:on_fire"
   },
   "modifier": {
     "name": "Additional damage while on fire",

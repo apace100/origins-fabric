@@ -11,7 +11,7 @@
         "inverted": true
       },
       {
-        "type": "origins:is_food"
+        "type": "origins:food"
       }
     ]
   }

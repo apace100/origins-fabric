@@ -46,9 +46,9 @@ public class PlayerConditions {
             .add("comparison", SerializableDataType.COMPARISON)
             .add("compare_to", SerializableDataType.FLOAT),
             (data, player) -> ((Comparison)data.get("comparison")).compare(player.getBrightnessAtEyes(), data.getFloat("compare_to"))));
-        register(new ConditionFactory<>(Origins.identifier("is_daytime"), new SerializableData(), (data, player) -> player.world.isDay()));
-        register(new ConditionFactory<>(Origins.identifier("is_fall_flying"), new SerializableData(), (data, player) -> player.isFallFlying()));
-        register(new ConditionFactory<>(Origins.identifier("is_in_daylight"), new SerializableData(), (data, player) -> {
+        register(new ConditionFactory<>(Origins.identifier("daytime"), new SerializableData(), (data, player) -> player.world.isDay()));
+        register(new ConditionFactory<>(Origins.identifier("fall_flying"), new SerializableData(), (data, player) -> player.isFallFlying()));
+        register(new ConditionFactory<>(Origins.identifier("exposed_to_sun"), new SerializableData(), (data, player) -> {
             if (player.world.isDay() && !WorldUtil.isRainingAtPlayerPosition(player)) {
                 float f = player.getBrightnessAtEyes();
                 BlockPos blockPos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).up() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
@@ -58,14 +58,14 @@ public class PlayerConditions {
             }
             return false;
         }));
-        register(new ConditionFactory<>(Origins.identifier("is_invisible"), new SerializableData(), (data, player) -> player.isInvisible()));
-        register(new ConditionFactory<>(Origins.identifier("is_on_fire"), new SerializableData(), (data, player) -> player.isOnFire()));
-        register(new ConditionFactory<>(Origins.identifier("is_sky_visible"), new SerializableData(), (data, player) -> {
+        register(new ConditionFactory<>(Origins.identifier("invisible"), new SerializableData(), (data, player) -> player.isInvisible()));
+        register(new ConditionFactory<>(Origins.identifier("on_fire"), new SerializableData(), (data, player) -> player.isOnFire()));
+        register(new ConditionFactory<>(Origins.identifier("exposed_to_sky"), new SerializableData(), (data, player) -> {
             BlockPos blockPos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).up() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
             return player.world.isSkyVisible(blockPos);
         }));
-        register(new ConditionFactory<>(Origins.identifier("is_sneaking"), new SerializableData(), (data, player) -> player.isSneaking()));
-        register(new ConditionFactory<>(Origins.identifier("is_sprinting"), new SerializableData(), (data, player) -> player.isSprinting()));
+        register(new ConditionFactory<>(Origins.identifier("sneaking"), new SerializableData(), (data, player) -> player.isSneaking()));
+        register(new ConditionFactory<>(Origins.identifier("sprinting"), new SerializableData(), (data, player) -> player.isSprinting()));
         register(new ConditionFactory<>(Origins.identifier("power_active"), new SerializableData().add("power", SerializableDataType.POWER_TYPE),
             (data, player) -> ((PowerTypeReference<?>)data.get("power")).isActive(player)));
         register(new ConditionFactory<>(Origins.identifier("status_effect"), new SerializableData()
