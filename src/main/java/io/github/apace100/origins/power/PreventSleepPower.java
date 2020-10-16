@@ -19,7 +19,7 @@ public class PreventSleepPower extends Power {
     }
 
     public boolean doesPrevent(WorldView world, BlockPos pos) {
-        CachedBlockPosition cbp = new CachedBlockPosition(world, pos, false);
+        CachedBlockPosition cbp = new CachedBlockPosition(world, pos, true);
         return predicate.test(cbp);
     }
 

@@ -3,8 +3,6 @@ package io.github.apace100.origins.origin;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
@@ -33,16 +31,15 @@ public class OriginUpgrade {
     }
 
     public void write(PacketByteBuf buffer) {
-        buffer.writeString(advancementCondition.toString());
-        buffer.writeString(upgradeToOrigin.toString());
+        buffer.writeIdentifier(advancementCondition);
+        buffer.writeIdentifier(upgradeToOrigin);
         buffer.writeString(announcement);
     }
 
-    @Environment(EnvType.CLIENT)
     public static OriginUpgrade read(PacketByteBuf buffer) {
-        Identifier condition = Identifier.tryParse(buffer.readString());
-        Identifier origin = Identifier.tryParse(buffer.readString());
-        String announcement = buffer.readString();
+        Identifier condition = buffer.readIdentifier();
+        Identifier origin = buffer.readIdentifier();
+        String announcement = buffer.readString(32767);
         return new OriginUpgrade(condition, origin, announcement);
     }
 

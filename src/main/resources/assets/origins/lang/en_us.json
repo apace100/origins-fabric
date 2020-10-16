@@ -192,6 +192,6 @@
   "death.attack.hurt_by_water": "%s took a bath for too long.",
 
   "commands.origin.origin_not_found": "Unknown origin: %s",
-  "commands.origin.set.success.single": "Set origin of %s to %s.",
-  "commands.origin.set.success.multiple": "Set origin of %s targets to %s."
+  "commands.origin.set.success.single": "Set origin of %s in layer %s to %s.",
+  "commands.origin.set.success.multiple": "Set origin of %s targets in layer %s to %s."
 }

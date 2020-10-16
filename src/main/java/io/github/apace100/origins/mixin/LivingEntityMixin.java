@@ -8,7 +8,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
@@ -80,14 +79,6 @@ public abstract class LivingEntityMixin extends Entity {
                 return;
             }
         }
-    }
-
-    @ModifyVariable(method = "damage", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/LivingEntity;despawnCounter:I"), ordinal = 0, argsOnly = true)
-    private float modifyDamageAmount(float originalAmount, DamageSource source, float amount) {
-        if((Object)this instanceof PlayerEntity) {
-            return OriginComponent.modify(this, ModifyDamageTakenPower.class, originalAmount, p -> p.doesApply(source, amount));
-        }
-        return originalAmount;
     }
 
     // CLIMBING

@@ -3,8 +3,6 @@ package io.github.apace100.origins.power.factory.condition;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
@@ -26,12 +24,10 @@ public class ConditionType<T> {
         conditionInstance.write(buf);
     }
 
-    @Environment(EnvType.CLIENT)
     public ConditionFactory<T>.Instance read(PacketByteBuf buf) {
-        Identifier type = Identifier.tryParse(buf.readString());
+        Identifier type = Identifier.tryParse(buf.readString(32767));
         ConditionFactory<T> conditionFactory = conditionRegistry.get(type);
-        ConditionFactory<T>.Instance conditionInstance = conditionFactory.read(buf);
-        return conditionInstance;
+        return conditionFactory.read(buf);
     }
 
     public ConditionFactory<T>.Instance read(JsonElement jsonElement) {

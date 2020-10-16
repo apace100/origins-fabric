@@ -76,7 +76,7 @@ public class SerializableData {
     public class Instance {
         private HashMap<String, Object> data = new HashMap<>();
 
-        Instance() {
+        public Instance() {
 
         }
 

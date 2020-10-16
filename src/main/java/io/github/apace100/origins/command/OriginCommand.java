@@ -35,9 +35,9 @@ public class OriginCommand {
 										i++;
 									}
 									if (targets.size() == 1) {
-										command.getSource().sendFeedback(new TranslatableText("commands.origin.set.success.single", targets.iterator().next().getDisplayName(), l.getTranslationKey(), o.getName()), true);
+										command.getSource().sendFeedback(new TranslatableText("commands.origin.set.success.single", targets.iterator().next().getDisplayName(), new TranslatableText(l.getTranslationKey()), o.getName()), true);
 									} else {
-										command.getSource().sendFeedback(new TranslatableText("commands.origin.set.success.multiple", targets.size(), o.getName()), true);
+										command.getSource().sendFeedback(new TranslatableText("commands.origin.set.success.multiple", targets.size(), new TranslatableText(l.getTranslationKey()), o.getName()), true);
 									}
 									return i;
 								}))))));

@@ -33,7 +33,6 @@ public class ModPacketsC2S {
                             component.sync();
                             if(component.hasAllOrigins() && !hadAllOrigins) {
                                 component.getOrigins().values().forEach(o -> {
-                                    Origins.LOGGER.info("Calling Powers onChosen for " + o.getIdentifier());
                                     o.getPowerTypes().forEach(powerType -> component.getPower(powerType).onChosen(hadOriginBefore));
                                 });
                             }

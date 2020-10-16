@@ -24,7 +24,7 @@ public class PhasingPower extends Power {
     }
 
     public boolean doesApply(BlockPos pos) {
-        return isBlacklist != blocks.test(new CachedBlockPosition(player.world, pos, false));
+        return isBlacklist != blocks.test(new CachedBlockPosition(player.world, pos, true));
     }
 
     public RenderType getRenderType() {

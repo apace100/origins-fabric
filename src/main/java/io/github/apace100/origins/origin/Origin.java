@@ -9,6 +9,8 @@ import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.PowerTypeRegistry;
 import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.util.SerializableData;
+import io.github.apace100.origins.util.SerializableDataType;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.advancement.Advancement;
@@ -28,8 +30,20 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Origin {
+
+    public static final SerializableData DATA = new SerializableData()
+        .add("powers", SerializableDataType.IDENTIFIERS)
+        .add("icon", SerializableDataType.ITEM, Items.AIR)
+        .add("unchoosable", SerializableDataType.BOOLEAN, false)
+        .add("order", SerializableDataType.INT, Integer.MAX_VALUE)
+        .add("impact", SerializableDataType.IMPACT, Impact.NONE)
+        .add("loading_priority", SerializableDataType.INT, 0)
+        .add("upgrades", SerializableDataType.UPGRADES, null)
+        .add("name", SerializableDataType.STRING, "")
+        .add("description", SerializableDataType.STRING, "");
 
     public static final Origin EMPTY;
 
@@ -175,20 +189,47 @@ public class Origin {
     }
 
     public void write(PacketByteBuf buffer) {
-        buffer.writeString(identifier.toString());
-        buffer.writeString(Registry.ITEM.getId(displayItem.getItem()).toString());
-        buffer.writeInt(impact.getImpactValue());
-        buffer.writeInt(order);
-        buffer.writeInt(loadingPriority);
-        buffer.writeBoolean(this.isChoosable);
-        buffer.writeInt(this.powerTypes.size());
-        for (PowerType<?> powerType : this.powerTypes) {
-            buffer.writeString(PowerTypeRegistry.getId(powerType).toString());
+        SerializableData.Instance data = DATA.new Instance();
+        data.set("icon", displayItem.getItem());
+        data.set("impact", impact);
+        data.set("order", order);
+        data.set("loading_priority", loadingPriority);
+        data.set("unchoosable", !this.isChoosable);
+        data.set("powers", powerTypes.stream().map(PowerType::getIdentifier).collect(Collectors.toList()));
+        data.set("name", getOrCreateNameTranslationKey());
+        data.set("description", getOrCreateDescriptionTranslationKey());
+        data.set("upgrades", upgrades);
+        DATA.write(buffer, data);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Origin createFromData(Identifier id, SerializableData.Instance data) {
+        Origin origin = new Origin(id,
+            (Item)data.get("icon"),
+            (Impact)data.get("impact"),
+            data.getInt("order"),
+            data.getInt("loading_priority"));
+
+        if(data.getBoolean("unchoosable")) {
+            origin.setUnchoosable();
         }
-        buffer.writeInt(this.upgrades.size());
-        this.upgrades.forEach(upgrade -> upgrade.write(buffer));
-        buffer.writeString(getOrCreateNameTranslationKey());
-        buffer.writeString(getOrCreateDescriptionTranslationKey());
+
+        ((List<Identifier>)data.get("powers")).forEach(powerId -> {
+            try {
+                origin.add(PowerTypeRegistry.get(powerId));
+            } catch(IllegalArgumentException e) {
+                Origins.LOGGER.error("Origin \"" + id + "\" contained unregistered power: \"" + powerId + "\"");
+            }
+        });
+
+        if(data.isPresent("upgrades")) {
+            ((List<OriginUpgrade>)data.get("upgrades")).forEach(origin::addUpgrade);
+        }
+
+        origin.setName(data.getString("name"));
+        origin.setDescription(data.getString("description"));
+
+        return origin;
     }
 
     @Environment(EnvType.CLIENT)
@@ -218,8 +259,7 @@ public class Origin {
                     Origins.LOGGER.error("Received invalid power type from server in origin: '" + s + "'.");
                 }
             } catch(IllegalArgumentException e) {
-                System.err.println("Failed to get power with id " + s + " which was received from the server.");
-                return null;
+                Origins.LOGGER.error("Failed to get power with id " + s + " which was received from the server.");
             }
         }
         origin.add(powers);

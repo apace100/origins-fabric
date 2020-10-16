@@ -3,8 +3,10 @@ package io.github.apace100.origins.mixin;
 import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Either;
 import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.power.ModifyDamageTakenPower;
 import io.github.apace100.origins.power.NetherSpawnPower;
 import io.github.apace100.origins.power.PreventSleepPower;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
 import net.minecraft.screen.ScreenHandlerListener;
@@ -24,6 +26,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
@@ -46,6 +49,11 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
 
     public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile profile) {
         super(world, pos, yaw, profile);
+    }
+
+    @ModifyArg(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
+    private float modifyDamageAmount(DamageSource source, float originalAmount) {
+        return OriginComponent.modify(this, ModifyDamageTakenPower.class, originalAmount, p -> p.doesApply(source, originalAmount));
     }
 
     // FRESH_AIR

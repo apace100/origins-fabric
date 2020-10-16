@@ -5,7 +5,8 @@
 		"origins:burning_wrath",
 		"origins:hotblooded",
 		"origins:water_vulnerability",
-		"origins:flame_particles"
+		"origins:flame_particles",
+		"origins:damage_from_snowballs"
 	],
 	"icon": "minecraft:blaze_powder",
 	"order": 1,

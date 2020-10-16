@@ -7,6 +7,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.origin.Impact;
+import io.github.apace100.origins.origin.OriginUpgrade;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.PowerTypeReference;
 import io.github.apace100.origins.power.factory.condition.ConditionFactory;
@@ -23,6 +25,7 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleType;
@@ -70,7 +73,7 @@ public class SerializableDataType<T> {
     public static final SerializableDataType<String> STRING = new SerializableDataType<>(
         String.class,
         PacketByteBuf::writeString,
-        PacketByteBuf::readString,
+        (buf) -> buf.readString(32767),
         JsonElement::getAsString);
 
     public static final SerializableDataType<Identifier> IDENTIFIER = new SerializableDataType<>(
@@ -80,6 +83,16 @@ public class SerializableDataType<T> {
         (json) -> Identifier.tryParse(json.getAsString()));
 
     public static final SerializableDataType<List<Identifier>> IDENTIFIERS = SerializableDataType.list(IDENTIFIER);
+
+    public static final SerializableDataType<Impact> IMPACT = SerializableDataType.enumValue(Impact.class);
+
+    public static final SerializableDataType<OriginUpgrade> UPGRADE = new SerializableDataType<>(
+        OriginUpgrade.class,
+        (buf, upgrade) -> upgrade.write(buf),
+        OriginUpgrade::read,
+        OriginUpgrade::fromJson);
+
+    public static final SerializableDataType<List<OriginUpgrade>> UPGRADES = SerializableDataType.list(UPGRADE);
 
     public static final SerializableDataType<EntityAttribute> ATTRIBUTE = SerializableDataType.registry(EntityAttribute.class, Registry.ATTRIBUTE);
 
@@ -121,6 +134,8 @@ public class SerializableDataType<T> {
     public static final SerializableDataType<PowerTypeReference> POWER_TYPE = SerializableDataType.wrap(
         PowerTypeReference.class, IDENTIFIER,
         PowerType::getIdentifier, PowerTypeReference::new);
+
+    public static final SerializableDataType<Item> ITEM = SerializableDataType.registry(Item.class, Registry.ITEM);
 
     public static final SerializableDataType<StatusEffect> STATUS_EFFECT = SerializableDataType.registry(StatusEffect.class, Registry.STATUS_EFFECT);
 

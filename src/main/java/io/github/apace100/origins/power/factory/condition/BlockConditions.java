@@ -46,7 +46,7 @@ public class BlockConditions {
                 ConditionFactory<CachedBlockPosition>.Instance adjacentCondition = (ConditionFactory<CachedBlockPosition>.Instance)data.get("adjacent_condition");
                 int adjacent = 0;
                 for(Direction d : Direction.values()) {
-                    if(adjacentCondition.test(new CachedBlockPosition(block.getWorld(), block.getBlockPos().offset(d), false))) {
+                    if(adjacentCondition.test(new CachedBlockPosition(block.getWorld(), block.getBlockPos().offset(d), true))) {
                         adjacent++;
                     }
                 }

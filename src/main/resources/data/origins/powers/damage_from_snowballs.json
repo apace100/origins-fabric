@@ -1,0 +1,13 @@
+{
+  "type": "origins:modify_damage_taken",
+  "modifier": {
+    "name": "Snowball damage taken like Blazes",
+    "value": 3,
+    "operation": "addition"
+  },
+  "damage_condition": {
+    "type": "origins:projectile",
+    "projectile": "minecraft:snowball"
+  },
+  "hidden": true
+}

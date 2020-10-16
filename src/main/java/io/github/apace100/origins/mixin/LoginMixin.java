@@ -5,6 +5,7 @@ import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
+import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.PowerTypeRegistry;
 import io.github.apace100.origins.power.factory.PowerFactory;
 import io.github.apace100.origins.registry.ModComponents;
@@ -34,10 +35,14 @@ public abstract class LoginMixin {
 		PacketByteBuf powerListData = new PacketByteBuf(Unpooled.buffer());
 		powerListData.writeInt(PowerTypeRegistry.size());
 		PowerTypeRegistry.entries().forEach((entry) -> {
-			PowerFactory.Instance factory = entry.getValue().getFactory();
+			PowerType<?> type = entry.getValue();
+			PowerFactory.Instance factory = type.getFactory();
 			if(factory != null) {
 				powerListData.writeIdentifier(entry.getKey());
 				factory.write(powerListData);
+				powerListData.writeString(type.getOrCreateNameTranslationKey());
+				powerListData.writeString(type.getOrCreateDescriptionTranslationKey());
+				powerListData.writeBoolean(type.isHidden());
 			}
 		});
 
@@ -45,7 +50,7 @@ public abstract class LoginMixin {
 		originListData.writeInt(OriginRegistry.size() - 1);
 		OriginRegistry.entries().forEach((entry) -> {
 			if(entry.getValue() != Origin.EMPTY) {
-				originListData.writeString(entry.getKey().toString());
+				originListData.writeIdentifier(entry.getKey());
 				entry.getValue().write(originListData);
 			}
 		});

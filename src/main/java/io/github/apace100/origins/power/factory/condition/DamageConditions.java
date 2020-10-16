@@ -5,7 +5,10 @@ import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.util.Comparison;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.ProjectileDamageSource;
 import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
 
@@ -29,12 +32,22 @@ public class DamageConditions {
             .add("comparison", SerializableDataType.COMPARISON)
             .add("compare_to", SerializableDataType.FLOAT),
             (data, dmg) -> ((Comparison)data.get("comparison")).compare(dmg.getRight(), data.getFloat("compare_to"))));
-
         register(new ConditionFactory<>(Origins.identifier("fire"), new SerializableData(),
             (data, dmg) -> dmg.getLeft().isFire()));
         register(new ConditionFactory<>(Origins.identifier("name"), new SerializableData()
             .add("name", SerializableDataType.STRING),
             (data, dmg) -> dmg.getLeft().getName().equals(data.getString("name"))));
+        register(new ConditionFactory<>(Origins.identifier("projectile"), new SerializableData()
+            .add("projectile", SerializableDataType.ENTITY_TYPE, null),
+            (data, dmg) -> {
+                if(dmg.getLeft() instanceof ProjectileDamageSource) {
+                    Entity projectile = ((ProjectileDamageSource)dmg.getLeft()).getSource();
+                    if(projectile != null && (data.isPresent("projectile") || projectile.getType() == (EntityType<?>)data.get("projectile"))) {
+                        return true;
+                    }
+                }
+                return false;
+            }));
     }
 
     private static void register(ConditionFactory<Pair<DamageSource, Float>> conditionFactory) {

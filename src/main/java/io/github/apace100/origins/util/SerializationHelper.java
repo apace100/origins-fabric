@@ -3,8 +3,6 @@ package io.github.apace100.origins.util;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.effect.StatusEffect;
@@ -47,9 +45,8 @@ public class SerializationHelper {
         throw new JsonSyntaxException("Attribute modifier needs to be a JSON object.");
     }
 
-    @Environment(EnvType.CLIENT)
     public static EntityAttributeModifier readAttributeModifier(PacketByteBuf buf) {
-        String modName = buf.readString();
+        String modName = buf.readString(32767);
         double modValue = buf.readDouble();
         int operation = buf.readInt();
         return new EntityAttributeModifier(modName, modValue, EntityAttributeModifier.Operation.fromId(operation));

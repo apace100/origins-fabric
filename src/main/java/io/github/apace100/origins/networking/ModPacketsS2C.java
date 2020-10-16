@@ -11,6 +11,7 @@ import io.github.apace100.origins.power.factory.PowerFactory;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.screen.ChooseOriginScreen;
+import io.github.apace100.origins.util.SerializableData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
@@ -20,7 +21,6 @@ import net.minecraft.util.Identifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 
 public class ModPacketsS2C {
 
@@ -42,15 +42,15 @@ public class ModPacketsS2C {
         });
         ClientSidePacketRegistry.INSTANCE.register(ModPackets.ORIGIN_LIST, (packetContext, packetByteBuf) -> {
             Identifier[] ids = new Identifier[packetByteBuf.readInt()];
-            Origin[] origins = new Origin[ids.length];
+            SerializableData.Instance[] origins = new SerializableData.Instance[ids.length];
             for(int i = 0; i < origins.length; i++) {
                 ids[i] = Identifier.tryParse(packetByteBuf.readString());
-                origins[i] = Origin.read(packetByteBuf);
+                origins[i] = Origin.DATA.read(packetByteBuf);
             }
             packetContext.getTaskQueue().execute(() -> {
                 OriginRegistry.reset();
                 for(int i = 0; i < ids.length; i++) {
-                    OriginRegistry.register(ids[i], origins[i]);
+                    OriginRegistry.register(ids[i], Origin.createFromData(ids[i], origins[i]));
                 }
             });
         });
@@ -69,19 +69,22 @@ public class ModPacketsS2C {
         });
         ClientSidePacketRegistry.INSTANCE.register(ModPackets.POWER_LIST, (packetContext, packetByteBuf) -> {
             int powerCount = packetByteBuf.readInt();
-            HashMap<Identifier, PowerFactory.Instance> factories = new HashMap<>();
+            HashMap<Identifier, PowerType> factories = new HashMap<>();
             for(int i = 0; i < powerCount; i++) {
                 Identifier powerId = packetByteBuf.readIdentifier();
                 Identifier factoryId = packetByteBuf.readIdentifier();
                 PowerFactory factory = ModRegistries.POWER_FACTORY.get(factoryId);
                 PowerFactory.Instance factoryInstance = factory.read(packetByteBuf);
-                factories.put(powerId, factoryInstance);
+                PowerType type = new PowerType(powerId, factoryInstance);
+                type.setTranslationKeys(packetByteBuf.readString(), packetByteBuf.readString());
+                if(packetByteBuf.readBoolean()) {
+                    type.setHidden();
+                }
+                factories.put(powerId, type);
             }
             packetContext.getTaskQueue().execute(() -> {
                 PowerTypeRegistry.clear();
-                for(Map.Entry<Identifier, PowerFactory.Instance> factory : factories.entrySet()) {
-                    PowerTypeRegistry.register(factory.getKey(), new PowerType(factory.getKey(), factory.getValue()));
-                }
+                factories.forEach(PowerTypeRegistry::register);
             });
         });
     }
