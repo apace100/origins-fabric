@@ -26,16 +26,32 @@ public class OriginLayer implements Comparable<OriginLayer> {
     private boolean enabled = false;
 
     private String nameTranslationKey;
+    private String missingOriginNameTranslationKey;
+    private String missingOriginDescriptionTranslationKey;
 
     public String getOrCreateTranslationKey() {
         if(nameTranslationKey == null || nameTranslationKey.isEmpty()) {
-            this.nameTranslationKey = "layer." + identifier.getNamespace() + "." + identifier.getPath();
+            this.nameTranslationKey = "layer." + identifier.getNamespace() + "." + identifier.getPath() + ".name";
         }
         return nameTranslationKey;
     }
 
     public String getTranslationKey() {
         return getOrCreateTranslationKey();
+    }
+
+    public String getMissingOriginNameTranslationKey() {
+        if(missingOriginNameTranslationKey == null || missingOriginNameTranslationKey.isEmpty()) {
+            this.missingOriginNameTranslationKey = "layer." + identifier.getNamespace() + "." + identifier.getPath() + ".missing_origin.name";
+        }
+        return missingOriginNameTranslationKey;
+    }
+
+    public String getMissingOriginDescriptionTranslationKey() {
+        if(missingOriginDescriptionTranslationKey == null || missingOriginDescriptionTranslationKey.isEmpty()) {
+            this.missingOriginDescriptionTranslationKey = "layer." + identifier.getNamespace() + "." + identifier.getPath() + ".missing_origin.description";
+        }
+        return missingOriginDescriptionTranslationKey;
     }
 
     public Identifier getIdentifier() {
@@ -88,6 +104,12 @@ public class OriginLayer implements Comparable<OriginLayer> {
         if(json.has("name")) {
             this.nameTranslationKey = JsonHelper.getString(json, "name", "");
         }
+        if(json.has("missing_name")) {
+            this.missingOriginNameTranslationKey = JsonHelper.getString(json, "missing_name", "");
+        }
+        if(json.has("missing_description")) {
+            this.missingOriginDescriptionTranslationKey = JsonHelper.getString(json, "missing_description", "");
+        }
     }
 
     @Override
@@ -118,6 +140,8 @@ public class OriginLayer implements Comparable<OriginLayer> {
         buffer.writeInt(conditionedOrigins.size());
         conditionedOrigins.forEach(co -> co.write(buffer));
         buffer.writeString(getOrCreateTranslationKey());
+        buffer.writeString(getMissingOriginNameTranslationKey());
+        buffer.writeString(getMissingOriginDescriptionTranslationKey());
     }
 
     @Environment(EnvType.CLIENT)
@@ -132,6 +156,8 @@ public class OriginLayer implements Comparable<OriginLayer> {
             layer.conditionedOrigins.add(ConditionedOrigin.read(buffer));
         }
         layer.nameTranslationKey = buffer.readString();
+        layer.missingOriginNameTranslationKey = buffer.readString();
+        layer.missingOriginDescriptionTranslationKey = buffer.readString();
         return layer;
     }
 
@@ -150,6 +176,8 @@ public class OriginLayer implements Comparable<OriginLayer> {
         layer.enabled = enabled;
         layer.identifier = id;
         layer.nameTranslationKey = JsonHelper.getString(json, "name", "");
+        layer.missingOriginNameTranslationKey = JsonHelper.getString(json, "missing_name", "");
+        layer.missingOriginDescriptionTranslationKey = JsonHelper.getString(json, "missing_description", "");
         return layer;
     }
 

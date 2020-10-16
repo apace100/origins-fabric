@@ -1,5 +1,6 @@
 package io.github.apace100.origins.screen;
 
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.origin.Impact;
@@ -36,6 +37,8 @@ public class ViewOriginScreen extends Screen {
 	private int currentMaxScroll = 0;
 	private int border = 13;
 
+	private ButtonWidget chooseOriginButton;
+
 	private int guiTop, guiLeft;
 
 	public ViewOriginScreen() {
@@ -61,12 +64,18 @@ public class ViewOriginScreen extends Screen {
 		super.init();
 		guiLeft = (this.width - windowWidth) / 2;
         guiTop = (this.height - windowHeight) / 2;
+		addButton(chooseOriginButton = new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight - 40, 100, 20, new TranslatableText(Origins.MODID + ".gui.choose"), b -> {
+			MinecraftClient.getInstance().openScreen(new ChooseOriginScreen(Lists.newArrayList(originLayers.get(currentLayer).getLeft()), 0, false));
+		}));
+		chooseOriginButton.active = chooseOriginButton.visible = originLayers.get(currentLayer).getRight() == Origin.EMPTY;
 		addButton(new ButtonWidget(guiLeft - 40,this.height / 2 - 10, 20, 20, new LiteralText("<"), b -> {
 			currentLayer = (currentLayer - 1 + originLayers.size()) % originLayers.size();
+			chooseOriginButton.active = chooseOriginButton.visible = originLayers.get(currentLayer).getRight() == Origin.EMPTY;
 			scrollPos = 0;
 		}));
 		addButton(new ButtonWidget(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20, new LiteralText(">"), b -> {
 			currentLayer = (currentLayer + 1) % originLayers.size();
+			chooseOriginButton.active = chooseOriginButton.visible = originLayers.get(currentLayer).getRight() == Origin.EMPTY;
 			scrollPos = 0;
 		}));
         addButton(new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20, new TranslatableText(Origins.MODID + ".gui.close"), b -> {
@@ -119,7 +128,7 @@ public class ViewOriginScreen extends Screen {
 	
 	private void renderOriginName(MatrixStack matrices) {
 		Origin origin = getCurrentOrigin();
-		StringVisitable originName = textRenderer.trimToWidth(origin.getName(), windowWidth - 36);
+		StringVisitable originName = textRenderer.trimToWidth(origin == Origin.EMPTY ? new TranslatableText(originLayers.get(currentLayer).getLeft().getMissingOriginNameTranslationKey()) : origin.getName(), windowWidth - 36);
 		this.drawStringWithShadow(matrices, textRenderer, originName.getString(), guiLeft + 39, guiTop + 19, 0xFFFFFF);
 		ItemStack is = origin.getDisplayItem();
 		this.itemRenderer.renderInGui(is, guiLeft + 15, guiTop + 15);
@@ -153,7 +162,11 @@ public class ViewOriginScreen extends Screen {
 
 		Origin origin = getCurrentOrigin();
 
+
 		Text orgDesc = origin.getDescription();
+		if(origin == Origin.EMPTY) {
+			orgDesc = new TranslatableText(originLayers.get(currentLayer).getLeft().getMissingOriginDescriptionTranslationKey());
+		}
 		List<OrderedText> descLines = textRenderer.wrapLines(orgDesc, windowWidth - 36);
 		for(OrderedText line : descLines) {
 			if(y >= startY - 18 && y <= endY + 12) {
@@ -161,7 +174,9 @@ public class ViewOriginScreen extends Screen {
 			}
 			y += 12;
 		}
-		
+		if(origin == Origin.EMPTY) {
+			return;
+		}
 		for(PowerType<?> p : origin.getPowerTypes()) {
 			if(p.isHidden()) {
 				continue;

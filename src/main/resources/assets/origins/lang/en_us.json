@@ -175,6 +175,7 @@
 
   "origins.gui.select": "Select",
   "origins.gui.close": "Close",
+  "origins.gui.choose": "Choose",
   "origins.gui.choose_origin.title": "Choose your %s.",
   "origins.gui.view_origin.title": "This is your %s.",
   "origins.gui.impact.impact": "Impact",
@@ -183,7 +184,9 @@
   "origins.gui.impact.medium": "Medium",
   "origins.gui.impact.high": "High",
 
-  "layer.origins.origin": "Origin",
+  "layer.origins.origin.name": "Origin",
+  "layer.origins.origin.missing_origin.name": "Missing",
+  "layer.origins.origin.missing_origin.description": "You do not have an Origin.",
 
   "death.attack.no_water_for_gills": "%s didn't manage to keep wet.",
   "death.attack.hurt_by_water": "%s took a bath for too long.",
