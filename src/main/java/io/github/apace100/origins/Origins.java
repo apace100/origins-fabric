@@ -9,7 +9,7 @@ import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginManager;
 import io.github.apace100.origins.power.PowerTypes;
-import io.github.apace100.origins.power.factory.PowerFactorySerializers;
+import io.github.apace100.origins.power.factory.PowerFactories;
 import io.github.apace100.origins.power.factory.condition.BlockConditions;
 import io.github.apace100.origins.power.factory.condition.DamageConditions;
 import io.github.apace100.origins.power.factory.condition.ItemConditions;
@@ -45,7 +45,7 @@ public class Origins implements ModInitializer {
 		ModEnchantments.register();
 		ModEntities.register();
 		ModLoot.register();
-		PowerFactorySerializers.register();
+		PowerFactories.register();
 		PlayerConditions.register();
 		ItemConditions.register();
 		BlockConditions.register();

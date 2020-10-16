@@ -79,6 +79,8 @@ public class SerializableDataType<T> {
         PacketByteBuf::readIdentifier,
         (json) -> Identifier.tryParse(json.getAsString()));
 
+    public static final SerializableDataType<List<Identifier>> IDENTIFIERS = SerializableDataType.list(IDENTIFIER);
+
     public static final SerializableDataType<EntityAttribute> ATTRIBUTE = SerializableDataType.registry(EntityAttribute.class, Registry.ATTRIBUTE);
 
     public static final SerializableDataType<EntityAttributeModifier> ATTRIBUTE_MODIFIER = new SerializableDataType<>(

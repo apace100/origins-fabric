@@ -2,18 +2,21 @@ package io.github.apace100.origins.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.origin.Impact;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.PowerType;
+import io.github.apace100.origins.registry.ModComponents;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
@@ -48,11 +51,17 @@ public class ChooseOriginScreen extends Screen {
 		this.layerList = layerList;
 		this.currentLayerIndex = currentLayerIndex;
 		this.originSelection = new ArrayList<>(10);
-		layerList.get(currentLayerIndex).getOrigins().forEach(originId -> {
+		PlayerEntity player = MinecraftClient.getInstance().player;
+		List<Identifier> originIdentifiers = layerList.get(currentLayerIndex).getOrigins(player);
+		if(originIdentifiers.size() == 0) {
+			openNextLayerScreen();
+			return;
+		}
+		originIdentifiers.forEach(originId -> {
 			Origin origin = OriginRegistry.get(originId);
 			if(origin.isChoosable()) {
 				if(origin.getDisplayItem().getItem() == Items.PLAYER_HEAD) {
-					origin.getDisplayItem().getOrCreateTag().putString("SkullOwner", MinecraftClient.getInstance().player.getDisplayName().getString());
+					origin.getDisplayItem().getOrCreateTag().putString("SkullOwner", player.getDisplayName().getString());
 				}
 				this.originSelection.add(origin);
 			}
@@ -62,6 +71,19 @@ public class ChooseOriginScreen extends Screen {
 			return impDelta == 0 ? a.getOrder() - b.getOrder() : impDelta;
 		});
 		this.showDirtBackground = showDirtBackground;
+	}
+
+	private void openNextLayerScreen() {
+		int index = currentLayerIndex + 1;
+		PlayerEntity player = MinecraftClient.getInstance().player;
+		while(index < layerList.size()) {
+			if(layerList.get(index).getOrigins(player).size() > 0) {
+				MinecraftClient.getInstance().openScreen(new ChooseOriginScreen(layerList, index, showDirtBackground));
+				return;
+			}
+			index++;
+		}
+		MinecraftClient.getInstance().openScreen(null);
 	}
 
 	@Override
@@ -87,11 +109,14 @@ public class ChooseOriginScreen extends Screen {
 			buf.writeString(originSelection.get(currentOrigin).getIdentifier().toString());
 			buf.writeString(layerList.get(currentLayerIndex).getIdentifier().toString());
 			ClientSidePacketRegistry.INSTANCE.sendToServer(ModPackets.CHOOSE_ORIGIN, buf);
-			if(currentLayerIndex + 1 >= layerList.size()) {
+			OriginComponent component = ModComponents.ORIGIN.get(MinecraftClient.getInstance().player);
+			component.setOrigin(layerList.get(currentLayerIndex), originSelection.get(currentOrigin));
+			/*if(currentLayerIndex + 1 >= layerList.size()) {
 				MinecraftClient.getInstance().openScreen(null);
 			} else {
 				MinecraftClient.getInstance().openScreen(new ChooseOriginScreen(layerList, currentLayerIndex + 1, showDirtBackground));
-			}
+			}*/
+			openNextLayerScreen();
         }));
 	}
 
@@ -106,6 +131,8 @@ public class ChooseOriginScreen extends Screen {
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		if(originSelection.size() == 0)
+			return;
 		this.renderBackground(matrices);
 		this.renderOriginWindow(matrices, mouseX, mouseY);
 		super.render(matrices, mouseX, mouseY, delta);

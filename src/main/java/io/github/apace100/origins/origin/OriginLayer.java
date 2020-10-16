@@ -1,11 +1,15 @@
 package io.github.apace100.origins.origin;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import com.google.common.collect.Lists;
+import com.google.gson.*;
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.power.factory.condition.ConditionFactory;
+import io.github.apace100.origins.power.factory.condition.ConditionTypes;
+import io.github.apace100.origins.util.SerializableData;
+import io.github.apace100.origins.util.SerializableDataType;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
@@ -18,7 +22,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
 
     private int order;
     private Identifier identifier;
-    private List<Identifier> origins;
+    private List<ConditionedOrigin> conditionedOrigins;
     private boolean enabled = false;
 
     private String nameTranslationKey;
@@ -43,19 +47,31 @@ public class OriginLayer implements Comparable<OriginLayer> {
     }
 
     public List<Identifier> getOrigins() {
-        List<Identifier> filteredOrigins = origins.stream().filter(OriginRegistry::contains).collect(Collectors.toList());
-        if(filteredOrigins.size() < origins.size()) {
-            for (Identifier id : origins) {
-                if(!OriginRegistry.contains(id)) {
-                    Origins.LOGGER.error("Origin layer \"" + identifier.toString() + "\" contained unregistered origin: \"" + id.toString() + "\" (skipping)");
-                }
+        return conditionedOrigins.stream().flatMap(co -> co.getOrigins().stream()).filter(o -> {
+            boolean contained = OriginRegistry.contains(o);
+            if(!contained) {
+                Origins.LOGGER.error("Origin layer \"" + identifier.toString() + "\" contained unregistered origin: \"" + o.toString() + "\" (skipping)");
             }
-        }
-        return filteredOrigins;
+            return contained;
+        }).collect(Collectors.toList());
+    }
+
+    public List<Identifier> getOrigins(PlayerEntity playerEntity) {
+        return conditionedOrigins.stream().filter(co -> co.isConditionFulfilled(playerEntity)).flatMap(co -> co.getOrigins().stream()).filter(o -> {
+            boolean contained = OriginRegistry.contains(o);
+            if(!contained) {
+                Origins.LOGGER.error("Origin layer \"" + identifier.toString() + "\" contained unregistered origin: \"" + o.toString() + "\" (skipping)");
+            }
+            return contained;
+        }).collect(Collectors.toList());
     }
 
     public boolean contains(Origin origin) {
-        return origin == Origin.EMPTY || origins.contains(origin.getIdentifier());
+        return origin == Origin.EMPTY || conditionedOrigins.stream().anyMatch(co -> co.getOrigins().stream().anyMatch(o -> o.equals(origin.getIdentifier())));
+    }
+
+    public boolean contains(Origin origin, PlayerEntity playerEntity) {
+        return origin == Origin.EMPTY || conditionedOrigins.stream().filter(co -> co.isConditionFulfilled(playerEntity)).anyMatch(co -> co.getOrigins().stream().anyMatch(o -> o.equals(origin.getIdentifier())));
     }
 
     public void merge(JsonObject json) {
@@ -67,11 +83,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
         }
         if(json.has("origins")) {
             JsonArray originArray = json.getAsJsonArray("origins");
-            originArray.forEach(je -> {
-                Identifier identifier = Identifier.tryParse(je.getAsString());
-                this.origins.add(identifier);
-                Origins.LOGGER.info("Added origin " + identifier.toString() + " to layer " + this.identifier.toString());
-            });
+            originArray.forEach(je -> this.conditionedOrigins.add(ConditionedOrigin.read(je)));
         }
         if(json.has("name")) {
             this.nameTranslationKey = JsonHelper.getString(json, "name", "");
@@ -103,8 +115,8 @@ public class OriginLayer implements Comparable<OriginLayer> {
         buffer.writeString(identifier.toString());
         buffer.writeInt(order);
         buffer.writeBoolean(enabled);
-        buffer.writeInt(origins.size());
-        origins.forEach(id -> buffer.writeString(id.toString()));
+        buffer.writeInt(conditionedOrigins.size());
+        conditionedOrigins.forEach(co -> co.write(buffer));
         buffer.writeString(getOrCreateTranslationKey());
     }
 
@@ -114,10 +126,10 @@ public class OriginLayer implements Comparable<OriginLayer> {
         layer.identifier = Identifier.tryParse(buffer.readString());
         layer.order = buffer.readInt();
         layer.enabled = buffer.readBoolean();
-        int originCount = buffer.readInt();
-        layer.origins = new ArrayList<>(originCount);
-        for(int i = 0; i < originCount; i++) {
-            layer.origins.add(Identifier.tryParse(buffer.readString()));
+        int conditionedOriginCount = buffer.readInt();
+        layer.conditionedOrigins = new ArrayList<>(conditionedOriginCount);
+        for(int i = 0; i < conditionedOriginCount; i++) {
+            layer.conditionedOrigins.add(ConditionedOrigin.read(buffer));
         }
         layer.nameTranslationKey = buffer.readString();
         return layer;
@@ -129,18 +141,73 @@ public class OriginLayer implements Comparable<OriginLayer> {
             throw new JsonParseException("Origin layer JSON requires \"origins\" array of origin IDs to include in the layer.");
         }
         JsonArray originArray = json.getAsJsonArray("origins");
-        List<Identifier> list = new ArrayList<>(originArray.size());
-        originArray.forEach(je -> {
-            Identifier identifier = Identifier.tryParse(je.getAsString());
-            list.add(identifier);
-        });
+        List<ConditionedOrigin> list = new ArrayList<>(originArray.size());
+        originArray.forEach(je -> list.add(ConditionedOrigin.read(je)));
         boolean enabled = JsonHelper.getBoolean(json, "enabled", true);
         OriginLayer layer = new OriginLayer();
         layer.order = order;
-        layer.origins = list;
+        layer.conditionedOrigins = list;
         layer.enabled = enabled;
         layer.identifier = id;
         layer.nameTranslationKey = JsonHelper.getString(json, "name", "");
         return layer;
+    }
+
+    public static class ConditionedOrigin {
+        private final ConditionFactory<PlayerEntity>.Instance condition;
+        private final List<Identifier> origins;
+
+        public ConditionedOrigin(ConditionFactory<PlayerEntity>.Instance condition, List<Identifier> origins) {
+            this.condition = condition;
+            this.origins = origins;
+        }
+
+        public boolean isConditionFulfilled(PlayerEntity playerEntity) {
+            return condition == null || condition.test(playerEntity);
+        }
+
+        public List<Identifier> getOrigins() {
+            return origins;
+        }
+        private static final SerializableData conditionedOriginObjectData = new SerializableData()
+            .add("condition", SerializableDataType.PLAYER_CONDITION)
+            .add("origins", SerializableDataType.IDENTIFIERS);
+
+        public void write(PacketByteBuf buffer) {
+            buffer.writeBoolean(condition != null);
+            if(condition != null)
+                condition.write(buffer);
+            buffer.writeInt(origins.size());
+            origins.forEach(buffer::writeIdentifier);
+        }
+
+        @Environment(EnvType.CLIENT)
+        public static ConditionedOrigin read(PacketByteBuf buffer) {
+            ConditionFactory<PlayerEntity>.Instance condition = null;
+            if(buffer.readBoolean()) {
+                condition = ConditionTypes.PLAYER.read(buffer);
+            }
+            int originCount = buffer.readInt();
+            List<Identifier> originList = new ArrayList<>(originCount);
+            for(int i = 0; i < originCount; i++) {
+                originList.add(buffer.readIdentifier());
+            }
+            return new ConditionedOrigin(condition, originList);
+        }
+
+        @SuppressWarnings("unchecked")
+        public static ConditionedOrigin read(JsonElement element) {
+            if(element.isJsonPrimitive()) {
+                JsonPrimitive elemPrimitive = element.getAsJsonPrimitive();
+                if(elemPrimitive.isString()) {
+                    return new ConditionedOrigin(null, Lists.newArrayList(Identifier.tryParse(elemPrimitive.getAsString())));
+                }
+                throw new JsonParseException("Expected origin in layer to be either a string or an object.");
+            } else if(element.isJsonObject()) {
+                SerializableData.Instance data = conditionedOriginObjectData.read(element.getAsJsonObject());
+                return new ConditionedOrigin((ConditionFactory<PlayerEntity>.Instance)data.get("condition"), (List<Identifier>)data.get("origins"));
+            }
+            throw new JsonParseException("Expected origin in layer to be either a string or an object.");
+        }
     }
 }

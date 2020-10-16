@@ -8,7 +8,6 @@ import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.Active;
 import io.github.apace100.origins.registry.ModComponents;
-import io.github.apace100.origins.util.ChoseOriginCriterion;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -27,13 +26,14 @@ public class ModPacketsC2S {
                     Identifier id = Identifier.tryParse(originId);
                     if(id != null) {
                         Origin origin = OriginRegistry.get(id);
-                        if(origin.isChoosable() && layer.contains(origin)) {
+                        if(origin.isChoosable() && layer.contains(origin, player)) {
                             boolean hadOriginBefore = component.hadOriginBefore();
                             boolean hadAllOrigins = component.hasAllOrigins();
                             component.setOrigin(layer, origin);
                             component.sync();
                             if(component.hasAllOrigins() && !hadAllOrigins) {
                                 component.getOrigins().values().forEach(o -> {
+                                    Origins.LOGGER.info("Calling Powers onChosen for " + o.getIdentifier());
                                     o.getPowerTypes().forEach(powerType -> component.getPower(powerType).onChosen(hadOriginBefore));
                                 });
                             }

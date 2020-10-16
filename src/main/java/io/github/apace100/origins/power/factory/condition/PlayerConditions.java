@@ -1,7 +1,13 @@
 package io.github.apace100.origins.power.factory.condition;
 
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.origin.OriginLayer;
+import io.github.apace100.origins.origin.OriginLayers;
+import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.PowerTypeReference;
+import io.github.apace100.origins.power.PowerTypeRegistry;
+import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.util.Comparison;
 import io.github.apace100.origins.util.SerializableData;
@@ -13,6 +19,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.tag.Tag;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 
@@ -88,6 +95,39 @@ public class PlayerConditions {
             }));
         register(new ConditionFactory<>(Origins.identifier("submerged_in"), new SerializableData().add("fluid", SerializableDataType.FLUID_TAG),
             (data, player) -> player.isSubmergedIn((Tag<Fluid>)data.get("fluid"))));
+        register(new ConditionFactory<>(Origins.identifier("fluid_height"), new SerializableData()
+            .add("fluid", SerializableDataType.FLUID_TAG)
+            .add("comparison", SerializableDataType.COMPARISON)
+            .add("compare_to", SerializableDataType.DOUBLE),
+            (data, player) -> ((Comparison)data.get("comparison")).compare(player.getFluidHeight((Tag<Fluid>)data.get("fluid")), data.getDouble("compare_to"))));
+        register(new ConditionFactory<>(Origins.identifier("origin"), new SerializableData()
+            .add("origin", SerializableDataType.IDENTIFIER)
+            .add("layer", SerializableDataType.IDENTIFIER, null),
+            (data, player) -> {
+                OriginComponent component = ModComponents.ORIGIN.get(player);
+                Identifier originId = data.getId("origin");
+                if(data.isPresent("layer")) {
+                    Identifier layerId = data.getId("layer");
+                    OriginLayer layer = OriginLayers.getLayer(layerId);
+                    if(layer == null) {
+                        return false;
+                    } else {
+                        return component.getOrigin(layer).getIdentifier().equals(originId);
+                    }
+                } else {
+                    return component.getOrigins().values().stream().anyMatch(o -> o.getIdentifier().equals(originId));
+                }
+            }));
+        register(new ConditionFactory<>(Origins.identifier("power"), new SerializableData()
+            .add("power", SerializableDataType.IDENTIFIER),
+            (data, player) -> {
+                try {
+                    PowerType<?> powerType = PowerTypeRegistry.get(data.getId("power"));
+                    return ModComponents.ORIGIN.get(player).hasPower(powerType);
+                } catch(IllegalArgumentException e) {
+                    return false;
+                }
+            }));
     }
 
     private static void register(ConditionFactory<PlayerEntity> conditionFactory) {
