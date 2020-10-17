@@ -58,8 +58,8 @@ public class SerializableData {
         try {
             dataFields.forEach((name, entry) -> {
                 if(!jsonObject.has(name)) {
-                    if(entry.hasDefault) {
-                        instance.set(name, entry.defaultValue);
+                    if(entry.hasDefault()) {
+                        instance.set(name, entry.getDefault(instance));
                     } else {
                         throw new JsonSyntaxException("JSON requires field: " + name);
                     }
