@@ -3,12 +3,14 @@ package io.github.apace100.origins.power.factory;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.power.factory.condition.ConditionFactory;
+import io.github.apace100.origins.registry.ModDamageSources;
 import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.util.AttributedEntityAttributeModifier;
 import io.github.apace100.origins.util.HudRender;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import net.minecraft.block.pattern.CachedBlockPosition;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -397,20 +399,24 @@ public class PowerFactories {
                 (type, player) ->
                     new ToggleNightVisionPower(type, player, data.getFloat("strength"), data.getBoolean("active_by_default")))
             .allowCondition());
-        register(new PowerFactory<>(Origins.identifier("water_vulnerability"),
+        register(new PowerFactory<>(Origins.identifier("damage_over_time"),
             new SerializableData()
                 .add("interval", SerializableDataType.INT)
                 .addFunctionedDefault("onset_delay", SerializableDataType.INT, data -> data.getInt("interval"))
                 .add("damage", SerializableDataType.FLOAT)
                 .addFunctionedDefault("damage_easy", SerializableDataType.FLOAT, data -> data.getFloat("damage"))
-                .add("water_protection", SerializableDataType.FLOAT),
+                .add("damage_source", SerializableDataType.DAMAGE_SOURCE, ModDamageSources.GENERIC_DOT)
+                .add("protection_enchantment", SerializableDataType.ENCHANTMENT, null)
+                .add("protection_effectiveness", SerializableDataType.FLOAT, 1.0F),
             data ->
-                (type, player) -> new WaterVulnerabilityPower(type, player,
+                (type, player) -> new DamageOverTimePower(type, player,
                     data.getInt("onset_delay"),
                     data.getInt("interval"),
                     data.getFloat("damage_easy"),
                     data.getFloat("damage"),
-                    data.getFloat("water_protection")))
+                    (DamageSource)data.get("damage_source"),
+                    (Enchantment)data.get("protection_enchantment"),
+                    data.getFloat("protection_effectiveness")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("swimming"),
             new SerializableData(), data -> SwimmingPower::new).allowCondition());

@@ -6,5 +6,5 @@ import net.minecraft.entity.damage.DamageSource;
 public class ModDamageSources {
 
     public static final DamageSource NO_WATER_FOR_GILLS = ((DamageSourceAccessor)((DamageSourceAccessor)DamageSourceAccessor.createDamageSource("no_water_for_gills")).callSetBypassesArmor()).callSetUnblockable();
-    public static final DamageSource HURT_BY_WATER = ((DamageSourceAccessor)((DamageSourceAccessor)DamageSourceAccessor.createDamageSource("hurt_by_water")).callSetBypassesArmor()).callSetUnblockable();
+    public static final DamageSource GENERIC_DOT = ((DamageSourceAccessor)((DamageSourceAccessor)DamageSourceAccessor.createDamageSource("genericDamageOverTime")).callSetBypassesArmor()).callSetUnblockable();
 }

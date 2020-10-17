@@ -14,6 +14,7 @@ public class Power {
     protected PowerType<?> type;
 
     private boolean shouldTick = false;
+    private boolean shouldTickWhenInactive = false;
 
     private List<Predicate<PlayerEntity>> conditions;
 
@@ -28,11 +29,20 @@ public class Power {
     }
 
     protected void setTicking() {
+        this.setTicking(false);
+    }
+
+    protected void setTicking(boolean evenWhenInactive) {
         this.shouldTick = true;
+        this.shouldTickWhenInactive = evenWhenInactive;
     }
 
     public boolean shouldTick() {
         return shouldTick;
+    }
+
+    public boolean shouldTickWhenInactive() {
+        return shouldTickWhenInactive;
     }
 
     public void tick() {

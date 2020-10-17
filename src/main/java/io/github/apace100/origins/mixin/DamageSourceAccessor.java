@@ -23,4 +23,7 @@ public interface DamageSourceAccessor {
 
     @Invoker
     DamageSource callSetFire();
+
+    @Invoker
+    DamageSource callSetUsesMagic();
 }

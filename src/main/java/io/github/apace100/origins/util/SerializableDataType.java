@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.mixin.DamageSourceAccessor;
 import io.github.apace100.origins.origin.Impact;
 import io.github.apace100.origins.origin.OriginUpgrade;
 import io.github.apace100.origins.power.PowerType;
@@ -16,6 +17,7 @@ import io.github.apace100.origins.power.factory.condition.ConditionType;
 import io.github.apace100.origins.power.factory.condition.ConditionTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.pattern.CachedBlockPosition;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -93,6 +95,46 @@ public class SerializableDataType<T> {
         OriginUpgrade::fromJson);
 
     public static final SerializableDataType<List<OriginUpgrade>> UPGRADES = SerializableDataType.list(UPGRADE);
+
+    public static final SerializableDataType<Enchantment> ENCHANTMENT = SerializableDataType.registry(Enchantment.class, Registry.ENCHANTMENT);
+
+    public static final SerializableDataType<DamageSource> DAMAGE_SOURCE = SerializableDataType.compound(DamageSource.class, new SerializableData()
+        .add("name", STRING)
+        .add("bypasses_armor", BOOLEAN, false)
+        .add("fire", BOOLEAN, false)
+        .add("unblockable", BOOLEAN, false)
+        .add("magic", BOOLEAN, false)
+        .add("out_of_world", BOOLEAN, false),
+        (data) -> {
+            DamageSource damageSource = DamageSourceAccessor.createDamageSource(data.getString("name"));
+            DamageSourceAccessor accessor = (DamageSourceAccessor)damageSource;
+            if(data.getBoolean("bypasses_armor")) {
+                accessor.callSetBypassesArmor();
+            }
+            if(data.getBoolean("fire")) {
+                accessor.callSetFire();
+            }
+            if(data.getBoolean("unblockable")) {
+                accessor.callSetUnblockable();
+            }
+            if(data.getBoolean("magic")) {
+                accessor.callSetUsesMagic();
+            }
+            if(data.getBoolean("out_of_world")) {
+                accessor.callSetOutOfWorld();
+            }
+            return damageSource;
+        },
+        (data, ds) -> {
+            SerializableData.Instance inst = data.new Instance();
+            inst.set("name", ds.name);
+            inst.set("fire", ds.isFire());
+            inst.set("unblockable", ds.isUnblockable());
+            inst.set("bypasses_armor", ds.bypassesArmor());
+            inst.set("out_of_world", ds.isOutOfWorld());
+            inst.set("magic", ds.getMagic());
+            return inst;
+        });
 
     public static final SerializableDataType<EntityAttribute> ATTRIBUTE = SerializableDataType.registry(EntityAttribute.class, Registry.ATTRIBUTE);
 

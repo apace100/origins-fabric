@@ -190,6 +190,7 @@
 
   "death.attack.no_water_for_gills": "%s didn't manage to keep wet.",
   "death.attack.hurt_by_water": "%s took a bath for too long.",
+  "death.attack.genericDamageOverTime": "%s died to a damage over time effect.",
 
   "commands.origin.origin_not_found": "Unknown origin: %s",
   "commands.origin.set.success.single": "Set origin of %s in layer %s to %s.",

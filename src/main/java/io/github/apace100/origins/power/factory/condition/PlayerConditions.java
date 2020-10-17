@@ -65,6 +65,10 @@ public class PlayerConditions {
             }
             return false;
         }));
+        register(new ConditionFactory<>(Origins.identifier("in_rain"), new SerializableData(), (data, player) -> {
+            BlockPos blockPos = player.getBlockPos();
+            return player.world.hasRain(blockPos) || player.world.hasRain(new BlockPos(blockPos.getX(), player.getBoundingBox().maxY, blockPos.getZ()));
+        }));
         register(new ConditionFactory<>(Origins.identifier("invisible"), new SerializableData(), (data, player) -> player.isInvisible()));
         register(new ConditionFactory<>(Origins.identifier("on_fire"), new SerializableData(), (data, player) -> player.isOnFire()));
         register(new ConditionFactory<>(Origins.identifier("exposed_to_sky"), new SerializableData(), (data, player) -> {

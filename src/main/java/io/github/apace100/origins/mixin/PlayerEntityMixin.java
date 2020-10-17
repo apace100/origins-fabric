@@ -37,6 +37,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
 
     @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot slot);
 
+    @Shadow protected boolean isSubmergedInWater;
+
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -112,34 +114,18 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
     private void tick(CallbackInfo info) {
         if(!world.isClient) {
             OriginComponent component = ModComponents.ORIGIN.get(this);
-            component.getPowers(Power.class).stream().filter(Power::shouldTick).forEach(Power::tick);
-            component.getPowers(WaterVulnerabilityPower.class).forEach(waterCounter -> {
-                if(this.isWet()) {
+            component.getPowers(Power.class, true).stream().filter(p -> p.shouldTick() && (p.shouldTickWhenInactive() || p.isActive())).forEach(Power::tick);
+            /*component.getPowers(WaterVulnerabilityPower.class).forEach(waterCounter -> {
+                if(this.getFluidHeight(FluidTags.WATER) > 0 || this.isRainingAtPlayerPosition() || this.isSubmergedInWater()) {
+                //if(this.isWet()) {
                     waterCounter.inWater();
                 } else {
                     waterCounter.outOfWater();
                 }
-            });
+            });*/
             if(this.age % 10 == 0) {
                 component.getPowers(SimpleStatusEffectPower.class).forEach(SimpleStatusEffectPower::applyEffects);
                 component.getPowers(StackingStatusEffectPower.class, true).forEach(StackingStatusEffectPower::tick);
-                /*if(PowerTypes.HEAT.isActive(this)) {
-                    VariableIntPower heat = component.getPower(PowerTypes.HEAT);
-                    int value = 0;
-                    if(this.isInLava()) {
-                        value = heat.increment();
-                        component.syncWith((ServerPlayerEntity)(Object)this);
-                    } else {
-                        value = heat.decrement();
-                        component.syncWith((ServerPlayerEntity)(Object)this);
-                    }
-                    EntityAttributeInstance moveSpeed = this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
-                    if(value == heat.getMin() && !moveSpeed.hasModifier(Constants.NO_HEAT_SLOWNESS)) {
-                        moveSpeed.addTemporaryModifier(Constants.NO_HEAT_SLOWNESS);
-                    } else if(value > heat.getMin() && moveSpeed.hasModifier(Constants.NO_HEAT_SLOWNESS)){
-                        moveSpeed.removeModifier(Constants.NO_HEAT_SLOWNESS);
-                    }
-                }*/
             }
         }
 
