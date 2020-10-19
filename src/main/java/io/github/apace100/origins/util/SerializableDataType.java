@@ -239,7 +239,7 @@ public class SerializableDataType<T> {
     public static final SerializableDataType<HudRender> HUD_RENDER = SerializableDataType.compound(HudRender.class, new
         SerializableData()
             .add("should_render", BOOLEAN, true)
-            .add("bar_index", INT)
+            .add("bar_index", INT, 0)
             .add("sprite_location", IDENTIFIER, Origins.identifier("textures/gui/resource_bar.png")),
         (dataInst) -> new HudRender(dataInst.getBoolean("should_render"), dataInst.getInt("bar_index"), dataInst.getId("sprite_location")),
         (data, inst) -> {
