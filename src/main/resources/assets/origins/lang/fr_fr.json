@@ -12,10 +12,10 @@
   "origin.origins.blazeborn.description": "Quelques personnes rares sont descendants des Blazes ; elles seront à l'aise dans les mers de lave du Nether.",
 
   "origin.origins.avian.name": "Aviaire",
-  "origin.origins.avian.description": "Il était une époque où les aviaires pouvaient voler – aujourd'hui, on ne les voit que planant d'un endroit à l'autre.",
+  "origin.origins.avian.description": "Il était une époque où les aviaires pouvaient voler – aujourd'hui, on ne les voit guère que planant d'un endroit à l'autre.",
 
   "origin.origins.phantom.name": "Demi-Phantom",
-  "origin.origins.phantom.description": "En tant qu'hybrides des hommes et des Phantoms, ils peuvent alterner entre chaque forme.",
+  "origin.origins.phantom.description": "En tant qu'hybrides des hommes et des Phantoms, ils peuvent passer d'une forme à l'autre.",
 
   "origin.origins.feline.name": "Félin(e)",
   "origin.origins.feline.description": "Les Creepers ont peur de leur apparence féline et leur instinct acrobatique leur permet de toujours retomber sur leurs pieds.",
@@ -78,10 +78,10 @@
   "power.origins.slow_falling.description": "Vous tomberez doucement comme une plume, tant que vous ne vous accroupissez pas.",
 
   "power.origins.vegetarian.name": "Végétarien(ne)",
-  "power.origins.vegetarian.description": "Vous ne pourrez manger que les végétaux.",
+  "power.origins.vegetarian.description": "Vous ne pourrez pas digérer la viande.",
 
   "power.origins.fresh_air.name": "L'air frais",
-  "power.origins.fresh_air.description": "S'endormir nécessite un lit dont la hauteur est au moins 86 blocs, afin que vous puissiez respirer l'air vraiment frais.",
+  "power.origins.fresh_air.description": "S'endormir nécessite un lit à une hauteur d'au moins 86 blocs, afin que vous puissiez respirer un air vraiment frais.",
 
   "power.origins.phasing.name": "Incorporel(le)",
   "power.origins.phasing.description": "Adopter une forme de Phantom vous laisse passer dans des blocs solides (sauf l'obsidienne).",
@@ -114,7 +114,7 @@
   "power.origins.scare_creepers.description": "Votre apparence effraie les Creepers ; ils n'exploseront qu'après que vous les frappez.",
 
   "power.origins.launch_into_air.name": "Don du vent",
-  "power.origins.launch_into_air.description": "Vous pourrez sauter peut-être vingt blocs dans l'air toutes les trente secondes.",
+  "power.origins.launch_into_air.description": "Vous pourrez vous lancer environ vingt blocs dans les airs toutes les trente secondes.",
 
   "power.origins.elytra.name": "Ailé(e)",
   "power.origins.elytra.description": "Vous avez des ailes d'Élytres sans même en équiper.",
