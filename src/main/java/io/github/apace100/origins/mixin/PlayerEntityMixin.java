@@ -107,28 +107,9 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
         }
     }
 
-    // HUNGER_OVER_TIME & BURN_IN_DAYLIGHT
-    // WATER_BREATHING & WATER_VULNERABILITY
-    // PARTICLES & EXHAUSTING_WATER_BREATHING
+    // WATER_BREATHING
     @Inject(at = @At("TAIL"), method = "tick")
     private void tick(CallbackInfo info) {
-        if(!world.isClient) {
-            OriginComponent component = ModComponents.ORIGIN.get(this);
-            component.getPowers(Power.class, true).stream().filter(p -> p.shouldTick() && (p.shouldTickWhenInactive() || p.isActive())).forEach(Power::tick);
-            /*component.getPowers(WaterVulnerabilityPower.class).forEach(waterCounter -> {
-                if(this.getFluidHeight(FluidTags.WATER) > 0 || this.isRainingAtPlayerPosition() || this.isSubmergedInWater()) {
-                //if(this.isWet()) {
-                    waterCounter.inWater();
-                } else {
-                    waterCounter.outOfWater();
-                }
-            });*/
-            if(this.age % 10 == 0) {
-                component.getPowers(SimpleStatusEffectPower.class).forEach(SimpleStatusEffectPower::applyEffects);
-                component.getPowers(StackingStatusEffectPower.class, true).forEach(StackingStatusEffectPower::tick);
-            }
-        }
-
         if(PowerTypes.WATER_BREATHING.isActive(this)) {
             if(!this.isSubmergedIn(FluidTags.WATER) && !this.hasStatusEffect(StatusEffects.WATER_BREATHING) && !this.hasStatusEffect(StatusEffects.CONDUIT_POWER)) {
                 if(!this.isRainingAtPlayerPosition()) {

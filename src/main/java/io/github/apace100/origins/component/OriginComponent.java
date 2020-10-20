@@ -2,6 +2,7 @@ package io.github.apace100.origins.component;
 
 import com.google.common.collect.Lists;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.power.Power;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public interface OriginComponent extends AutoSyncedComponent {
+public interface OriginComponent extends AutoSyncedComponent, ServerTickingComponent {
 
 	boolean hasOrigin(OriginLayer layer);
 	boolean hasAllOrigins();

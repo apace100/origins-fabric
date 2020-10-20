@@ -5,9 +5,7 @@ import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
-import io.github.apace100.origins.power.Power;
-import io.github.apace100.origins.power.PowerType;
-import io.github.apace100.origins.power.PowerTypeRegistry;
+import io.github.apace100.origins.power.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -137,6 +135,23 @@ public class PlayerOriginComponent implements OriginComponent {
         });
         if(this.hasAllOrigins()) {
             this.hadOriginBefore = true;
+        }
+    }
+
+    @Override
+    public void serverTick() {
+        this.getPowers(Power.class, true).stream().filter(p -> p.shouldTick() && (p.shouldTickWhenInactive() || p.isActive())).forEach(Power::tick);
+            /*this.getPowers(WaterVulnerabilityPower.class).forEach(waterCounter -> {
+                if(this.getFluidHeight(FluidTags.WATER) > 0 || this.isRainingAtPlayerPosition() || this.isSubmergedInWater()) {
+                //if(this.isWet()) {
+                    waterCounter.inWater();
+                } else {
+                    waterCounter.outOfWater();
+                }
+            });*/
+        if(this.player.age % 10 == 0) {
+            this.getPowers(SimpleStatusEffectPower.class).forEach(SimpleStatusEffectPower::applyEffects);
+            this.getPowers(StackingStatusEffectPower.class, true).forEach(StackingStatusEffectPower::tick);
         }
     }
 
