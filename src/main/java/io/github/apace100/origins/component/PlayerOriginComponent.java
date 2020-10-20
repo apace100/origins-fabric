@@ -8,9 +8,6 @@ import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.PowerTypeRegistry;
-import io.github.apace100.origins.registry.ModComponents;
-import nerdhub.cardinal.components.api.ComponentType;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -144,7 +141,7 @@ public class PlayerOriginComponent implements OriginComponent {
     }
 
     @Override
-    public void fromTag(CompoundTag compoundTag) {
+    public void readFromNbt(CompoundTag compoundTag) {
         this.fromTag(compoundTag, true);
     }
 
@@ -225,7 +222,7 @@ public class PlayerOriginComponent implements OriginComponent {
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag compoundTag) {
+    public void writeToNbt(CompoundTag compoundTag) {
         ListTag originLayerList = new ListTag();
         for(Map.Entry<OriginLayer, Origin> entry : origins.entrySet()) {
             CompoundTag layerTag = new CompoundTag();
@@ -243,11 +240,10 @@ public class PlayerOriginComponent implements OriginComponent {
             powerList.add(powerTag);
         }
         compoundTag.put("Powers", powerList);
-        return compoundTag;
     }
 
     @Override
-    public void readFromPacket(PacketByteBuf buf) {
+    public void applySyncPacket(PacketByteBuf buf) {
         CompoundTag compoundTag = buf.readCompoundTag();
         if(compoundTag != null) {
             this.fromTag(compoundTag, false);
@@ -255,13 +251,8 @@ public class PlayerOriginComponent implements OriginComponent {
     }
 
     @Override
-    public Entity getEntity() {
-        return this.player;
-    }
-
-    @Override
-    public ComponentType<?> getComponentType() {
-        return ModComponents.ORIGIN;
+    public void sync() {
+        OriginComponent.sync(this.player);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package io.github.apace100.origins.mixin;
 
+import dev.onyxstudios.cca.api.v3.component.ComponentProvider;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.origin.Origin;
@@ -71,7 +72,7 @@ public abstract class LoginMixin {
 		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, ModPackets.LAYER_LIST, originLayerData);
 
 		List<ServerPlayerEntity> playerList = getPlayerList();
-		playerList.forEach(spe -> ModComponents.ORIGIN.get(spe).syncWith(player));
+		playerList.forEach(spe -> ModComponents.ORIGIN.syncWith(spe, ComponentProvider.fromEntity(player)));
 		OriginComponent.sync(player);
 		if(!component.hasAllOrigins()) {
 			PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());

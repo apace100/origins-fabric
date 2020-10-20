@@ -37,7 +37,6 @@ public class Origins implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Origins is initializing. Have fun!");
-		ModComponents.register();
 		ModBlocks.register();
 		ModItems.register();
 		ModTags.register();
