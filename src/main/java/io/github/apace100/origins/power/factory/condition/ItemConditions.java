@@ -7,6 +7,7 @@ import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ToolItem;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.registry.Registry;
 
@@ -41,6 +42,17 @@ public class ItemConditions {
                     armor = item.getProtection();
                 }
                 return ((Comparison)data.get("comparison")).compare(armor, data.getInt("compare_to"));
+            }));
+        register(new ConditionFactory<>(Origins.identifier("harvest_level"), new SerializableData()
+            .add("comparison", SerializableDataType.COMPARISON)
+            .add("compare_to", SerializableDataType.INT),
+            (data, stack) -> {
+                int harvestLevel = 0;
+                if(stack.getItem() instanceof ToolItem) {
+                    ToolItem item = (ToolItem)stack.getItem();
+                    harvestLevel = item.getMaterial().getMiningLevel();
+                }
+                return ((Comparison)data.get("comparison")).compare(harvestLevel, data.getInt("compare_to"));
             }));
     }
 

@@ -14,11 +14,15 @@ import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import io.github.apace100.origins.util.WorldUtil;
 import net.minecraft.block.pattern.CachedBlockPosition;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -146,6 +150,24 @@ public class PlayerConditions {
             (data, player) -> player.isOnGround() &&
             !data.isPresent("block_condition") || ((ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition")).test(
             new CachedBlockPosition(player.world, player.getBlockPos().down(), true))));
+        register(new ConditionFactory<>(Origins.identifier("equipped_item"), new SerializableData()
+            .add("equipment_slot", SerializableDataType.EQUIPMENT_SLOT)
+            .add("item_condition", SerializableDataType.ITEM_CONDITION),
+            (data, player) -> ((ConditionFactory<ItemStack>.Instance)data.get("item_condition")).test(
+                player.getEquippedStack((EquipmentSlot)data.get("equipment_slot")))));
+        register(new ConditionFactory<>(Origins.identifier("attribute"), new SerializableData()
+            .add("attribute", SerializableDataType.ATTRIBUTE)
+            .add("comparison", SerializableDataType.COMPARISON)
+            .add("compare_to", SerializableDataType.DOUBLE),
+            (data, player) -> {
+                double attrValue = 0F;
+                EntityAttributeInstance attributeInstance = player.getAttributeInstance((EntityAttribute) data.get("attribute"));
+                if(attributeInstance != null) {
+                    attrValue = attributeInstance.getValue();
+                }
+                return ((Comparison)data.get("comparison")).compare(attrValue, data.getDouble("compare_to"));
+            }));
+
     }
 
     private static void register(ConditionFactory<PlayerEntity> conditionFactory) {
