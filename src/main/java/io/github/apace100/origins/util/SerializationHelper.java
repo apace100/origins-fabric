@@ -3,6 +3,7 @@ package io.github.apace100.origins.util;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.effect.StatusEffect;
@@ -10,7 +11,6 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.tag.FluidTags;
-import net.minecraft.tag.ServerTagManagerHolder;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
@@ -26,12 +26,13 @@ public class SerializationHelper {
         Optional<? extends Tag.Identified<Fluid>> tag = FluidTags.getRequiredTags().stream().filter(f -> f.getId().equals(id)).findAny();
         if(tag.isPresent()) {
             return tag.get();
+        } else {
+            return TagRegistry.fluid(id);
         }
-        return null;
     }
 
     public static Tag<Block> getBlockTagFromId(Identifier id) {
-        return ServerTagManagerHolder.getTagManager().getBlocks().getTag(id);//BlockTags.getTagGroup().getTag(id);
+        return TagRegistry.block(id);
     }
 
     public static EntityAttributeModifier readAttributeModifier(JsonElement jsonElement) {
