@@ -177,6 +177,8 @@ public class EntityActions {
 
                 entity.world.spawnEntity(areaEffectCloudEntity);
             }));
+        register(new ActionFactory<>(Origins.identifier("extinguish"), new SerializableData(),
+            (data, entity) -> entity.extinguish()));
     }
 
     private static void register(ActionFactory<Entity> actionFactory) {
