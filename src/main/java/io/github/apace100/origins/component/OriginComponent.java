@@ -1,13 +1,14 @@
 package io.github.apace100.origins.component;
 
 import com.google.common.collect.Lists;
+import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.ValueModifyingPower;
 import io.github.apace100.origins.registry.ModComponents;
-import nerdhub.cardinal.components.api.util.sync.EntitySyncedComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public interface OriginComponent extends EntitySyncedComponent {
+public interface OriginComponent extends AutoSyncedComponent, ServerTickingComponent {
 
 	boolean hasOrigin(OriginLayer layer);
 	boolean hasAllOrigins();
@@ -35,8 +36,10 @@ public interface OriginComponent extends EntitySyncedComponent {
 
 	void setOrigin(OriginLayer layer, Origin origin);
 
+	void sync();
+
 	static void sync(PlayerEntity player) {
-		ModComponents.ORIGIN.get(player).sync();
+		ModComponents.ORIGIN.sync(player);
 	}
 
 	static <T extends Power> List<T> getPowers(Entity entity, Class<T> powerClass) {
@@ -80,7 +83,7 @@ public interface OriginComponent extends EntitySyncedComponent {
 						currentValue += baseValue * modifier.getValue();
 						break;
 					case MULTIPLY_TOTAL:
-						currentValue *= modifier.getValue();
+						currentValue *= (1 + modifier.getValue());
 						break;
 				}
 			}

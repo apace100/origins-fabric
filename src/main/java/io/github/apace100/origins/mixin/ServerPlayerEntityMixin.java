@@ -70,7 +70,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
 
     @Inject(at = @At("HEAD"), method = "getSpawnPointDimension", cancellable = true)
     private void modifyBlazebornSpawnDimension(CallbackInfoReturnable<RegistryKey<World>> info) {
-        if ((spawnPointPosition == null || hasObstructedSpawn()) && OriginComponent.getPowers(this, NetherSpawnPower.class).size() > 0) {
+        if ((spawnPointPosition == null || hasObstructedSpawn()) && OriginComponent.hasPower(this, NetherSpawnPower.class)) {
             info.setReturnValue(World.NETHER);
         }
     }
@@ -90,7 +90,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
 
     @Inject(at = @At("HEAD"), method = "isSpawnPointSet", cancellable = true)
     private void modifyBlazebornSpawnPointSet(CallbackInfoReturnable<Boolean> info) {
-        if((spawnPointPosition == null || hasObstructedSpawn()) && OriginComponent.getPowers(this, NetherSpawnPower.class).size() > 0) {
+        if((spawnPointPosition == null || hasObstructedSpawn()) && OriginComponent.hasPower(this, NetherSpawnPower.class)) {
             info.setReturnValue(true);
         }
     }

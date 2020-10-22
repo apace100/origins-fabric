@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 public class FireProjectilePower extends ActiveCooldownPower {
@@ -50,11 +51,19 @@ public class FireProjectilePower extends ActiveCooldownPower {
         if(entityType != null) {
             Entity entity = entityType.create(player.world);
             Vec3d spawnPos = player.getPos().add(0, ((EyeHeightAccess)player).callGetEyeHeight(player.getPose(), player.getDimensions(player.getPose())), 0).add(player.getRotationVector());
-            entity.setPos(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
+            entity.refreshPositionAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), player.pitch, player.yaw);
             if(entity instanceof ProjectileEntity) {
                 ProjectileEntity projectile = (ProjectileEntity)entity;
                 projectile.setOwner(player);
                 projectile.setProperties(player, player.pitch, player.yaw, 0F, speed, divergence);
+            } else {
+                float f = -MathHelper.sin(player.yaw * 0.017453292F) * MathHelper.cos(player.pitch * 0.017453292F);
+                float g = -MathHelper.sin(player.pitch * 0.017453292F);
+                float h = MathHelper.cos(player.yaw * 0.017453292F) * MathHelper.cos(player.pitch * 0.017453292F);
+                Vec3d vec3d = (new Vec3d(f, g, h)).normalize().add(player.getRandom().nextGaussian() * 0.007499999832361937D * (double)divergence, player.getRandom().nextGaussian() * 0.007499999832361937D * (double)divergence, player.getRandom().nextGaussian() * 0.007499999832361937D * (double)divergence).multiply((double)speed);
+                entity.setVelocity(vec3d);
+                Vec3d playerVelo = player.getVelocity();
+                entity.setVelocity(entity.getVelocity().add(playerVelo.x, player.isOnGround() ? 0.0D : playerVelo.y, playerVelo.z));
             }
             player.world.spawnEntity(entity);
         }

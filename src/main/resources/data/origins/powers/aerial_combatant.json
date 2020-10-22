@@ -2,7 +2,7 @@
   "type": "origins:modify_damage_dealt",
   "modifier": {
     "name": "Extra damage while fall flying",
-    "value": 2,
+    "value": 1,
     "operation": "multiply_base"
   },
   "condition": {

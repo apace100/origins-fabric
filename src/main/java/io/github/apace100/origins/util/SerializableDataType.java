@@ -6,20 +6,27 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.mixin.DamageSourceAccessor;
 import io.github.apace100.origins.origin.Impact;
 import io.github.apace100.origins.origin.OriginUpgrade;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.PowerTypeReference;
+import io.github.apace100.origins.power.factory.action.ActionFactory;
+import io.github.apace100.origins.power.factory.action.ActionType;
+import io.github.apace100.origins.power.factory.action.ActionTypes;
 import io.github.apace100.origins.power.factory.condition.ConditionFactory;
 import io.github.apace100.origins.power.factory.condition.ConditionType;
 import io.github.apace100.origins.power.factory.condition.ConditionTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.damage.DamageSource;
@@ -29,6 +36,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.recipe.Ingredient;
@@ -37,7 +46,11 @@ import net.minecraft.tag.ServerTagManagerHolder;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -204,6 +217,8 @@ public class SerializableDataType<T> {
     public static final SerializableDataType<Comparison> COMPARISON = SerializableDataType.enumValue(Comparison.class,
         SerializationHelper.buildEnumMap(Comparison.class, Comparison::getComparisonString));
 
+    public static final SerializableDataType<Space> SPACE = SerializableDataType.enumValue(Space.class);
+
     public static final SerializableDataType<ConditionFactory<PlayerEntity>.Instance> PLAYER_CONDITION =
         SerializableDataType.condition(ClassUtil.castClass(ConditionFactory.Instance.class), ConditionTypes.PLAYER);
 
@@ -227,6 +242,24 @@ public class SerializableDataType<T> {
 
     public static final SerializableDataType<List<ConditionFactory<Pair<DamageSource, Float>>.Instance>> DAMAGE_CONDITIONS =
         SerializableDataType.list(DAMAGE_CONDITION);
+
+    public static final SerializableDataType<ActionFactory<Entity>.Instance> ENTITY_ACTION =
+        SerializableDataType.effect(ClassUtil.castClass(ActionFactory.Instance.class), ActionTypes.ENTITY);
+
+    public static final SerializableDataType<List<ActionFactory<Entity>.Instance>> ENTITY_ACTIONS =
+        SerializableDataType.list(ENTITY_ACTION);
+
+    public static final SerializableDataType<ActionFactory<Triple<World, BlockPos, Direction>>.Instance> BLOCK_ACTION =
+        SerializableDataType.effect(ClassUtil.castClass(ActionFactory.Instance.class), ActionTypes.BLOCK);
+
+    public static final SerializableDataType<List<ActionFactory<Triple<World, BlockPos, Direction>>.Instance>> BLOCK_ACTIONS =
+        SerializableDataType.list(BLOCK_ACTION);
+
+    public static final SerializableDataType<ActionFactory<ItemStack>.Instance> ITEM_ACTION =
+        SerializableDataType.effect(ClassUtil.castClass(ActionFactory.Instance.class), ActionTypes.ITEM);
+
+    public static final SerializableDataType<List<ActionFactory<ItemStack>.Instance>> ITEM_ACTIONS =
+        SerializableDataType.list(ITEM_ACTION);
 
     public static final SerializableDataType<Ingredient> INGREDIENT = new SerializableDataType<>(
         Ingredient.class,
@@ -259,11 +292,69 @@ public class SerializableDataType<T> {
             "aquatic", EntityGroup.AQUATIC
         )));
 
+    public static final SerializableDataType<EquipmentSlot> EQUIPMENT_SLOT = SerializableDataType.enumValue(EquipmentSlot.class);
+
     public static final SerializableDataType<SoundEvent> SOUND_EVENT = SerializableDataType.registry(SoundEvent.class, Registry.SOUND_EVENT);
 
     public static final SerializableDataType<EntityType<?>> ENTITY_TYPE = SerializableDataType.registry(ClassUtil.castClass(EntityType.class), Registry.ENTITY_TYPE);
 
     public static final SerializableDataType<ParticleType<?>> PARTICLE_TYPE = SerializableDataType.registry(ClassUtil.castClass(ParticleType.class), Registry.PARTICLE_TYPE);
+
+    public static final SerializableDataType<CompoundTag> NBT = SerializableDataType.wrap(CompoundTag.class, SerializableDataType.STRING,
+        CompoundTag::toString,
+        (str) -> {
+            try {
+                return new StringNbtReader(new StringReader(str)).parseCompoundTag();
+            } catch (CommandSyntaxException e) {
+                throw new JsonSyntaxException("Could not parse NBT tag, exception: " + e.getMessage());
+            }
+        });
+
+    public static final SerializableDataType<ItemStack> ITEM_STACK = SerializableDataType.compound(ItemStack.class,
+        new SerializableData()
+            .add("item", SerializableDataType.ITEM)
+            .add("amount", SerializableDataType.INT, 1)
+            .add("tag", NBT, null),
+        (data) ->  {
+            ItemStack stack = new ItemStack((Item)data.get("item"), data.getInt("amount"));
+            if(data.isPresent("tag")) {
+                stack.setTag((CompoundTag)data.get("tag"));
+            }
+            return stack;
+        },
+        ((serializableData, itemStack) -> {
+            SerializableData.Instance data = serializableData.new Instance();
+            data.set("item", itemStack.getItem());
+            data.set("amount", itemStack.getCount());
+            data.set("tag", itemStack.hasTag() ? itemStack.getTag() : null);
+            return data;
+        }));
+
+    public static final SerializableDataType<List<ItemStack>> ITEM_STACKS = SerializableDataType.list(ITEM_STACK);
+
+    public static final SerializableDataType<Pair<Integer, ItemStack>> POSITIONED_ITEM_STACK = SerializableDataType.compound(ClassUtil.castClass(Pair.class),
+        new SerializableData()
+            .add("item", SerializableDataType.ITEM)
+            .add("amount", SerializableDataType.INT, 1)
+            .add("tag", NBT, null)
+            .add("slot", SerializableDataType.INT, Integer.MIN_VALUE),
+        (data) ->  {
+            ItemStack stack = new ItemStack((Item)data.get("item"), data.getInt("amount"));
+            if(data.isPresent("tag")) {
+                stack.setTag((CompoundTag)data.get("tag"));
+            }
+            return new Pair<>(data.getInt("slot"), stack);
+        },
+        ((serializableData, positionedStack) -> {
+            SerializableData.Instance data = serializableData.new Instance();
+            data.set("item", positionedStack.getRight().getItem());
+            data.set("amount", positionedStack.getRight().getCount());
+            data.set("tag", positionedStack.getRight().hasTag() ? positionedStack.getRight().getTag() : null);
+            data.set("slot", positionedStack.getLeft());
+            return data;
+        }));
+
+    public static final SerializableDataType<List<Pair<Integer, ItemStack>>> POSITIONED_ITEM_STACKS = SerializableDataType.list(POSITIONED_ITEM_STACK);
 
     private final Class<T> dataClass;
     private final BiConsumer<PacketByteBuf, T> send;
@@ -412,6 +503,10 @@ public class SerializableDataType<T> {
 
     public static <T> SerializableDataType<ConditionFactory<T>.Instance> condition(Class<ConditionFactory<T>.Instance> dataClass, ConditionType<T> conditionType) {
         return new SerializableDataType<>(dataClass, conditionType::write, conditionType::read, conditionType::read);
+    }
+
+    public static <T> SerializableDataType<ActionFactory<T>.Instance> effect(Class<ActionFactory<T>.Instance> dataClass, ActionType<T> actionType) {
+        return new SerializableDataType<>(dataClass, actionType::write, actionType::read, actionType::read);
     }
 
     public static <T, U> SerializableDataType<T> wrap(Class<T> dataClass, SerializableDataType<U> base, Function<T, U> toFunction, Function<U, T> fromFunction) {

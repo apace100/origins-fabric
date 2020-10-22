@@ -14,8 +14,6 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import java.util.Optional;
-
 public class NetherSpawnPower extends Power {
 
     public NetherSpawnPower(PowerType<?> type, PlayerEntity player) {
@@ -64,7 +62,7 @@ public class NetherSpawnPower extends Power {
             int center = nether.getDimensionHeight() / 2;
             BlockPos.Mutable mutable = spawnToNetherPos.mutableCopy();
             mutable.setY(center);
-            Vec3d tpPos = Dismounting.method_30769(EntityType.PLAYER, nether, mutable, true);
+            Vec3d tpPos = getSpawn(nether, mutable);
             int range = 64;
             for(int dx = -range; dx <= range && tpPos == null; dx++) {
                 for(int dz = -range; dz <= range && tpPos == null; dz++) {
@@ -72,12 +70,12 @@ public class NetherSpawnPower extends Power {
                         mutable.setX(spawnToNetherPos.getX() + dx);
                         mutable.setZ(spawnToNetherPos.getZ() + dz);
                         mutable.setY(center + i);
-                        tpPos = Dismounting.method_30769(EntityType.PLAYER, nether, mutable, true);
+                        tpPos = getSpawn(nether, mutable);
                         if(tpPos != null) {
                             break;
                         }
                         mutable.setY(center - i);
-                        tpPos = Dismounting.method_30769(EntityType.PLAYER, nether, mutable, true);
+                        tpPos = getSpawn(nether, mutable);
                         if(tpPos != null) {
                             break;
                         }
@@ -96,8 +94,8 @@ public class NetherSpawnPower extends Power {
         return null;
     }
 
-    private Optional<Vec3d> getValidPosition(World world, BlockPos pos) {
-         Vec3d p = Dismounting.method_30769(EntityType.PLAYER, world, pos, false);
-         return Optional.of(p);
+    private Vec3d getSpawn(ServerWorld world, BlockPos pos) {
+        return Dismounting.method_30769(EntityType.PLAYER, world, pos, true);
+        //return PlayerEntity.findRespawnPosition(world, pos, 0f, true, false).orElse(null);
     }
 }

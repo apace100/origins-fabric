@@ -5,12 +5,7 @@ import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
-import io.github.apace100.origins.power.Power;
-import io.github.apace100.origins.power.PowerType;
-import io.github.apace100.origins.power.PowerTypeRegistry;
-import io.github.apace100.origins.registry.ModComponents;
-import nerdhub.cardinal.components.api.ComponentType;
-import net.minecraft.entity.Entity;
+import io.github.apace100.origins.power.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -144,7 +139,24 @@ public class PlayerOriginComponent implements OriginComponent {
     }
 
     @Override
-    public void fromTag(CompoundTag compoundTag) {
+    public void serverTick() {
+        this.getPowers(Power.class, true).stream().filter(p -> p.shouldTick() && (p.shouldTickWhenInactive() || p.isActive())).forEach(Power::tick);
+            /*this.getPowers(WaterVulnerabilityPower.class).forEach(waterCounter -> {
+                if(this.getFluidHeight(FluidTags.WATER) > 0 || this.isRainingAtPlayerPosition() || this.isSubmergedInWater()) {
+                //if(this.isWet()) {
+                    waterCounter.inWater();
+                } else {
+                    waterCounter.outOfWater();
+                }
+            });*/
+        if(this.player.age % 10 == 0) {
+            this.getPowers(SimpleStatusEffectPower.class).forEach(SimpleStatusEffectPower::applyEffects);
+            this.getPowers(StackingStatusEffectPower.class, true).forEach(StackingStatusEffectPower::tick);
+        }
+    }
+
+    @Override
+    public void readFromNbt(CompoundTag compoundTag) {
         this.fromTag(compoundTag, true);
     }
 
@@ -205,15 +217,20 @@ public class PlayerOriginComponent implements OriginComponent {
         ListTag powerList = (ListTag)compoundTag.get("Powers");
         for(int i = 0; i < powerList.size(); i++) {
             CompoundTag powerTag = powerList.getCompound(i);
-            PowerType<?> type = PowerTypeRegistry.get(Identifier.tryParse(powerTag.getString("Type")));
-            if(hasPowerType(type)) {
-                Tag data = powerTag.get("Data");
-                Power power = type.create(player);
-                power.fromTag(data);
-                this.powers.put(type, power);
-                if(callPowerOnAdd) {
-                    power.onAdded();
+            Identifier powerTypeId = Identifier.tryParse(powerTag.getString("Type"));
+            try {
+                PowerType<?> type = PowerTypeRegistry.get(powerTypeId);
+                if(hasPowerType(type)) {
+                    Tag data = powerTag.get("Data");
+                    Power power = type.create(player);
+                    power.fromTag(data);
+                    this.powers.put(type, power);
+                    if(callPowerOnAdd) {
+                        power.onAdded();
+                    }
                 }
+            } catch(IllegalArgumentException e) {
+                Origins.LOGGER.warn("Power data of unregistered power \"" + powerTypeId + "\" found on player, skipping...");
             }
         }
         this.getPowerTypes().forEach(pt -> {
@@ -225,7 +242,7 @@ public class PlayerOriginComponent implements OriginComponent {
     }
 
     @Override
-    public CompoundTag toTag(CompoundTag compoundTag) {
+    public void writeToNbt(CompoundTag compoundTag) {
         ListTag originLayerList = new ListTag();
         for(Map.Entry<OriginLayer, Origin> entry : origins.entrySet()) {
             CompoundTag layerTag = new CompoundTag();
@@ -243,11 +260,10 @@ public class PlayerOriginComponent implements OriginComponent {
             powerList.add(powerTag);
         }
         compoundTag.put("Powers", powerList);
-        return compoundTag;
     }
 
     @Override
-    public void readFromPacket(PacketByteBuf buf) {
+    public void applySyncPacket(PacketByteBuf buf) {
         CompoundTag compoundTag = buf.readCompoundTag();
         if(compoundTag != null) {
             this.fromTag(compoundTag, false);
@@ -255,13 +271,8 @@ public class PlayerOriginComponent implements OriginComponent {
     }
 
     @Override
-    public Entity getEntity() {
-        return this.player;
-    }
-
-    @Override
-    public ComponentType<?> getComponentType() {
-        return ModComponents.ORIGIN;
+    public void sync() {
+        OriginComponent.sync(this.player);
     }
 
     @Override
