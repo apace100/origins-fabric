@@ -14,6 +14,9 @@ import io.github.apace100.origins.power.factory.condition.BlockConditions;
 import io.github.apace100.origins.power.factory.condition.DamageConditions;
 import io.github.apace100.origins.power.factory.condition.ItemConditions;
 import io.github.apace100.origins.power.factory.condition.PlayerConditions;
+import io.github.apace100.origins.power.factory.action.BlockActions;
+import io.github.apace100.origins.power.factory.action.EntityActions;
+import io.github.apace100.origins.power.factory.action.ItemActions;
 import io.github.apace100.origins.registry.*;
 import io.github.apace100.origins.util.ChoseOriginCriterion;
 import io.github.apace100.origins.util.ElytraPowerFallFlying;
@@ -49,6 +52,9 @@ public class Origins implements ModInitializer {
 		ItemConditions.register();
 		BlockConditions.register();
 		DamageConditions.register();
+		EntityActions.register();
+		ItemActions.register();
+		BlockActions.register();
 		Origin.init();
 		FallFlyingLib.registerAccessor((le) -> new ElytraPowerFallFlying(le));
 		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {

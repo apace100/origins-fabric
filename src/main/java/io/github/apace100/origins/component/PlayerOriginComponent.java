@@ -217,15 +217,20 @@ public class PlayerOriginComponent implements OriginComponent {
         ListTag powerList = (ListTag)compoundTag.get("Powers");
         for(int i = 0; i < powerList.size(); i++) {
             CompoundTag powerTag = powerList.getCompound(i);
-            PowerType<?> type = PowerTypeRegistry.get(Identifier.tryParse(powerTag.getString("Type")));
-            if(hasPowerType(type)) {
-                Tag data = powerTag.get("Data");
-                Power power = type.create(player);
-                power.fromTag(data);
-                this.powers.put(type, power);
-                if(callPowerOnAdd) {
-                    power.onAdded();
+            Identifier powerTypeId = Identifier.tryParse(powerTag.getString("Type"));
+            try {
+                PowerType<?> type = PowerTypeRegistry.get(powerTypeId);
+                if(hasPowerType(type)) {
+                    Tag data = powerTag.get("Data");
+                    Power power = type.create(player);
+                    power.fromTag(data);
+                    this.powers.put(type, power);
+                    if(callPowerOnAdd) {
+                        power.onAdded();
+                    }
                 }
+            } catch(IllegalArgumentException e) {
+                Origins.LOGGER.warn("Power data of unregistered power \"" + powerTypeId + "\" found on player, skipping...");
             }
         }
         this.getPowerTypes().forEach(pt -> {

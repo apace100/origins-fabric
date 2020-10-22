@@ -2,7 +2,7 @@
   "type": "origins:modify_break_speed",
   "modifier": {
     "name": "Unbreakable natural stone",
-    "value": 0,
+    "value": -1,
     "operation": "multiply_total"
   },
   "block_condition": {

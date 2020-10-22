@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
@@ -37,6 +38,16 @@ public abstract class LivingEntityMixin extends Entity {
         //}
     }
 
+    @Inject(method = "damage", at = @At("RETURN"))
+    private void invokeHitActions(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if(cir.getReturnValue()) {
+            OriginComponent.getPowers(this, SelfActionWhenHitPower.class).forEach(p -> p.whenHit(source, amount));
+            OriginComponent.getPowers(this, AttackerActionWhenHitPower.class).forEach(p -> p.whenHit(source, amount));
+            OriginComponent.getPowers(source.getAttacker(), SelfActionOnHitPower.class).forEach(p -> p.onHit((LivingEntity)(Object)this, source, amount));
+            OriginComponent.getPowers(source.getAttacker(), TargetActionOnHitPower.class).forEach(p -> p.onHit((LivingEntity)(Object)this, source, amount));
+        }
+    }
+
     // ModifyLavaSpeedPower
     @ModifyConstant(method = "travel", constant = {
         @Constant(doubleValue = 0.5D, ordinal = 0),
@@ -55,7 +66,7 @@ public abstract class LivingEntityMixin extends Entity {
             List<SetEntityGroupPower> groups = component.getPowers(SetEntityGroupPower.class);
             if(groups.size() > 0) {
                 if(groups.size() > 1) {
-                    Origins.LOGGER.warn("Player " + this.getDisplayName().toString() + " had two instances of SetEntityGroupPower.");
+                    Origins.LOGGER.warn("Player " + this.getDisplayName().toString() + " has two instances of SetEntityGroupPower.");
                 }
                 info.setReturnValue(groups.get(0).group);
             }

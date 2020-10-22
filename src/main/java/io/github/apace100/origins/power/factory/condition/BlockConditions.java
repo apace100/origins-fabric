@@ -8,6 +8,7 @@ import io.github.apace100.origins.util.SerializableDataType;
 import net.minecraft.block.Block;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.tag.Tag;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 
@@ -51,6 +52,18 @@ public class BlockConditions {
                     }
                 }
                 return ((Comparison)data.get("comparison")).compare(adjacent, data.getInt("compare_to"));
+            }));
+        register(new ConditionFactory<>(Origins.identifier("replacable"), new SerializableData(),
+            (data, block) -> block.getBlockState().getMaterial().isReplaceable()));
+        register(new ConditionFactory<>(Origins.identifier("attachable"), new SerializableData(),
+            (data, block) -> {
+                for(Direction d : Direction.values()) {
+                    BlockPos adjacent = block.getBlockPos().offset(d);
+                    if(block.getWorld().getBlockState(adjacent).isSideSolidFullSquare(block.getWorld(), block.getBlockPos(), d.getOpposite())) {
+                        return true;
+                    }
+                }
+                return false;
             }));
     }
 
