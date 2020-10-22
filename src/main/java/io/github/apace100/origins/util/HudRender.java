@@ -1,8 +1,11 @@
 package io.github.apace100.origins.util;
 
+import io.github.apace100.origins.Origins;
 import net.minecraft.util.Identifier;
 
 public class HudRender {
+
+    public static final HudRender DONT_RENDER = new HudRender(false, 0, Origins.identifier("textures/gui/resource_bar.png"));
 
     private final boolean shouldRender;
     private final int barIndex;

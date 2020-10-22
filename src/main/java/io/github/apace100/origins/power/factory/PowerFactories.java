@@ -2,6 +2,7 @@ package io.github.apace100.origins.power.factory;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.power.*;
+import io.github.apace100.origins.power.factory.action.ActionFactory;
 import io.github.apace100.origins.power.factory.condition.ConditionFactory;
 import io.github.apace100.origins.registry.ModDamageSources;
 import io.github.apace100.origins.registry.ModRegistries;
@@ -11,6 +12,7 @@ import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -165,8 +167,9 @@ public class PowerFactories {
                 return (type, player) -> new ActiveCooldownPower(type, player,
                     data.getInt("cooldown"),
                     (HudRender)data.get("hud_render"),
-                    p -> {
-                        if(!p.world.isClient) {
+                    e -> {
+                        if(!e.world.isClient && e instanceof PlayerEntity) {
+                            PlayerEntity p = (PlayerEntity)e;
                             p.addVelocity(0, data.getFloat("speed"), 0);
                             p.velocityModified = true;
                             if(soundEvent != null) {
@@ -446,6 +449,107 @@ public class PowerFactories {
                 (type, player) ->
                     new LavaVisionPower(type, player, data.getFloat("s"), data.getFloat("v")))
             .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("conditioned_attribute"),
+            new SerializableData()
+                .add("modifier", SerializableDataType.ATTRIBUTED_ATTRIBUTE_MODIFIER, null)
+                .add("modifiers", SerializableDataType.ATTRIBUTED_ATTRIBUTE_MODIFIERS, null)
+                .add("tick_rate", SerializableDataType.INT, 20),
+            data ->
+                (type, player) -> {
+                    ConditionedAttributePower ap = new ConditionedAttributePower(type, player, data.getInt("tick_rate"));
+                    if(data.isPresent("modifier")) {
+                        ap.addModifier((AttributedEntityAttributeModifier)data.get("modifier"));
+                    }
+                    if(data.isPresent("modifiers")) {
+                        List<AttributedEntityAttributeModifier> modifierList = (List<AttributedEntityAttributeModifier>)data.get("modifiers");
+                        modifierList.forEach(ap::addModifier);
+                    }
+                    return ap;
+                }).allowCondition());
+        register(new PowerFactory<>(Origins.identifier("active_self"),
+            new SerializableData()
+                .add("entity_action", SerializableDataType.ENTITY_ACTION)
+                .add("cooldown", SerializableDataType.INT)
+                .add("hud_render", SerializableDataType.HUD_RENDER),
+            data ->
+                (type, player) -> new ActiveCooldownPower(type, player, data.getInt("cooldown"), (HudRender)data.get("hud_render"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("action_over_time"),
+            new SerializableData()
+                .add("entity_action", SerializableDataType.ENTITY_ACTION)
+                .add("interval", SerializableDataType.INT),
+            data ->
+                (type, player) -> new ActionOverTimePower(type, player, data.getInt("interval"), (ActionFactory<Entity>.Instance)data.get("entity_action")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("self_action_when_hit"),
+            new SerializableData()
+                .add("entity_action", SerializableDataType.ENTITY_ACTION)
+                .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
+                .add("cooldown", SerializableDataType.INT)
+                .add("hud_render", SerializableDataType.HUD_RENDER, HudRender.DONT_RENDER),
+            data ->
+                (type, player) -> new SelfActionWhenHitPower(type, player, data.getInt("cooldown"),
+                    (HudRender)data.get("hud_render"), (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("attacker_action_when_hit"),
+            new SerializableData()
+                .add("entity_action", SerializableDataType.ENTITY_ACTION)
+                .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
+                .add("cooldown", SerializableDataType.INT)
+                .add("hud_render", SerializableDataType.HUD_RENDER, HudRender.DONT_RENDER),
+            data ->
+                (type, player) -> new SelfActionWhenHitPower(type, player, data.getInt("cooldown"),
+                    (HudRender)data.get("hud_render"), (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("self_action_on_hit"),
+            new SerializableData()
+                .add("entity_action", SerializableDataType.ENTITY_ACTION)
+                .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
+                .add("cooldown", SerializableDataType.INT)
+                .add("hud_render", SerializableDataType.HUD_RENDER, HudRender.DONT_RENDER),
+            data ->
+                (type, player) -> new SelfActionOnHitPower(type, player, data.getInt("cooldown"),
+                    (HudRender)data.get("hud_render"), (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("target_action_on_hit"),
+            new SerializableData()
+                .add("entity_action", SerializableDataType.ENTITY_ACTION)
+                .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
+                .add("cooldown", SerializableDataType.INT)
+                .add("hud_render", SerializableDataType.HUD_RENDER, HudRender.DONT_RENDER),
+            data ->
+                (type, player) -> new TargetActionOnHitPower(type, player, data.getInt("cooldown"),
+                    (HudRender)data.get("hud_render"), (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("starting_equipment"),
+            new SerializableData()
+                .add("stack", SerializableDataType.POSITIONED_ITEM_STACK, null)
+                .add("stacks", SerializableDataType.POSITIONED_ITEM_STACKS, null),
+            data ->
+                (type, player) -> {
+                    StartingEquipmentPower power = new StartingEquipmentPower(type, player);
+                    if(data.isPresent("stack")) {
+                        Pair<Integer, ItemStack> stack = (Pair<Integer, ItemStack>)data.get("stack");
+                        power.addStack(stack.getLeft(), stack.getRight());
+                    }
+                    if(data.isPresent("stacks")) {
+                        ((List<Pair<Integer, ItemStack>>)data.get("stacks"))
+                            .forEach(integerItemStackPair -> {
+                                int slot = integerItemStackPair.getLeft();
+                                if(slot > Integer.MIN_VALUE) {
+                                    power.addStack(integerItemStackPair.getLeft(), integerItemStackPair.getRight());
+                                } else {
+                                    power.addStack(integerItemStackPair.getRight());
+                                }
+                            });
+                    }
+                    return power;
+                }));
     }
 
     private static void register(PowerFactory serializer) {

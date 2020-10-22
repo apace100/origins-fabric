@@ -80,7 +80,7 @@ public interface OriginComponent extends EntitySyncedComponent {
 						currentValue += baseValue * modifier.getValue();
 						break;
 					case MULTIPLY_TOTAL:
-						currentValue *= modifier.getValue();
+						currentValue *= (1 + modifier.getValue());
 						break;
 				}
 			}

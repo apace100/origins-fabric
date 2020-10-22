@@ -13,6 +13,7 @@ import io.github.apace100.origins.util.Comparison;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import io.github.apace100.origins.util.WorldUtil;
+import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
@@ -132,6 +133,19 @@ public class PlayerConditions {
                     return false;
                 }
             }));
+        register(new ConditionFactory<>(Origins.identifier("food_level"), new SerializableData()
+            .add("comparison", SerializableDataType.COMPARISON)
+            .add("compare_to", SerializableDataType.INT),
+            (data, player) -> ((Comparison)data.get("comparison")).compare(player.getHungerManager().getFoodLevel(), data.getInt("compare_to"))));
+        register(new ConditionFactory<>(Origins.identifier("saturation_level"), new SerializableData()
+            .add("comparison", SerializableDataType.COMPARISON)
+            .add("compare_to", SerializableDataType.FLOAT),
+            (data, player) -> ((Comparison)data.get("comparison")).compare(player.getHungerManager().getSaturationLevel(), data.getFloat("compare_to"))));
+        register(new ConditionFactory<>(Origins.identifier("on_block"), new SerializableData()
+            .add("block_condition", SerializableDataType.BLOCK_CONDITION),
+            (data, player) -> player.isOnGround() &&
+            !data.isPresent("block_condition") || ((ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition")).test(
+            new CachedBlockPosition(player.world, player.getBlockPos().down(), true))));
     }
 
     private static void register(ConditionFactory<PlayerEntity> conditionFactory) {
