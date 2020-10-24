@@ -2,7 +2,7 @@
   "origin.origins.human.name": "Humain",
   "origin.origins.human.description": "Un être humain ordinaire, qui aura une expérience Minecraft ordinaire.",
 
-  "origin.origins.merling.name": "Sirènet(te)",
+  "origin.origins.merling.name": "Sirènet",
   "origin.origins.merling.description": "Ces habitants de la mer ne sont pas habitués à rester hors de l'eau.",
 
   "origin.origins.arachnid.name": "Arachnide",
@@ -15,9 +15,9 @@
   "origin.origins.avian.description": "Il était une époque où les aviaires pouvaient voler – aujourd'hui, on ne les voit guère que planant d'un endroit à l'autre.",
 
   "origin.origins.phantom.name": "Demi-Phantom",
-  "origin.origins.phantom.description": "En tant qu'hybrides des hommes et des Phantoms, ils peuvent passer d'une forme à l'autre.",
+  "origin.origins.phantom.description": "En tant qu'hybrides des Hommes et des Phantoms, ils peuvent passer d'une forme à l'autre.",
 
-  "origin.origins.feline.name": "Félin(e)",
+  "origin.origins.feline.name": "Félin",
   "origin.origins.feline.description": "Les Creepers ont peur de leur apparence féline et leur instinct acrobatique leur permet de toujours retomber sur leurs pieds.",
 
   "origin.origins.elytrian.name": "Élytrien",
@@ -57,7 +57,7 @@
   "power.origins.carnivore.description": "Vous ne pourrez manger que de la viande.",
 
   "power.origins.fire_immunity.name": "Immunité au feu",
-  "power.origins.fire_immunity.description": "Vous ne serez jamais endommagé par le feu.",
+  "power.origins.fire_immunity.description": "Le feu ne vous endommagera jamais.",
 
   "power.origins.nether_spawn.name": "Résident du Nether",
   "power.origins.nether_spawn.description": "Vous trouverez votre point de réapparition au Nether.",
@@ -65,7 +65,7 @@
   "power.origins.burning_wrath.name": "Courroux du Blaze",
   "power.origins.burning_wrath.description": "Vos coups seront plus puissants si vous êtes en feu.",
 
-  "power.origins.hotblooded.name": "Hypertherme",
+  "power.origins.hotblooded.name": "Hyperthermie",
   "power.origins.hotblooded.description": "Votre sang sera si chaud que ni les poisons ni la putréfaction vous affecteront.",
 
   "power.origins.water_vulnerability.name": "Hydrophobie",
@@ -77,13 +77,13 @@
   "power.origins.slow_falling.name": "Légèreté",
   "power.origins.slow_falling.description": "Vous tomberez doucement comme une plume, tant que vous ne vous accroupissez pas.",
 
-  "power.origins.vegetarian.name": "Végétarien(ne)",
+  "power.origins.vegetarian.name": "Végétarien",
   "power.origins.vegetarian.description": "Vous ne pourrez pas digérer la viande.",
 
   "power.origins.fresh_air.name": "L'air frais",
   "power.origins.fresh_air.description": "S'endormir nécessite un lit à une hauteur d'au moins 86 blocs, afin que vous puissiez respirer un air vraiment frais.",
 
-  "power.origins.phasing.name": "Incorporel(le)",
+  "power.origins.phasing.name": "Incorporel",
   "power.origins.phasing.description": "Adopter une forme de Phantom vous laisse passer dans des blocs solides (sauf l'obsidienne).",
 
   "power.origins.invisibility.name": "Invisibilité",
@@ -101,7 +101,7 @@
   "power.origins.sprint_jump.name": "Chevilles fortes",
   "power.origins.sprint_jump.description": "Vos sauts seront plus hauts si vous sprintez.",
 
-  "power.origins.nine_lives.name": "Neuf vies?",
+  "power.origins.nine_lives.name": "Neuf vies ?",
   "power.origins.nine_lives.description": "Vous avez un cœur en moins que la plupart.",
 
   "power.origins.cat_vision.name": "Nocturne",
@@ -116,7 +116,7 @@
   "power.origins.launch_into_air.name": "Don du vent",
   "power.origins.launch_into_air.description": "Vous pourrez vous lancer environ vingt blocs dans les airs toutes les trente secondes.",
 
-  "power.origins.elytra.name": "Ailé(e)",
+  "power.origins.elytra.name": "Ailé",
   "power.origins.elytra.description": "Vous avez des ailes d'Élytres sans même en équiper.",
 
   "power.origins.light_armor.name": "20 Minutes du Mans",
@@ -126,10 +126,10 @@
   "power.origins.claustrophobia.description": "Rester sous un plafond bas trop longtemps vous ralentira et vous affaiblira.",
 
   "power.origins.more_kinetic_damage.name": "Os cassants",
-  "power.origins.more_kinetic_damage.description": "Vous serez blessé plus lourdement si vous tombez, ou si vous percutez un bloc en vol.",
+  "power.origins.more_kinetic_damage.description": "Vous vous blesserez plus lourdement si vous tombez, ou si vous percutez un bloc en vol.",
 
   "power.origins.aerial_combatant.name": "Chasseur extraordinaire",
-  "power.origins.aerial_combatant.description": "Vous serez considérablement plus fort lorsque vous volez avec des élytres.",
+  "power.origins.aerial_combatant.description": "Vos coups seront considérablement plus forts lorsque vous volez avec des élytres.",
 
   "power.origins.throw_ender_pearl.name": "Téléportation",
   "power.origins.throw_ender_pearl.description": "Vous pouvez lancer une perle de l'Ender pour vous téléporter n'importe quand – elle n'infligera pas de dégâts.",
@@ -154,9 +154,9 @@
   "power.origins.no_shield.description": "La façon dont vos mains sont formées vous empêche de tenir un bouclier correctement.",
 
   "power.origins.strong_arms.name": "Costaud",
-  "power.origins.strong_arms.description": "Vous êtes suffisamment fort pour briser de la roche naturelle à main nue.",
+  "power.origins.strong_arms.description": "Vous avez suffisamment de force pour briser de la roche naturelle à main nue.",
 
-  "power.origins.translucent.name": "Translucent(e)",
+  "power.origins.translucent.name": "Translucent",
   "power.origins.translucent.description": "Votre peau est translucente.",
 
   "category.origins": "Origines",
