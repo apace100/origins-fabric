@@ -163,6 +163,11 @@
   "key.origins.active_power": "Pouvoir actif",
   "key.origins.view_origin": "Afficher l'origine",
 
+  "text.autoconfig.origins.title": "Configuration d'Origins",
+  "text.autoconfig.origins.option.xOffset": "Offset X de la barre de rechargement",
+  "text.autoconfig.origins.option.yOffset": "Offset Y de la barre de rechargement",
+  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Force de l'overlay en forme Phantom",
+
   "item.origins.orb_of_origin": "Orbe d'origine",
 
   "enchantment.origins.water_protection": "Protection contre l'eau",
@@ -176,6 +181,10 @@
   "origins.gui.impact.low": "Faible",
   "origins.gui.impact.medium": "Moyen",
   "origins.gui.impact.high": "Élevé",
+
+  "layer.origins.origin.name": "Origine",
+  "layer.origins.origin.missing_origin.name": "Manquante",
+  "layer.origins.origin.missing_origin.description": "Vous n'avez pas d'origine.",
 
   "death.attack.no_water_for_gills": "%s n'a pas réussi à rester mouillé(e).",
   "death.attack.hurt_by_water": "%s a pris son bain trop longtemps.",
