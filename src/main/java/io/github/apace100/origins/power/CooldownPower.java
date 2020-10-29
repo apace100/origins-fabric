@@ -20,7 +20,7 @@ public class CooldownPower extends Power implements HudRendered {
     }
 
     public boolean canUse() {
-        return player.getEntityWorld().getTime() >= lastUseTime + cooldownDuration;
+        return player.getEntityWorld().getTime() >= lastUseTime + cooldownDuration && isActive();
     }
 
     public void use() {

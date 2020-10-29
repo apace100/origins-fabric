@@ -61,6 +61,10 @@ public class Power {
 
     }
 
+    public void onRespawn() {
+
+    }
+
     public boolean isActive() {
         return conditions.stream().allMatch(condition -> condition.test(player));
     }

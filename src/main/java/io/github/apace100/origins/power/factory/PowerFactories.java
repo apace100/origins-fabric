@@ -529,7 +529,8 @@ public class PowerFactories {
         register(new PowerFactory<>(Origins.identifier("starting_equipment"),
             new SerializableData()
                 .add("stack", SerializableDataType.POSITIONED_ITEM_STACK, null)
-                .add("stacks", SerializableDataType.POSITIONED_ITEM_STACKS, null),
+                .add("stacks", SerializableDataType.POSITIONED_ITEM_STACKS, null)
+                .add("recurrent", SerializableDataType.BOOLEAN, false),
             data ->
                 (type, player) -> {
                     StartingEquipmentPower power = new StartingEquipmentPower(type, player);
@@ -548,6 +549,7 @@ public class PowerFactories {
                                 }
                             });
                     }
+                    power.setRecurrent(data.getBoolean("recurrent"));
                     return power;
                 }));
     }
