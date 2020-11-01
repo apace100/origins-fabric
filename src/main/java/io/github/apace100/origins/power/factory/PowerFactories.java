@@ -136,9 +136,14 @@ public class PowerFactories {
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("inventory"),
             new SerializableData()
-                .add("name", SerializableDataType.STRING, "container.inventory"),
+                .add("name", SerializableDataType.STRING, "container.inventory")
+                .add("drop_on_death", SerializableDataType.BOOLEAN, false)
+                .add("drop_on_death_filter", SerializableDataType.ITEM_CONDITION, null),
             data ->
-                (type, player) -> new InventoryPower(type, player, data.getString("name"), 9))
+                (type, player) -> new InventoryPower(type, player, data.getString("name"), 9,
+                    data.getBoolean("drop_on_death"),
+                    data.isPresent("drop_on_death_filter") ? (ConditionFactory<ItemStack>.Instance)data.get("drop_on_death_filter") :
+                    itemStack -> true))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("invisibility"),
             new SerializableData()

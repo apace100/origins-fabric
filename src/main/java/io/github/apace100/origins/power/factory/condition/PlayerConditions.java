@@ -2,6 +2,7 @@ package io.github.apace100.origins.power.factory.condition;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.power.PowerType;
@@ -121,7 +122,11 @@ public class PlayerConditions {
                     if(layer == null) {
                         return false;
                     } else {
-                        return component.getOrigin(layer).getIdentifier().equals(originId);
+                        Origin origin = component.getOrigin(layer);
+                        if(origin != null) {
+                            return origin.getIdentifier().equals(originId);
+                        }
+                        return false;
                     }
                 } else {
                     return component.getOrigins().values().stream().anyMatch(o -> o.getIdentifier().equals(originId));

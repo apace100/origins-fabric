@@ -12,6 +12,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.tag.FluidTags;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -56,6 +57,14 @@ public abstract class LivingEntityMixin extends Entity {
     })
     private double modifyLavaSpeed(double original) {
         return OriginComponent.modify(this, ModifyLavaSpeedPower.class, original);
+    }
+
+    @Redirect(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isWet()Z"))
+    private boolean preventExtinguishingFromSwimming(LivingEntity livingEntity) {
+        if(OriginComponent.hasPower(livingEntity, SwimmingPower.class) && livingEntity.isSwimming() && !(getFluidHeight(FluidTags.WATER) > 0)) {
+            return false;
+        }
+        return livingEntity.isWet();
     }
 
     // SetEntityGroupPower

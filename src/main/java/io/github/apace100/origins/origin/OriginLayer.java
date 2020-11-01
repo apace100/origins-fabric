@@ -2,7 +2,6 @@ package io.github.apace100.origins.origin;
 
 import com.google.common.collect.Lists;
 import com.google.gson.*;
-import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.power.factory.condition.ConditionFactory;
 import io.github.apace100.origins.power.factory.condition.ConditionTypes;
 import io.github.apace100.origins.util.SerializableData;
@@ -63,23 +62,11 @@ public class OriginLayer implements Comparable<OriginLayer> {
     }
 
     public List<Identifier> getOrigins() {
-        return conditionedOrigins.stream().flatMap(co -> co.getOrigins().stream()).filter(o -> {
-            boolean contained = OriginRegistry.contains(o);
-            if(!contained) {
-                Origins.LOGGER.error("Origin layer \"" + identifier.toString() + "\" contained unregistered origin: \"" + o.toString() + "\" (skipping)");
-            }
-            return contained;
-        }).collect(Collectors.toList());
+        return conditionedOrigins.stream().flatMap(co -> co.getOrigins().stream()).filter(OriginRegistry::contains).collect(Collectors.toList());
     }
 
     public List<Identifier> getOrigins(PlayerEntity playerEntity) {
-        return conditionedOrigins.stream().filter(co -> co.isConditionFulfilled(playerEntity)).flatMap(co -> co.getOrigins().stream()).filter(o -> {
-            boolean contained = OriginRegistry.contains(o);
-            if(!contained) {
-                Origins.LOGGER.error("Origin layer \"" + identifier.toString() + "\" contained unregistered origin: \"" + o.toString() + "\" (skipping)");
-            }
-            return contained;
-        }).collect(Collectors.toList());
+        return conditionedOrigins.stream().filter(co -> co.isConditionFulfilled(playerEntity)).flatMap(co -> co.getOrigins().stream()).filter(OriginRegistry::contains).collect(Collectors.toList());
     }
 
     public boolean contains(Origin origin) {
