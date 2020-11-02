@@ -7,6 +7,9 @@
     "type": "origins:in_tag",
     "tag": "origins:unphasable"
   },
+  "phase_down_condition": {
+    "type": "origins:sneaking"
+  },
   "condition": {
     "type": "origins:power_active",
     "power": "origins:phantomize"

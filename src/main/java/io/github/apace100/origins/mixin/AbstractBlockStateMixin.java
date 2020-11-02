@@ -5,6 +5,7 @@ import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.PhasingPower;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -32,11 +33,11 @@ public abstract class AbstractBlockStateMixin {
     private void phaseThroughBlocks(BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> info) {
         VoxelShape blockShape = getBlock().getCollisionShape(asBlockState(), world, pos, context);
         if(!blockShape.isEmpty() && context instanceof EntityShapeContext) {
-            EntityShapeContext entityContext = (EntityShapeContext)context;
             Entity entity = ((EntityShapeContextAccess)context).getEntity();
             if(entity != null) {
-                if(!isAbove(entity, blockShape, pos, false) || entityContext.isDescending()) {
-                    for (PhasingPower phasingPower : OriginComponent.getPowers(entity, PhasingPower.class)) {
+                boolean isAbove = isAbove(entity, blockShape, pos, false);
+                for (PhasingPower phasingPower : OriginComponent.getPowers(entity, PhasingPower.class)) {
+                    if(!isAbove || phasingPower.shouldPhaseDown((PlayerEntity)entity)) {
                         if(phasingPower.doesApply(pos)) {
                             info.setReturnValue(VoxelShapes.empty());
                         }

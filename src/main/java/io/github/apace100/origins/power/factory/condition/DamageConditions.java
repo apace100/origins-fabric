@@ -18,6 +18,9 @@ public class DamageConditions {
 
     @SuppressWarnings("unchecked")
     public static void register() {
+        register(new ConditionFactory<>(Origins.identifier("constant"), new SerializableData()
+            .add("value", SerializableDataType.BOOLEAN),
+            (data, dmg) -> data.getBoolean("value")));
         register(new ConditionFactory<>(Origins.identifier("and"), new SerializableData()
             .add("conditions", SerializableDataType.DAMAGE_CONDITIONS),
             (data, dmg) -> ((List<ConditionFactory<Pair<DamageSource, Float>>.Instance>)data.get("conditions")).stream().allMatch(

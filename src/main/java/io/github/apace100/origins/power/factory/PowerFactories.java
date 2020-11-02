@@ -314,11 +314,13 @@ public class PowerFactories {
                 .add("block_condition", SerializableDataType.BLOCK_CONDITION)
                 .add("blacklist", SerializableDataType.BOOLEAN, false)
                 .add("render_type", SerializableDataType.enumValue(PhasingPower.RenderType.class), PhasingPower.RenderType.BLINDNESS)
-                .add("view_distance", SerializableDataType.FLOAT),
+                .add("view_distance", SerializableDataType.FLOAT)
+                .add("phase_down_condition", SerializableDataType.PLAYER_CONDITION, null),
             data ->
                 (type, player) ->
                     new PhasingPower(type, player, data.isPresent("block_condition") ? (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition") : cbp -> true,
-                        data.getBoolean("blacklist"), (PhasingPower.RenderType)data.get("render_type"), data.getFloat("view_distance")))
+                        data.getBoolean("blacklist"), (PhasingPower.RenderType)data.get("render_type"), data.getFloat("view_distance"),
+                        (ConditionFactory<PlayerEntity>.Instance)data.get("phase_down_condition")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("prevent_item_use"),
             new SerializableData()
@@ -359,6 +361,31 @@ public class PowerFactories {
                         restrictions.put(EquipmentSlot.FEET, (ConditionFactory<ItemStack>.Instance)data.get("feet"));
                     }
                     return new RestrictArmorPower(type, player, restrictions);
+                }));
+
+        register(new PowerFactory<>(Origins.identifier("conditioned_restrict_armor"),
+            new SerializableData()
+                .add("head", SerializableDataType.ITEM_CONDITION, null)
+                .add("chest", SerializableDataType.ITEM_CONDITION, null)
+                .add("legs", SerializableDataType.ITEM_CONDITION, null)
+                .add("feet", SerializableDataType.ITEM_CONDITION, null)
+                .add("tick_rate", SerializableDataType.INT, 80),
+            data ->
+                (type, player) -> {
+                    HashMap<EquipmentSlot, Predicate<ItemStack>> restrictions = new HashMap<>();
+                    if(data.isPresent("head")) {
+                        restrictions.put(EquipmentSlot.HEAD, (ConditionFactory<ItemStack>.Instance)data.get("head"));
+                    }
+                    if(data.isPresent("chest")) {
+                        restrictions.put(EquipmentSlot.CHEST, (ConditionFactory<ItemStack>.Instance)data.get("chest"));
+                    }
+                    if(data.isPresent("legs")) {
+                        restrictions.put(EquipmentSlot.LEGS, (ConditionFactory<ItemStack>.Instance)data.get("legs"));
+                    }
+                    if(data.isPresent("feet")) {
+                        restrictions.put(EquipmentSlot.FEET, (ConditionFactory<ItemStack>.Instance)data.get("feet"));
+                    }
+                    return new ConditionedRestrictArmorPower(type, player, restrictions, data.getInt("tick_rate"));
                 })
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("stacking_status_effect"),
