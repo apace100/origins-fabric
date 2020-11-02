@@ -316,7 +316,7 @@ public class PowerFactories {
                 .add("block_condition", SerializableDataType.BLOCK_CONDITION)
                 .add("blacklist", SerializableDataType.BOOLEAN, false)
                 .add("render_type", SerializableDataType.enumValue(PhasingPower.RenderType.class), PhasingPower.RenderType.BLINDNESS)
-                .add("view_distance", SerializableDataType.FLOAT)
+                .add("view_distance", SerializableDataType.FLOAT, 10F)
                 .add("phase_down_condition", SerializableDataType.PLAYER_CONDITION, null),
             data ->
                 (type, player) ->
