@@ -78,7 +78,7 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
                         loadingPriorities.put(id, priority);
                     } else {
                         if(loadingPriorities.get(id) < priority) {
-                            PowerTypeRegistry.register(id, type);
+                            PowerTypeRegistry.update(id, type);
                             loadingPriorities.put(id, priority);
                         }
                     }
