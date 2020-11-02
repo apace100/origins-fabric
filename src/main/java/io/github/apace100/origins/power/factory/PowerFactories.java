@@ -21,12 +21,14 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.tag.Tag;
 import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
 
@@ -584,6 +586,25 @@ public class PowerFactories {
                     power.setRecurrent(data.getBoolean("recurrent"));
                     return power;
                 }));
+        register(new PowerFactory<>(Origins.identifier("action_on_callback"),
+            new SerializableData()
+                .add("entity_action_respawned", SerializableDataType.ENTITY_ACTION, null)
+                .add("entity_action_removed", SerializableDataType.ENTITY_ACTION, null)
+                .add("entity_action_chosen", SerializableDataType.ENTITY_ACTION, null)
+                .add("execute_chosen_when_orb", SerializableDataType.BOOLEAN, true),
+            data ->
+                (type, player) -> new ActionOnCallbackPower(type, player,
+                    (ActionFactory<Entity>.Instance)data.get("entity_action_respawned"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action_removed"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action_chosen"),
+                    data.getBoolean("execute_chosen_when_orb")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("walk_on_fluid"),
+            new SerializableData()
+                .add("fluid", SerializableDataType.FLUID_TAG),
+            data ->
+                (type, player) -> new WalkOnFluidPower(type, player, (Tag<Fluid>)data.get("fluid")))
+            .allowCondition());
     }
 
     private static void register(PowerFactory serializer) {

@@ -15,7 +15,12 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.potion.PotionUtil;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.CommandOutput;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Quaternion;
@@ -128,13 +133,22 @@ public class EntityActions {
                 entity.velocityModified = true;
             }));
         register(new ActionFactory<>(Origins.identifier("spawn_entity"), new SerializableData()
-            .add("entity_type", SerializableDataType.ENTITY_TYPE),
+            .add("entity_type", SerializableDataType.ENTITY_TYPE)
+            .add("tag", SerializableDataType.NBT, null)
+            .add("entity_action", SerializableDataType.ENTITY_ACTION, null),
             (data, entity) -> {
                 Entity e = ((EntityType<?>)data.get("entity_type")).create(entity.world);
                 if(e != null) {
                     e.refreshPositionAndAngles(entity.getPos().x, entity.getPos().y, entity.getPos().z, entity.yaw, entity.pitch);
+                    if(data.isPresent("tag")) {
+                        e.fromTag((CompoundTag)data.get("tag"));
+                    }
+
+                    entity.world.spawnEntity(e);
+                    if(data.isPresent("action")) {
+                        ((ActionFactory<Entity>.Instance)data.get("action")).accept(e);
+                    }
                 }
-                entity.world.spawnEntity(e);
             }));
         register(new ActionFactory<>(Origins.identifier("gain_air"), new SerializableData()
             .add("value", SerializableDataType.INT),
@@ -179,6 +193,25 @@ public class EntityActions {
             }));
         register(new ActionFactory<>(Origins.identifier("extinguish"), new SerializableData(),
             (data, entity) -> entity.extinguish()));
+        register(new ActionFactory<>(Origins.identifier("execute_command"), new SerializableData()
+            .add("command", SerializableDataType.STRING)
+            .add("permission_level", SerializableDataType.INT, 0),
+            (data, entity) -> {
+                MinecraftServer server = entity.world.getServer();
+                if(server != null) {
+                    ServerCommandSource source = new ServerCommandSource(
+                        CommandOutput.DUMMY,
+                        entity.getPos(),
+                        entity.getRotationClient(),
+                        entity.world instanceof ServerWorld ? (ServerWorld)entity.world : null,
+                        data.getInt("permission_level"),
+                        entity.getName().getString(),
+                        entity.getDisplayName(),
+                        entity.world.getServer(),
+                        entity);
+                    server.getCommandManager().execute(source, data.getString("command"));
+                }
+            }));
     }
 
     private static void register(ActionFactory<Entity> actionFactory) {

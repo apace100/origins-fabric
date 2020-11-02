@@ -34,9 +34,9 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Inject(method = "canWalkOnFluid", at = @At("HEAD"), cancellable = true)
     private void modifyWalkableFluids(Fluid fluid, CallbackInfoReturnable<Boolean> info) {
-        //if(PowerTypes.LAVA_STRIDER.isActive(this) && fluid.isIn(FluidTags.LAVA)) {
-        //    info.setReturnValue(true);
-        //}
+        if(OriginComponent.getPowers(this, WalkOnFluidPower.class).stream().anyMatch(p -> fluid.isIn(p.getFluidTag()))) {
+            info.setReturnValue(true);
+        }
     }
 
     @Inject(method = "damage", at = @At("RETURN"))
