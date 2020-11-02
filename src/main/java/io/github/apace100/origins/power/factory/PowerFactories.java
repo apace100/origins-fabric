@@ -21,12 +21,14 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.tag.Tag;
 import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
 
@@ -136,9 +138,14 @@ public class PowerFactories {
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("inventory"),
             new SerializableData()
-                .add("name", SerializableDataType.STRING, "container.inventory"),
+                .add("name", SerializableDataType.STRING, "container.inventory")
+                .add("drop_on_death", SerializableDataType.BOOLEAN, false)
+                .add("drop_on_death_filter", SerializableDataType.ITEM_CONDITION, null),
             data ->
-                (type, player) -> new InventoryPower(type, player, data.getString("name"), 9))
+                (type, player) -> new InventoryPower(type, player, data.getString("name"), 9,
+                    data.getBoolean("drop_on_death"),
+                    data.isPresent("drop_on_death_filter") ? (ConditionFactory<ItemStack>.Instance)data.get("drop_on_death_filter") :
+                    itemStack -> true))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("invisibility"),
             new SerializableData()
@@ -309,11 +316,13 @@ public class PowerFactories {
                 .add("block_condition", SerializableDataType.BLOCK_CONDITION, null)
                 .add("blacklist", SerializableDataType.BOOLEAN, false)
                 .add("render_type", SerializableDataType.enumValue(PhasingPower.RenderType.class), PhasingPower.RenderType.BLINDNESS)
-                .add("view_distance", SerializableDataType.FLOAT),
+                .add("view_distance", SerializableDataType.FLOAT, 10F)
+                .add("phase_down_condition", SerializableDataType.PLAYER_CONDITION, null),
             data ->
                 (type, player) ->
                     new PhasingPower(type, player, data.isPresent("block_condition") ? (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition") : cbp -> true,
-                        data.getBoolean("blacklist"), (PhasingPower.RenderType)data.get("render_type"), data.getFloat("view_distance")))
+                        data.getBoolean("blacklist"), (PhasingPower.RenderType)data.get("render_type"), data.getFloat("view_distance"),
+                        (ConditionFactory<PlayerEntity>.Instance)data.get("phase_down_condition")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("prevent_item_use"),
             new SerializableData()
@@ -354,6 +363,31 @@ public class PowerFactories {
                         restrictions.put(EquipmentSlot.FEET, (ConditionFactory<ItemStack>.Instance)data.get("feet"));
                     }
                     return new RestrictArmorPower(type, player, restrictions);
+                }));
+
+        register(new PowerFactory<>(Origins.identifier("conditioned_restrict_armor"),
+            new SerializableData()
+                .add("head", SerializableDataType.ITEM_CONDITION, null)
+                .add("chest", SerializableDataType.ITEM_CONDITION, null)
+                .add("legs", SerializableDataType.ITEM_CONDITION, null)
+                .add("feet", SerializableDataType.ITEM_CONDITION, null)
+                .add("tick_rate", SerializableDataType.INT, 80),
+            data ->
+                (type, player) -> {
+                    HashMap<EquipmentSlot, Predicate<ItemStack>> restrictions = new HashMap<>();
+                    if(data.isPresent("head")) {
+                        restrictions.put(EquipmentSlot.HEAD, (ConditionFactory<ItemStack>.Instance)data.get("head"));
+                    }
+                    if(data.isPresent("chest")) {
+                        restrictions.put(EquipmentSlot.CHEST, (ConditionFactory<ItemStack>.Instance)data.get("chest"));
+                    }
+                    if(data.isPresent("legs")) {
+                        restrictions.put(EquipmentSlot.LEGS, (ConditionFactory<ItemStack>.Instance)data.get("legs"));
+                    }
+                    if(data.isPresent("feet")) {
+                        restrictions.put(EquipmentSlot.FEET, (ConditionFactory<ItemStack>.Instance)data.get("feet"));
+                    }
+                    return new ConditionedRestrictArmorPower(type, player, restrictions, data.getInt("tick_rate"));
                 })
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("stacking_status_effect"),
@@ -529,7 +563,8 @@ public class PowerFactories {
         register(new PowerFactory<>(Origins.identifier("starting_equipment"),
             new SerializableData()
                 .add("stack", SerializableDataType.POSITIONED_ITEM_STACK, null)
-                .add("stacks", SerializableDataType.POSITIONED_ITEM_STACKS, null),
+                .add("stacks", SerializableDataType.POSITIONED_ITEM_STACKS, null)
+                .add("recurrent", SerializableDataType.BOOLEAN, false),
             data ->
                 (type, player) -> {
                     StartingEquipmentPower power = new StartingEquipmentPower(type, player);
@@ -548,8 +583,28 @@ public class PowerFactories {
                                 }
                             });
                     }
+                    power.setRecurrent(data.getBoolean("recurrent"));
                     return power;
                 }));
+        register(new PowerFactory<>(Origins.identifier("action_on_callback"),
+            new SerializableData()
+                .add("entity_action_respawned", SerializableDataType.ENTITY_ACTION, null)
+                .add("entity_action_removed", SerializableDataType.ENTITY_ACTION, null)
+                .add("entity_action_chosen", SerializableDataType.ENTITY_ACTION, null)
+                .add("execute_chosen_when_orb", SerializableDataType.BOOLEAN, true),
+            data ->
+                (type, player) -> new ActionOnCallbackPower(type, player,
+                    (ActionFactory<Entity>.Instance)data.get("entity_action_respawned"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action_removed"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action_chosen"),
+                    data.getBoolean("execute_chosen_when_orb")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("walk_on_fluid"),
+            new SerializableData()
+                .add("fluid", SerializableDataType.FLUID_TAG),
+            data ->
+                (type, player) -> new WalkOnFluidPower(type, player, (Tag<Fluid>)data.get("fluid")))
+            .allowCondition());
     }
 
     private static void register(PowerFactory serializer) {

@@ -12,14 +12,18 @@ import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 
+import java.util.function.Predicate;
+
 public class InventoryPower extends Power implements Active, Inventory {
 
     private final int size;
     private final DefaultedList<ItemStack> inventory;
     private final TranslatableText containerName;
     private final ScreenHandlerFactory factory;
+    private final boolean shouldDropOnDeath;
+    private final Predicate<ItemStack> dropOnDeathFilter;
 
-    public InventoryPower(PowerType<?> type, PlayerEntity player, String containerName, int size) {
+    public InventoryPower(PowerType<?> type, PlayerEntity player, String containerName, int size, boolean shouldDropOnDeath, Predicate<ItemStack> dropOnDeathFilter) {
         super(type, player);
         this.size = size;
         this.inventory = DefaultedList.ofSize(size, ItemStack.EMPTY);
@@ -27,6 +31,8 @@ public class InventoryPower extends Power implements Active, Inventory {
         this.factory = (i, playerInventory, playerEntity) -> {
             return new Generic3x3ContainerScreenHandler(i, playerInventory, this);
         };
+        this.shouldDropOnDeath = shouldDropOnDeath;
+        this.dropOnDeathFilter = dropOnDeathFilter;
     }
 
     @Override
@@ -95,5 +101,13 @@ public class InventoryPower extends Power implements Active, Inventory {
         for(int i = 0; i < size; i++) {
             setStack(i, ItemStack.EMPTY);
         }
+    }
+
+    public boolean shouldDropOnDeath() {
+        return shouldDropOnDeath;
+    }
+
+    public boolean shouldDropOnDeath(ItemStack stack) {
+        return shouldDropOnDeath && dropOnDeathFilter.test(stack);
     }
 }

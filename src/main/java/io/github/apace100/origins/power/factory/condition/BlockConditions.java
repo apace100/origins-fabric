@@ -18,6 +18,9 @@ public class BlockConditions {
 
     @SuppressWarnings("unchecked")
     public static void register() {
+        register(new ConditionFactory<>(Origins.identifier("constant"), new SerializableData()
+            .add("value", SerializableDataType.BOOLEAN),
+            (data, block) -> data.getBoolean("value")));
         register(new ConditionFactory<>(Origins.identifier("and"), new SerializableData()
             .add("conditions", SerializableDataType.BLOCK_CONDITIONS),
             (data, block) -> ((List<ConditionFactory<CachedBlockPosition>.Instance>)data.get("conditions")).stream().allMatch(

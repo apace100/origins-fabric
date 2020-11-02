@@ -1,4 +1,5 @@
 {
   "type": "origins:inventory",
-  "name": "container.shulker_inventory_power"
+  "name": "container.shulker_inventory_power",
+  "drop_on_death": false
 }

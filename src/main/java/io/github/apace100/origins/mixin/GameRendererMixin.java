@@ -114,7 +114,7 @@ public abstract class GameRendererMixin {
         Box cameraBox = new Box(pos, pos);
         cameraBox = cameraBox.expand(rangeX, rangeY, rangeZ);
         HashSet<BlockPos> set = new HashSet<>();
-        BlockPos.method_29715(cameraBox).forEach(p -> set.add(p.toImmutable()));
+        BlockPos.stream(cameraBox).forEach(p -> set.add(p.toImmutable()));
         return set;
     }
 

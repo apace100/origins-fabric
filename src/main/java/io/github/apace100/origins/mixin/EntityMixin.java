@@ -1,20 +1,21 @@
 package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.power.FireImmunityPower;
-import io.github.apace100.origins.power.InvisibilityPower;
-import io.github.apace100.origins.power.InvulnerablePower;
-import io.github.apace100.origins.power.PhasingPower;
+import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.tag.FluidTags;
+import net.minecraft.tag.Tag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -32,19 +33,32 @@ public abstract class EntityMixin {
 
     @Shadow public World world;
 
+    @Shadow public abstract double getFluidHeight(Tag<Fluid> fluid);
+
     @Inject(at = @At("HEAD"), method = "isInvulnerableTo", cancellable = true)
     private void makeOriginInvulnerable(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
         if((Object)this instanceof PlayerEntity) {
             OriginComponent component = ModComponents.ORIGIN.get(this);
+            if(!component.hasAllOrigins()) {
+                cir.setReturnValue(true);
+            }
             if(component.getPowers(InvulnerablePower.class).stream().anyMatch(inv -> inv.doesApply(damageSource))) {
                 cir.setReturnValue(true);
             }
         }
     }
 
+    @Redirect(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isWet()Z"))
+    private boolean preventExtinguishingFromSwimming(Entity entity) {
+        if(OriginComponent.hasPower(entity, SwimmingPower.class) && entity.isSwimming() && !(getFluidHeight(FluidTags.WATER) > 0)) {
+            return false;
+        }
+        return entity.isWet();
+    }
+
     @Inject(at = @At("HEAD"), method = "isInvisible", cancellable = true)
     private void phantomInvisibility(CallbackInfoReturnable<Boolean> info) {
-        if(OriginComponent.getPowers((Entity)(Object)this, InvisibilityPower.class).size() > 0) {
+        if(OriginComponent.hasPower((Entity)(Object)this, InvisibilityPower.class)) {
             info.setReturnValue(true);
         }
     }

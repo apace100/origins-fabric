@@ -2,6 +2,7 @@ package io.github.apace100.origins.power.factory.condition;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.power.PowerType;
@@ -34,6 +35,9 @@ public class PlayerConditions {
 
     @SuppressWarnings("unchecked")
     public static void register() {
+        register(new ConditionFactory<>(Origins.identifier("constant"), new SerializableData()
+            .add("value", SerializableDataType.BOOLEAN),
+            (data, player) -> data.getBoolean("value")));
         register(new ConditionFactory<>(Origins.identifier("and"), new SerializableData()
             .add("conditions", SerializableDataType.PLAYER_CONDITIONS),
             (data, player) -> ((List<ConditionFactory<PlayerEntity>.Instance>)data.get("conditions")).stream().allMatch(
@@ -58,7 +62,11 @@ public class PlayerConditions {
             .add("comparison", SerializableDataType.COMPARISON)
             .add("compare_to", SerializableDataType.FLOAT),
             (data, player) -> ((Comparison)data.get("comparison")).compare(player.getBrightnessAtEyes(), data.getFloat("compare_to"))));
-        register(new ConditionFactory<>(Origins.identifier("daytime"), new SerializableData(), (data, player) -> player.world.isDay()));
+        register(new ConditionFactory<>(Origins.identifier("daytime"), new SerializableData(), (data, player) -> player.world.getTimeOfDay() % 24000L < 13000L));
+        register(new ConditionFactory<>(Origins.identifier("time_of_day"), new SerializableData()
+            .add("comparison", SerializableDataType.COMPARISON)
+            .add("compare_to", SerializableDataType.INT), (data, player) ->
+            ((Comparison)data.get("comparison")).compare(player.world.getTimeOfDay() % 24000L, data.getInt("compare_to"))));
         register(new ConditionFactory<>(Origins.identifier("fall_flying"), new SerializableData(), (data, player) -> player.isFallFlying()));
         register(new ConditionFactory<>(Origins.identifier("exposed_to_sun"), new SerializableData(), (data, player) -> {
             if (player.world.isDay() && !WorldUtil.isRainingAtPlayerPosition(player)) {
@@ -121,7 +129,11 @@ public class PlayerConditions {
                     if(layer == null) {
                         return false;
                     } else {
-                        return component.getOrigin(layer).getIdentifier().equals(originId);
+                        Origin origin = component.getOrigin(layer);
+                        if(origin != null) {
+                            return origin.getIdentifier().equals(originId);
+                        }
+                        return false;
                     }
                 } else {
                     return component.getOrigins().values().stream().anyMatch(o -> o.getIdentifier().equals(originId));
@@ -167,7 +179,7 @@ public class PlayerConditions {
                 }
                 return ((Comparison)data.get("comparison")).compare(attrValue, data.getDouble("compare_to"));
             }));
-
+        register(new ConditionFactory<>(Origins.identifier("swimming"), new SerializableData(), (data, player) -> player.isSwimming()));
     }
 
     private static void register(ConditionFactory<PlayerEntity> conditionFactory) {

@@ -62,7 +62,7 @@ public class Origins implements ModInitializer {
 		});
 		CriteriaRegistryInvoker.callRegister(ChoseOriginCriterion.INSTANCE);
 		CriteriaRegistryInvoker.callRegister(GainedPowerCriterion.INSTANCE);
-		ArgumentTypes.register("origin", OriginArgument.class, new ConstantArgumentSerializer(OriginArgument::origin));
+		ArgumentTypes.register("origin", OriginArgument.class, new ConstantArgumentSerializer<>(OriginArgument::origin));
 		ArgumentTypes.register("layer", LayerArgument.class, new ConstantArgumentSerializer<>(LayerArgument::layer));
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new PowerTypes());
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginManager());
