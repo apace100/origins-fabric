@@ -4,6 +4,7 @@ import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.InvisibilityPower;
 import io.github.apace100.origins.power.ModelColorPower;
 import io.github.apace100.origins.power.PowerTypes;
+import io.github.apace100.origins.power.ShakingPower;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -25,6 +26,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
@@ -33,6 +35,13 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<LivingEnt
 
     protected LivingEntityRendererMixin(EntityRenderDispatcher dispatcher) {
         super(dispatcher);
+    }
+
+    @Inject(method = "isShaking", at = @At("HEAD"), cancellable = true)
+    private void letPlayersShakeTheirBodies(LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
+        if(OriginComponent.hasPower(entity, ShakingPower.class)) {
+            cir.setReturnValue(true);
+        }
     }
 
     @Inject(method = "render", at = @At(value = "HEAD"), cancellable = true)
@@ -47,16 +56,6 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<LivingEnt
             info.cancel();
         }
     }
-/*
-    @ModifyVariable(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/LivingEntityRenderer;getRenderLayer(Lnet/minecraft/entity/LivingEntity;ZZZ)Lnet/minecraft/client/render/RenderLayer;", shift = At.Shift.BEFORE), ordinal = 1)
-    private boolean changeRenderLayerWhenTranslucent(boolean original, LivingEntity livingEntity) {
-        if(livingEntity instanceof PlayerEntity) {
-            if(OriginComponent.getPowers(livingEntity, ModelColorPower.class).stream().anyMatch(ModelColorPower::isTranslucent)) {
-                return true;
-            }
-        }
-        return original;
-    }*/
 
     @ModifyVariable(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/VertexConsumerProvider;getBuffer(Lnet/minecraft/client/render/RenderLayer;)Lnet/minecraft/client/render/VertexConsumer;", shift = At.Shift.BEFORE))
     private RenderLayer changeRenderLayerWhenTranslucent(RenderLayer original, LivingEntity entity) {
@@ -67,17 +66,6 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<LivingEnt
         }
         return original;
     }
-/*
-    @ModifyConstant(method = "render", constant = @Constant(floatValue = 0.15F, ordinal = 0))
-    private float modifyTranslucency(float original, LivingEntity livingEntity) {
-        if (livingEntity instanceof PlayerEntity) {
-            List<ModelColorPower> modelColorPowers = ModComponents.ORIGIN.get(livingEntity).getPowers(ModelColorPower.class);
-            if (modelColorPowers.size() > 0) {
-                return modelColorPowers.stream().map(p -> p.getAlpha()).min(Float::compare).get();
-            }
-        }
-        return original;
-    }*/
 
     @Environment(EnvType.CLIENT)
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/EntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V", ordinal = 0))
