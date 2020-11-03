@@ -53,6 +53,10 @@ public class NetherSpawnPower extends Power {
             ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
             ServerWorld nether = serverPlayer.getServerWorld().getServer().getWorld(World.NETHER);
             BlockPos regularSpawn = serverPlayer.getServer().getWorld(World.OVERWORLD).getSpawnPos();
+            if(nether == null) {
+                Origins.LOGGER.error("While looking for a spawn in the Nether, the Nether was null.");
+                return new Pair<>(serverPlayer.getServer().getWorld(World.OVERWORLD), regularSpawn);
+            }
             BlockPos spawnToNetherPos = new BlockPos(regularSpawn.getX() / 8, regularSpawn.getY(), regularSpawn.getZ() / 8);
             int iterations = (nether.getDimensionHeight() / 2) - 8;
             int center = nether.getDimensionHeight() / 2;

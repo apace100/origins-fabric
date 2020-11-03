@@ -167,7 +167,7 @@ public class PowerFactories {
             new SerializableData()
                 .add("cooldown", SerializableDataType.INT)
                 .add("speed", SerializableDataType.FLOAT)
-                .add("sound", SerializableDataType.SOUND_EVENT)
+                .add("sound", SerializableDataType.SOUND_EVENT, null)
                 .add("hud_render", SerializableDataType.HUD_RENDER),
             data -> {
                 SoundEvent soundEvent = (SoundEvent)data.get("sound");
@@ -313,7 +313,7 @@ public class PowerFactories {
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("phasing"),
             new SerializableData()
-                .add("block_condition", SerializableDataType.BLOCK_CONDITION)
+                .add("block_condition", SerializableDataType.BLOCK_CONDITION, null)
                 .add("blacklist", SerializableDataType.BOOLEAN, false)
                 .add("render_type", SerializableDataType.enumValue(PhasingPower.RenderType.class), PhasingPower.RenderType.BLINDNESS)
                 .add("view_distance", SerializableDataType.FLOAT, 10F)
