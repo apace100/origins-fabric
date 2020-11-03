@@ -1,9 +1,11 @@
 package io.github.apace100.origins.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.apace100.origins.OriginsClient;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.NightVisionPower;
 import io.github.apace100.origins.power.PhasingPower;
+import io.github.apace100.origins.power.ShaderPower;
 import io.github.apace100.origins.registry.ModComponents;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -18,6 +20,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -25,6 +28,7 @@ import net.minecraft.world.BlockView;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -49,6 +53,48 @@ public abstract class GameRendererMixin {
     private ItemStack floatingItem;
 
     @Shadow protected abstract void method_31136(float f);
+
+    @Shadow protected abstract void loadShader(Identifier identifier);
+
+    @Unique
+    private Identifier currentlyLoadedShader;
+
+    @Inject(at = @At("TAIL"), method = "onCameraEntitySet")
+    private void loadShaderFromPowerOnCameraEntity(Entity entity, CallbackInfo ci) {
+        OriginComponent.withPower(client.getCameraEntity(), ShaderPower.class, null, shaderPower -> {
+            Identifier shaderLoc = shaderPower.getShaderLocation();
+            loadShader(shaderLoc);
+            currentlyLoadedShader = shaderLoc;
+        });
+    }
+
+    @Inject(at = @At("HEAD"), method = "render")
+    private void loadShaderFromPower(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+        OriginComponent.withPower(client.getCameraEntity(), ShaderPower.class, null, shaderPower -> {
+            Identifier shaderLoc = shaderPower.getShaderLocation();
+            if(currentlyLoadedShader != shaderLoc) {
+                loadShader(shaderLoc);
+                currentlyLoadedShader = shaderLoc;
+            }
+        });
+    }
+
+    @Inject(
+        at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getFramebuffer()Lnet/minecraft/client/gl/Framebuffer;"),
+        method = "render"
+    )
+    private void fixHudWithShaderEnabled(float tickDelta, long nanoTime, boolean renderLevel, CallbackInfo info) {
+        RenderSystem.enableTexture();
+    }
+
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setCameraEntity(Lnet/minecraft/entity/Entity;)V"))
+    private void updateShaderPowers(CallbackInfo ci) {
+        OriginComponent.withPower(client.getCameraEntity(), ShaderPower.class, null, shaderPower -> {
+            Identifier shaderLoc = shaderPower.getShaderLocation();
+            loadShader(shaderLoc);
+            currentlyLoadedShader = shaderLoc;
+        });
+    }
 
     // NightVisionPower
     @Inject(at = @At("HEAD"), method = "getNightVisionStrength", cancellable = true)

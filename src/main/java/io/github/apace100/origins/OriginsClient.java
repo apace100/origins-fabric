@@ -18,10 +18,10 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.FabricKeyBinding;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.event.client.ClientTickCallback;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
@@ -60,7 +60,7 @@ public class OriginsClient implements ClientModInitializer {
         viewCurrentOriginKeybind = FabricKeyBinding.Builder.create(new Identifier(Origins.MODID, "view_origin"),
             InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_O, "category." + Origins.MODID).build();
         KeyBindingHelper.registerKeyBinding(viewCurrentOriginKeybind);
-        ClientTickCallback.EVENT.register(client -> {
+        ClientTickEvents.START_CLIENT_TICK.register(tick -> {
             while(useActivePowerKeybind.wasPressed()) {
                 ClientSidePacketRegistry.INSTANCE.sendToServer(ModPackets.USE_ACTIVE_POWER, new PacketByteBuf(Unpooled.buffer()));
                 OriginComponent component = ModComponents.ORIGIN.get(MinecraftClient.getInstance().player);

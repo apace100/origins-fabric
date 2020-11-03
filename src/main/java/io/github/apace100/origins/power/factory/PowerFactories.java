@@ -605,6 +605,12 @@ public class PowerFactories {
             data ->
                 (type, player) -> new WalkOnFluidPower(type, player, (Tag<Fluid>)data.get("fluid")))
             .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("shader"),
+            new SerializableData()
+                .add("shader", SerializableDataType.IDENTIFIER),
+            data ->
+                (type, player) -> new ShaderPower(type, player, data.getId("shader")))
+            .allowCondition());
     }
 
     private static void register(PowerFactory serializer) {

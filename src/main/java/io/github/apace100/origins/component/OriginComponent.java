@@ -15,6 +15,8 @@ import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -40,6 +42,13 @@ public interface OriginComponent extends AutoSyncedComponent, ServerTickingCompo
 
 	static void sync(PlayerEntity player) {
 		ModComponents.ORIGIN.sync(player);
+	}
+
+	static <T extends Power> void withPower(Entity entity, Class<T> powerClass, Predicate<T> power, Consumer<T> with) {
+		if(entity instanceof PlayerEntity) {
+			Optional<Power> optional = ModComponents.ORIGIN.get(entity).getPowers().stream().filter(p -> powerClass.isAssignableFrom(p.getClass()) && (power == null || power.test((T)p))).findAny();
+			optional.ifPresent(p -> with.accept((T)p));
+		}
 	}
 
 	static <T extends Power> List<T> getPowers(Entity entity, Class<T> powerClass) {
