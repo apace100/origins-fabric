@@ -26,7 +26,7 @@ import java.util.List;
 @Environment(EnvType.CLIENT)
 public abstract class BackgroundRendererMixin {
 
-    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"), method = "render")
+    @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z", ordinal = 1), method = "render")
     private static boolean hasStatusEffectProxy(LivingEntity player, StatusEffect effect) {
         if(player instanceof PlayerEntity && effect == StatusEffects.NIGHT_VISION && !player.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
             return ModComponents.ORIGIN.get(player).getPowers(NightVisionPower.class).stream().anyMatch(NightVisionPower::isActive);
