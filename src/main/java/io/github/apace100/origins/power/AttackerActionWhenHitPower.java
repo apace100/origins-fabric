@@ -21,7 +21,7 @@ public class AttackerActionWhenHitPower extends CooldownPower {
     }
 
     public void whenHit(DamageSource damageSource, float damageAmount) {
-        if(damageSource.getAttacker() != null) {
+        if(damageSource.getAttacker() != null && damageSource.getAttacker() != player) {
             if(damageCondition == null || damageCondition.test(new Pair<>(damageSource, damageAmount))) {
                 if(canUse()) {
                     this.entityAction.accept(damageSource.getAttacker());

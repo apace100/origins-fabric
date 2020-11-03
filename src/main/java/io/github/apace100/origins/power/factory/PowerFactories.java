@@ -534,7 +534,7 @@ public class PowerFactories {
                 .add("cooldown", SerializableDataType.INT)
                 .add("hud_render", SerializableDataType.HUD_RENDER, HudRender.DONT_RENDER),
             data ->
-                (type, player) -> new SelfActionWhenHitPower(type, player, data.getInt("cooldown"),
+                (type, player) -> new AttackerActionWhenHitPower(type, player, data.getInt("cooldown"),
                     (HudRender)data.get("hud_render"), (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition"),
                     (ActionFactory<Entity>.Instance)data.get("entity_action")))
             .allowCondition());
