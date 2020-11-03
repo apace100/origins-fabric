@@ -88,10 +88,11 @@ public class EntityActions {
                 if(entity instanceof LivingEntity) {
                     LivingEntity le = (LivingEntity) entity;
                     if(data.isPresent("effect")) {
-                        le.addStatusEffect((StatusEffectInstance)data.get("effect"));
+                        StatusEffectInstance effect = (StatusEffectInstance)data.get("effect");
+                        le.addStatusEffect(new StatusEffectInstance(effect));
                     }
                     if(data.isPresent("effects")) {
-                        ((List<StatusEffectInstance>)data.get("effects")).forEach(le::addStatusEffect);
+                        ((List<StatusEffectInstance>)data.get("effects")).forEach(e -> le.addStatusEffect(new StatusEffectInstance(e)));
                     }
                 }
             }));
