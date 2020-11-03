@@ -1,8 +1,8 @@
 {
   "type": "origins:phasing",
   "blacklist": true,
-  "render_type": "remove_blocks",
-  "view_distance": 3,
+  "render_type": "blindness",
+  "view_distance": 10,
   "block_condition": {
     "type": "origins:in_tag",
     "tag": "origins:unphasable"
