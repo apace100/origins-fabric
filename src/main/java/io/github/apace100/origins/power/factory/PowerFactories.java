@@ -611,6 +611,9 @@ public class PowerFactories {
             data ->
                 (type, player) -> new ShaderPower(type, player, data.getId("shader")))
             .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("shaking"),
+            new SerializableData(), data -> (type, player) -> new ShakingPower(type, player))
+            .allowCondition());
     }
 
     private static void register(PowerFactory serializer) {
