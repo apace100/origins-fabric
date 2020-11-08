@@ -44,6 +44,16 @@ public class BlockActions {
                     }
                 }
             }));
+        register(new ActionFactory<>(Origins.identifier("offset"), new SerializableData()
+            .add("action", SerializableDataType.BLOCK_ACTION)
+            .add("x", SerializableDataType.INT, 0)
+            .add("y", SerializableDataType.INT, 0)
+            .add("z", SerializableDataType.INT, 0),
+            (data, block) -> ((ActionFactory<Triple<World, BlockPos, Direction>>.Instance)data.get("action")).accept(Triple.of(
+                block.getLeft(),
+                block.getMiddle().add(data.getInt("x"), data.getInt("y"), data.getInt("z")),
+                block.getRight())
+            )));
 
         register(new ActionFactory<>(Origins.identifier("set_block"), new SerializableData()
             .add("block", SerializableDataType.BLOCK),

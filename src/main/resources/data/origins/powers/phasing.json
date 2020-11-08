@@ -8,7 +8,15 @@
     "tag": "origins:unphasable"
   },
   "phase_down_condition": {
-    "type": "origins:sneaking"
+    "type": "origins:and",
+    "conditions": [
+      {
+        "type": "origins:sneaking"
+      },
+      {
+        "type": "origins:on_block"
+      }
+    ]
   },
   "condition": {
     "type": "origins:power_active",

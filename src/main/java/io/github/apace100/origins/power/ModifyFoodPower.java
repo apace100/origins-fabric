@@ -1,34 +1,44 @@
 package io.github.apace100.origins.power;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.FoodComponent;
 import net.minecraft.item.ItemStack;
 
-import java.util.function.Function;
+import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class ModifyFoodPower extends Power {
 
     private final Predicate<ItemStack> applicableFood;
-    private final Function<FoodComponent, Integer> foodLevel;
-    private final Function<FoodComponent, Float> saturation;
+    private final List<EntityAttributeModifier> foodModifiers;
+    private final List<EntityAttributeModifier> saturationModifiers;
+    private final Consumer<Entity> entityActionWhenEaten;
 
-    public ModifyFoodPower(PowerType<?> type, PlayerEntity player, Predicate<ItemStack> applicableFood, Function<FoodComponent, Integer> additionalFood, Function<FoodComponent, Float> additionalSaturation) {
+    public ModifyFoodPower(PowerType<?> type, PlayerEntity player, Predicate<ItemStack> applicableFood, List<EntityAttributeModifier> foodModifiers, List<EntityAttributeModifier> saturationModifiers, Consumer<Entity> entityActionWhenEaten) {
         super(type, player);
         this.applicableFood = applicableFood;
-        this.foodLevel = additionalFood;
-        this.saturation = additionalSaturation;
+        this.foodModifiers = foodModifiers;
+        this.saturationModifiers = saturationModifiers;
+        this.entityActionWhenEaten = entityActionWhenEaten;
     }
 
     public boolean doesApply(ItemStack stack) {
         return applicableFood.test(stack);
     }
 
-    public int getFoodLevel(FoodComponent food) {
-        return foodLevel.apply(food);
+    public void eat() {
+        if(entityActionWhenEaten != null) {
+            entityActionWhenEaten.accept(player);
+        }
     }
 
-    public float getSaturation(FoodComponent food) {
-        return saturation.apply(food);
+    public List<EntityAttributeModifier> getFoodModifiers() {
+        return foodModifiers;
+    }
+
+    public List<EntityAttributeModifier> getSaturationModifiers() {
+        return saturationModifiers;
     }
 }

@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.MathHelper;
@@ -18,14 +19,16 @@ public class FireProjectilePower extends ActiveCooldownPower {
     private final float speed;
     private final float divergence;
     private final SoundEvent soundEvent;
+    private final CompoundTag tag;
 
-    public FireProjectilePower(PowerType<?> type, PlayerEntity player, int cooldownDuration, HudRender hudRender, EntityType entityType, int projectileCount, float speed, float divergence, SoundEvent soundEvent) {
+    public FireProjectilePower(PowerType<?> type, PlayerEntity player, int cooldownDuration, HudRender hudRender, EntityType entityType, int projectileCount, float speed, float divergence, SoundEvent soundEvent, CompoundTag tag) {
         super(type, player, cooldownDuration, hudRender, null);
         this.entityType = entityType;
         this.projectileCount = projectileCount;
         this.speed = speed;
         this.divergence = divergence;
         this.soundEvent = soundEvent;
+        this.tag = tag;
     }
 
     @Override
@@ -50,6 +53,12 @@ public class FireProjectilePower extends ActiveCooldownPower {
     private void fireProjectile() {
         if(entityType != null) {
             Entity entity = entityType.create(player.world);
+            if(entity == null) {
+                return;
+            }
+            if(tag != null) {
+                entity.fromTag(tag);
+            }
             Vec3d spawnPos = player.getPos().add(0, ((EyeHeightAccess)player).callGetEyeHeight(player.getPose(), player.getDimensions(player.getPose())), 0).add(player.getRotationVector());
             entity.refreshPositionAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), player.pitch, player.yaw);
             if(entity instanceof ProjectileEntity) {

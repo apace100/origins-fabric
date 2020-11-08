@@ -1,7 +1,12 @@
 package io.github.apace100.origins.power.factory.action;
 
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.power.Power;
+import io.github.apace100.origins.power.PowerType;
+import io.github.apace100.origins.power.VariableIntPower;
 import io.github.apace100.origins.power.factory.condition.ConditionFactory;
+import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
@@ -211,6 +216,29 @@ public class EntityActions {
                         entity.world.getServer(),
                         entity);
                     server.getCommandManager().execute(source, data.getString("command"));
+                }
+            }));
+        register(new ActionFactory<>(Origins.identifier("change_resource"), new SerializableData()
+            .add("resource", SerializableDataType.POWER_TYPE)
+            .add("change", SerializableDataType.INT),
+            (data, entity) -> {
+                if(entity instanceof PlayerEntity) {
+                    OriginComponent component = ModComponents.ORIGIN.get(entity);
+                    Power p = component.getPower((PowerType<?>)data.get("resource"));
+                    if(p instanceof VariableIntPower) {
+                        VariableIntPower vip = (VariableIntPower)p;
+                        int newValue = vip.getValue() + data.getInt("change");
+                        vip.setValue(newValue);
+                        OriginComponent.sync((PlayerEntity)entity);
+                    }
+                }
+            }));
+        register(new ActionFactory<>(Origins.identifier("feed"), new SerializableData()
+            .add("food", SerializableDataType.INT)
+            .add("saturation", SerializableDataType.FLOAT),
+            (data, entity) -> {
+                if(entity instanceof PlayerEntity) {
+                    ((PlayerEntity)entity).getHungerManager().add(data.getInt("food"), data.getFloat("saturation"));
                 }
             }));
     }

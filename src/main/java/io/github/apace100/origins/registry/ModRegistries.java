@@ -10,6 +10,7 @@ import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
@@ -26,6 +27,7 @@ public class ModRegistries {
     public static final Registry<ConditionFactory<ItemStack>> ITEM_CONDITION;
     public static final Registry<ConditionFactory<CachedBlockPosition>> BLOCK_CONDITION;
     public static final Registry<ConditionFactory<Pair<DamageSource, Float>>> DAMAGE_CONDITION;
+    public static final Registry<ConditionFactory<FluidState>> FLUID_CONDITION;
     public static final Registry<ActionFactory<Entity>> ENTITY_ACTION;
     public static final Registry<ActionFactory<ItemStack>> ITEM_ACTION;
     public static final Registry<ActionFactory<Triple<World, BlockPos, Direction>>> BLOCK_ACTION;
@@ -36,6 +38,7 @@ public class ModRegistries {
         ITEM_CONDITION = FabricRegistryBuilder.createSimple(ClassUtil.<ConditionFactory<ItemStack>>castClass(ConditionFactory.class), Origins.identifier("item_condition")).buildAndRegister();
         BLOCK_CONDITION = FabricRegistryBuilder.createSimple(ClassUtil.<ConditionFactory<CachedBlockPosition>>castClass(ConditionFactory.class), Origins.identifier("block_condition")).buildAndRegister();
         DAMAGE_CONDITION = FabricRegistryBuilder.createSimple(ClassUtil.<ConditionFactory<Pair<DamageSource, Float>>>castClass(ConditionFactory.class), Origins.identifier("damage_condition")).buildAndRegister();
+        FLUID_CONDITION = FabricRegistryBuilder.createSimple(ClassUtil.<ConditionFactory<FluidState>>castClass(ConditionFactory.class), Origins.identifier("fluid_condition")).buildAndRegister();
         ENTITY_ACTION = FabricRegistryBuilder.createSimple(ClassUtil.<ActionFactory<Entity>>castClass(ActionFactory.class), Origins.identifier("entity_action")).buildAndRegister();
         ITEM_ACTION = FabricRegistryBuilder.createSimple(ClassUtil.<ActionFactory<ItemStack>>castClass(ActionFactory.class), Origins.identifier("item_action")).buildAndRegister();
         BLOCK_ACTION = FabricRegistryBuilder.createSimple(ClassUtil.<ActionFactory<Triple<World, BlockPos, Direction>>>castClass(ActionFactory.class), Origins.identifier("block_action")).buildAndRegister();

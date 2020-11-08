@@ -7,6 +7,7 @@ import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import net.minecraft.block.Block;
 import net.minecraft.block.pattern.CachedBlockPosition;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -31,11 +32,24 @@ public class BlockConditions {
             (data, block) -> ((List<ConditionFactory<CachedBlockPosition>.Instance>)data.get("conditions")).stream().anyMatch(
                 condition -> condition.test(block)
             )));
+        register(new ConditionFactory<>(Origins.identifier("offset"), new SerializableData()
+            .add("condition", SerializableDataType.BLOCK_CONDITION)
+            .add("x", SerializableDataType.INT, 0)
+            .add("y", SerializableDataType.INT, 0)
+            .add("z", SerializableDataType.INT, 0),
+            (data, block) -> ((ConditionFactory<CachedBlockPosition>.Instance)data.get("condition"))
+                .test(new CachedBlockPosition(
+                    block.getWorld(),
+                    block.getBlockPos().add(
+                        data.getInt("x"),
+                        data.getInt("y"),
+                        data.getInt("z")
+                    ), true))));
+
         register(new ConditionFactory<>(Origins.identifier("height"), new SerializableData()
             .add("comparison", SerializableDataType.COMPARISON)
             .add("compare_to", SerializableDataType.INT),
             (data, block) -> ((Comparison)data.get("comparison")).compare(block.getBlockPos().getY(), data.getInt("compare_to"))));
-
         register(new ConditionFactory<>(Origins.identifier("block"), new SerializableData()
             .add("block", SerializableDataType.BLOCK),
             (data, block) -> block.getBlockState().isOf((Block)data.get("block"))));
@@ -68,6 +82,9 @@ public class BlockConditions {
                 }
                 return false;
             }));
+        register(new ConditionFactory<>(Origins.identifier("fluid"), new SerializableData()
+            .add("fluid_condition", SerializableDataType.FLUID_CONDITION),
+            (data, block) -> ((ConditionFactory<FluidState>.Instance)data.get("fluid_condition")).test(block.getWorld().getFluidState(block.getBlockPos()))));
     }
 
     private static void register(ConditionFactory<CachedBlockPosition> conditionFactory) {

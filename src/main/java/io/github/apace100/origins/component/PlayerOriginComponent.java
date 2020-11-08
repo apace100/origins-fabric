@@ -141,14 +141,6 @@ public class PlayerOriginComponent implements OriginComponent {
     @Override
     public void serverTick() {
         this.getPowers(Power.class, true).stream().filter(p -> p.shouldTick() && (p.shouldTickWhenInactive() || p.isActive())).forEach(Power::tick);
-            /*this.getPowers(WaterVulnerabilityPower.class).forEach(waterCounter -> {
-                if(this.getFluidHeight(FluidTags.WATER) > 0 || this.isRainingAtPlayerPosition() || this.isSubmergedInWater()) {
-                //if(this.isWet()) {
-                    waterCounter.inWater();
-                } else {
-                    waterCounter.outOfWater();
-                }
-            });*/
         if(this.player.age % 10 == 0) {
             this.getPowers(SimpleStatusEffectPower.class).forEach(SimpleStatusEffectPower::applyEffects);
             this.getPowers(StackingStatusEffectPower.class, true).forEach(StackingStatusEffectPower::tick);
@@ -223,7 +215,13 @@ public class PlayerOriginComponent implements OriginComponent {
                 if(hasPowerType(type)) {
                     Tag data = powerTag.get("Data");
                     Power power = type.create(player);
-                    power.fromTag(data);
+                    try {
+                        power.fromTag(data);
+                    } catch(ClassCastException e) {
+                        // Occurs when power was overriden by data pack since last world load
+                        // to be a power type which uses different data class.
+                        Origins.LOGGER.warn("Data type of \"" + powerTypeId + "\" changed, skipping data for that power on player " + player.getName().asString());
+                    }
                     this.powers.put(type, power);
                     if(callPowerOnAdd) {
                         power.onAdded();

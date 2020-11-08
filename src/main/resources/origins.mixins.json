@@ -15,6 +15,7 @@
     "EntityMixin",
     "EntityShapeContextMixin",
     "EyeHeightAccess",
+    "HungerManagerMixin",
     "ItemStackMixin",
     "LivingEntityMixin",
     "LoginMixin",

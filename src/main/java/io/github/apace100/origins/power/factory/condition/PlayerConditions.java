@@ -5,9 +5,7 @@ import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
-import io.github.apace100.origins.power.PowerType;
-import io.github.apace100.origins.power.PowerTypeReference;
-import io.github.apace100.origins.power.PowerTypeRegistry;
+import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.util.Comparison;
@@ -158,10 +156,10 @@ public class PlayerConditions {
             .add("compare_to", SerializableDataType.FLOAT),
             (data, player) -> ((Comparison)data.get("comparison")).compare(player.getHungerManager().getSaturationLevel(), data.getFloat("compare_to"))));
         register(new ConditionFactory<>(Origins.identifier("on_block"), new SerializableData()
-            .add("block_condition", SerializableDataType.BLOCK_CONDITION),
+            .add("block_condition", SerializableDataType.BLOCK_CONDITION, null),
             (data, player) -> player.isOnGround() &&
-            !data.isPresent("block_condition") || ((ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition")).test(
-            new CachedBlockPosition(player.world, player.getBlockPos().down(), true))));
+                (!data.isPresent("block_condition") || ((ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition")).test(
+            new CachedBlockPosition(player.world, player.getBlockPos().down(), true)))));
         register(new ConditionFactory<>(Origins.identifier("equipped_item"), new SerializableData()
             .add("equipment_slot", SerializableDataType.EQUIPMENT_SLOT)
             .add("item_condition", SerializableDataType.ITEM_CONDITION),
@@ -180,6 +178,27 @@ public class PlayerConditions {
                 return ((Comparison)data.get("comparison")).compare(attrValue, data.getDouble("compare_to"));
             }));
         register(new ConditionFactory<>(Origins.identifier("swimming"), new SerializableData(), (data, player) -> player.isSwimming()));
+        register(new ConditionFactory<>(Origins.identifier("resource"), new SerializableData()
+            .add("resource", SerializableDataType.POWER_TYPE)
+            .add("comparison", SerializableDataType.COMPARISON)
+            .add("compare_to", SerializableDataType.INT),
+            (data, player) -> {
+                int resourceValue = 0;
+                OriginComponent component = ModComponents.ORIGIN.get(player);
+                Power p = component.getPower((PowerType<?>)data.get("resource"));
+                if(p instanceof VariableIntPower) {
+                    resourceValue = ((VariableIntPower)p).getValue();
+                }
+                return ((Comparison)data.get("comparison")).compare(resourceValue, data.getInt("compare_to"));
+            }));
+        register(new ConditionFactory<>(Origins.identifier("air"), new SerializableData()
+            .add("comparison", SerializableDataType.COMPARISON)
+            .add("compare_to", SerializableDataType.INT),
+            (data, player) -> ((Comparison)data.get("comparison")).compare(player.getAir(), data.getInt("compare_to"))));
+        register(new ConditionFactory<>(Origins.identifier("in_block"), new SerializableData()
+            .add("block_condition", SerializableDataType.BLOCK_CONDITION),
+            (data, player) ->((ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition")).test(
+                    new CachedBlockPosition(player.world, player.getBlockPos(), true))));
     }
 
     private static void register(ConditionFactory<PlayerEntity> conditionFactory) {

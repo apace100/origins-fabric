@@ -9,6 +9,7 @@ import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.ValueModifyingPower;
 import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.util.AttributeUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
@@ -79,24 +80,10 @@ public interface OriginComponent extends AutoSyncedComponent, ServerTickingCompo
 
 	static <T extends ValueModifyingPower> double modify(Entity entity, Class<T> powerClass, double baseValue, Predicate<T> powerFilter) {
 		if(entity instanceof PlayerEntity) {
-			double currentValue = baseValue;
 			List<EntityAttributeModifier> mps = ModComponents.ORIGIN.get(entity).getPowers(powerClass).stream()
 				.filter(p -> powerFilter == null || powerFilter.test(p))
-				.flatMap(p -> p.getModifiers().stream()).sorted().collect(Collectors.toList());
-			for(EntityAttributeModifier modifier : mps) {
-				switch(modifier.getOperation()) {
-					case ADDITION:
-						currentValue += modifier.getValue();
-						break;
-					case MULTIPLY_BASE:
-						currentValue += baseValue * modifier.getValue();
-						break;
-					case MULTIPLY_TOTAL:
-						currentValue *= (1 + modifier.getValue());
-						break;
-				}
-			}
-			return currentValue;
+				.flatMap(p -> p.getModifiers().stream()).collect(Collectors.toList());
+			return AttributeUtil.sortAndApplyModifiers(mps, baseValue);
 		}
 		return baseValue;
 	}

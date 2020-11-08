@@ -23,6 +23,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
@@ -33,6 +34,7 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -124,7 +126,8 @@ public class PowerFactories {
                 .add("divergence", SerializableDataType.FLOAT, 1F)
                 .add("sound", SerializableDataType.SOUND_EVENT, null)
                 .add("entity_type", SerializableDataType.ENTITY_TYPE)
-                .add("hud_render", SerializableDataType.HUD_RENDER),
+                .add("hud_render", SerializableDataType.HUD_RENDER)
+                .add("tag", SerializableDataType.NBT, null),
             data ->
                 (type, player) ->
                     new FireProjectilePower(type, player,
@@ -134,7 +137,8 @@ public class PowerFactories {
                         data.getInt("count"),
                         data.getFloat("speed"),
                         data.getFloat("divergence"),
-                        (SoundEvent)data.get("sound")))
+                        (SoundEvent)data.get("sound"),
+                        (CompoundTag)data.get("tag")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("inventory"),
             new SerializableData()
@@ -614,6 +618,49 @@ public class PowerFactories {
         register(new PowerFactory<>(Origins.identifier("shaking"),
             new SerializableData(), data -> (type, player) -> new ShakingPower(type, player))
             .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("resource"),
+            new SerializableData()
+                .add("min", SerializableDataType.INT)
+                .add("max", SerializableDataType.INT)
+                .addFunctionedDefault("start_value", SerializableDataType.INT, data -> data.getInt("min"))
+                .add("hud_render", SerializableDataType.HUD_RENDER),
+            data ->
+                (type, player) ->
+                    new HudRenderedVariableIntPower(type, player,
+                        (HudRender)data.get("hud_render"),
+                        data.getInt("start_value"),
+                        data.getInt("min"),
+                        data.getInt("max")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("modify_food"),
+            new SerializableData()
+                .add("item_condition", SerializableDataType.ITEM_CONDITION, null)
+                .add("food_modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
+                .add("food_modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null)
+                .add("saturation_modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
+                .add("saturation_modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null)
+                .add("entity_action", SerializableDataType.ENTITY_ACTION, null),
+            data ->
+                (type, player) -> {
+                    List<EntityAttributeModifier> foodModifiers = new LinkedList<>();
+                    List<EntityAttributeModifier> saturationModifiers = new LinkedList<>();
+                    if(data.isPresent("food_modifier")) {
+                        foodModifiers.add((EntityAttributeModifier)data.get("food_modifier"));
+                    }
+                    if(data.isPresent("food_modifiers")) {
+                        List<EntityAttributeModifier> modifierList = (List<EntityAttributeModifier>)data.get("food_modifiers");
+                        foodModifiers.addAll(modifierList);
+                    }
+                    if(data.isPresent("saturation_modifier")) {
+                        saturationModifiers.add((EntityAttributeModifier)data.get("saturation_modifier"));
+                    }
+                    if(data.isPresent("saturation_modifiers")) {
+                        List<EntityAttributeModifier> modifierList = (List<EntityAttributeModifier>)data.get("saturation_modifiers");
+                        saturationModifiers.addAll(modifierList);
+                    }
+                    return new ModifyFoodPower(type, player, data.isPresent("item_condition") ? (ConditionFactory<ItemStack>.Instance)data.get("item_condition") : stack -> true,
+                        foodModifiers, saturationModifiers, (ActionFactory<Entity>.Instance)data.get("entity_action"));
+                }).allowCondition());
     }
 
     private static void register(PowerFactory serializer) {
