@@ -18,7 +18,7 @@ public class ElytraFeatureRendererMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"))
     private Item modifyEquippedStackToElytra(ItemStack itemStack, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, LivingEntity livingEntity, float f, float g, float h, float j, float k, float l) {
-        if(OriginComponent.getPowers(livingEntity, ElytraFlightPower.class).size() > 0 && !livingEntity.isInvisible()) {
+        if(OriginComponent.getPowers(livingEntity, ElytraFlightPower.class).stream().anyMatch(ElytraFlightPower::shouldRenderElytra) && !livingEntity.isInvisible()) {
             return Items.ELYTRA;
         }
         return itemStack.getItem();

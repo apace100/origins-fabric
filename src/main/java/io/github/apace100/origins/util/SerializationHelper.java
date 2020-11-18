@@ -17,6 +17,7 @@ import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -39,7 +40,7 @@ public class SerializationHelper {
         if(jsonElement.isJsonObject()) {
             JsonObject json = jsonElement.getAsJsonObject();
             String name = JsonHelper.getString(json, "name", "Unnamed attribute modifier");
-            String operation = JsonHelper.getString(json, "operation").toUpperCase();
+            String operation = JsonHelper.getString(json, "operation").toUpperCase(Locale.ROOT);
             double value = JsonHelper.getFloat(json, "value");
             return new EntityAttributeModifier(name, value, EntityAttributeModifier.Operation.valueOf(operation));
         }

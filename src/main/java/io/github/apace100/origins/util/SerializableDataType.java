@@ -56,6 +56,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -459,7 +460,7 @@ public class SerializableDataType<T> {
                             return t;
                         } catch(IllegalArgumentException e0) {
                             try {
-                                T t = Enum.valueOf(dataClass, enumName.toUpperCase());
+                                T t = Enum.valueOf(dataClass, enumName.toUpperCase(Locale.ROOT));
                                 return t;
                             } catch (IllegalArgumentException e1) {
                                 try {
@@ -470,9 +471,9 @@ public class SerializableDataType<T> {
                                     return t;
                                 } catch (IllegalArgumentException e2) {
                                     T[] enumValues = dataClass.getEnumConstants();
-                                    String stringOf = enumValues[0].name() + ", " + enumValues[0].name().toLowerCase();
+                                    String stringOf = enumValues[0].name() + ", " + enumValues[0].name().toLowerCase(Locale.ROOT);
                                     for(int i = 1; i < enumValues.length; i++) {
-                                        stringOf += ", " + enumValues[i].name() + ", " + enumValues[i].name().toLowerCase();
+                                        stringOf += ", " + enumValues[i].name() + ", " + enumValues[i].name().toLowerCase(Locale.ROOT);
                                     }
                                     throw new JsonSyntaxException("Expected value to be a string of: " + stringOf);
                                 }
