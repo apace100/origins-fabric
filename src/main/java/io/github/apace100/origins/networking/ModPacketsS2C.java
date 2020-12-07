@@ -1,6 +1,7 @@
 package io.github.apace100.origins.networking;
 
 import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.integration.OriginDataLoadedCallback;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
@@ -65,6 +66,7 @@ public class ModPacketsS2C {
                 for(int i = 0; i < layerCount; i++) {
                     OriginLayers.add(layers[i]);
                 }
+                OriginDataLoadedCallback.EVENT.invoker().onDataLoaded(true);
             });
         });
         ClientSidePacketRegistry.INSTANCE.register(ModPackets.POWER_LIST, (packetContext, packetByteBuf) -> {

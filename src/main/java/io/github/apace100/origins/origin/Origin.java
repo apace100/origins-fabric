@@ -79,6 +79,8 @@ public class Origin {
     private final int loadingPriority;
     private List<OriginUpgrade> upgrades = new LinkedList<>();
 
+    private boolean isSpecial;
+
     private String nameTranslationKey;
     private String descriptionTranslationKey;
 
@@ -123,6 +125,11 @@ public class Origin {
         return this;
     }
 
+    public Origin setSpecial() {
+        this.isSpecial = true;
+        return this;
+    }
+
     private Origin setName(String name) {
         this.nameTranslationKey = name;
         return this;
@@ -142,6 +149,10 @@ public class Origin {
 
     public int getLoadingPriority() {
         return this.loadingPriority;
+    }
+
+    public boolean isSpecial() {
+        return this.isSpecial;
     }
 
     public boolean isChoosable() {

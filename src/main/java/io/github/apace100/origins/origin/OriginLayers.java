@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.integration.OriginDataLoadedCallback;
 import io.github.apace100.origins.util.MultiJsonDataLoader;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.resource.ResourceManager;
@@ -54,6 +55,7 @@ public class OriginLayers extends MultiJsonDataLoader implements IdentifiableRes
             });
         });
         Origins.LOGGER.info("Finished loading origin layers from data files. Read " + layers.size() + " layers.");
+        OriginDataLoadedCallback.EVENT.invoker().onDataLoaded(false);
     }
 
     public static OriginLayer getLayer(Identifier id) {

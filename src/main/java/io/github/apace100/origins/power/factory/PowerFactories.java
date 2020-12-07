@@ -221,7 +221,7 @@ public class PowerFactories {
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("modify_damage_dealt"),
             new SerializableData()
-                .add("damage_condition", SerializableDataType.BLOCK_CONDITION, null)
+                .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
                 .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
                 .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null),
             data ->

@@ -178,6 +178,7 @@
   "origins.gui.choose": "Choose",
   "origins.gui.choose_origin.title": "Choose your %s.",
   "origins.gui.view_origin.title": "This is your %s.",
+  "origins.gui.view_origin.empty": "You can not have any Origins.",
   "origins.gui.impact.impact": "Impact",
   "origins.gui.impact.none": "None",
   "origins.gui.impact.low": "Low",

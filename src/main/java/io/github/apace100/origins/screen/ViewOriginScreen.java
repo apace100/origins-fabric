@@ -46,11 +46,14 @@ public class ViewOriginScreen extends Screen {
 		super(new TranslatableText(Origins.MODID + ".screen.view_origin"));
 		HashMap<OriginLayer, Origin> origins = ModComponents.ORIGIN.get(MinecraftClient.getInstance().player).getOrigins();
 		originLayers = new ArrayList<>(origins.size());
+		PlayerEntity player = MinecraftClient.getInstance().player;
 		origins.forEach((layer, origin) -> {
 			if(origin.getDisplayItem().getItem() == Items.PLAYER_HEAD) {
-				origin.getDisplayItem().getOrCreateTag().putString("SkullOwner", MinecraftClient.getInstance().player.getDisplayName().getString());
+				origin.getDisplayItem().getOrCreateTag().putString("SkullOwner", player.getDisplayName().getString());
 			}
-			originLayers.add(new Pair<>(layer, origin));
+			if(origin != Origin.EMPTY || layer.getOrigins(player).size() > 0) {
+				originLayers.add(new Pair<>(layer, origin));
+			}
 		});
 		originLayers.sort(Comparator.comparing(Pair::getLeft));
 	}
@@ -65,21 +68,23 @@ public class ViewOriginScreen extends Screen {
 		super.init();
 		guiLeft = (this.width - windowWidth) / 2;
         guiTop = (this.height - windowHeight) / 2;
-		addButton(chooseOriginButton = new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight - 40, 100, 20, new TranslatableText(Origins.MODID + ".gui.choose"), b -> {
-			MinecraftClient.getInstance().openScreen(new ChooseOriginScreen(Lists.newArrayList(originLayers.get(currentLayer).getLeft()), 0, false));
-		}));
-		PlayerEntity player = MinecraftClient.getInstance().player;
-		chooseOriginButton.active = chooseOriginButton.visible = originLayers.get(currentLayer).getRight() == Origin.EMPTY && originLayers.get(currentLayer).getLeft().getOrigins(player).size() > 0;
-		addButton(new ButtonWidget(guiLeft - 40,this.height / 2 - 10, 20, 20, new LiteralText("<"), b -> {
-			currentLayer = (currentLayer - 1 + originLayers.size()) % originLayers.size();
+        if(originLayers.size() > 0) {
+			addButton(chooseOriginButton = new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight - 40, 100, 20, new TranslatableText(Origins.MODID + ".gui.choose"), b -> {
+				MinecraftClient.getInstance().openScreen(new ChooseOriginScreen(Lists.newArrayList(originLayers.get(currentLayer).getLeft()), 0, false));
+			}));
+			PlayerEntity player = MinecraftClient.getInstance().player;
 			chooseOriginButton.active = chooseOriginButton.visible = originLayers.get(currentLayer).getRight() == Origin.EMPTY && originLayers.get(currentLayer).getLeft().getOrigins(player).size() > 0;
-			scrollPos = 0;
-		}));
-		addButton(new ButtonWidget(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20, new LiteralText(">"), b -> {
-			currentLayer = (currentLayer + 1) % originLayers.size();
-			chooseOriginButton.active = chooseOriginButton.visible = originLayers.get(currentLayer).getRight() == Origin.EMPTY && originLayers.get(currentLayer).getLeft().getOrigins(player).size() > 0;
-			scrollPos = 0;
-		}));
+			addButton(new ButtonWidget(guiLeft - 40,this.height / 2 - 10, 20, 20, new LiteralText("<"), b -> {
+				currentLayer = (currentLayer - 1 + originLayers.size()) % originLayers.size();
+				chooseOriginButton.active = chooseOriginButton.visible = originLayers.get(currentLayer).getRight() == Origin.EMPTY && originLayers.get(currentLayer).getLeft().getOrigins(player).size() > 0;
+				scrollPos = 0;
+			}));
+			addButton(new ButtonWidget(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20, new LiteralText(">"), b -> {
+				currentLayer = (currentLayer + 1) % originLayers.size();
+				chooseOriginButton.active = chooseOriginButton.visible = originLayers.get(currentLayer).getRight() == Origin.EMPTY && originLayers.get(currentLayer).getLeft().getOrigins(player).size() > 0;
+				scrollPos = 0;
+			}));
+		}
         addButton(new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20, new TranslatableText(Origins.MODID + ".gui.close"), b -> {
 			MinecraftClient.getInstance().openScreen(null);
         }));
@@ -94,15 +99,20 @@ public class ViewOriginScreen extends Screen {
 
 	private void renderOriginWindow(MatrixStack matrices, int mouseX, int mouseY) {
 		RenderSystem.enableBlend();
-		renderWindowBackground(matrices, 16, 0);
-		this.renderOriginContent(matrices, mouseX, mouseY);
-		this.client.getTextureManager().bindTexture(WINDOW);
-		this.drawTexture(matrices, guiLeft, guiTop, 0, 0, windowWidth, windowHeight);
-		renderOriginName(matrices);
-		this.client.getTextureManager().bindTexture(WINDOW);
-		this.renderOriginImpact(matrices, mouseX, mouseY);
-		Text title = new TranslatableText(Origins.MODID + ".gui.view_origin.title", new TranslatableText(originLayers.get(currentLayer).getLeft().getTranslationKey()));
-		this.drawCenteredString(matrices, this.textRenderer, title.getString(), width / 2, guiTop - 15, 0xFFFFFF);
+		boolean hasLayer = originLayers.size() > 0;
+		if(hasLayer) {
+			renderWindowBackground(matrices, 16, 0);
+			this.renderOriginContent(matrices, mouseX, mouseY);
+			this.client.getTextureManager().bindTexture(WINDOW);
+			this.drawTexture(matrices, guiLeft, guiTop, 0, 0, windowWidth, windowHeight);
+			renderOriginName(matrices);
+			this.client.getTextureManager().bindTexture(WINDOW);
+			this.renderOriginImpact(matrices, mouseX, mouseY);
+			Text title = new TranslatableText(Origins.MODID + ".gui.view_origin.title", new TranslatableText(originLayers.get(currentLayer).getLeft().getTranslationKey()));
+			drawCenteredString(matrices, this.textRenderer, title.getString(), width / 2, guiTop - 15, 0xFFFFFF);
+		} else {
+			drawCenteredString(matrices, this.textRenderer, new TranslatableText(Origins.MODID + ".gui.view_origin.empty").getString(), width / 2, guiTop + 15, 0xFFFFFF);
+		}
 		RenderSystem.disableBlend();
 	}
 
