@@ -48,7 +48,7 @@ public class Origin {
     public static final Origin EMPTY;
 
     static {
-        EMPTY = register(new Origin(new Identifier(Origins.MODID, "empty"), Items.AIR, Impact.NONE, -1, Integer.MAX_VALUE).setUnchoosable());
+        EMPTY = register(new Origin(new Identifier(Origins.MODID, "empty"), Items.AIR, Impact.NONE, -1, Integer.MAX_VALUE).setUnchoosable().setSpecial());
     }
 
     public static void init() {

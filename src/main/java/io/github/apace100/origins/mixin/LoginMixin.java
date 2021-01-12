@@ -98,6 +98,12 @@ public abstract class LoginMixin {
 		}
 	}
 
+	@Inject(method = "remove", at = @At("HEAD"))
+	private void invokeOnRemovedCallback(ServerPlayerEntity player, CallbackInfo ci) {
+		OriginComponent component = ModComponents.ORIGIN.get(player);
+		component.getPowers().forEach(Power::onRemoved);
+	}
+
 	@Redirect(method = "respawnPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;findRespawnPosition(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;FZZ)Ljava/util/Optional;"))
 	private Optional<Vec3d> retryObstructedSpawnpointIfFailed(ServerWorld world, BlockPos pos, float f, boolean bl, boolean bl2, ServerPlayerEntity player, boolean alive) {
 		Optional<Vec3d> original = PlayerEntity.findRespawnPosition(world, pos, f, bl, bl2);
