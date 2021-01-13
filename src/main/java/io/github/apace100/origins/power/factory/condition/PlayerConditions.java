@@ -8,10 +8,7 @@ import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModRegistries;
-import io.github.apace100.origins.util.Comparison;
-import io.github.apace100.origins.util.SerializableData;
-import io.github.apace100.origins.util.SerializableDataType;
-import io.github.apace100.origins.util.WorldUtil;
+import io.github.apace100.origins.util.*;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -28,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public class PlayerConditions {
 
@@ -195,10 +193,36 @@ public class PlayerConditions {
             .add("comparison", SerializableDataType.COMPARISON)
             .add("compare_to", SerializableDataType.INT),
             (data, player) -> ((Comparison)data.get("comparison")).compare(player.getAir(), data.getInt("compare_to"))));
-        register(new ConditionFactory<>(Origins.identifier("in_block"), new SerializableData()
-            .add("block_condition", SerializableDataType.BLOCK_CONDITION),
-            (data, player) ->((ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition")).test(
-                    new CachedBlockPosition(player.world, player.getBlockPos(), true))));
+        register(new ConditionFactory<>(Origins.identifier("block_in_radius"), new SerializableData()
+            .add("block_condition", SerializableDataType.BLOCK_CONDITION)
+            .add("radius", SerializableDataType.INT)
+            .add("shape", SerializableDataType.enumValue(Shape.class), Shape.CUBE)
+            .add("compare_to", SerializableDataType.INT, 1)
+            .add("comparison", SerializableDataType.COMPARISON, Comparison.GREATER_THAN_OR_EQUAL),
+            (data, player) -> {
+                Predicate<CachedBlockPosition> blockCondition = ((ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition"));
+                int stopAt = -1;
+                Comparison comparison = ((Comparison)data.get("comparison"));
+                int compareTo = data.getInt("compare_to");
+                switch(comparison) {
+                    case EQUAL: case LESS_THAN_OR_EQUAL: case GREATER_THAN:
+                        stopAt = compareTo + 1;
+                        break;
+                    case LESS_THAN: case GREATER_THAN_OR_EQUAL:
+                        stopAt = compareTo;
+                        break;
+                }
+                int count = 0;
+                for(BlockPos pos : Shape.getPositions(player.getBlockPos(), (Shape) data.get("shape"), data.getInt("radius"))) {
+                    if(blockCondition.test(new CachedBlockPosition(player.world, pos, true))) {
+                        count++;
+                        if(count == stopAt) {
+                            break;
+                        }
+                    }
+                }
+                return comparison.compare(count, compareTo);
+            }));
     }
 
     private static void register(ConditionFactory<PlayerEntity> conditionFactory) {
