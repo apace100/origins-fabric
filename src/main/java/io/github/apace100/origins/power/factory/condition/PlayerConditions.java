@@ -193,6 +193,10 @@ public class PlayerConditions {
             .add("comparison", SerializableDataType.COMPARISON)
             .add("compare_to", SerializableDataType.INT),
             (data, player) -> ((Comparison)data.get("comparison")).compare(player.getAir(), data.getInt("compare_to"))));
+        register(new ConditionFactory<>(Origins.identifier("in_block"), new SerializableData()
+            .add("block_condition", SerializableDataType.BLOCK_CONDITION),
+            (data, player) ->((ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition")).test(
+                new CachedBlockPosition(player.world, player.getBlockPos(), true))));
         register(new ConditionFactory<>(Origins.identifier("block_in_radius"), new SerializableData()
             .add("block_condition", SerializableDataType.BLOCK_CONDITION)
             .add("radius", SerializableDataType.INT)
