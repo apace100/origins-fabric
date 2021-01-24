@@ -12,6 +12,7 @@
     "CreeperEntityMixin",
     "CriteriaRegistryInvoker",
     "DamageSourceAccessor",
+    "EntityAccessor",
     "EntityMixin",
     "EntityShapeContextMixin",
     "EyeHeightAccess",
