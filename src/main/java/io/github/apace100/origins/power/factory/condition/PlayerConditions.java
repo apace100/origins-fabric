@@ -66,12 +66,10 @@ public class PlayerConditions {
             ((Comparison)data.get("comparison")).compare(player.world.getTimeOfDay() % 24000L, data.getInt("compare_to"))));
         register(new ConditionFactory<>(Origins.identifier("fall_flying"), new SerializableData(), (data, player) -> player.isFallFlying()));
         register(new ConditionFactory<>(Origins.identifier("exposed_to_sun"), new SerializableData(), (data, player) -> {
-            if (player.world.isDay() && !WorldUtil.isRainingAtPlayerPosition(player)) {
+            if (player.world.isDay() && !((EntityAccessor) player).callIsBeingRainedOn()) {
                 float f = player.getBrightnessAtEyes();
                 BlockPos blockPos = player.getVehicle() instanceof BoatEntity ? (new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ())).up() : new BlockPos(player.getX(), (double) Math.round(player.getY()), player.getZ());
-                if (f > 0.5F && player.world.isSkyVisible(blockPos)) {
-                    return true;
-                }
+                return f > 0.5F && player.world.isSkyVisible(blockPos);
             }
             return false;
         }));
