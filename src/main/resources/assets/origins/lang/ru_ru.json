@@ -181,15 +181,15 @@
   "origins.gui.view_origin.empty": "У вас не может быть Происхождения.",
   "origins.gui.impact.impact": "Влияние",
   "origins.gui.impact.none": "Ничего",
-  "origins.gui.impact.low": "Низкий",
-  "origins.gui.impact.medium": "Средний",
-  "origins.gui.impact.high": "Высокий",
+  "origins.gui.impact.low": "Низкое",
+  "origins.gui.impact.medium": "Среднее",
+  "origins.gui.impact.high": "Высокое",
 
   "layer.origins.origin.name": "Происхождение",
   "layer.origins.origin.missing_origin.name": "Отсутствует",
   "layer.origins.origin.missing_origin.description": "У вас нет Происхождения.",
 
-  "death.attack.no_water_for_gills": "%s не удалось остаться достаточно влажным.",
+  "death.attack.no_water_for_gills": "%s не сумел остаться мокрым.",
   "death.attack.hurt_by_water": "%s слишком долго принимал ванну.",
   "death.attack.genericDamageOverTime": "%s умер от временного повреждения.",
 
