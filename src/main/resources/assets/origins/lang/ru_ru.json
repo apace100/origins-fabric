@@ -163,8 +163,8 @@
   "key.origins.view_origin": "Посмотреть Происхождение",
 
   "text.autoconfig.origins.title": "Настройка Origins",
-  "text.autoconfig.origins.option.xOffset": "Cooldown Bar Offset X",
-  "text.autoconfig.origins.option.yOffset": "Cooldown Bar Offset Y",
+  "text.autoconfig.origins.option.xOffset": "Позиция полосы восстановления по оси X",
+  "text.autoconfig.origins.option.yOffset": "Позиция полосы восстановления по оси Y",
   "text.autoconfig.origins.option.phantomizedOverlayStrength": "Степень наложения фантомизации",
 
   "item.origins.orb_of_origin": "Сфера Происхождения",
