@@ -27,7 +27,7 @@
   "origin.origins.enderian.description": "Рожденные как сыновья и дочери Дракона Края, Эндерианцы способны к телепортации, но уязвимы для воды.",
 
   "origin.origins.shulk.name": "Шалк",
-  "origin.origins.shulk.description": "Родство с Шалкерами, тела Шалков снабжены защитной оболочкой, похожий на панцирь.",
+  "origin.origins.shulk.description": "Из-за родства с шалкерами, Шалки снабжены защитной оболочкой, похожий на панцирь.",
 
   "power.origins.water_breathing.name": "Жабры",
   "power.origins.water_breathing.description": "Ты можешь дышать под водой, но не на суше.",
@@ -180,7 +180,7 @@
   "origins.gui.view_origin.title": "Это ваше %s.",
   "origins.gui.view_origin.empty": "У вас не может быть Происхождения.",
   "origins.gui.impact.impact": "Влияние",
-  "origins.gui.impact.none": "Ничего",
+  "origins.gui.impact.none": "Никакое",
   "origins.gui.impact.low": "Низкое",
   "origins.gui.impact.medium": "Среднее",
   "origins.gui.impact.high": "Высокое",
