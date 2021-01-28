@@ -167,7 +167,7 @@
   "text.autoconfig.origins.option.yOffset": "Позиция полосы восстановления по оси Y",
   "text.autoconfig.origins.option.phantomizedOverlayStrength": "Степень наложения фантомизации",
 
-  "item.origins.orb_of_origin": "Сфера Происхождения",
+  "item.origins.orb_of_origin": "Сфера происхождения",
 
   "enchantment.origins.water_protection": "Защита от воды",
 
@@ -178,7 +178,7 @@
   "origins.gui.choose": "Выберите",
   "origins.gui.choose_origin.title": "Выберите ваше %s.",
   "origins.gui.view_origin.title": "Это ваше %s.",
-  "origins.gui.view_origin.empty": "Вы не выбрали происхождения.",
+  "origins.gui.view_origin.empty": "Вы не выбрали происхождение.",
   "origins.gui.impact.impact": "Влияние",
   "origins.gui.impact.none": "Никакое",
   "origins.gui.impact.low": "Низкое",
@@ -187,7 +187,7 @@
 
   "layer.origins.origin.name": "Происхождение",
   "layer.origins.origin.missing_origin.name": "Отсутствует",
-  "layer.origins.origin.missing_origin.description": "У вас нет Происхождения.",
+  "layer.origins.origin.missing_origin.description": "У вас нет происхождения.",
 
   "death.attack.no_water_for_gills": "%s не сумел остаться мокрым.",
   "death.attack.hurt_by_water": "%s слишком долго принимал ванну.",
