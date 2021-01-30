@@ -23,6 +23,7 @@ import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -227,6 +228,9 @@ public class PlayerConditions {
                 }
                 return comparison.compare(count, compareTo);
             }));
+        register(new ConditionFactory<>(Origins.identifier("dimension"), new SerializableData()
+            .add("dimension", SerializableDataType.IDENTIFIER),
+            (data, player) -> player.world.getRegistryKey() == RegistryKey.of(Registry.DIMENSION, data.getId("dimension"))));
     }
 
     private static void register(ConditionFactory<PlayerEntity> conditionFactory) {

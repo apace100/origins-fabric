@@ -6,6 +6,7 @@ import io.github.apace100.origins.util.Comparison;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import net.minecraft.block.Block;
+import net.minecraft.block.FluidFillable;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.tag.Tag;
@@ -85,6 +86,12 @@ public class BlockConditions {
         register(new ConditionFactory<>(Origins.identifier("fluid"), new SerializableData()
             .add("fluid_condition", SerializableDataType.FLUID_CONDITION),
             (data, block) -> ((ConditionFactory<FluidState>.Instance)data.get("fluid_condition")).test(block.getWorld().getFluidState(block.getBlockPos()))));
+        register(new ConditionFactory<>(Origins.identifier("movement_blocking"), new SerializableData(),
+            (data, block) -> block.getBlockState().getMaterial().blocksMovement() && !block.getBlockState().getCollisionShape(block.getWorld(), block.getBlockPos()).isEmpty()));
+        register(new ConditionFactory<>(Origins.identifier("light_blocking"), new SerializableData(),
+            (data, block) -> block.getBlockState().getMaterial().blocksLight()));
+        register(new ConditionFactory<>(Origins.identifier("water_loggable"), new SerializableData(),
+            (data, block) -> block.getBlockState().getBlock() instanceof FluidFillable));
     }
 
     private static void register(ConditionFactory<CachedBlockPosition> conditionFactory) {
