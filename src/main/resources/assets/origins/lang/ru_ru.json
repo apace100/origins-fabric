@@ -138,9 +138,9 @@
   "power.origins.pumpkin_hate.description": "Ты боишься тыкв. По понятной причине.",
 
   "power.origins.extra_reach.name": "Длинное Тело",
-  "power.origins.extra_reach.description": "Вы можете дотянуться до далеко стоящих блоков и энтити.",
+  "power.origins.extra_reach.description": "Вы можете дотянуться до далеко стоящих блоков и существ.",
 
-  "power.origins.shulker_inventory.name": "Накопитель",
+  "power.origins.shulker_inventory.name": "Хранитель",
   "power.origins.shulker_inventory.description": "У вас есть доступ к дополнительным 9 ячейкам инвентаря, в которых хранятся предметы после смерти.",
 
   "power.origins.natural_armor.name": "Прочная кожа",
@@ -160,7 +160,7 @@
 
   "category.origins": "Origins",
   "key.origins.active_power": "Активная Сила",
-  "key.origins.view_origin": "Посмотреть Происхождение",
+  "key.origins.view_origin": "Посмотреть происхождение",
 
   "text.autoconfig.origins.title": "Настройка Origins",
   "text.autoconfig.origins.option.xOffset": "Позиция полосы восстановления по оси X",
