@@ -83,6 +83,9 @@ public class PowerFactories {
                 (type, player) ->
                     new CooldownPower(type, player, data.getInt("cooldown"), (HudRender)data.get("hud_render")))
             .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("end_spawn"),
+            new SerializableData(),
+            data -> (BiFunction<PowerType<Power>, PlayerEntity, Power>)EndSpawnPower::new));
         register(new PowerFactory<>(Origins.identifier("effect_immunity"),
             new SerializableData()
                 .add("effect", SerializableDataType.STATUS_EFFECT, null)
