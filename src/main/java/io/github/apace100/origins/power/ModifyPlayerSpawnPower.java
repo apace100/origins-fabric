@@ -42,7 +42,7 @@ public class ModifyPlayerSpawnPower extends Power {
             ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
             Pair<ServerWorld, BlockPos> spawn = getSpawn(false);
             if(spawn != null) {
-                if(!isOrbOfOrigin || isOrbOfOrigin) {
+                if(!isOrbOfOrigin) {
                     Vec3d tpPos = Dismounting.method_30769(EntityType.PLAYER, spawn.getLeft(), spawn.getRight(), true);
                     if(tpPos != null) {
                         serverPlayer.teleport(spawn.getLeft(), tpPos.x, tpPos.y, tpPos.z, player.pitch, player.yaw);
@@ -95,7 +95,7 @@ public class ModifyPlayerSpawnPower extends Power {
                     break;
 
                 default:
-                    Origins.LOGGER.warn("No spawn strategy defined in JSON, defaulting to `overworld`");
+                    Origins.LOGGER.warn("This case does nothing. The game crashes if there is no spawn strategy set");
                     if(dimensionDistanceMultiplier != 0) {
                         spawnToDimPos = new BlockPos(regularSpawn.getX() * dimensionDistanceMultiplier, regularSpawn.getY(), regularSpawn.getZ() * dimensionDistanceMultiplier);
                     } else {
@@ -108,6 +108,10 @@ public class ModifyPlayerSpawnPower extends Power {
             } else {
                 BlockPos structurePos = getStructureLocation(structure, dimension);
                 ChunkPos structureChunkPos;
+
+                if(structurePos == null) {
+                    return null;
+                }
                 structureChunkPos = new ChunkPos(structurePos.getX() >> 4, structurePos.getZ() >> 4);
                 StructureStart structureStart = world.getStructureAccessor().getStructureStart(ChunkSectionPos.from(structureChunkPos, 0), structure, world.getChunk(structurePos));
                 BlockPos structureCenter = new BlockPos(structureStart.getBoundingBox().getCenter());
@@ -119,8 +123,6 @@ public class ModifyPlayerSpawnPower extends Power {
                 BlockPos spawnLocation = mutable;
                 world.getChunkManager().addTicket(ChunkTicketType.START, new ChunkPos(spawnLocation), 11, Unit.INSTANCE);
                 return new Pair(world, spawnLocation);
-            } else {
-                Origins.LOGGER.warn("Could not find spawn for player with ModifyPlayerSpawnPower in range " + range + " of " + ".");
             }
             return null;
         }
@@ -133,7 +135,7 @@ public class ModifyPlayerSpawnPower extends Power {
         BlockPos blockPos2 = serverWorld.locateStructure(structure, blockPos, 100, false);
         //FrostburnOrigins.LOGGER.warn("Unrecognized dimension id '" + dimensionId + "', defaulting to id '0', OVERWORLD");
         if (blockPos2 == null) {
-            Origins.LOGGER.warn("Couldn't find '" + structure.getName() + "' in world at dimension '" + " " + "'");
+            Origins.LOGGER.warn("Could not find '" + structure.getName() + "' in dimension: " + dimension.getValue());
             return null;
         } else {
             return blockPos2;
