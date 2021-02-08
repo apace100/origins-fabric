@@ -1,7 +1,7 @@
 {
   "type": "origins:modify_player_spawn",
-  "dimension": "the_nether",
-  "dimension_distance_multiplier": -8,
+  "dimension": "the_end",
+  "dimension_distance_multiplier": 0,
   "spawn_strategy": "center",
   "sound": "minecraft:entity.player.attack_strong"
 }

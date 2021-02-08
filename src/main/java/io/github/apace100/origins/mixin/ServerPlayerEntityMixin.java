@@ -4,7 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Either;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.ModifyDamageTakenPower;
-import io.github.apace100.origins.power.NetherSpawnPower;
+import io.github.apace100.origins.power.ModifyPlayerSpawnPower;
 import io.github.apace100.origins.power.PreventSleepPower;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -69,28 +69,29 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
     }
 
     @Inject(at = @At("HEAD"), method = "getSpawnPointDimension", cancellable = true)
-    private void modifyBlazebornSpawnDimension(CallbackInfoReturnable<RegistryKey<World>> info) {
-        if ((spawnPointPosition == null || hasObstructedSpawn()) && OriginComponent.hasPower(this, NetherSpawnPower.class)) {
-            info.setReturnValue(World.NETHER);
+    private void modifySpawnPointDimension(CallbackInfoReturnable<RegistryKey<World>> info) {
+        if ((spawnPointPosition == null || hasObstructedSpawn()) && OriginComponent.getPowers(this, ModifyPlayerSpawnPower.class).size() > 0) {
+            ModifyPlayerSpawnPower power = OriginComponent.getPowers(this, ModifyPlayerSpawnPower.class).get(0);
+            info.setReturnValue(power.dimension);
         }
     }
 
     @Inject(at = @At("HEAD"), method = "getSpawnPointPosition", cancellable = true)
-    private void modifyBlazebornSpawnPosition(CallbackInfoReturnable<BlockPos> info) {
-        if(OriginComponent.getPowers(this, NetherSpawnPower.class).size() > 0) {
+    private void modifyPlayerSpawnPosition(CallbackInfoReturnable<BlockPos> info) {
+        if(OriginComponent.getPowers(this, ModifyPlayerSpawnPower.class).size() > 0) {
             if(spawnPointPosition == null) {
-                info.setReturnValue(findNetherSpawn());
+                info.setReturnValue(findPlayerSpawn());
             } else if(hasObstructedSpawn()) {
                 networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.NO_RESPAWN_BLOCK, 0.0F));
-                info.setReturnValue(findNetherSpawn());
+                info.setReturnValue(findPlayerSpawn());
             }
         }
     }
 
 
     @Inject(at = @At("HEAD"), method = "isSpawnPointSet", cancellable = true)
-    private void modifyBlazebornSpawnPointSet(CallbackInfoReturnable<Boolean> info) {
-        if((spawnPointPosition == null || hasObstructedSpawn()) && OriginComponent.hasPower(this, NetherSpawnPower.class)) {
+    private void modifySpawnPointSet(CallbackInfoReturnable<Boolean> info) {
+        if((spawnPointPosition == null || hasObstructedSpawn()) && OriginComponent.hasPower(this, ModifyPlayerSpawnPower.class)) {
             info.setReturnValue(true);
         }
     }
@@ -104,8 +105,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
         return false;
     }
 
-    private BlockPos findNetherSpawn() {
-        NetherSpawnPower power = OriginComponent.getPowers(this, NetherSpawnPower.class).get(0);
+    private BlockPos findPlayerSpawn() {
+        ModifyPlayerSpawnPower power = OriginComponent.getPowers(this, ModifyPlayerSpawnPower.class).get(0);
         Pair<ServerWorld, BlockPos> spawn = power.getSpawn(true);
         if(spawn != null) {
             return spawn.getRight();

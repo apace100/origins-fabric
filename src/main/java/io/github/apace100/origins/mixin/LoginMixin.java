@@ -6,10 +6,7 @@ import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
-import io.github.apace100.origins.power.NetherSpawnPower;
-import io.github.apace100.origins.power.Power;
-import io.github.apace100.origins.power.PowerType;
-import io.github.apace100.origins.power.PowerTypeRegistry;
+import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.power.factory.PowerFactory;
 import io.github.apace100.origins.registry.ModComponents;
 import io.netty.buffer.Unpooled;
@@ -108,7 +105,7 @@ public abstract class LoginMixin {
 	private Optional<Vec3d> retryObstructedSpawnpointIfFailed(ServerWorld world, BlockPos pos, float f, boolean bl, boolean bl2, ServerPlayerEntity player, boolean alive) {
 		Optional<Vec3d> original = PlayerEntity.findRespawnPosition(world, pos, f, bl, bl2);
 		if(!original.isPresent()) {
-			if(OriginComponent.hasPower(player, NetherSpawnPower.class)) {
+			if(OriginComponent.hasPower(player, ModifyPlayerSpawnPower.class)) {
 				return Optional.ofNullable(Dismounting.method_30769(EntityType.PLAYER, world, pos, bl));
 			}
 		}

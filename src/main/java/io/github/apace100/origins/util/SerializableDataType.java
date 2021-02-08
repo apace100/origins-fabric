@@ -50,6 +50,7 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -363,6 +364,12 @@ public class SerializableDataType<T> {
         }));
 
     public static final SerializableDataType<List<Pair<Integer, ItemStack>>> POSITIONED_ITEM_STACKS = SerializableDataType.list(POSITIONED_ITEM_STACK);
+
+    public static SerializableDataType<RegistryKey<World>> DIMENSION = SerializableDataType.wrap(
+            ClassUtil.castClass(RegistryKey.class),
+            SerializableDataType.IDENTIFIER,
+            RegistryKey::getValue, identifier -> RegistryKey.of(Registry.DIMENSION, identifier)
+    );
 
     private final Class<T> dataClass;
     private final BiConsumer<PacketByteBuf, T> send;

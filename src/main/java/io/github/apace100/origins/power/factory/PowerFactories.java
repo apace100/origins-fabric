@@ -6,10 +6,7 @@ import io.github.apace100.origins.power.factory.action.ActionFactory;
 import io.github.apace100.origins.power.factory.condition.ConditionFactory;
 import io.github.apace100.origins.registry.ModDamageSources;
 import io.github.apace100.origins.registry.ModRegistries;
-import io.github.apace100.origins.util.AttributedEntityAttributeModifier;
-import io.github.apace100.origins.util.HudRender;
-import io.github.apace100.origins.util.SerializableData;
-import io.github.apace100.origins.util.SerializableDataType;
+import io.github.apace100.origins.util.*;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -32,6 +29,9 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.StructureFeature;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -297,9 +297,22 @@ public class PowerFactories {
                     return power;
                 })
             .allowCondition());
-        register(new PowerFactory<>(Origins.identifier("nether_spawn"),
-            new SerializableData(),
-            data -> (BiFunction<PowerType<Power>, PlayerEntity, Power>)NetherSpawnPower::new));
+        register(new PowerFactory<>(Origins.identifier("modify_player_spawn"),
+                new SerializableData()
+                        .add("dimension", SerializableDataType.DIMENSION)
+                        .add("dimension_distance_multiplier", SerializableDataType.INT, 0)
+                        .add("spawn_strategy", SerializableDataType.STRING, "overworld")
+                        .add("structure", SerializableDataType.registry(ClassUtil.castClass(StructureFeature.class), Registry.STRUCTURE_FEATURE), null)
+                        .add("respawn_sound", SerializableDataType.SOUND_EVENT, null),
+                data ->
+                        (type, player) ->
+                                new ModifyPlayerSpawnPower(type, player,
+                                        (RegistryKey<World>)data.get("dimension"),
+                                        data.getInt("dimension_distance_multiplier"),
+                                        data.getString("spawn_strategy"),
+                                        data.isPresent("structure") ? (StructureFeature<?>)data.get("structure") : null,
+                                        (SoundEvent)data.get("respawn_sound")))
+                .allowCondition());
         register(new PowerFactory<>(Origins.identifier("night_vision"),
             new SerializableData()
                 .add("strength", SerializableDataType.FLOAT, 1.0F),
