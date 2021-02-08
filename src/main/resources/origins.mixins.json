@@ -14,6 +14,7 @@
     "DamageSourceAccessor",
     "EntityMixin",
     "EntityShapeContextMixin",
+    "ExperienceOrbEntityMixin",
     "EyeHeightAccess",
     "HungerManagerMixin",
     "ItemStackMixin",

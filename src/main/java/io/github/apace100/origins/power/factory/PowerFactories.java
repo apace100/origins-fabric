@@ -661,6 +661,22 @@ public class PowerFactories {
                     return new ModifyFoodPower(type, player, data.isPresent("item_condition") ? (ConditionFactory<ItemStack>.Instance)data.get("item_condition") : stack -> true,
                         foodModifiers, saturationModifiers, (ActionFactory<Entity>.Instance)data.get("entity_action"));
                 }).allowCondition());
+        register(new PowerFactory<>(Origins.identifier("modify_xp_gain"),
+            new SerializableData()
+                .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
+                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null),
+            data ->
+                (type, player) -> {
+                    ModifyExperiencePower power = new ModifyExperiencePower(type, player);
+                    if(data.isPresent("modifier")) {
+                        power.addModifier(data.getModifier("modifier"));
+                    }
+                    if(data.isPresent("modifiers")) {
+                        ((List<EntityAttributeModifier>)data.get("modifiers")).forEach(power::addModifier);
+                    }
+                    return power;
+                })
+            .allowCondition());
     }
 
     private static void register(PowerFactory serializer) {

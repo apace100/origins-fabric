@@ -231,6 +231,14 @@ public class PlayerConditions {
         register(new ConditionFactory<>(Origins.identifier("dimension"), new SerializableData()
             .add("dimension", SerializableDataType.IDENTIFIER),
             (data, player) -> player.world.getRegistryKey() == RegistryKey.of(Registry.DIMENSION, data.getId("dimension"))));
+        register(new ConditionFactory<>(Origins.identifier("xp_levels"), new SerializableData()
+            .add("comparison", SerializableDataType.COMPARISON)
+            .add("compare_to", SerializableDataType.INT),
+            (data, player) -> ((Comparison)data.get("comparison")).compare(player.experienceLevel, data.getInt("compare_to"))));
+        register(new ConditionFactory<>(Origins.identifier("xp_points"), new SerializableData()
+            .add("comparison", SerializableDataType.COMPARISON)
+            .add("compare_to", SerializableDataType.INT),
+            (data, player) -> ((Comparison)data.get("comparison")).compare(player.totalExperience, data.getInt("compare_to"))));
     }
 
     private static void register(ConditionFactory<PlayerEntity> conditionFactory) {

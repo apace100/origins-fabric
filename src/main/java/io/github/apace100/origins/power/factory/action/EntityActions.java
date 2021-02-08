@@ -241,6 +241,19 @@ public class EntityActions {
                     ((PlayerEntity)entity).getHungerManager().add(data.getInt("food"), data.getFloat("saturation"));
                 }
             }));
+        register(new ActionFactory<>(Origins.identifier("add_xp"), new SerializableData()
+            .add("points", SerializableDataType.INT, 0)
+            .add("levels", SerializableDataType.INT, 0),
+            (data, entity) -> {
+                if(entity instanceof PlayerEntity) {
+                    int points = data.getInt("points");
+                    int levels = data.getInt("levels");
+                    if(points > 0) {
+                        ((PlayerEntity)entity).addExperience(points);
+                    }
+                    ((PlayerEntity)entity).addExperienceLevels(levels);
+                }
+            }));
     }
 
     private static void register(ActionFactory<Entity> actionFactory) {
