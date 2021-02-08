@@ -301,7 +301,7 @@ public class PowerFactories {
                 new SerializableData()
                         .add("dimension", SerializableDataType.DIMENSION)
                         .add("dimension_distance_multiplier", SerializableDataType.INT, 0)
-                        .add("spawn_strategy", SerializableDataType.STRING, "overworld")
+                        .add("spawn_strategy", SerializableDataType.STRING, "default")
                         .add("structure", SerializableDataType.registry(ClassUtil.castClass(StructureFeature.class), Registry.STRUCTURE_FEATURE), null)
                         .add("respawn_sound", SerializableDataType.SOUND_EVENT, null),
                 data ->
