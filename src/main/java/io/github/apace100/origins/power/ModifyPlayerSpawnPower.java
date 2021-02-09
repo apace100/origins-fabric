@@ -80,7 +80,7 @@ public class ModifyPlayerSpawnPower extends Power {
             switch(spawnStrategy) {
                 case "center":
                     if(dimensionDistanceMultiplier != 0) {
-                        spawnToDimPos = new BlockPos(1 * dimensionDistanceMultiplier, 1, 1 * dimensionDistanceMultiplier);
+                        spawnToDimPos = new BlockPos(1 * dimensionDistanceMultiplier, center, 1 * dimensionDistanceMultiplier);
                     } else {
                         spawnToDimPos = new BlockPos(1, center, 1);
                     }
@@ -104,7 +104,7 @@ public class ModifyPlayerSpawnPower extends Power {
             }
 
             if(structure == null) {
-                tpPos = getValidSpawn(spawnToDimPos, 64, world);
+                tpPos = getValidSpawn(spawnToDimPos, range, world);
             } else {
                 BlockPos structurePos = getStructureLocation(structure, dimension);
                 ChunkPos structureChunkPos;
@@ -115,7 +115,7 @@ public class ModifyPlayerSpawnPower extends Power {
                 structureChunkPos = new ChunkPos(structurePos.getX() >> 4, structurePos.getZ() >> 4);
                 StructureStart structureStart = world.getStructureAccessor().getStructureStart(ChunkSectionPos.from(structureChunkPos, 0), structure, world.getChunk(structurePos));
                 BlockPos structureCenter = new BlockPos(structureStart.getBoundingBox().getCenter());
-                tpPos = getValidSpawn(structureCenter, 64, world);
+                tpPos = getValidSpawn(structureCenter, range, world);
             }
 
             if(tpPos != null) {
@@ -163,7 +163,7 @@ public class ModifyPlayerSpawnPower extends Power {
         // Decrease y check
         int d = 0;
         while(i < world.getDimensionHeight() || d > 0) {
-            for (int coordinateCount = 0; coordinateCount < 64; ++coordinateCount) {
+            for (int coordinateCount = 0; coordinateCount < range; ++coordinateCount) {
                 // make a step, add 'direction' vector (di, dj) to current position (i, j)
                 x += dx;
                 z += dz;
