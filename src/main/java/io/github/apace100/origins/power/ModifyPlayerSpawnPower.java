@@ -79,11 +79,7 @@ public class ModifyPlayerSpawnPower extends Power {
 
             switch(spawnStrategy) {
                 case "center":
-                    if(dimensionDistanceMultiplier != 0) {
-                        spawnToDimPos = new BlockPos(1 * dimensionDistanceMultiplier, center, 1 * dimensionDistanceMultiplier);
-                    } else {
-                        spawnToDimPos = new BlockPos(1, center, 1);
-                    }
+                    spawnToDimPos = new BlockPos(0, center, 0);
                     break;
 
                 case "default":

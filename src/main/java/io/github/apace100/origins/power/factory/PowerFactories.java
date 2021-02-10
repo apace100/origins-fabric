@@ -300,7 +300,7 @@ public class PowerFactories {
         register(new PowerFactory<>(Origins.identifier("modify_player_spawn"),
                 new SerializableData()
                         .add("dimension", SerializableDataType.DIMENSION)
-                        .add("dimension_distance_multiplier", SerializableDataType.INT, 0)
+                        .add("dimension_distance_multiplier", SerializableDataType.FLOAT, 0F)
                         .add("spawn_strategy", SerializableDataType.STRING, "default")
                         .add("structure", SerializableDataType.registry(ClassUtil.castClass(StructureFeature.class), Registry.STRUCTURE_FEATURE), null)
                         .add("respawn_sound", SerializableDataType.SOUND_EVENT, null),
@@ -308,7 +308,7 @@ public class PowerFactories {
                         (type, player) ->
                                 new ModifyPlayerSpawnPower(type, player,
                                         (RegistryKey<World>)data.get("dimension"),
-                                        data.getInt("dimension_distance_multiplier"),
+                                        (int)data.getFloat("dimension_distance_multiplier"),
                                         data.getString("spawn_strategy"),
                                         data.isPresent("structure") ? (StructureFeature<?>)data.get("structure") : null,
                                         (SoundEvent)data.get("respawn_sound")))
