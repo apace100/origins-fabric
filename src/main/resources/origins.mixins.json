@@ -27,7 +27,8 @@
     "RegistryAccessor",
     "ServerPlayerEntityMixin",
     "ServerPlayerInteractionManagerAccessor",
-    "ServerPlayerInteractionManagerMixin"
+    "ServerPlayerInteractionManagerMixin",
+    "WeightedListEntryAccessor"
   ],
   "client": [
     "BackgroundRendererMixin",

@@ -8,6 +8,7 @@ import io.github.apace100.origins.power.VariableIntPower;
 import io.github.apace100.origins.power.factory.condition.ConditionFactory;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModRegistries;
+import io.github.apace100.origins.util.FilterableWeightedList;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import io.github.apace100.origins.util.Space;
@@ -67,6 +68,13 @@ public class EntityActions {
                         }
                     }
                 }
+            }));
+        register(new ActionFactory<>(Origins.identifier("choice"), new SerializableData()
+            .add("actions", SerializableDataType.weightedList(SerializableDataType.ENTITY_ACTION)),
+            (data, entity) -> {
+                FilterableWeightedList<ActionFactory<Entity>.Instance> actionList = (FilterableWeightedList<ActionFactory<Entity>.Instance>)data.get("actions");
+                ActionFactory<Entity>.Instance action = actionList.pickRandom(new Random());
+                action.accept(entity);
             }));
 
         register(new ActionFactory<>(Origins.identifier("damage"), new SerializableData()
