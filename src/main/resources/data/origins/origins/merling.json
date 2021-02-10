@@ -5,7 +5,8 @@
 		"origins:aqua_affinity",
 		"origins:swim_speed",
 		"origins:like_water",
-		"origins:aquatic"
+		"origins:aquatic",
+		"origins:conduit_power_on_land"
 	],
 	"icon": "minecraft:cod",
 	"order": 0,

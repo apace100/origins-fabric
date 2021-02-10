@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class ConduitBlockEntityMixin {
 
     @Redirect(method = "givePlayersEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isTouchingWaterOrRain()Z"))
-    private boolean alsoAffectMerlingsOnLand(PlayerEntity playerEntity) {
-        return playerEntity.isTouchingWaterOrRain() || PowerTypes.WATER_BREATHING.isActive(playerEntity);
+    private boolean allowConduitPowerOnLand(PlayerEntity playerEntity) {
+        return playerEntity.isTouchingWaterOrRain() || PowerTypes.CONDUIT_POWER_ON_LAND.isActive(playerEntity);
     }
 }
