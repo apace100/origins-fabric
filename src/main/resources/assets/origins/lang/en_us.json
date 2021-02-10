@@ -185,6 +185,9 @@
   "origins.gui.impact.medium": "Medium",
   "origins.gui.impact.high": "High",
 
+  "origin.origins.random.name": "Random",
+  "origin.origins.random.description": "You'll be assigned one of the following:",
+
   "layer.origins.origin.name": "Origin",
   "layer.origins.origin.missing_origin.name": "Missing",
   "layer.origins.origin.missing_origin.description": "You do not have an Origin.",
