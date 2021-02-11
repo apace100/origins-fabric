@@ -45,7 +45,7 @@ public class DamageConditions {
             (data, dmg) -> {
                 if(dmg.getLeft() instanceof ProjectileDamageSource) {
                     Entity projectile = ((ProjectileDamageSource)dmg.getLeft()).getSource();
-                    if(projectile != null && (data.isPresent("projectile") || projectile.getType() == (EntityType<?>)data.get("projectile"))) {
+                    if(projectile != null && (!data.isPresent("projectile") || projectile.getType() == (EntityType<?>)data.get("projectile"))) {
                         return true;
                     }
                 }
