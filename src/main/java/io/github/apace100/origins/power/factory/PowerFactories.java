@@ -574,7 +574,12 @@ public class PowerFactories {
                     StartingEquipmentPower power = new StartingEquipmentPower(type, player);
                     if(data.isPresent("stack")) {
                         Pair<Integer, ItemStack> stack = (Pair<Integer, ItemStack>)data.get("stack");
-                        power.addStack(stack.getLeft(), stack.getRight());
+                        int slot = stack.getLeft();
+                        if(slot > Integer.MIN_VALUE) {
+                            power.addStack(stack.getLeft(), stack.getRight());
+                        } else {
+                            power.addStack(stack.getRight());
+                        }
                     }
                     if(data.isPresent("stacks")) {
                         ((List<Pair<Integer, ItemStack>>)data.get("stacks"))
