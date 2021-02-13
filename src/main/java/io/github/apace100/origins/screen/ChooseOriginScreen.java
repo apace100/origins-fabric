@@ -2,14 +2,12 @@ package io.github.apace100.origins.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.origin.Impact;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.PowerType;
-import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModItems;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
@@ -123,8 +121,6 @@ public class ChooseOriginScreen extends Screen {
 				buf.writeString(getCurrentOrigin().getIdentifier().toString());
 				buf.writeString(layerList.get(currentLayerIndex).getIdentifier().toString());
 				ClientSidePacketRegistry.INSTANCE.sendToServer(ModPackets.CHOOSE_ORIGIN, buf);
-				OriginComponent component = ModComponents.ORIGIN.get(MinecraftClient.getInstance().player);
-				component.setOrigin(layerList.get(currentLayerIndex), getCurrentOrigin());
 			}
 			openNextLayerScreen();
         }));
