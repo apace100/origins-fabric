@@ -14,6 +14,7 @@ import io.github.apace100.origins.mixin.DamageSourceAccessor;
 import io.github.apace100.origins.mixin.WeightedListEntryAccessor;
 import io.github.apace100.origins.origin.Impact;
 import io.github.apace100.origins.origin.OriginUpgrade;
+import io.github.apace100.origins.power.Active;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.PowerTypeReference;
 import io.github.apace100.origins.power.factory.action.ActionFactory;
@@ -56,7 +57,10 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Triple;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -363,6 +367,8 @@ public class SerializableDataType<T> {
         }));
 
     public static final SerializableDataType<List<Pair<Integer, ItemStack>>> POSITIONED_ITEM_STACKS = SerializableDataType.list(POSITIONED_ITEM_STACK);
+
+    public static final SerializableDataType<Active.KeyType> ACTIVE_KEY_TYPE = SerializableDataType.enumValue(Active.KeyType.class);
 
     private final Class<T> dataClass;
     private final BiConsumer<PacketByteBuf, T> send;

@@ -159,7 +159,7 @@
   "power.origins.translucent.description": "Cildiniz yarı saydamdır.",
 
   "category.origins": "Origin'ler",
-  "key.origins.active_power": "Aktif güç",
+  "key.origins.primary_active": "Aktif güç",
   "key.origins.view_origin": "Origin'i Görüntüle",
 
   "text.autoconfig.origins.title": "Origin Yapılandırma",

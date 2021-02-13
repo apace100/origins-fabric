@@ -85,10 +85,11 @@ public class ModPacketsC2S {
             });
         }));
         ServerSidePacketRegistry.INSTANCE.register(ModPackets.USE_ACTIVE_POWER, ((packetContext, packetByteBuf) -> {
+            Active.KeyType keyType = Active.KeyType.values()[packetByteBuf.readInt()];
             packetContext.getTaskQueue().execute(() -> {
                 OriginComponent component = ModComponents.ORIGIN.get(packetContext.getPlayer());
                 if(component.hasAllOrigins()) {
-                    component.getPowers().stream().filter(p -> p instanceof Active).forEach(p -> ((Active)p).onUse());
+                    component.getPowers().stream().filter(p -> p instanceof Active && ((Active)p).getKey() == keyType).forEach(p -> ((Active)p).onUse());
                 }
             });
         }));

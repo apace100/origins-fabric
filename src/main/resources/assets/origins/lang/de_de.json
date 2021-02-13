@@ -138,7 +138,7 @@
   "power.origins.extra_reach.description": "Du kannst Blöcke und Wesen weiter weg erreichen.",
 
   "category.origins": "Origins",
-  "key.origins.active_power": "Aktive Fähigkeit",
+  "key.origins.primary_active": "Aktive Fähigkeit",
   "key.origins.view_origin": "Zeige Ursprung",
 
   "item.origins.orb_of_origin": "Kugel des Ursprungs",

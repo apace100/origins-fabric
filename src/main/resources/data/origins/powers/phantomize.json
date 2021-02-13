@@ -1,4 +1,5 @@
 {
   "type": "origins:toggle",
-  "hidden": true
+  "hidden": true,
+  "key": "primary"
 }

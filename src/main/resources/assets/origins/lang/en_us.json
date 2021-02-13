@@ -159,7 +159,8 @@
   "power.origins.translucent.description": "Your skin is translucent.",
 
   "category.origins": "Origins",
-  "key.origins.active_power": "Active Power",
+  "key.origins.primary_active": "Active Power (Primary)",
+  "key.origins.secondary_active": "Active Power (Secondary)",
   "key.origins.view_origin": "View Origin",
 
   "text.autoconfig.origins.title": "Origins Configuration",

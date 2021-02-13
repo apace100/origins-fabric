@@ -159,7 +159,7 @@
   "power.origins.translucent.description": "Sua pele é translúcida.",
 
   "category.origins": "Origens",
-  "key.origins.active_power": "Poder Ativo",
+  "key.origins.primary_active": "Poder Ativo",
   "key.origins.view_origin": "Ver origem",
 
   "item.origins.orb_of_origin": "Orbe de Origem",

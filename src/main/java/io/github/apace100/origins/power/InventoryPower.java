@@ -110,4 +110,16 @@ public class InventoryPower extends Power implements Active, Inventory {
     public boolean shouldDropOnDeath(ItemStack stack) {
         return shouldDropOnDeath && dropOnDeathFilter.test(stack);
     }
+
+    private KeyType keyType;
+
+    @Override
+    public KeyType getKey() {
+        return keyType;
+    }
+
+    @Override
+    public void setKey(KeyType type) {
+        keyType = type;
+    }
 }

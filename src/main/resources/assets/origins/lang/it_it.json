@@ -138,7 +138,7 @@
   "power.origins.extra_reach.description": "Puoi raggiungere blocchi piuù lontani.",
 
   "category.origins": "Origini",
-  "key.origins.active_power": "Attiva Potere",
+  "key.origins.primary_active": "Attiva Potere",
   "key.origins.view_origin": "Mostra Origine",
 
   "item.origins.orb_of_origin": "Globo delle Origini",

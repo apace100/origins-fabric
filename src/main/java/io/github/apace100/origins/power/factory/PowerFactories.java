@@ -46,10 +46,14 @@ public class PowerFactories {
         register(new PowerFactory<>(Origins.identifier("simple"), new SerializableData(), data -> Power::new).allowCondition());
         register(new PowerFactory<>(Origins.identifier("toggle"),
             new SerializableData()
-                .add("active_by_default", SerializableDataType.BOOLEAN, true),
+                .add("active_by_default", SerializableDataType.BOOLEAN, true)
+                .add("key", SerializableDataType.ACTIVE_KEY_TYPE, Active.KeyType.PRIMARY),
             data ->
-                (type, player) ->
-                    new TogglePower(type, player, data.getBoolean("active_by_default")))
+                (type, player) -> {
+                    TogglePower power = new TogglePower(type, player, data.getBoolean("active_by_default"));
+                    power.setKey((Active.KeyType)data.get("key"));
+                    return power;
+                })
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("attribute"),
             new SerializableData()
@@ -127,10 +131,11 @@ public class PowerFactories {
                 .add("sound", SerializableDataType.SOUND_EVENT, null)
                 .add("entity_type", SerializableDataType.ENTITY_TYPE)
                 .add("hud_render", SerializableDataType.HUD_RENDER)
-                .add("tag", SerializableDataType.NBT, null),
+                .add("tag", SerializableDataType.NBT, null)
+                .add("key", SerializableDataType.ACTIVE_KEY_TYPE, Active.KeyType.PRIMARY),
             data ->
-                (type, player) ->
-                    new FireProjectilePower(type, player,
+                (type, player) -> {
+                    FireProjectilePower power = new FireProjectilePower(type, player,
                         data.getInt("cooldown"),
                         (HudRender)data.get("hud_render"),
                         (EntityType)data.get("entity_type"),
@@ -138,18 +143,26 @@ public class PowerFactories {
                         data.getFloat("speed"),
                         data.getFloat("divergence"),
                         (SoundEvent)data.get("sound"),
-                        (CompoundTag)data.get("tag")))
+                        (CompoundTag)data.get("tag"));
+                    power.setKey((Active.KeyType)data.get("key"));
+                    return power;
+                })
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("inventory"),
             new SerializableData()
                 .add("name", SerializableDataType.STRING, "container.inventory")
                 .add("drop_on_death", SerializableDataType.BOOLEAN, false)
-                .add("drop_on_death_filter", SerializableDataType.ITEM_CONDITION, null),
+                .add("drop_on_death_filter", SerializableDataType.ITEM_CONDITION, null)
+                .add("key", SerializableDataType.ACTIVE_KEY_TYPE, Active.KeyType.PRIMARY),
             data ->
-                (type, player) -> new InventoryPower(type, player, data.getString("name"), 9,
-                    data.getBoolean("drop_on_death"),
-                    data.isPresent("drop_on_death_filter") ? (ConditionFactory<ItemStack>.Instance)data.get("drop_on_death_filter") :
-                    itemStack -> true))
+                (type, player) -> {
+                    InventoryPower power = new InventoryPower(type, player, data.getString("name"), 9,
+                        data.getBoolean("drop_on_death"),
+                        data.isPresent("drop_on_death_filter") ? (ConditionFactory<ItemStack>.Instance) data.get("drop_on_death_filter") :
+                            itemStack -> true);
+                    power.setKey((Active.KeyType)data.get("key"));
+                    return power;
+                })
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("invisibility"),
             new SerializableData()
@@ -172,25 +185,30 @@ public class PowerFactories {
                 .add("cooldown", SerializableDataType.INT)
                 .add("speed", SerializableDataType.FLOAT)
                 .add("sound", SerializableDataType.SOUND_EVENT, null)
-                .add("hud_render", SerializableDataType.HUD_RENDER),
+                .add("hud_render", SerializableDataType.HUD_RENDER)
+                .add("key", SerializableDataType.ACTIVE_KEY_TYPE, Active.KeyType.PRIMARY),
             data -> {
                 SoundEvent soundEvent = (SoundEvent)data.get("sound");
-                return (type, player) -> new ActiveCooldownPower(type, player,
-                    data.getInt("cooldown"),
-                    (HudRender)data.get("hud_render"),
-                    e -> {
-                        if(!e.world.isClient && e instanceof PlayerEntity) {
-                            PlayerEntity p = (PlayerEntity)e;
-                            p.addVelocity(0, data.getFloat("speed"), 0);
-                            p.velocityModified = true;
-                            if(soundEvent != null) {
-                                p.world.playSound((PlayerEntity)null, p.getX(), p.getY(), p.getZ(), soundEvent, SoundCategory.NEUTRAL, 0.5F, 0.4F / (p.getRandom().nextFloat() * 0.4F + 0.8F));
+                return (type, player) -> {
+                    ActiveCooldownPower power = new ActiveCooldownPower(type, player,
+                        data.getInt("cooldown"),
+                        (HudRender) data.get("hud_render"),
+                        e -> {
+                            if (!e.world.isClient && e instanceof PlayerEntity) {
+                                PlayerEntity p = (PlayerEntity) e;
+                                p.addVelocity(0, data.getFloat("speed"), 0);
+                                p.velocityModified = true;
+                                if (soundEvent != null) {
+                                    p.world.playSound((PlayerEntity) null, p.getX(), p.getY(), p.getZ(), soundEvent, SoundCategory.NEUTRAL, 0.5F, 0.4F / (p.getRandom().nextFloat() * 0.4F + 0.8F));
+                                }
+                                for (int i = 0; i < 4; ++i) {
+                                    ((ServerWorld) p.world).spawnParticles(ParticleTypes.CLOUD, p.getX(), p.getRandomBodyY(), p.getZ(), 8, p.getRandom().nextGaussian(), 0.0D, p.getRandom().nextGaussian(), 0.5);
+                                }
                             }
-                            for(int i = 0; i < 4; ++i) {
-                                ((ServerWorld)p.world).spawnParticles(ParticleTypes.CLOUD, p.getX(), p.getRandomBodyY(), p.getZ(), 8, p.getRandom().nextGaussian(), 0.0D, p.getRandom().nextGaussian(), 0.5);
-                            }
-                        }
-                    });
+                        });
+                    power.setKey((Active.KeyType)data.get("key"));
+                    return power;
+                };
             }).allowCondition());
         register(new PowerFactory<>(Origins.identifier("model_color"),
             new SerializableData()
@@ -435,10 +453,14 @@ public class PowerFactories {
         register(new PowerFactory<>(Origins.identifier("toggle_night_vision"),
             new SerializableData()
                 .add("active_by_default", SerializableDataType.BOOLEAN, false)
-                .add("strength", SerializableDataType.FLOAT, 1.0F),
+                .add("strength", SerializableDataType.FLOAT, 1.0F)
+                .add("key", SerializableDataType.ACTIVE_KEY_TYPE, Active.KeyType.PRIMARY),
             data ->
-                (type, player) ->
-                    new ToggleNightVisionPower(type, player, data.getFloat("strength"), data.getBoolean("active_by_default")))
+                (type, player) -> {
+                    ToggleNightVisionPower power = new ToggleNightVisionPower(type, player, data.getFloat("strength"), data.getBoolean("active_by_default"));
+                    power.setKey((Active.KeyType)data.get("key"));
+                    return power;
+                })
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("damage_over_time"),
             new SerializableData()
@@ -508,10 +530,15 @@ public class PowerFactories {
             new SerializableData()
                 .add("entity_action", SerializableDataType.ENTITY_ACTION)
                 .add("cooldown", SerializableDataType.INT)
-                .add("hud_render", SerializableDataType.HUD_RENDER),
+                .add("hud_render", SerializableDataType.HUD_RENDER)
+                .add("key", SerializableDataType.ACTIVE_KEY_TYPE, Active.KeyType.PRIMARY),
             data ->
-                (type, player) -> new ActiveCooldownPower(type, player, data.getInt("cooldown"), (HudRender)data.get("hud_render"),
-                    (ActionFactory<Entity>.Instance)data.get("entity_action")))
+                (type, player) -> {
+                    ActiveCooldownPower power = new ActiveCooldownPower(type, player, data.getInt("cooldown"), (HudRender)data.get("hud_render"),
+                        (ActionFactory<Entity>.Instance)data.get("entity_action"));
+                    power.setKey((Active.KeyType)data.get("key"));
+                    return power;
+                })
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("action_over_time"),
             new SerializableData()
@@ -621,7 +648,7 @@ public class PowerFactories {
                 (type, player) -> new ShaderPower(type, player, data.getId("shader")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("shaking"),
-            new SerializableData(), data -> (type, player) -> new ShakingPower(type, player))
+            new SerializableData(), data -> (BiFunction<PowerType<Power>, PlayerEntity, Power>) ShakingPower::new)
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("resource"),
             new SerializableData()

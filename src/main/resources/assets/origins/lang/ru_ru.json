@@ -138,7 +138,7 @@
   "power.origins.extra_reach.description": "Вы можете дотянуться до далеко стоящих блоков и энтити.",
 
   "category.origins": "Происхождение",
-  "key.origins.active_power": "Активная Сила",
+  "key.origins.primary_active": "Активная Сила",
   "key.origins.view_origin": "Посмотреть Происхождение",
 
   "item.origins.orb_of_origin": "Сфера Происхождения",
