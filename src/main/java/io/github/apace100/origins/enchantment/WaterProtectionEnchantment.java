@@ -29,7 +29,7 @@ public class WaterProtectionEnchantment extends Enchantment {
 
     @Override
     protected boolean canAccept(Enchantment other) {
-        if(other == this || other instanceof ProtectionEnchantment) {
+        if(other == this || ((other instanceof ProtectionEnchantment && !(((ProtectionEnchantment)other).protectionType == ProtectionEnchantment.Type.FALL)))) {
             return false;
         }
         return super.canAccept(other);
