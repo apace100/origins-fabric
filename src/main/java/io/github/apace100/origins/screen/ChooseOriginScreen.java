@@ -23,7 +23,6 @@ import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Language;
-import net.minecraft.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,7 +146,7 @@ public class ChooseOriginScreen extends Screen {
 			return impDelta == 0 ? a.getOrder() - b.getOrder() : impDelta;
 		});
 		for(Identifier id : randoms) {
-			this.randomOriginText.append(new TranslatableText(Util.createTranslationKey("origin", id) + ".name"));
+			this.randomOriginText.append(OriginRegistry.get(id).getName());
 			this.randomOriginText.append(new LiteralText("\n"));
 		}
 	}
