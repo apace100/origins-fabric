@@ -239,18 +239,6 @@ public class PlayerConditions {
             .add("comparison", SerializableDataType.COMPARISON)
             .add("compare_to", SerializableDataType.INT),
             (data, player) -> ((Comparison)data.get("comparison")).compare(player.totalExperience, data.getInt("compare_to"))));
-        register(new ConditionFactory<>(Origins.identifier("attribute"), new SerializableData()
-            .add("attribute", SerializableDataType.ATTRIBUTE)
-            .add("comparison", SerializableDataType.COMPARISON)
-            .add("compare_to", SerializableDataType.DOUBLE),
-            (data, player) -> {
-                double attrValue = 0F;
-                EntityAttributeInstance attributeInstance = player.getAttributeInstance((EntityAttribute) data.get("attribute"));
-                if(attributeInstance != null) {
-                    attrValue = attributeInstance.getValue();
-                }
-                return ((Comparison)data.get("comparison")).compare(attrValue, data.getDouble("compare_to"));
-            }));
         register(new ConditionFactory<>(Origins.identifier("health"), new SerializableData()
             .add("comparison", SerializableDataType.COMPARISON)
             .add("compare_to", SerializableDataType.FLOAT),
