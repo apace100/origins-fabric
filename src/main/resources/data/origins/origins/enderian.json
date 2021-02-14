@@ -4,8 +4,7 @@
 		"origins:water_vulnerability",
 		"origins:pumpkin_hate",
 		"origins:extra_reach",
-		"origins:ender_particles",
-		"origins:launch_into_air_secondary"
+		"origins:ender_particles"
 	],
 	"icon": "minecraft:ender_pearl",
 	"order": 1,
