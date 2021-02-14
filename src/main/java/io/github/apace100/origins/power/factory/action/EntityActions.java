@@ -159,8 +159,8 @@ public class EntityActions {
                     }
 
                     entity.world.spawnEntity(e);
-                    if(data.isPresent("action")) {
-                        ((ActionFactory<Entity>.Instance)data.get("action")).accept(e);
+                    if(data.isPresent("entity_action")) {
+                        ((ActionFactory<Entity>.Instance)data.get("entity_action")).accept(e);
                     }
                 }
             }));
