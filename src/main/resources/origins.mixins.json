@@ -28,7 +28,8 @@
     "ServerPlayerEntityMixin",
     "ServerPlayerInteractionManagerAccessor",
     "ServerPlayerInteractionManagerMixin",
-    "WeightedListEntryAccessor"
+    "WeightedListEntryAccessor",
+    "ServerPlayNetworkHandlerMixin"
   ],
   "client": [
     "BackgroundRendererMixin",
