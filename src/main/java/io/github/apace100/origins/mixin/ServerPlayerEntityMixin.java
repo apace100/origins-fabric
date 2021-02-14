@@ -2,6 +2,7 @@ package io.github.apace100.origins.mixin;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Either;
+import io.github.apace100.origins.access.EndRespawningEntity;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.ModifyDamageTakenPower;
 import io.github.apace100.origins.power.ModifyPlayerSpawnPower;
@@ -24,6 +25,7 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -32,7 +34,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 
 @Mixin(ServerPlayerEntity.class)
-public abstract class ServerPlayerEntityMixin extends PlayerEntity implements ScreenHandlerListener {
+public abstract class ServerPlayerEntityMixin extends PlayerEntity implements ScreenHandlerListener, EndRespawningEntity {
 
     @Shadow private RegistryKey<World> spawnPointDimension;
 
@@ -46,6 +48,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
     @Shadow public ServerPlayNetworkHandler networkHandler;
 
     @Shadow public abstract void sendMessage(Text message, boolean actionBar);
+
+    @Shadow public boolean notInAnyWorld;
 
     public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile profile) {
         super(world, pos, yaw, profile);
@@ -70,7 +74,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
 
     @Inject(at = @At("HEAD"), method = "getSpawnPointDimension", cancellable = true)
     private void modifySpawnPointDimension(CallbackInfoReturnable<RegistryKey<World>> info) {
-        if ((spawnPointPosition == null || hasObstructedSpawn()) && OriginComponent.getPowers(this, ModifyPlayerSpawnPower.class).size() > 0) {
+        if (!this.origins_isEndRespawning && (spawnPointPosition == null || hasObstructedSpawn()) && OriginComponent.getPowers(this, ModifyPlayerSpawnPower.class).size() > 0) {
             ModifyPlayerSpawnPower power = OriginComponent.getPowers(this, ModifyPlayerSpawnPower.class).get(0);
             info.setReturnValue(power.dimension);
         }
@@ -78,7 +82,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
 
     @Inject(at = @At("HEAD"), method = "getSpawnPointPosition", cancellable = true)
     private void modifyPlayerSpawnPosition(CallbackInfoReturnable<BlockPos> info) {
-        if(OriginComponent.getPowers(this, ModifyPlayerSpawnPower.class).size() > 0) {
+        if(!this.origins_isEndRespawning && OriginComponent.getPowers(this, ModifyPlayerSpawnPower.class).size() > 0) {
             if(spawnPointPosition == null) {
                 info.setReturnValue(findPlayerSpawn());
             } else if(hasObstructedSpawn()) {
@@ -91,7 +95,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
 
     @Inject(at = @At("HEAD"), method = "isSpawnPointSet", cancellable = true)
     private void modifySpawnPointSet(CallbackInfoReturnable<Boolean> info) {
-        if((spawnPointPosition == null || hasObstructedSpawn()) && OriginComponent.hasPower(this, ModifyPlayerSpawnPower.class)) {
+        if(!this.origins_isEndRespawning && (spawnPointPosition == null || hasObstructedSpawn()) && OriginComponent.hasPower(this, ModifyPlayerSpawnPower.class)) {
             info.setReturnValue(true);
         }
     }
@@ -112,5 +116,23 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
             return spawn.getRight();
         }
         return null;
+    }
+
+    @Unique
+    private boolean origins_isEndRespawning;
+
+    @Override
+    public void setEndRespawning(boolean endSpawn) {
+        this.origins_isEndRespawning = endSpawn;
+    }
+
+    @Override
+    public boolean isEndRespawning() {
+        return this.origins_isEndRespawning;
+    }
+
+    @Override
+    public boolean hasRealRespawnPoint() {
+        return spawnPointPosition != null && !hasObstructedSpawn();
     }
 }
