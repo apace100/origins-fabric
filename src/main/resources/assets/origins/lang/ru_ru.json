@@ -26,6 +26,9 @@
   "origin.origins.enderian.name": "Эндерианец",
   "origin.origins.enderian.description": "Рожденные как сыновья и дочери Дракона Края, Эндерианцы способны к телепортации, но уязвимы для воды.",
 
+  "origin.origins.shulk.name": "Шалк",
+  "origin.origins.shulk.description": "Из-за родства с шалкерами, Шалки снабжены защитной оболочкой, похожий на панцирь.",
+
   "power.origins.water_breathing.name": "Жабры",
   "power.origins.water_breathing.description": "Ты можешь дышать под водой, но не на суше.",
 
@@ -76,7 +79,7 @@
 
   "power.origins.vegetarian.name": "Вегетарианец",
   "power.origins.vegetarian.description": "Ты не можешь есть мясо.",
-
+  
   "power.origins.fresh_air.name": "Свежий Воздух",
   "power.origins.fresh_air.description": "Во время сна твоя кровать должна находиться на высоте не менее 86 блоков, чтобы ты мог дышать свежим воздухом.",
 
@@ -132,29 +135,65 @@
   "power.origins.throw_ender_pearl.description": "Всякий раз, когда ты хочешь, ты можешь бросить жемчужину Эндера, которая не наносит никакого урона, позволяя тебе телепортироваться.",
 
   "power.origins.pumpkin_hate.name": "Боязнь Тыкв",
-  "power.origins.pumpkin_hate.description": "Ты боишься тыкв. По уважительной причине.",
+  "power.origins.pumpkin_hate.description": "Ты боишься тыкв. По понятной причине.",
 
-  "power.origins.extra_reach.name": "Стройное Тело",
-  "power.origins.extra_reach.description": "Вы можете дотянуться до далеко стоящих блоков и энтити.",
+  "power.origins.extra_reach.name": "Длинное Тело",
+  "power.origins.extra_reach.description": "Вы можете дотянуться до далеко стоящих блоков и существ.",
 
-  "category.origins": "Происхождение",
+  "power.origins.shulker_inventory.name": "Хранитель",
+  "power.origins.shulker_inventory.description": "У вас есть доступ к дополнительным 9 ячейкам инвентаря, в которых хранятся предметы после смерти.",
+
+  "power.origins.natural_armor.name": "Прочная кожа",
+  "power.origins.natural_armor.description": "Даже без брони, ваша кожа обеспечивает естественную защиту.",
+
+  "power.origins.more_exhaustion.name": "Большой аппетит",
+  "power.origins.more_exhaustion.description": "Вы истощаетесь намного быстрее, чем другие, поэтому вам нужно есть больше.",
+
+  "power.origins.no_shield.name": "Громоздкий",
+  "power.origins.no_shield.description": "Из-за сложения рук, что присуще каждому Шалку, вы не можете держать щит вертикально.",
+
+  "power.origins.strong_arms.name": "Сильные руки",
+  "power.origins.strong_arms.description": "Вы достаточно сильны, чтобы разбивать природные камни без кирки.",
+
+  "power.origins.translucent.name": "Полупрозрачный",
+  "power.origins.translucent.description": "Ваша кожа полупрозрачная.",
+
+  "category.origins": "Origins",
   "key.origins.primary_active": "Активная Сила",
-  "key.origins.view_origin": "Посмотреть Происхождение",
+  "key.origins.view_origin": "Посмотреть происхождение",
 
-  "item.origins.orb_of_origin": "Сфера Происхождения",
+  "text.autoconfig.origins.title": "Настройка Origins",
+  "text.autoconfig.origins.option.xOffset": "Позиция полосы восстановления по оси X",
+  "text.autoconfig.origins.option.yOffset": "Позиция полосы восстановления по оси Y",
+  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Степень наложения фантомизации",
 
-  "enchantment.origins.water_protection": "Защита от Воды",
+  "item.origins.orb_of_origin": "Сфера происхождения",
+
+  "enchantment.origins.water_protection": "Защита от воды",
+
+  "container.shulker_inventory_power": "Шалкеровый инвентарь",
 
   "origins.gui.select": "Выбрать",
   "origins.gui.close": "Закрыть",
-  "origins.gui.choose_origin.title": "Выберите свое Происхождение",
-  "origins.gui.view_origin.title": "Это ваше Происхождение",
+  "origins.gui.choose": "Выберите",
+  "origins.gui.choose_origin.title": "Выберите ваше %s.",
+  "origins.gui.view_origin.title": "Это ваше %s.",
+  "origins.gui.view_origin.empty": "Вы не выбрали происхождение.",
   "origins.gui.impact.impact": "Влияние",
-  "origins.gui.impact.none": "Нет",
-  "origins.gui.impact.low": "Меньше",
-  "origins.gui.impact.medium": "Средне",
-  "origins.gui.impact.high": "Больше",
+  "origins.gui.impact.none": "Никакое",
+  "origins.gui.impact.low": "Низкое",
+  "origins.gui.impact.medium": "Среднее",
+  "origins.gui.impact.high": "Высокое",
+
+  "layer.origins.origin.name": "Происхождение",
+  "layer.origins.origin.missing_origin.name": "Отсутствует",
+  "layer.origins.origin.missing_origin.description": "У вас нет происхождения.",
 
   "death.attack.no_water_for_gills": "%s не сумел остаться мокрым.",
-  "death.attack.hurt_by_water": "%s слишком долго принимал ванну."
+  "death.attack.hurt_by_water": "%s слишком долго принимал ванну.",
+  "death.attack.genericDamageOverTime": "%s умер от временного повреждения.",
+
+  "commands.origin.origin_not_found": "Неизвестное происхождение: %s",
+  "commands.origin.set.success.single": "Выберите происхождение %s в слое %s к %s.",
+  "commands.origin.set.success.multiple": "Выберите происхождение %s целям в слое %s к %s."
 }
