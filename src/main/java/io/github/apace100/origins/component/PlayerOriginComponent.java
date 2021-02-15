@@ -160,6 +160,7 @@ public class PlayerOriginComponent implements OriginComponent {
             if(callPowerOnAdd) {
                 for (Power power: powers.values()) {
                     power.onRemoved();
+                    power.onLost();
                 }
             }
             powers.clear();
