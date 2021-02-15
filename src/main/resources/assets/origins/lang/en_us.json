@@ -159,7 +159,8 @@
   "power.origins.translucent.description": "Your skin is translucent.",
 
   "category.origins": "Origins",
-  "key.origins.active_power": "Active Power",
+  "key.origins.primary_active": "Active Power (Primary)",
+  "key.origins.secondary_active": "Active Power (Secondary)",
   "key.origins.view_origin": "View Origin",
 
   "text.autoconfig.origins.title": "Origins Configuration",
@@ -185,13 +186,19 @@
   "origins.gui.impact.medium": "Medium",
   "origins.gui.impact.high": "High",
 
+  "origin.origins.random.name": "Random",
+  "origin.origins.random.description": "You'll be assigned one of the following:",
+
   "layer.origins.origin.name": "Origin",
   "layer.origins.origin.missing_origin.name": "Missing",
   "layer.origins.origin.missing_origin.description": "You do not have an Origin.",
 
-  "death.attack.no_water_for_gills": "%s didn't manage to keep wet.",
-  "death.attack.hurt_by_water": "%s took a bath for too long.",
-  "death.attack.genericDamageOverTime": "%s died to a damage over time effect.",
+  "death.attack.no_water_for_gills": "%1$s didn't manage to keep wet.",
+  "death.attack.no_water_for_gills.player": "%1$s didn't manage to keep wet because they were fighting %2$s.",
+  "death.attack.hurt_by_water": "%1$s took a bath for too long.",
+  "death.attack.hurt_by_water.player": "%1$s was put underwater by %2$s.",
+  "death.attack.genericDamageOverTime": "%1$s died to a damage over time effect.",
+  "death.attack.genericDamageOverTime.player": "%1$s died to a damage over time effect whilst fighting %2$s.",
 
   "commands.origin.origin_not_found": "Unknown origin: %s",
   "commands.origin.set.success.single": "Set origin of %s in layer %s to %s.",

@@ -4,14 +4,17 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.mixin.DamageSourceAccessor;
+import io.github.apace100.origins.mixin.WeightedListEntryAccessor;
 import io.github.apace100.origins.origin.Impact;
 import io.github.apace100.origins.origin.OriginUpgrade;
+import io.github.apace100.origins.power.Active;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.PowerTypeReference;
 import io.github.apace100.origins.power.factory.action.ActionFactory;
@@ -46,10 +49,12 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.tag.ServerTagManagerHolder;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.JsonHelper;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -364,6 +369,14 @@ public class SerializableDataType<T> {
 
     public static final SerializableDataType<List<Pair<Integer, ItemStack>>> POSITIONED_ITEM_STACKS = SerializableDataType.list(POSITIONED_ITEM_STACK);
 
+    public static final SerializableDataType<Active.KeyType> ACTIVE_KEY_TYPE = SerializableDataType.enumValue(Active.KeyType.class);
+
+    public static SerializableDataType<RegistryKey<World>> DIMENSION = SerializableDataType.wrap(
+            ClassUtil.castClass(RegistryKey.class),
+            SerializableDataType.IDENTIFIER,
+            RegistryKey::getValue, identifier -> RegistryKey.of(Registry.DIMENSION, identifier)
+    );
+
     private final Class<T> dataClass;
     private final BiConsumer<PacketByteBuf, T> send;
     private final Function<PacketByteBuf, T> receive;
@@ -522,5 +535,38 @@ public class SerializableDataType<T> {
             (buf, t) -> base.send(buf, toFunction.apply(t)),
             (buf) -> fromFunction.apply(base.receive(buf)),
             (json) -> fromFunction.apply(base.read(json)));
+    }
+
+    public static <T> SerializableDataType<FilterableWeightedList<T>> weightedList(SerializableDataType<T> base) {
+        return new SerializableDataType<>(ClassUtil.castClass(FilterableWeightedList.class), (buf, list) -> {
+            buf.writeInt(list.size());
+            list.entryStream().forEach((entry) -> {
+                base.send(buf, entry.getElement());
+                buf.writeInt(((WeightedListEntryAccessor)entry).getWeight());
+            });
+        }, (buf) -> {
+            int count = buf.readInt();
+            FilterableWeightedList<T> list = new FilterableWeightedList<T>();
+
+            for(int i = 0; i < count; ++i) {
+                T t = base.receive(buf);
+                int weight = buf.readInt();
+                list.add(t, weight);
+            }
+
+            return list;
+        }, (json) -> {
+            FilterableWeightedList<T> list = new FilterableWeightedList<T>();
+            if (json.isJsonArray()) {
+                for (JsonElement je : json.getAsJsonArray()) {
+                    JsonObject weightedObj = je.getAsJsonObject();
+                    T elem = base.read(weightedObj.get("element"));
+                    int weight = JsonHelper.getInt(weightedObj, "weight");
+                    list.add(elem, weight);
+                }
+            }
+
+            return list;
+        });
     }
 }

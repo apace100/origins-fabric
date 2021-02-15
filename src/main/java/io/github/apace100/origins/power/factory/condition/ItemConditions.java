@@ -5,6 +5,8 @@ import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.util.Comparison;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
@@ -56,6 +58,14 @@ public class ItemConditions {
                     harvestLevel = item.getMaterial().getMiningLevel();
                 }
                 return ((Comparison)data.get("comparison")).compare(harvestLevel, data.getInt("compare_to"));
+            }));
+        register(new ConditionFactory<>(Origins.identifier("enchantment"), new SerializableData()
+            .add("enchantment", SerializableDataType.ENCHANTMENT)
+            .add("compare_to", SerializableDataType.INT)
+            .add("comparison", SerializableDataType.COMPARISON),
+            (data, stack) -> {
+                int enchantLevel = EnchantmentHelper.getLevel((Enchantment)data.get("enchantment"), stack);
+                return ((Comparison)data.get("comparison")).compare(enchantLevel, data.getInt("compare_to"));
             }));
     }
 

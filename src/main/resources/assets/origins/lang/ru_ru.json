@@ -159,7 +159,7 @@
   "power.origins.translucent.description": "Ваша кожа полупрозрачная.",
 
   "category.origins": "Origins",
-  "key.origins.active_power": "Активная Сила",
+  "key.origins.primary_active": "Активная Сила",
   "key.origins.view_origin": "Посмотреть происхождение",
 
   "text.autoconfig.origins.title": "Настройка Origins",

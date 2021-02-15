@@ -4,5 +4,7 @@
   "condition": {
     "type": "origins:submerged_in",
     "fluid": "minecraft:water"
-  }
+  },
+  "active_by_default": true,
+  "key": "primary"
 }

@@ -84,7 +84,7 @@ public class Origin {
     private String nameTranslationKey;
     private String descriptionTranslationKey;
 
-    protected Origin(Identifier id, ItemConvertible item, Impact impact, int order, int loadingPriority) {
+    public Origin(Identifier id, ItemConvertible item, Impact impact, int order, int loadingPriority) {
         this.identifier = id;
         this.displayItem = new ItemStack(item);
         this.impact = impact;
@@ -93,7 +93,7 @@ public class Origin {
         this.loadingPriority = loadingPriority;
     }
 
-    private Origin addUpgrade(OriginUpgrade upgrade) {
+    public Origin addUpgrade(OriginUpgrade upgrade) {
         this.upgrades.add(upgrade);
         return this;
     }
@@ -115,7 +115,7 @@ public class Origin {
         return identifier;
     }
 
-    protected Origin add(PowerType<?>... powerTypes) {
+    public Origin add(PowerType<?>... powerTypes) {
         this.powerTypes.addAll(Lists.newArrayList(powerTypes));
         return this;
     }
@@ -130,12 +130,12 @@ public class Origin {
         return this;
     }
 
-    private Origin setName(String name) {
+    public Origin setName(String name) {
         this.nameTranslationKey = name;
         return this;
     }
 
-    private Origin setDescription(String description) {
+    public Origin setDescription(String description) {
         this.descriptionTranslationKey = description;
         return this;
     }

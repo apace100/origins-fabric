@@ -1,0 +1,199 @@
+{
+  "origin.origins.human.name": "İnsan",
+  "origin.origins.human.description": "Normal bir insan. Sıradan Minecraft deneyimi.",
+
+  "origin.origins.merling.name": "Merling",
+  "origin.origins.merling.description": "Bu okyanus sakinleri uzun süre sudan çıkmaya alışkın değiller.",
+
+  "origin.origins.arachnid.name": "Arachnid",
+  "origin.origins.arachnid.description": "Tırmanma yetenekleri ve düşmanlarını örümcek ağına hapsedebilme yetenekleri, Arachnid'i mükemmel avcılar yapar.",
+
+  "origin.origins.blazeborn.name": "Blazeborn",
+  "origin.origins.blazeborn.description": "Blaze'in son torunları olan Blazeborn, doğal olarak Nether'in tehlikelerine karşı bağışıklığı vardır.",
+
+  "origin.origins.avian.name": "Avian",
+  "origin.origins.avian.description": "Avian ırkı, uçma yeteneğini uzun zaman önce kaybetti. Şimdi bu barışçıl yaratıklar bir yerden diğerine süzülürken görülebilir.",
+
+  "origin.origins.phantom.name": "Phantom",
+  "origin.origins.phantom.description": "Yarı-insan ve yarı-phantom yavrular olarak, bu yaratıklar bir Phantom ve normal bir form arasında geçiş yapabilirler.",
+
+  "origin.origins.feline.name": "Feline",
+  "origin.origins.feline.description": "Kedi benzeri görünümleriyle Feline, creeperları korkutur. Kedilerin el becerisi ile her zaman güvenle ayaklarının üzerine inerler.",
+
+  "origin.origins.elytrian.name": "Elytrian",
+  "origin.origins.elytrian.description": "Elytrian'lar genellikle rüzgarlarda uçarken başlarının üzerinde yeterince alan olmadığında rahatsız olurlar.",
+
+  "origin.origins.enderian.name": "Enderian",
+  "origin.origins.enderian.description": "Ender Ejderhasının oğulları ve kızları olarak doğan Enderian'lar ışınlanma yeteneğine sahipler ancak suya karşı savunmasızlar.",
+
+  "origin.origins.shulk.name": "Shulk",
+  "origin.origins.shulk.description": "Shulk'lar ile ilgili olarak, Shulk'un vücutları, koruyucu kabuk benzeri bir deri ile donatılmıştır.",
+
+  "power.origins.water_breathing.name": "Solungaçlar",
+  "power.origins.water_breathing.description": "Su altında nesfes alabilirsin ama su üstünde alamazsın.",
+
+  "power.origins.aqua_affinity.name": "Aqua Affinity",
+  "power.origins.aqua_affinity.description": "Diğerlerinin karada yaptığı gibi su altında blokları kırabilirsiniz.",
+
+  "power.origins.water_vision.name": "Islak gözler",
+  "power.origins.water_vision.description": "Sualtı görüşün mükemmel.",
+
+  "power.origins.swim_speed.name": "Yüzgeçler",
+  "power.origins.swim_speed.description": "Sualtı hızın arttı.",
+
+  "power.origins.like_water.name": "Su gibi",
+  "power.origins.like_water.description": "Suyun altındayken istemediğiniz sürece aşağıya batmazsınız.",
+
+  "power.origins.fragile.name": "Kırılgan",
+  "power.origins.fragile.description": "İnsanlardan 3 daha az kalbiniz var.",
+
+  "power.origins.webbing.name": "Dokumak",
+  "power.origins.webbing.description": "Yakın dövüşte bir düşmana vurduğunuzda, örümcek ağına takılırlar.",
+
+  "power.origins.climbing.name": "Tırmanmak",
+  "power.origins.climbing.description": "Sadece merdivenlere değil, her türlü duvara tırmanabilirsiniz.",
+
+  "power.origins.carnivore.name": "Etobur",
+  "power.origins.carnivore.description": "Diyetiniz etle sınırlıdır, sebze yiyemezsiniz.",
+
+  "power.origins.fire_immunity.name": "Ateş bağışıklığı",
+  "power.origins.fire_immunity.description": "Her türlü ateş hasarına karşı bağışıksınız.",
+
+  "power.origins.nether_spawn.name": "Nether yerlisi",
+  "power.origins.nether_spawn.description": "Doğal spawn'ınız Nether'da olucaktır.",
+
+  "power.origins.burning_wrath.name": "Yanan Gazap",
+  "power.origins.burning_wrath.description": "Ateş içinde, saldırılarınızla ek hasar verirsiniz.",
+
+  "power.origins.hotblooded.name": "Sıcakkanlı",
+  "power.origins.hotblooded.description": "Sıcak vücudunuz nedeniyle zehirler yanarak sizi zehir ve açlık durumu etkilerine karşı bağışık hale getirir.",
+
+  "power.origins.water_vulnerability.name": "Hidrofobi",
+  "power.origins.water_vulnerability.description": "Su ile temas halindeyken zamanla hasar alırsınız.",
+
+  "power.origins.tailwind.name": "Arka rüzgar",
+  "power.origins.tailwind.description": "Diğerlerinden biraz daha hızlı yürüyorsunuz.",
+
+  "power.origins.slow_falling.name": "Tüy siklet",
+  "power.origins.slow_falling.description": "Eğilmediğiniz sürece yere bir tüy kadar nazikçe düşersiniz.",
+
+  "power.origins.vegetarian.name": "Vejetaryen",
+  "power.origins.vegetarian.description": "Eti sindiremezsin.",
+
+  "power.origins.fresh_air.name": "Temiz hava",
+  "power.origins.fresh_air.description": "Yatağınızın temiz hava alabilmeniz için uyurken en az 86 blok yükseklikte olması gerekir.",
+
+  "power.origins.phasing.name": "Aşamalı",
+  "power.origins.phasing.description": "Phantomlaşmış haldeyken, Obsidiyen hariç katı malzemenin içinden geçebilirsiniz.",
+
+  "power.origins.invisibility.name": "Görünmezlik",
+  "power.origins.invisibility.description": "Phantomlaşmışken görünmezsiniz.",
+
+  "power.origins.hunger_over_time.name": "Hızlı metabolizma",
+  "power.origins.hunger_over_time.description": "Phantomlaşmak acıkmanıza neden olur.",
+
+  "power.origins.burn_in_daylight.name": "Fotoalerjik",
+  "power.origins.burn_in_daylight.description": "Görünmez değilseniz gün ışığında yanmaya başlarsınız.",
+
+  "power.origins.fall_immunity.name": "Akrobasi",
+  "power.origins.fall_immunity.description": "Hangi yükseklikten düştüğünüz önemli değil, asla düşme hasarı almazsınız.",
+
+  "power.origins.sprint_jump.name": "Güçlü Ayak Bilekleri",
+  "power.origins.sprint_jump.description": "Koşma sırasında zıplayarak daha yükseğe zıplayabilirsiniz.",
+
+  "power.origins.nine_lives.name": "Dokuz canlı",
+  "power.origins.nine_lives.description": "İnsanlardan 1 daha az kalbiniz var.",
+
+  "power.origins.cat_vision.name": "Geceleyin hareketlenen",
+  "power.origins.cat_vision.description": "Karanlıkta, su içinde değilken hafifçe görebilirsiniz.",
+
+  "power.origins.weak_arms.name": "Zayıf Kollar",
+  "power.origins.weak_arms.description": "Bir güç iksirinin etkisi altında olmadığın sürece, ancak bitişiğindeki en fazla 2 doğal taş blok varsa, doğal taş çıkarabilirsin.",
+
+  "power.origins.scare_creepers.name": "Kedi-Gibi Görünüm",
+  "power.origins.scare_creepers.description": "Creeperlar sizden korkar ve yalnızca onlara saldırırsanız patlar.",
+
+  "power.origins.launch_into_air.name": "Rüzgarların Hediyesi",
+  "power.origins.launch_into_air.description": "Her 30 saniyede bir, yaklaşık 20 blok yukarı fırlatılabilirsiniz.",
+
+  "power.origins.elytra.name": "Kanatlı",
+  "power.origins.elytra.description": "Hiç kuşanmanıza gerek kalmadan Elytra kanatlarınız var.",
+
+  "power.origins.light_armor.name": "Mobilite İhtiyacı",
+  "power.origins.light_armor.description": "Herhangi bir ağır zırh (zincir zırhından daha yüksek koruma değerlerine sahip zırh) giyemezsiniz.",
+
+  "power.origins.claustrophobia.name": "Klostrofobi",
+  "power.origins.claustrophobia.description": "Çok uzun süre alçak tavanlı bir yerde olmak sizi zayıflatır ve yavaşlatır.",
+
+  "power.origins.more_kinetic_damage.name": "Kırılgan kemikler",
+  "power.origins.more_kinetic_damage.description": "Bloklara düşüp uçarak daha fazla hasar alırsınız.",
+
+  "power.origins.aerial_combatant.name": "Hava Savaşçısı",
+  "power.origins.aerial_combatant.description": "Elytra uçuşundayken önemli ölçüde daha fazla hasar verirsiniz.",
+
+  "power.origins.throw_ender_pearl.name": "Teleportasyon",
+  "power.origins.throw_ender_pearl.description": "İstediğiniz zaman, hiçbir hasar vermeyen ve ışınlanmanıza izin veren bir ender incisi fırlatabilirsiniz.",
+
+  "power.origins.pumpkin_hate.name": "Balkabaklarından Korkmak",
+  "power.origins.pumpkin_hate.description": "Balkabaklarından korkuyorsun. İyi bir sebep için.",
+
+  "power.origins.extra_reach.name": "İnce vücut",
+  "power.origins.extra_reach.description": "Daha uzaktaki bloklara ve varlıklara erişebilirsiniz.",
+
+  "power.origins.shulker_inventory.name": "İstifçi",
+  "power.origins.shulker_inventory.description": "Öğeleri ölüm halinde koruyan ek 9 envanter yuvasına erişiminiz var.",
+
+  "power.origins.natural_armor.name": "Sağlam Cilt",
+  "power.origins.natural_armor.description": "Zırh giymeden bile cildiniz doğal koruma sağlar.",
+
+  "power.origins.more_exhaustion.name": "Büyük İştah",
+  "power.origins.more_exhaustion.description": "Diğerlerinden çok daha çabuk yorulursunuz, bu yüzden daha fazla yemenizi gerektirir.",
+
+  "power.origins.no_shield.name": "Kontrolsüz",
+  "power.origins.no_shield.description": "Elinizin şeklinden dolayı bir kalkanı dik tutmanın bir yolu yoktur.",
+
+  "power.origins.strong_arms.name": "Güçlü kollar",
+  "power.origins.strong_arms.description": "Kazma kullanmadan doğal taşları kıracak kadar güçlüsünüz.",
+
+  "power.origins.translucent.name": "Yarı saydam",
+  "power.origins.translucent.description": "Cildiniz yarı saydamdır.",
+
+  "category.origins": "Origin'ler",
+  "key.origins.primary_active": "Aktif güç",
+  "key.origins.view_origin": "Origin'i Görüntüle",
+
+  "text.autoconfig.origins.title": "Origin Yapılandırma",
+  "text.autoconfig.origins.option.xOffset": "Cooldown Bar Offset X",
+  "text.autoconfig.origins.option.yOffset": "Cooldown Bar Offset Y",
+  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Phantomize Kaplama Gücü",
+
+  "item.origins.orb_of_origin": "Orb of Origin",
+
+  "enchantment.origins.water_protection": "Su Koruması",
+
+  "container.shulker_inventory_power": "Shulker Envanteri",
+
+  "origins.gui.select": "Seç",
+  "origins.gui.close": "Kapat",
+  "origins.gui.choose": "Seç",
+  "origins.gui.choose_origin.title": "Origin seçin.",
+  "origins.gui.view_origin.title": "Bu senin Origin'in.",
+  "origins.gui.view_origin.empty": "Herhangi bir Origin'e sahip olamazsınız.",
+  "origins.gui.impact.impact": "Etki",
+  "origins.gui.impact.none": "Yok",
+  "origins.gui.impact.low": "Düşük",
+  "origins.gui.impact.medium": "Orta",
+  "origins.gui.impact.high": "Yüksek",
+
+  "layer.origins.origin.name": "Origin",
+  "layer.origins.origin.missing_origin.name": "Eksik",
+  "layer.origins.origin.missing_origin.description": "Bir Origin'iniz yok.",
+
+  "death.attack.no_water_for_gills": "%s ıslak kalmayı başaramadı.",
+  "death.attack.hurt_by_water": "%s çok uzun süre banyo yaptı.",
+  "death.attack.genericDamageOverTime": "%s zamanla bir hasar sonucu öldü.",
+
+  "commands.origin.origin_not_found": "Bilinmeyen Origin: %s",
+  "commands.origin.set.success.single": "Origin'ini ayarla %s katmanda %s göre %s.",
+  "commands.origin.set.success.multiple": "Origin'ini ayarla %s katmandaki hedefler %s göre %s."
+}

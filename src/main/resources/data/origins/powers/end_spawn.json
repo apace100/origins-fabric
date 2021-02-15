@@ -1,6 +1,5 @@
 {
   "type": "origins:modify_player_spawn",
-  "dimension": "the_nether",
-  "dimension_distance_multiplier": 0.125,
+  "dimension": "the_end",
   "spawn_strategy": "center"
 }

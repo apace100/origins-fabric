@@ -37,4 +37,16 @@ public class TogglePower extends Power implements Active {
     public void fromTag(Tag tag) {
         isActive = ((ByteTag)tag).getByte() > 0;
     }
+
+    private KeyType keyType;
+
+    @Override
+    public KeyType getKey() {
+        return keyType;
+    }
+
+    @Override
+    public void setKey(KeyType type) {
+        keyType = type;
+    }
 }

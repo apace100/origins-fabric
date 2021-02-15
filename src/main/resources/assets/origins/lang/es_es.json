@@ -156,7 +156,7 @@
   "power.origins.strong_arms.description": "Eres lo suficientemente fuerte para romper piedra con tus manos.",
 
   "category.origins": "Origines",
-  "key.origins.active_power": "Poder Activo",
+  "key.origins.primary_active": "Poder Activo",
   "key.origins.view_origin": "Ver Origen",
 
   "item.origins.orb_of_origin": "Orbe del Origen",

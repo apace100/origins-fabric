@@ -53,6 +53,10 @@ public class Power {
 
     }
 
+    public void onLost() {
+
+    }
+
     public void onAdded() {
 
     }

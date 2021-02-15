@@ -22,4 +22,16 @@ public class ActiveCooldownPower extends CooldownPower implements Active {
             use();
         }
     }
+
+    private KeyType keyType;
+
+    @Override
+    public KeyType getKey() {
+        return keyType;
+    }
+
+    @Override
+    public void setKey(KeyType type) {
+        keyType = type;
+    }
 }

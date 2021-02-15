@@ -8,6 +8,7 @@ import io.github.apace100.origins.power.VariableIntPower;
 import io.github.apace100.origins.power.factory.condition.ConditionFactory;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModRegistries;
+import io.github.apace100.origins.util.FilterableWeightedList;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import io.github.apace100.origins.util.Space;
@@ -67,6 +68,13 @@ public class EntityActions {
                         }
                     }
                 }
+            }));
+        register(new ActionFactory<>(Origins.identifier("choice"), new SerializableData()
+            .add("actions", SerializableDataType.weightedList(SerializableDataType.ENTITY_ACTION)),
+            (data, entity) -> {
+                FilterableWeightedList<ActionFactory<Entity>.Instance> actionList = (FilterableWeightedList<ActionFactory<Entity>.Instance>)data.get("actions");
+                ActionFactory<Entity>.Instance action = actionList.pickRandom(new Random());
+                action.accept(entity);
             }));
 
         register(new ActionFactory<>(Origins.identifier("damage"), new SerializableData()
@@ -151,8 +159,8 @@ public class EntityActions {
                     }
 
                     entity.world.spawnEntity(e);
-                    if(data.isPresent("action")) {
-                        ((ActionFactory<Entity>.Instance)data.get("action")).accept(e);
+                    if(data.isPresent("entity_action")) {
+                        ((ActionFactory<Entity>.Instance)data.get("entity_action")).accept(e);
                     }
                 }
             }));
@@ -239,6 +247,19 @@ public class EntityActions {
             (data, entity) -> {
                 if(entity instanceof PlayerEntity) {
                     ((PlayerEntity)entity).getHungerManager().add(data.getInt("food"), data.getFloat("saturation"));
+                }
+            }));
+        register(new ActionFactory<>(Origins.identifier("add_xp"), new SerializableData()
+            .add("points", SerializableDataType.INT, 0)
+            .add("levels", SerializableDataType.INT, 0),
+            (data, entity) -> {
+                if(entity instanceof PlayerEntity) {
+                    int points = data.getInt("points");
+                    int levels = data.getInt("levels");
+                    if(points > 0) {
+                        ((PlayerEntity)entity).addExperience(points);
+                    }
+                    ((PlayerEntity)entity).addExperienceLevels(levels);
                 }
             }));
     }

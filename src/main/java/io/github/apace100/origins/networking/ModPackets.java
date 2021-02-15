@@ -11,4 +11,5 @@ public class ModPackets {
     public static final Identifier ORIGIN_LIST = new Identifier(Origins.MODID, "origin_list");
     public static final Identifier LAYER_LIST = new Identifier(Origins.MODID, "layer_list");
     public static final Identifier POWER_LIST = new Identifier(Origins.MODID, "power_list");
+    public static final Identifier CHOOSE_RANDOM_ORIGIN = new Identifier(Origins.MODID, "choose_random_origin");
 }

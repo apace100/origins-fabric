@@ -12,8 +12,10 @@
     "CreeperEntityMixin",
     "CriteriaRegistryInvoker",
     "DamageSourceAccessor",
+    "EntityAccessor",
     "EntityMixin",
     "EntityShapeContextMixin",
+    "ExperienceOrbEntityMixin",
     "EyeHeightAccess",
     "HungerManagerMixin",
     "ItemStackMixin",
@@ -26,7 +28,9 @@
     "RegistryAccessor",
     "ServerPlayerEntityMixin",
     "ServerPlayerInteractionManagerAccessor",
-    "ServerPlayerInteractionManagerMixin"
+    "ServerPlayerInteractionManagerMixin",
+    "WeightedListEntryAccessor",
+    "ServerPlayNetworkHandlerMixin"
   ],
   "client": [
     "BackgroundRendererMixin",

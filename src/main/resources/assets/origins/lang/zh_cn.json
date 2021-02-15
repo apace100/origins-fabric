@@ -159,7 +159,7 @@
   "power.origins.translucent.description": "你的皮肤是透明的",
 
   "category.origins": "起源",
-  "key.origins.active_power": "主动能力",
+  "key.origins.primary_active": "主动能力",
 
   "item.origins.orb_of_origin": "起源之球",
 

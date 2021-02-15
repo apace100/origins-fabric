@@ -2,14 +2,13 @@ package io.github.apace100.origins.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.origin.Impact;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.PowerType;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModItems;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
@@ -36,6 +35,7 @@ public class ChooseOriginScreen extends Screen {
 	private int currentLayerIndex = 0;
 	private int currentOrigin = 0;
 	private List<Origin> originSelection;
+	private int maxSelection = 0;
 	private static final int windowWidth = 176;
 	private static final int windowHeight = 182;
 	private int scrollPos = 0;
@@ -45,6 +45,9 @@ public class ChooseOriginScreen extends Screen {
 	private int guiTop, guiLeft;
 
 	private boolean showDirtBackground;
+
+	private Origin randomOrigin;
+	private MutableText randomOriginText;
 	
 	public ChooseOriginScreen(ArrayList<OriginLayer> layerList, int currentLayerIndex, boolean showDirtBackground) {
 		super(new TranslatableText(Origins.MODID + ".screen.choose_origin"));
@@ -53,10 +56,6 @@ public class ChooseOriginScreen extends Screen {
 		this.originSelection = new ArrayList<>(10);
 		PlayerEntity player = MinecraftClient.getInstance().player;
 		List<Identifier> originIdentifiers = layerList.get(currentLayerIndex).getOrigins(player);
-		if(originIdentifiers.size() == 0) {
-			openNextLayerScreen();
-			return;
-		}
 		originIdentifiers.forEach(originId -> {
 			Origin origin = OriginRegistry.get(originId);
 			if(origin.isChoosable()) {
@@ -70,6 +69,14 @@ public class ChooseOriginScreen extends Screen {
 			int impDelta = a.getImpact().getImpactValue() - b.getImpact().getImpactValue();
 			return impDelta == 0 ? a.getOrder() - b.getOrder() : impDelta;
 		});
+		maxSelection = originSelection.size();
+		if(layerList.get(currentLayerIndex).isRandomAllowed()) {
+			maxSelection += 1;
+		}
+		if(maxSelection == 0) {
+			openNextLayerScreen();
+			return;
+		}
 		this.showDirtBackground = showDirtBackground;
 	}
 
@@ -97,27 +104,51 @@ public class ChooseOriginScreen extends Screen {
 		guiLeft = (this.width - windowWidth) / 2;
         guiTop = (this.height - windowHeight) / 2;
         addButton(new ButtonWidget(guiLeft - 40,this.height / 2 - 10, 20, 20, new LiteralText("<"), b -> {
-        	currentOrigin = (currentOrigin - 1 + originSelection.size()) % originSelection.size();
+        	currentOrigin = (currentOrigin - 1 + maxSelection) % maxSelection;
         	scrollPos = 0;
         }));
         addButton(new ButtonWidget(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20, new LiteralText(">"), b -> {
-        	currentOrigin = (currentOrigin + 1) % originSelection.size();
+        	currentOrigin = (currentOrigin + 1) % maxSelection;
         	scrollPos = 0;
         }));
         addButton(new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20, new TranslatableText(Origins.MODID + ".gui.select"), b -> {
 			PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-			buf.writeString(originSelection.get(currentOrigin).getIdentifier().toString());
-			buf.writeString(layerList.get(currentLayerIndex).getIdentifier().toString());
-			ClientSidePacketRegistry.INSTANCE.sendToServer(ModPackets.CHOOSE_ORIGIN, buf);
-			OriginComponent component = ModComponents.ORIGIN.get(MinecraftClient.getInstance().player);
-			component.setOrigin(layerList.get(currentLayerIndex), originSelection.get(currentOrigin));
-			/*if(currentLayerIndex + 1 >= layerList.size()) {
-				MinecraftClient.getInstance().openScreen(null);
+			if(currentOrigin == originSelection.size()) {
+				buf.writeString(layerList.get(currentLayerIndex).getIdentifier().toString());
+				ClientSidePacketRegistry.INSTANCE.sendToServer(ModPackets.CHOOSE_RANDOM_ORIGIN, buf);
 			} else {
-				MinecraftClient.getInstance().openScreen(new ChooseOriginScreen(layerList, currentLayerIndex + 1, showDirtBackground));
-			}*/
+				buf.writeString(getCurrentOrigin().getIdentifier().toString());
+				buf.writeString(layerList.get(currentLayerIndex).getIdentifier().toString());
+				ClientSidePacketRegistry.INSTANCE.sendToServer(ModPackets.CHOOSE_ORIGIN, buf);
+			}
 			openNextLayerScreen();
         }));
+	}
+
+	private Origin getCurrentOrigin() {
+		if(currentOrigin == originSelection.size()) {
+			if(randomOrigin == null) {
+				initRandomOrigin();
+			}
+			return randomOrigin;
+		}
+		return originSelection.get(currentOrigin);
+	}
+
+	private void initRandomOrigin() {
+		this.randomOrigin = new Origin(Origins.identifier("random"), ModItems.ORB_OF_ORIGIN, Impact.NONE, -1, Integer.MAX_VALUE);
+		this.randomOriginText = new LiteralText("");
+		List<Identifier> randoms = layerList.get(currentLayerIndex).getRandomOrigins(MinecraftClient.getInstance().player);
+		randoms.sort((ia, ib) -> {
+			Origin a = OriginRegistry.get(ia);
+			Origin b = OriginRegistry.get(ib);
+			int impDelta = a.getImpact().getImpactValue() - b.getImpact().getImpactValue();
+			return impDelta == 0 ? a.getOrder() - b.getOrder() : impDelta;
+		});
+		for(Identifier id : randoms) {
+			this.randomOriginText.append(OriginRegistry.get(id).getName());
+			this.randomOriginText.append(new LiteralText("\n"));
+		}
 	}
 
 	@Override
@@ -153,7 +184,7 @@ public class ChooseOriginScreen extends Screen {
 	}
 	
 	private void renderOriginImpact(MatrixStack matrices, int mouseX, int mouseY) {
-		Impact impact = originSelection.get(currentOrigin).getImpact();
+		Impact impact = getCurrentOrigin().getImpact();
 		int impactValue = impact.getImpactValue();
 		int wOffset = impactValue * 8;
 		for(int i = 0; i < 3; i++) {
@@ -171,9 +202,9 @@ public class ChooseOriginScreen extends Screen {
 	}
 	
 	private void renderOriginName(MatrixStack matrices) {
-		StringVisitable originName = textRenderer.trimToWidth(originSelection.get(currentOrigin).getName(), windowWidth - 36);
+		StringVisitable originName = textRenderer.trimToWidth(getCurrentOrigin().getName(), windowWidth - 36);
 		this.drawStringWithShadow(matrices, textRenderer, originName.getString(), guiLeft + 39, guiTop + 19, 0xFFFFFF);
-		ItemStack is = originSelection.get(currentOrigin).getDisplayItem();
+		ItemStack is = getCurrentOrigin().getDisplayItem();
 		this.itemRenderer.renderInGui(is, guiLeft + 15, guiTop + 15);
 	}
 	
@@ -197,7 +228,7 @@ public class ChooseOriginScreen extends Screen {
 	}
 
 	private void renderOriginContent(MatrixStack matrices, int mouseX, int mouseY) {
-		Origin origin = originSelection.get(currentOrigin);
+		Origin origin = getCurrentOrigin();
 		int x = guiLeft + 18;
 		int y = guiTop + 50;
 		int startY = y;
@@ -212,26 +243,37 @@ public class ChooseOriginScreen extends Screen {
 			}
 			y += 12;
 		}
-		
-		for(PowerType<?> p : origin.getPowerTypes()) {
-			if(p.isHidden()) {
-				continue;
-			}
-			OrderedText name = Language.getInstance().reorder(textRenderer.trimToWidth(p.getName().formatted(Formatting.UNDERLINE), windowWidth - 36));
-			Text desc = p.getDescription();
-			List<OrderedText> drawLines = textRenderer.wrapLines(desc, windowWidth - 36);
-			if(y >= startY - 24 && y <= endY + 12) {
-				textRenderer.draw(matrices, name, x, y, 0xFFFFFF);
-			}
+
+		if(origin == randomOrigin) {
+			List<OrderedText> drawLines = textRenderer.wrapLines(randomOriginText, windowWidth - 36);
 			for(OrderedText line : drawLines) {
 				y += 12;
 				if(y >= startY - 24 && y <= endY + 12) {
 					textRenderer.draw(matrices, line, x + 2, y, 0xCCCCCC);
 				}
 			}
-
 			y += 14;
-			
+		} else {
+			for(PowerType<?> p : origin.getPowerTypes()) {
+				if(p.isHidden()) {
+					continue;
+				}
+				OrderedText name = Language.getInstance().reorder(textRenderer.trimToWidth(p.getName().formatted(Formatting.UNDERLINE), windowWidth - 36));
+				Text desc = p.getDescription();
+				List<OrderedText> drawLines = textRenderer.wrapLines(desc, windowWidth - 36);
+				if(y >= startY - 24 && y <= endY + 12) {
+					textRenderer.draw(matrices, name, x, y, 0xFFFFFF);
+				}
+				for(OrderedText line : drawLines) {
+					y += 12;
+					if(y >= startY - 24 && y <= endY + 12) {
+						textRenderer.draw(matrices, line, x + 2, y, 0xCCCCCC);
+					}
+				}
+
+				y += 14;
+
+			}
 		}
 		y += scrollPos;
 		currentMaxScroll = y - windowHeight - 15;

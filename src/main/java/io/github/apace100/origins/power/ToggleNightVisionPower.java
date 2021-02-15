@@ -38,4 +38,16 @@ public class ToggleNightVisionPower extends NightVisionPower implements Active {
             isActive = ((ByteTag)tag).getByte() > 0;
         }
     }
+
+    private KeyType keyType;
+
+    @Override
+    public KeyType getKey() {
+        return keyType;
+    }
+
+    @Override
+    public void setKey(KeyType type) {
+        keyType = type;
+    }
 }

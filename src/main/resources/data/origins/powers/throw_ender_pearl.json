@@ -7,5 +7,6 @@
   "entity_type": "origins:enderian_pearl",
   "sound": "minecraft:entity.ender_pearl.throw",
   "speed": 1.5,
-  "divergence": 1
+  "divergence": 1,
+  "key": "primary"
 }

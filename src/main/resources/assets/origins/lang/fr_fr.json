@@ -160,7 +160,7 @@
   "power.origins.translucent.description": "Votre peau est translucente.",
 
   "category.origins": "Origines",
-  "key.origins.active_power": "Pouvoir actif",
+  "key.origins.primary_active": "Pouvoir actif",
   "key.origins.view_origin": "Afficher l'origine",
 
   "text.autoconfig.origins.title": "Configuration d'Origins",

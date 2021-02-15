@@ -3,6 +3,7 @@ package io.github.apace100.origins.power.factory.action;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.power.factory.condition.ConditionFactory;
 import io.github.apace100.origins.registry.ModRegistries;
+import io.github.apace100.origins.util.FilterableWeightedList;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import net.minecraft.block.Block;
@@ -43,6 +44,13 @@ public class BlockActions {
                         ((ActionFactory<Triple<World, BlockPos, Direction>>.Instance)data.get("else_action")).accept(block);
                     }
                 }
+            }));
+        register(new ActionFactory<>(Origins.identifier("choice"), new SerializableData()
+            .add("actions", SerializableDataType.weightedList(SerializableDataType.BLOCK_ACTION)),
+            (data, block) -> {
+                FilterableWeightedList<ActionFactory<Triple<World, BlockPos, Direction>>.Instance> actionList = (FilterableWeightedList<ActionFactory<Triple<World, BlockPos, Direction>>.Instance>)data.get("actions");
+                ActionFactory<Triple<World, BlockPos, Direction>>.Instance action = actionList.pickRandom(new Random());
+                action.accept(block);
             }));
         register(new ActionFactory<>(Origins.identifier("offset"), new SerializableData()
             .add("action", SerializableDataType.BLOCK_ACTION)

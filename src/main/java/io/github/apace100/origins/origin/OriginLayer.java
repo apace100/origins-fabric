@@ -14,6 +14,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,10 @@ public class OriginLayer implements Comparable<OriginLayer> {
     private String nameTranslationKey;
     private String missingOriginNameTranslationKey;
     private String missingOriginDescriptionTranslationKey;
+
+    private boolean isRandomAllowed = false;
+    private boolean doesRandomAllowUnchoosable = false;
+    private List<Identifier> originsExcludedFromRandom = null;
 
     public String getOrCreateTranslationKey() {
         if(nameTranslationKey == null || nameTranslationKey.isEmpty()) {
@@ -70,11 +75,19 @@ public class OriginLayer implements Comparable<OriginLayer> {
     }
 
     public boolean contains(Origin origin) {
-        return origin == Origin.EMPTY || conditionedOrigins.stream().anyMatch(co -> co.getOrigins().stream().anyMatch(o -> o.equals(origin.getIdentifier())));
+        return conditionedOrigins.stream().anyMatch(co -> co.getOrigins().stream().anyMatch(o -> o.equals(origin.getIdentifier())));
     }
 
     public boolean contains(Origin origin, PlayerEntity playerEntity) {
-        return origin == Origin.EMPTY || conditionedOrigins.stream().filter(co -> co.isConditionFulfilled(playerEntity)).anyMatch(co -> co.getOrigins().stream().anyMatch(o -> o.equals(origin.getIdentifier())));
+        return conditionedOrigins.stream().filter(co -> co.isConditionFulfilled(playerEntity)).anyMatch(co -> co.getOrigins().stream().anyMatch(o -> o.equals(origin.getIdentifier())));
+    }
+
+    public boolean isRandomAllowed() {
+        return isRandomAllowed;
+    }
+
+    public List<Identifier> getRandomOrigins(PlayerEntity playerEntity) {
+        return conditionedOrigins.stream().filter(co -> co.isConditionFulfilled(playerEntity)).flatMap(co -> co.getOrigins().stream()).filter(OriginRegistry::contains).filter(o -> !originsExcludedFromRandom.contains(o)).filter(id -> doesRandomAllowUnchoosable || OriginRegistry.get(id).isChoosable()).collect(Collectors.toList());
     }
 
     public void merge(JsonObject json) {
@@ -96,6 +109,20 @@ public class OriginLayer implements Comparable<OriginLayer> {
         }
         if(json.has("missing_description")) {
             this.missingOriginDescriptionTranslationKey = JsonHelper.getString(json, "missing_description", "");
+        }
+        if(json.has("allow_random")) {
+            this.isRandomAllowed = JsonHelper.getBoolean(json, "allow_random");
+        }
+        if(json.has("allow_random_unchoosable")) {
+            this.doesRandomAllowUnchoosable = JsonHelper.getBoolean(json, "allow_random_unchoosable");
+        }
+        if(json.has("exclude_random") && json.get("exclude_random").isJsonArray()) {
+            boolean replaceExclude = JsonHelper.getBoolean(json, "replace_exclude_random", false);
+            if(replaceExclude) {
+                originsExcludedFromRandom.clear();
+            }
+            JsonArray excludeRandomArray = json.getAsJsonArray("exclude_random");
+            excludeRandomArray.forEach(je -> originsExcludedFromRandom.add(Identifier.tryParse(je.getAsString())));
         }
     }
 
@@ -129,6 +156,12 @@ public class OriginLayer implements Comparable<OriginLayer> {
         buffer.writeString(getOrCreateTranslationKey());
         buffer.writeString(getMissingOriginNameTranslationKey());
         buffer.writeString(getMissingOriginDescriptionTranslationKey());
+        buffer.writeBoolean(isRandomAllowed());
+        if(isRandomAllowed()) {
+            buffer.writeBoolean(doesRandomAllowUnchoosable);
+            buffer.writeInt(originsExcludedFromRandom.size());
+            originsExcludedFromRandom.forEach(buffer::writeIdentifier);
+        }
     }
 
     @Environment(EnvType.CLIENT)
@@ -145,6 +178,15 @@ public class OriginLayer implements Comparable<OriginLayer> {
         layer.nameTranslationKey = buffer.readString();
         layer.missingOriginNameTranslationKey = buffer.readString();
         layer.missingOriginDescriptionTranslationKey = buffer.readString();
+        layer.isRandomAllowed = buffer.readBoolean();
+        if(layer.isRandomAllowed) {
+            layer.doesRandomAllowUnchoosable = buffer.readBoolean();
+            int excludedSize = buffer.readInt();
+            layer.originsExcludedFromRandom = new LinkedList<>();
+            for(int i = 0; i < excludedSize; i++) {
+                layer.originsExcludedFromRandom.add(buffer.readIdentifier());
+            }
+        }
         return layer;
     }
 
@@ -165,6 +207,15 @@ public class OriginLayer implements Comparable<OriginLayer> {
         layer.nameTranslationKey = JsonHelper.getString(json, "name", "");
         layer.missingOriginNameTranslationKey = JsonHelper.getString(json, "missing_name", "");
         layer.missingOriginDescriptionTranslationKey = JsonHelper.getString(json, "missing_description", "");
+
+        layer.isRandomAllowed = JsonHelper.getBoolean(json, "allow_random", false);
+        layer.doesRandomAllowUnchoosable = JsonHelper.getBoolean(json, "allow_random_unchoosable", false);
+        layer.originsExcludedFromRandom = new LinkedList<>();
+        if(json.has("exclude_random") && json.get("exclude_random").isJsonArray()) {
+            JsonArray excludeRandomArray = json.getAsJsonArray("exclude_random");
+            excludeRandomArray.forEach(je -> layer.originsExcludedFromRandom.add(Identifier.tryParse(je.getAsString())));
+        }
+
         return layer;
     }
 

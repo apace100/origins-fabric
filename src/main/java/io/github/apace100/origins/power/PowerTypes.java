@@ -19,6 +19,7 @@ import java.util.Optional;
 public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResourceReloadListener {
 
     public static final PowerType<Power> WATER_BREATHING;
+    public static final PowerType<Power> CONDUIT_POWER_ON_LAND;
     public static final PowerType<Power> AQUA_AFFINITY;
     public static final PowerType<ToggleNightVisionPower> WATER_VISION;
     public static final PowerType<Power> LIKE_WATER;
@@ -31,6 +32,7 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
 
     static {
         WATER_BREATHING = new PowerTypeReference<>(new Identifier(Origins.MODID, "water_breathing"));
+        CONDUIT_POWER_ON_LAND = new PowerTypeReference<>(new Identifier(Origins.MODID, "conduit_power_on_land"));
         AQUA_AFFINITY = new PowerTypeReference<>(new Identifier(Origins.MODID, "aqua_affinity"));
         WATER_VISION = new PowerTypeReference<>(new Identifier(Origins.MODID, "water_vision"));
         LIKE_WATER = new PowerTypeReference<>(new Identifier(Origins.MODID, "like_water"));
