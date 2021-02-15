@@ -243,6 +243,9 @@ public class PlayerConditions {
             .add("comparison", SerializableDataType.COMPARISON)
             .add("compare_to", SerializableDataType.FLOAT),
             (data, player) -> ((Comparison)data.get("comparison")).compare(player.getHealth() / player.getMaxHealth(), data.getFloat("compare_to"))));
+        register(new ConditionFactory<>(Origins.identifier("biome"), new SerializableData()
+            .add("biome", SerializableDataType.IDENTIFIER),
+            (data, player) -> player.world.getRegistryManager().get(Registry.BIOME_KEY).getId(player.world.getBiome(player.getBlockPos())).equals(data.getId("biome"))));
     }
 
     private static void register(ConditionFactory<PlayerEntity> conditionFactory) {
