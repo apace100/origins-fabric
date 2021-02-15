@@ -99,8 +99,8 @@ public abstract class LoginMixin {
 	}
 
 	@Redirect(method = "respawnPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;setSpawnPoint(Lnet/minecraft/util/registry/RegistryKey;Lnet/minecraft/util/math/BlockPos;FZZ)V"))
-	private void preventEndExitSpawnPointSetting(ServerPlayerEntity serverPlayerEntity, RegistryKey<World> dimension, BlockPos pos, float angle, boolean spawnPointSet, boolean bl) {
-		EndRespawningEntity ere = (EndRespawningEntity)serverPlayerEntity;
+	private void preventEndExitSpawnPointSetting(ServerPlayerEntity serverPlayerEntity, RegistryKey<World> dimension, BlockPos pos, float angle, boolean spawnPointSet, boolean bl, ServerPlayerEntity playerEntity, boolean alive) {
+		EndRespawningEntity ere = (EndRespawningEntity)playerEntity;
 		// Prevent setting the spawn point if the player has a "fake" respawn point
 		if(ere.hasRealRespawnPoint()) {
 			serverPlayerEntity.setSpawnPoint(dimension, pos, angle, spawnPointSet, bl);
