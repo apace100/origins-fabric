@@ -3,8 +3,6 @@
 		"origins:phantomize",
 		"origins:translucent",
 		"origins:phasing",
-		"origins:invisibility",
-		"origins:burn_in_daylight",
 		"origins:hunger_over_time",
 		"origins:fragile"
 	],
