@@ -159,8 +159,9 @@
   "power.origins.translucent.description": "Ваша кожа полупрозрачная.",
 
   "category.origins": "Origins",
-  "key.origins.primary_active": "Активная Сила",
-  "key.origins.view_origin": "Посмотреть происхождение",
+  "key.origins.primary_active": "Активная сила (Главная)",
+  "key.origins.secondary_active": "Активная сила (Второстепенная)",
+  "key.origins.view_origin": "Просмотр происхождения",
 
   "text.autoconfig.origins.title": "Настройка Origins",
   "text.autoconfig.origins.option.xOffset": "Позиция полосы восстановления по оси X",
@@ -184,16 +185,22 @@
   "origins.gui.impact.low": "Низкое",
   "origins.gui.impact.medium": "Среднее",
   "origins.gui.impact.high": "Высокое",
+  
+  "origin.origins.random.name": "Случайный",
+  "origin.origins.random.description": "Вам будет назначен один из следующих:",
 
   "layer.origins.origin.name": "Происхождение",
   "layer.origins.origin.missing_origin.name": "Отсутствует",
   "layer.origins.origin.missing_origin.description": "У вас нет происхождения.",
 
-  "death.attack.no_water_for_gills": "%s не сумел остаться мокрым.",
-  "death.attack.hurt_by_water": "%s слишком долго принимал ванну.",
-  "death.attack.genericDamageOverTime": "%s умер от временного повреждения.",
+  "death.attack.no_water_for_gills": "%1$s не успел погрузиться в воду.",
+  "death.attack.no_water_for_gills.player": "%1$s не успел погрузиться в воду из-за боя с %2$s.",
+  "death.attack.hurt_by_water": "%1$s принимал ванну слишком долго.",
+  "death.attack.hurt_by_water.player": "%1$s был утоплен под воду %2$s.",
+  "death.attack.genericDamageOverTime": "%1$s умер от временного эффекта урона.",
+  "death.attack.genericDamageOverTime.player": "%1$s умер от временного эффекта урона во время боя с %2$s.",
 
   "commands.origin.origin_not_found": "Неизвестное происхождение: %s",
-  "commands.origin.set.success.single": "Выберите происхождение %s в слое %s к %s.",
-  "commands.origin.set.success.multiple": "Выберите происхождение %s целям в слое %s к %s."
+  "commands.origin.set.success.single": "Выбрать происхождение %s в слое %s к %s.",
+  "commands.origin.set.success.multiple": "Выбрать происхождение %s целям в слое %s к %s."
 }
