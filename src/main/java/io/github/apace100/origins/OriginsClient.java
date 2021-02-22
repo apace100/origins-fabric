@@ -20,8 +20,8 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.render.RenderLayer;
@@ -80,7 +80,7 @@ public class OriginsClient implements ClientModInitializer {
     private void performActivePower(Active.KeyType key) {
         PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
         buffer.writeInt(key.ordinal());
-        ClientSidePacketRegistry.INSTANCE.sendToServer(ModPackets.USE_ACTIVE_POWER, buffer);
+        ClientPlayNetworking.send(ModPackets.USE_ACTIVE_POWER, buffer);
         OriginComponent component = ModComponents.ORIGIN.get(MinecraftClient.getInstance().player);
         if(component.hasAllOrigins()) {
             component.getPowers().stream().filter(p -> p instanceof Active && ((Active)p).getKey() == key).forEach(p -> ((Active)p).onUse());

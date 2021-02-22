@@ -7,17 +7,19 @@ import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
-import io.github.apace100.origins.power.*;
+import io.github.apace100.origins.power.ModifyPlayerSpawnPower;
+import io.github.apace100.origins.power.Power;
+import io.github.apace100.origins.power.PowerType;
+import io.github.apace100.origins.power.PowerTypeRegistry;
 import io.github.apace100.origins.power.factory.PowerFactory;
 import io.github.apace100.origins.registry.ModComponents;
 import io.netty.buffer.Unpooled;
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Dismounting;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
@@ -26,7 +28,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,12 +40,11 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings("rawtypes")
 @Mixin(PlayerManager.class)
 public abstract class LoginMixin {
 
 	@Shadow public abstract List<ServerPlayerEntity> getPlayerList();
-
-	@Shadow @Final private MinecraftServer server;
 
 	@Inject(at = @At("TAIL"), method = "Lnet/minecraft/server/PlayerManager;onPlayerConnect(Lnet/minecraft/network/ClientConnection;Lnet/minecraft/server/network/ServerPlayerEntity;)V")
 	private void openOriginsGui(ClientConnection connection, ServerPlayerEntity player, CallbackInfo info) {
@@ -84,9 +84,9 @@ public abstract class LoginMixin {
 			}
 		});
 
-		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, ModPackets.POWER_LIST, powerListData);
-		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, ModPackets.ORIGIN_LIST, originListData);
-		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, ModPackets.LAYER_LIST, originLayerData);
+		ServerPlayNetworking.send(player, ModPackets.POWER_LIST, powerListData);
+		ServerPlayNetworking.send(player, ModPackets.ORIGIN_LIST, originListData);
+		ServerPlayNetworking.send(player, ModPackets.LAYER_LIST, originLayerData);
 
 		List<ServerPlayerEntity> playerList = getPlayerList();
 		playerList.forEach(spe -> ModComponents.ORIGIN.syncWith(spe, ComponentProvider.fromEntity(player)));
@@ -94,7 +94,7 @@ public abstract class LoginMixin {
 		if(!component.hasAllOrigins()) {
 			PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
 			data.writeBoolean(true);
-			ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, ModPackets.OPEN_ORIGIN_SCREEN, data);
+			ServerPlayNetworking.send(player, ModPackets.OPEN_ORIGIN_SCREEN, data);
 		}
 	}
 
