@@ -35,6 +35,9 @@ public class PowerType<T extends Power> {
         return this;
     }
 
+    public void onRemoved() {}
+    public void onLost() {}
+
     public void setTranslationKeys(String name, String description) {
         this.nameTranslationKey = name;
         this.descriptionTranslationKey = description;

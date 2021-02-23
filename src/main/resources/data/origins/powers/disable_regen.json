@@ -1,0 +1,5 @@
+{
+    "type": "origins:disable_regen",
+    "name": "No Regen",
+    "description": "You cannot heal through normal means like food."
+}

@@ -663,6 +663,8 @@ public class PowerFactories {
         register(new PowerFactory<>(Origins.identifier("shaking"),
             new SerializableData(), data -> (BiFunction<PowerType<Power>, PlayerEntity, Power>) ShakingPower::new)
             .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("disable_regen"),
+            new SerializableData(), data -> DisableRegenPower::new).allowCondition());
         register(new PowerFactory<>(Origins.identifier("resource"),
             new SerializableData()
                 .add("min", SerializableDataType.INT)
