@@ -1,6 +1,7 @@
 package io.github.apace100.origins.networking;
 
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.OriginsClient;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.integration.OriginDataLoadedCallback;
 import io.github.apace100.origins.origin.Origin;
@@ -70,6 +71,7 @@ public class ModPacketsS2C {
         for(int i = 0; i < Origins.SEMVER.length; i++) {
             buf.writeInt(Origins.SEMVER[i]);
         }
+        OriginsClient.isServerRunningOrigins = true;
         return CompletableFuture.completedFuture(buf);
     }
 

@@ -38,6 +38,8 @@ public class OriginsClient implements ClientModInitializer {
 
     public static OriginsConfig config;
 
+    public static boolean isServerRunningOrigins = false;
+
     @Override
     @Environment(EnvType.CLIENT)
     public void onInitializeClient() {

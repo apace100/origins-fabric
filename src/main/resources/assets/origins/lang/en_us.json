@@ -180,6 +180,7 @@
   "origins.gui.choose_origin.title": "Choose your %s.",
   "origins.gui.view_origin.title": "This is your %s.",
   "origins.gui.view_origin.empty": "You can not have any Origins.",
+  "origins.gui.view_origin.not_installed": "The server does not have Origins installed.",
   "origins.gui.impact.impact": "Impact",
   "origins.gui.impact.none": "None",
   "origins.gui.impact.low": "Low",
