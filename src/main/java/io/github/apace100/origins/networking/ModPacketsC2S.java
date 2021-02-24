@@ -56,6 +56,7 @@ public class ModPacketsC2S {
                         Origins.LOGGER.info("Player " + playerEntity.getDisplayName().asString() + " tried to choose unchoosable Origin for layer " + layerId + ": " + originId + ".");
                         component.setOrigin(layer, Origin.EMPTY);
                     }
+                    confirmOrigin(playerEntity, layer, component.getOrigin(layer));
                     component.sync();
                 } else {
                     Origins.LOGGER.warn("Player " + playerEntity.getDisplayName().asString() + " chose unknown origin: " + originId);
@@ -90,6 +91,7 @@ public class ModPacketsC2S {
                     Origins.LOGGER.info("Player " + playerEntity.getDisplayName().asString() + " tried to choose a random Origin for layer " + layerId + ", which is not allowed!");
                     component.setOrigin(layer, Origin.EMPTY);
                 }
+                confirmOrigin(playerEntity, layer, component.getOrigin(layer));
                 component.sync();
             } else {
                 Origins.LOGGER.warn("Player " + playerEntity.getDisplayName().asString() + " tried to choose origin for layer " + layerId + " while having one already.");
@@ -135,5 +137,12 @@ public class ModPacketsC2S {
 
     private static void handshake(ServerLoginNetworkHandler serverLoginNetworkHandler, MinecraftServer minecraftServer, PacketSender packetSender, ServerLoginNetworking.LoginSynchronizer loginSynchronizer) {
         packetSender.sendPacket(ModPackets.HANDSHAKE, PacketByteBufs.empty());
+    }
+
+    private static void confirmOrigin(ServerPlayerEntity player, OriginLayer layer, Origin origin) {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeIdentifier(layer.getIdentifier());
+        buf.writeIdentifier(origin.getIdentifier());
+        ServerPlayNetworking.send(player, ModPackets.CONFIRM_ORIGIN, buf);
     }
 }

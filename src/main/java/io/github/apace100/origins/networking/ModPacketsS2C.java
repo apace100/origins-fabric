@@ -13,6 +13,7 @@ import io.github.apace100.origins.power.factory.PowerFactory;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.screen.ChooseOriginScreen;
+import io.github.apace100.origins.screen.WaitForNextLayerScreen;
 import io.github.apace100.origins.util.SerializableData;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
@@ -45,7 +46,21 @@ public class ModPacketsS2C {
             ClientPlayNetworking.registerReceiver(ModPackets.ORIGIN_LIST, ModPacketsS2C::receiveOriginList);
             ClientPlayNetworking.registerReceiver(ModPackets.LAYER_LIST, ModPacketsS2C::receiveLayerList);
             ClientPlayNetworking.registerReceiver(ModPackets.POWER_LIST, ModPacketsS2C::receivePowerList);
+            ClientPlayNetworking.registerReceiver(ModPackets.CONFIRM_ORIGIN, ModPacketsS2C::receiveOriginConfirmation);
         }));
+    }
+
+    @Environment(EnvType.CLIENT)
+    private static void receiveOriginConfirmation(MinecraftClient minecraftClient, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
+        OriginLayer layer = OriginLayers.getLayer(packetByteBuf.readIdentifier());
+        Origin origin = OriginRegistry.get(packetByteBuf.readIdentifier());
+        minecraftClient.execute(() -> {
+            OriginComponent component = ModComponents.ORIGIN.get(minecraftClient.player);
+            component.setOrigin(layer, origin);
+            if(minecraftClient.currentScreen instanceof WaitForNextLayerScreen) {
+                ((WaitForNextLayerScreen)minecraftClient.currentScreen).openSelection();
+            }
+        });
     }
 
     @Environment(EnvType.CLIENT)

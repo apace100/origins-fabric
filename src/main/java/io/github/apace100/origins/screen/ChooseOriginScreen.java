@@ -10,7 +10,7 @@ import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.registry.ModItems;
 import io.netty.buffer.Unpooled;
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -81,6 +81,8 @@ public class ChooseOriginScreen extends Screen {
 	}
 
 	private void openNextLayerScreen() {
+		MinecraftClient.getInstance().openScreen(new WaitForNextLayerScreen(layerList, currentLayerIndex, showDirtBackground));
+		/*
 		int index = currentLayerIndex + 1;
 		PlayerEntity player = MinecraftClient.getInstance().player;
 		while(index < layerList.size()) {
@@ -91,6 +93,7 @@ public class ChooseOriginScreen extends Screen {
 			index++;
 		}
 		MinecraftClient.getInstance().openScreen(null);
+		*/
 	}
 
 	@Override
@@ -115,11 +118,11 @@ public class ChooseOriginScreen extends Screen {
 			PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 			if(currentOrigin == originSelection.size()) {
 				buf.writeString(layerList.get(currentLayerIndex).getIdentifier().toString());
-				ClientSidePacketRegistry.INSTANCE.sendToServer(ModPackets.CHOOSE_RANDOM_ORIGIN, buf);
+				ClientPlayNetworking.send(ModPackets.CHOOSE_RANDOM_ORIGIN, buf);
 			} else {
 				buf.writeString(getCurrentOrigin().getIdentifier().toString());
 				buf.writeString(layerList.get(currentLayerIndex).getIdentifier().toString());
-				ClientSidePacketRegistry.INSTANCE.sendToServer(ModPackets.CHOOSE_ORIGIN, buf);
+				ClientPlayNetworking.send(ModPackets.CHOOSE_ORIGIN, buf);
 			}
 			openNextLayerScreen();
         }));
