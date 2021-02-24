@@ -36,6 +36,11 @@ public class WaitForNextLayerScreen extends Screen {
     }
 
     @Override
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        this.renderBackground(matrices);
+    }
+
+    @Override
     public void renderBackground(MatrixStack matrices, int vOffset) {
         if(showDirtBackground) {
             super.renderBackgroundTexture(vOffset);
