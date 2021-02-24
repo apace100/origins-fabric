@@ -10,13 +10,17 @@ public class ActionOnCallbackPower extends Power {
     private final Consumer<Entity> entityActionRespawned;
     private final Consumer<Entity> entityActionRemoved;
     private final Consumer<Entity> entityActionChosen;
+    private final Consumer<Entity> entityActionLost;
+    private final Consumer<Entity> entityActionAdded;
     private final boolean executeChosenWhenOrb;
 
-    public ActionOnCallbackPower(PowerType<?> type, PlayerEntity player, Consumer<Entity> entityActionRespawned, Consumer<Entity> entityActionRemoved, Consumer<Entity> entityActionChosen, boolean executeChosenWhenOrb) {
+    public ActionOnCallbackPower(PowerType<?> type, PlayerEntity player, Consumer<Entity> entityActionRespawned, Consumer<Entity> entityActionRemoved, Consumer<Entity> entityActionChosen, Consumer<Entity> entityActionLost, Consumer<Entity> entityActionAdded, boolean executeChosenWhenOrb) {
         super(type, player);
         this.entityActionRespawned = entityActionRespawned;
         this.entityActionRemoved = entityActionRemoved;
         this.entityActionChosen = entityActionChosen;
+        this.entityActionLost = entityActionLost;
+        this.entityActionAdded = entityActionAdded;
         this.executeChosenWhenOrb = executeChosenWhenOrb;
     }
 
@@ -38,6 +42,20 @@ public class ActionOnCallbackPower extends Power {
     public void onRemoved() {
         if(entityActionRemoved != null) {
             entityActionRemoved.accept(player);
+        }
+    }
+
+    @Override
+    public void onLost() {
+        if(entityActionLost != null) {
+            entityActionLost.accept(player);
+        }
+    }
+
+    @Override
+    public void onAdded() {
+        if(entityActionAdded != null) {
+            entityActionAdded.accept(player);
         }
     }
 }

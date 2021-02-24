@@ -123,8 +123,8 @@ public class PlayerOriginComponent implements OriginComponent {
                 }
             }
             for(PowerType<?> toRemove : powersToRemove) {
-                toRemove.onRemoved();
-                toRemove.onLost();
+                powers.get(toRemove).onRemoved();
+                powers.get(toRemove).onLost();
                 powers.remove(toRemove);
             }
         }

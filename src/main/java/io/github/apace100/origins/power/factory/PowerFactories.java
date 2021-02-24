@@ -640,12 +640,16 @@ public class PowerFactories {
                 .add("entity_action_respawned", SerializableDataType.ENTITY_ACTION, null)
                 .add("entity_action_removed", SerializableDataType.ENTITY_ACTION, null)
                 .add("entity_action_chosen", SerializableDataType.ENTITY_ACTION, null)
+                .add("entity_action_lost", SerializableDataType.ENTITY_ACTION, null)
+                .add("entity_action_added", SerializableDataType.ENTITY_ACTION, null)
                 .add("execute_chosen_when_orb", SerializableDataType.BOOLEAN, true),
             data ->
                 (type, player) -> new ActionOnCallbackPower(type, player,
                     (ActionFactory<Entity>.Instance)data.get("entity_action_respawned"),
                     (ActionFactory<Entity>.Instance)data.get("entity_action_removed"),
                     (ActionFactory<Entity>.Instance)data.get("entity_action_chosen"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action_lost"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action_added"),
                     data.getBoolean("execute_chosen_when_orb")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("walk_on_fluid"),

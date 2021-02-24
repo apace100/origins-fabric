@@ -39,7 +39,6 @@ public class AttributePower extends Power {
                 player.getAttributeInstance(mod.getAttribute()).addTemporaryModifier(mod.getModifier());
             }
         });
-
     }
 
     @Override

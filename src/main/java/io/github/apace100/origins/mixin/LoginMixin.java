@@ -124,6 +124,12 @@ public abstract class LoginMixin {
 		return original;
 	}
 
+	@Inject(method = "respawnPlayer", at = @At("HEAD"))
+	private void invokePowerRemovedCallback(ServerPlayerEntity player, boolean alive, CallbackInfoReturnable<ServerPlayerEntity> cir) {
+		List<Power> powers = ModComponents.ORIGIN.get(player).getPowers();
+		powers.forEach(Power::onRemoved);
+	}
+
 	@Inject(method = "respawnPlayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;onSpawn()V"), locals = LocalCapture.CAPTURE_FAILHARD)
 	private void invokePowerRespawnCallback(ServerPlayerEntity player, boolean alive, CallbackInfoReturnable<ServerPlayerEntity> cir, BlockPos blockPos, float f, boolean bl, ServerWorld serverWorld, Optional optional2, ServerPlayerInteractionManager serverPlayerInteractionManager2, ServerWorld serverWorld2, ServerPlayerEntity serverPlayerEntity) {
 		if(!alive) {
