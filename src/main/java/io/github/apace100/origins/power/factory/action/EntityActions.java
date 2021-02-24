@@ -209,7 +209,7 @@ public class EntityActions {
             (data, entity) -> entity.extinguish()));
         register(new ActionFactory<>(Origins.identifier("execute_command"), new SerializableData()
             .add("command", SerializableDataType.STRING)
-            .add("permission_level", SerializableDataType.INT, 0),
+            .add("permission_level", SerializableDataType.INT, 4),
             (data, entity) -> {
                 MinecraftServer server = entity.world.getServer();
                 if(server != null) {
