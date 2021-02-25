@@ -61,7 +61,7 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<LivingEnt
     private RenderLayer changeRenderLayerWhenTranslucent(RenderLayer original, LivingEntity entity) {
         if(entity instanceof PlayerEntity) {
             if(OriginComponent.getPowers(entity, ModelColorPower.class).stream().anyMatch(ModelColorPower::isTranslucent)) {
-                return RenderLayer.getEntityTranslucent(getTexture(entity));
+                return RenderLayer.getItemEntityTranslucentCull(getTexture(entity));
             }
         }
         return original;
