@@ -119,12 +119,11 @@ public class PlayerOriginComponent implements OriginComponent {
             for (Map.Entry<PowerType<?>, Power> powerEntry: powers.entrySet()) {
                 if(!hasPowerType(powerEntry.getKey())) {
                     powerEntry.getValue().onRemoved();
+                    powerEntry.getValue().onLost();
                     powersToRemove.add(powerEntry.getKey());
                 }
             }
             for(PowerType<?> toRemove : powersToRemove) {
-                powers.get(toRemove).onRemoved();
-                powers.get(toRemove).onLost();
                 powers.remove(toRemove);
             }
         }
