@@ -180,11 +180,13 @@
   "origins.gui.choose_origin.title": "Choose your %s.",
   "origins.gui.view_origin.title": "This is your %s.",
   "origins.gui.view_origin.empty": "You can not have any Origins.",
+  "origins.gui.view_origin.not_installed": "The server does not have Origins installed.",
   "origins.gui.impact.impact": "Impact",
   "origins.gui.impact.none": "None",
   "origins.gui.impact.low": "Low",
   "origins.gui.impact.medium": "Medium",
   "origins.gui.impact.high": "High",
+  "origins.gui.version_mismatch": "This server is running a different version of Origins (v%1$s) which is incompatible with the one you have installed (v%2$s).",
 
   "origin.origins.random.name": "Random",
   "origin.origins.random.description": "You'll be assigned one of the following:",

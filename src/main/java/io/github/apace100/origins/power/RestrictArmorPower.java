@@ -15,6 +15,22 @@ public class RestrictArmorPower extends Power {
         this.armorConditions = armorConditions;
     }
 
+    @Override
+    public void onChosen(boolean isOrbOfOrigin) {
+        super.onChosen(isOrbOfOrigin);
+        for(EquipmentSlot slot : armorConditions.keySet()) {
+            ItemStack equippedItem = player.getEquippedStack(slot);
+            if(!equippedItem.isEmpty()) {
+                if(!canEquip(equippedItem, slot)) {
+                    if(!player.inventory.insertStack(equippedItem)) {
+                        player.dropItem(equippedItem, true);
+                    }
+                    player.equipStack(slot, ItemStack.EMPTY);
+                }
+            }
+        }
+    }
+
     public boolean canEquip(ItemStack itemStack, EquipmentSlot slot) {
         return !armorConditions.get(slot).test(itemStack);
     }

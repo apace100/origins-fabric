@@ -25,18 +25,18 @@
     "PlayerEntityMixin",
     "PlayerScreenHandlerMixin",
     "PotionItemMixin",
-    "RegistryAccessor",
     "ServerPlayerEntityMixin",
     "ServerPlayerInteractionManagerAccessor",
     "ServerPlayerInteractionManagerMixin",
-    "WeightedListEntryAccessor",
-    "ServerPlayNetworkHandlerMixin"
+    "ServerPlayNetworkHandlerMixin",
+    "WeightedListEntryAccessor"
   ],
   "client": [
     "BackgroundRendererMixin",
     "ClientPlayerEntityMixin",
     "ClientPlayerInteractionManagerAccessor",
     "ClientPlayNetworkHandlerMixin",
+    "ConnectScreenMixin",
     "ElytraFeatureRendererMixin",
     "GameRendererMixin",
     "InGameOverlayRendererMixin",

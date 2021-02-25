@@ -3,6 +3,7 @@ package io.github.apace100.origins.screen;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.OriginsClient;
 import io.github.apace100.origins.origin.Impact;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
@@ -100,7 +101,7 @@ public class ViewOriginScreen extends Screen {
 	private void renderOriginWindow(MatrixStack matrices, int mouseX, int mouseY) {
 		RenderSystem.enableBlend();
 		boolean hasLayer = originLayers.size() > 0;
-		if(hasLayer) {
+		if(hasLayer && OriginsClient.isServerRunningOrigins) {
 			renderWindowBackground(matrices, 16, 0);
 			this.renderOriginContent(matrices, mouseX, mouseY);
 			this.client.getTextureManager().bindTexture(WINDOW);
@@ -111,7 +112,11 @@ public class ViewOriginScreen extends Screen {
 			Text title = new TranslatableText(Origins.MODID + ".gui.view_origin.title", new TranslatableText(originLayers.get(currentLayer).getLeft().getTranslationKey()));
 			drawCenteredString(matrices, this.textRenderer, title.getString(), width / 2, guiTop - 15, 0xFFFFFF);
 		} else {
-			drawCenteredString(matrices, this.textRenderer, new TranslatableText(Origins.MODID + ".gui.view_origin.empty").getString(), width / 2, guiTop + 15, 0xFFFFFF);
+			if(OriginsClient.isServerRunningOrigins) {
+				drawCenteredString(matrices, this.textRenderer, new TranslatableText(Origins.MODID + ".gui.view_origin.empty").getString(), width / 2, guiTop + 15, 0xFFFFFF);
+			} else {
+				drawCenteredString(matrices, this.textRenderer, new TranslatableText(Origins.MODID + ".gui.view_origin.not_installed").getString(), width / 2, guiTop + 15, 0xFFFFFF);
+			}
 		}
 		RenderSystem.disableBlend();
 	}

@@ -22,6 +22,7 @@ import net.adriantodt.fallflyinglib.FallFlyingLib;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.argument.ArgumentTypes;
 import net.minecraft.command.argument.serialize.ConstantArgumentSerializer;
 import net.minecraft.resource.ResourceType;
@@ -32,11 +33,21 @@ import org.apache.logging.log4j.Logger;
 public class Origins implements ModInitializer {
 
 	public static final String MODID = "origins";
+	public static String VERSION = "";
+	public static int[] SEMVER;
 	public static final Logger LOGGER = LogManager.getLogger(Origins.class);
 
 	@Override
 	public void onInitialize() {
-		LOGGER.info("Origins is initializing. Have fun!");
+		FabricLoader.getInstance().getModContainer(MODID).ifPresent(modContainer -> {
+			VERSION = modContainer.getMetadata().getVersion().getFriendlyString();
+			String[] splitVersion = VERSION.split("\\.");
+			SEMVER = new int[splitVersion.length];
+			for(int i = 0; i < SEMVER.length; i++) {
+				SEMVER[i] = Integer.parseInt(splitVersion[i]);
+			}
+		});
+		LOGGER.info("Origins " + VERSION + " is initializing. Have fun!");
 		ModBlocks.register();
 		ModItems.register();
 		ModTags.register();
