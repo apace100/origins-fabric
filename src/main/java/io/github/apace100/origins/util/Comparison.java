@@ -5,12 +5,12 @@ import java.util.function.BiFunction;
 public enum Comparison {
 
     NONE("", (a, b) -> false),
-    EQUAL("==", (a, b) -> a == b),
+    EQUAL("==", (a, b) -> a.equals(b)),
     LESS_THAN("<", (a, b) -> a < b),
     GREATER_THAN(">", (a, b) -> a > b),
     LESS_THAN_OR_EQUAL("<=", (a, b) -> a <= b),
     GREATER_THAN_OR_EQUAL(">=", (a, b) -> a >= b),
-    NOT_EQUAL("!=", (a, b) -> a != b);
+    NOT_EQUAL("!=", (a, b) -> !a.equals(b));
 
     private final String comparisonString;
     private final BiFunction<Double, Double, Boolean> comparison;

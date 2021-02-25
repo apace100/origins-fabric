@@ -213,7 +213,7 @@ public class PlayerConditions {
                         player.world.getServer(),
                         player);
                     int output = server.getCommandManager().execute(source, data.getString("command"));
-                    return ((Comparison)data.get("comparison")).compare(output, data.getDouble("compare_to"));
+                    return ((Comparison)data.get("comparison")).compare(output, data.getInt("compare_to"));
                 }
                 return false;
             }));
