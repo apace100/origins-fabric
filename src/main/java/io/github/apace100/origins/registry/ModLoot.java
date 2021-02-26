@@ -1,5 +1,8 @@
 package io.github.apace100.origins.registry;
 
+import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.util.OriginLootCondition;
+import io.github.apace100.origins.util.PowerLootCondition;
 import net.fabricmc.fabric.api.loot.v1.FabricLootPoolBuilder;
 import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
 import net.minecraft.enchantment.Enchantment;
@@ -7,11 +10,15 @@ import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Items;
 import net.minecraft.loot.ConstantLootTableRange;
+import net.minecraft.loot.condition.LootCondition;
+import net.minecraft.loot.condition.LootConditionType;
 import net.minecraft.loot.entry.EmptyEntry;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.function.SetNbtLootFunction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.JsonSerializer;
+import net.minecraft.util.registry.Registry;
 
 public class ModLoot {
 
@@ -20,7 +27,14 @@ public class ModLoot {
     private static final Identifier MINESHAFT = new Identifier("minecraft", "chests/abandoned_mineshaft");
     private static final Identifier WATER_RUIN = new Identifier("minecraft", "chests/underwater_ruin_small");
 
-    public static void register() {
+    public static final LootConditionType ORIGIN_LOOT_CONDITION = registerLootCondition("origin", new OriginLootCondition.Serializer());
+    public static final LootConditionType POWER_LOOT_CONDITION = registerLootCondition("power", new PowerLootCondition.Serializer());
+
+    private static LootConditionType registerLootCondition(String path, JsonSerializer<? extends LootCondition> serializer) {
+        return Registry.register(Registry.LOOT_CONDITION_TYPE, Origins.identifier(path), new LootConditionType(serializer));
+    }
+
+    public static void registerLootTables() {
         CompoundTag waterProtectionLevel1 = createEnchantmentTag(ModEnchantments.WATER_PROTECTION, 1);
         CompoundTag waterProtectionLevel2 = createEnchantmentTag(ModEnchantments.WATER_PROTECTION, 2);
         CompoundTag waterProtectionLevel3 = createEnchantmentTag(ModEnchantments.WATER_PROTECTION, 3);

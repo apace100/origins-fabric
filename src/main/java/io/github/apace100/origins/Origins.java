@@ -54,7 +54,7 @@ public class Origins implements ModInitializer {
 		ModPacketsC2S.register();
 		ModEnchantments.register();
 		ModEntities.register();
-		ModLoot.register();
+		ModLoot.registerLootTables();
 		PowerFactories.register();
 		PlayerConditions.register();
 		ItemConditions.register();
