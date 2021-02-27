@@ -39,7 +39,7 @@ public class OriginsConfig implements ConfigData {
             try {
                 t = super.deserialize();
             } catch(Exception e) {
-                Origins.LOGGER.error("Failed reading config (creating default): " + e.getMessage());
+                Origins.LOGGER.error("Failed reading config (re-creating default): " + e.getMessage());
                 return super.createDefault();
             }
             return t;
