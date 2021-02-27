@@ -56,7 +56,7 @@ public class Origins implements ModInitializer {
 		ModEntities.register();
 		ModLoot.registerLootTables();
 		PowerFactories.register();
-		PlayerConditions.register();
+		EntityConditions.register();
 		ItemConditions.register();
 		BlockConditions.register();
 		DamageConditions.register();

@@ -55,7 +55,7 @@ public class EntityActions {
                 }
             }));
         register(new ActionFactory<>(Origins.identifier("if_else"), new SerializableData()
-            .add("condition", SerializableDataType.PLAYER_CONDITION)
+            .add("condition", SerializableDataType.ENTITY_CONDITION)
             .add("if_action", SerializableDataType.ENTITY_ACTION)
             .add("else_action", SerializableDataType.ENTITY_ACTION, null),
             (data, entity) -> {

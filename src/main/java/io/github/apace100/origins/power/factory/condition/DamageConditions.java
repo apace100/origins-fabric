@@ -7,6 +7,7 @@ import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.ProjectileDamageSource;
 import net.minecraft.util.Pair;
@@ -46,6 +47,17 @@ public class DamageConditions {
                 if(dmg.getLeft() instanceof ProjectileDamageSource) {
                     Entity projectile = ((ProjectileDamageSource)dmg.getLeft()).getSource();
                     if(projectile != null && (!data.isPresent("projectile") || projectile.getType() == (EntityType<?>)data.get("projectile"))) {
+                        return true;
+                    }
+                }
+                return false;
+            }));
+        register(new ConditionFactory<>(Origins.identifier("attacker"), new SerializableData()
+            .add("entity_condition", SerializableDataType.ENTITY_CONDITION, null),
+            (data, dmg) -> {
+                Entity attacker = dmg.getLeft().getAttacker();
+                if(attacker instanceof LivingEntity) {
+                    if(!data.isPresent("entity_condition") || ((ConditionFactory<LivingEntity>.Instance)data.get("entity_condition")).test((LivingEntity)attacker)) {
                         return true;
                     }
                 }

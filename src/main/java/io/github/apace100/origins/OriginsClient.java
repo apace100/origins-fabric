@@ -4,7 +4,7 @@ import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.networking.ModPacketsS2C;
 import io.github.apace100.origins.power.Active;
-import io.github.apace100.origins.power.factory.condition.PlayerConditionsClient;
+import io.github.apace100.origins.power.factory.condition.EntityConditionsClient;
 import io.github.apace100.origins.registry.ModBlocks;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModEntities;
@@ -49,7 +49,7 @@ public class OriginsClient implements ClientModInitializer {
 
         ModPacketsS2C.register();
 
-        PlayerConditionsClient.register();
+        EntityConditionsClient.register();
 
         AutoConfig.register(OriginsConfig.class, OriginsConfig.Serializer::new);
         config = AutoConfig.getConfigHolder(OriginsConfig.class).getConfig();

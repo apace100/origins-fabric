@@ -26,16 +26,12 @@ import io.github.apace100.origins.power.factory.condition.ConditionTypes;
 import net.minecraft.block.Block;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityGroup;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
@@ -226,11 +222,11 @@ public class SerializableDataType<T> {
 
     public static final SerializableDataType<Space> SPACE = SerializableDataType.enumValue(Space.class);
 
-    public static final SerializableDataType<ConditionFactory<PlayerEntity>.Instance> PLAYER_CONDITION =
-        SerializableDataType.condition(ClassUtil.castClass(ConditionFactory.Instance.class), ConditionTypes.PLAYER);
+    public static final SerializableDataType<ConditionFactory<LivingEntity>.Instance> ENTITY_CONDITION =
+        SerializableDataType.condition(ClassUtil.castClass(ConditionFactory.Instance.class), ConditionTypes.ENTITY);
 
-    public static final SerializableDataType<List<ConditionFactory<PlayerEntity>.Instance>> PLAYER_CONDITIONS =
-        SerializableDataType.list(PLAYER_CONDITION);
+    public static final SerializableDataType<List<ConditionFactory<LivingEntity>.Instance>> ENTITY_CONDITIONS =
+        SerializableDataType.list(ENTITY_CONDITION);
 
     public static final SerializableDataType<ConditionFactory<ItemStack>.Instance> ITEM_CONDITION =
         SerializableDataType.condition(ClassUtil.castClass(ConditionFactory.Instance.class), ConditionTypes.ITEM);

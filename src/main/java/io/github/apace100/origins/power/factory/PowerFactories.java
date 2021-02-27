@@ -352,7 +352,7 @@ public class PowerFactories {
                 .add("blacklist", SerializableDataType.BOOLEAN, false)
                 .add("render_type", SerializableDataType.enumValue(PhasingPower.RenderType.class), PhasingPower.RenderType.BLINDNESS)
                 .add("view_distance", SerializableDataType.FLOAT, 10F)
-                .add("phase_down_condition", SerializableDataType.PLAYER_CONDITION, null),
+                .add("phase_down_condition", SerializableDataType.ENTITY_CONDITION, null),
             data ->
                 (type, player) ->
                     new PhasingPower(type, player, data.isPresent("block_condition") ? (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition") : cbp -> true,

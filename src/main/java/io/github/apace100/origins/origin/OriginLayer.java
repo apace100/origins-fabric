@@ -8,6 +8,7 @@ import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -220,10 +221,10 @@ public class OriginLayer implements Comparable<OriginLayer> {
     }
 
     public static class ConditionedOrigin {
-        private final ConditionFactory<PlayerEntity>.Instance condition;
+        private final ConditionFactory<LivingEntity>.Instance condition;
         private final List<Identifier> origins;
 
-        public ConditionedOrigin(ConditionFactory<PlayerEntity>.Instance condition, List<Identifier> origins) {
+        public ConditionedOrigin(ConditionFactory<LivingEntity>.Instance condition, List<Identifier> origins) {
             this.condition = condition;
             this.origins = origins;
         }
@@ -236,7 +237,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
             return origins;
         }
         private static final SerializableData conditionedOriginObjectData = new SerializableData()
-            .add("condition", SerializableDataType.PLAYER_CONDITION)
+            .add("condition", SerializableDataType.ENTITY_CONDITION)
             .add("origins", SerializableDataType.IDENTIFIERS);
 
         public void write(PacketByteBuf buffer) {
@@ -249,9 +250,9 @@ public class OriginLayer implements Comparable<OriginLayer> {
 
         @Environment(EnvType.CLIENT)
         public static ConditionedOrigin read(PacketByteBuf buffer) {
-            ConditionFactory<PlayerEntity>.Instance condition = null;
+            ConditionFactory<LivingEntity>.Instance condition = null;
             if(buffer.readBoolean()) {
-                condition = ConditionTypes.PLAYER.read(buffer);
+                condition = ConditionTypes.ENTITY.read(buffer);
             }
             int originCount = buffer.readInt();
             List<Identifier> originList = new ArrayList<>(originCount);
@@ -271,7 +272,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
                 throw new JsonParseException("Expected origin in layer to be either a string or an object.");
             } else if(element.isJsonObject()) {
                 SerializableData.Instance data = conditionedOriginObjectData.read(element.getAsJsonObject());
-                return new ConditionedOrigin((ConditionFactory<PlayerEntity>.Instance)data.get("condition"), (List<Identifier>)data.get("origins"));
+                return new ConditionedOrigin((ConditionFactory<LivingEntity>.Instance)data.get("condition"), (List<Identifier>)data.get("origins"));
             }
             throw new JsonParseException("Expected origin in layer to be either a string or an object.");
         }
