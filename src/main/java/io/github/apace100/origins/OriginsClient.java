@@ -13,7 +13,6 @@ import io.github.apace100.origins.screen.ViewOriginScreen;
 import io.github.apace100.origins.util.OriginsConfig;
 import io.netty.buffer.Unpooled;
 import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
-import me.sargunvohra.mcmods.autoconfig1u.serializer.Toml4jConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -52,7 +51,7 @@ public class OriginsClient implements ClientModInitializer {
 
         PlayerConditionsClient.register();
 
-        AutoConfig.register(OriginsConfig.class, Toml4jConfigSerializer::new);
+        AutoConfig.register(OriginsConfig.class, OriginsConfig.Serializer::new);
         config = AutoConfig.getConfigHolder(OriginsConfig.class).getConfig();
 
         usePrimaryActivePowerKeybind = new KeyBinding("key.origins.primary_active", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_G, "category." + Origins.MODID);
