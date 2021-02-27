@@ -438,7 +438,14 @@ public class SerializableDataType<T> {
         return new SerializableDataType<>(dataClass,
             (buf, t) -> buf.writeIdentifier(registry.getId(t)),
             (buf) -> registry.get(buf.readIdentifier()),
-            (json) -> registry.get(Identifier.tryParse(json.getAsString())));
+            (json) -> {
+                Identifier id = Identifier.tryParse(json.getAsString());
+                if(!registry.getIds().contains(id)) {
+                    throw new RuntimeException(
+                        "Identifier \"" + id + "\" was not registered in registry \"" + registry.getKey().getValue() + "\".");
+                }
+                return registry.get(id);
+            });
     }
 
     public static <T> SerializableDataType<T> compound(Class<T> dataClass, SerializableData data, Function<SerializableData.Instance, T> toInstance, BiFunction<SerializableData, T, SerializableData.Instance> toData) {
