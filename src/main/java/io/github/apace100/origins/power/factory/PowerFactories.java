@@ -9,10 +9,7 @@ import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.util.*;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityGroup;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
@@ -28,10 +25,13 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Pair;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.StructureFeature;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -302,10 +302,11 @@ public class PowerFactories {
         register(new PowerFactory<>(Origins.identifier("modify_jump"),
             new SerializableData()
                 .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
-                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null),
+                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null)
+                .add("entity_action", SerializableDataType.ENTITY_ACTION, null),
             data ->
                 (type, player) -> {
-                    ModifyJumpPower power = new ModifyJumpPower(type, player);
+                    ModifyJumpPower power = new ModifyJumpPower(type, player, (ActionFactory<Entity>.Instance)data.get("entity_action"));
                     if(data.isPresent("modifier")) {
                         power.addModifier(data.getModifier("modifier"));
                     }
@@ -725,6 +726,19 @@ public class PowerFactories {
                     }
                     return power;
                 })
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("action_on_block_break"),
+            new SerializableData()
+                .add("entity_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("block_action", SerializableDataType.BLOCK_ACTION, null)
+                .add("block_condition", SerializableDataType.BLOCK_CONDITION, null)
+                .add("only_when_harvested", SerializableDataType.BOOLEAN, true),
+            data ->
+                (type, player) -> new ActionOnBlockBreakPower(type, player,
+                    (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
+                    (ActionFactory<Triple<World, BlockPos, Direction>>.Instance)data.get("block_action"),
+                    data.getBoolean("only_when_harvested")))
             .allowCondition());
     }
 
