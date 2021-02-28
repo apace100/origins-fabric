@@ -539,6 +539,24 @@ public class PowerFactories {
                     }
                     return ap;
                 }).allowCondition());
+        register(new PowerFactory<>(Origins.identifier("ticked_action"),
+            new SerializableData()
+                .add("tick_rate", SerializableDataType.INT, 20)
+                .add("entity_action", SerializableDataType.ENTITY_ACTION, null),
+            data ->
+                (type, player) ->
+                    new TickedAction(type, player, data.getInt("tick_rate"), (ActionFactory<Entity>.Instance)data.get("entity_action")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("ticked_action_on_change"),
+            new SerializableData()
+                .add("tick_rate", SerializableDataType.INT, 20)
+                .add("rising_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("falling_action", SerializableDataType.ENTITY_ACTION, null),
+            data ->
+                (type, player) ->
+                    new TickedActionOnChange(type, player, data.getInt("tick_rate"),
+                        (ActionFactory<Entity>.Instance)data.get("rising_action"), (ActionFactory<Entity>.Instance)data.get("falling_action")))
+            .allowCondition()); 
         register(new PowerFactory<>(Origins.identifier("active_self"),
             new SerializableData()
                 .add("entity_action", SerializableDataType.ENTITY_ACTION)
