@@ -19,6 +19,7 @@ public class Power {
     private List<Predicate<PlayerEntity>> conditions;
 
     public Power(PowerType<?> type, PlayerEntity player) {
+        this.type = type;
         this.player = player;
         this.conditions = new LinkedList<>();
     }

@@ -7,6 +7,9 @@ import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.Active;
+import io.github.apace100.origins.power.Power;
+import io.github.apace100.origins.power.PowerType;
+import io.github.apace100.origins.power.PowerTypeRegistry;
 import io.github.apace100.origins.registry.ModComponents;
 import net.fabricmc.fabric.api.networking.v1.*;
 import net.minecraft.network.PacketByteBuf;
@@ -28,7 +31,25 @@ public class ModPacketsC2S {
         ServerLoginNetworking.registerGlobalReceiver(ModPackets.HANDSHAKE, ModPacketsC2S::handleHandshakeReply);
         ServerPlayNetworking.registerGlobalReceiver(ModPackets.CHOOSE_ORIGIN, ModPacketsC2S::chooseOrigin);
         ServerPlayNetworking.registerGlobalReceiver(ModPackets.CHOOSE_RANDOM_ORIGIN, ModPacketsC2S::chooseRandomOrigin);
-        ServerPlayNetworking.registerGlobalReceiver(ModPackets.USE_ACTIVE_POWER, ModPacketsC2S::useActivePower);
+        ServerPlayNetworking.registerGlobalReceiver(ModPackets.USE_ACTIVE_POWERS, ModPacketsC2S::useActivePowers);
+    }
+
+    private static void useActivePowers(MinecraftServer minecraftServer, ServerPlayerEntity playerEntity, ServerPlayNetworkHandler serverPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
+        int count = packetByteBuf.readInt();
+        Identifier[] powerIds = new Identifier[count];
+        for(int i = 0; i < count; i++) {
+            powerIds[i] = packetByteBuf.readIdentifier();
+        }
+        minecraftServer.execute(() -> {
+            OriginComponent component = ModComponents.ORIGIN.get(playerEntity);
+            for(Identifier id : powerIds) {
+                PowerType<?> type = PowerTypeRegistry.get(id);
+                Power power = component.getPower(type);
+                if(power instanceof Active && power.isActive()) {
+                    ((Active)power).onUse();
+                }
+            }
+        });
     }
 
     private static void chooseOrigin(MinecraftServer minecraftServer, ServerPlayerEntity playerEntity, ServerPlayNetworkHandler serverPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
@@ -95,16 +116,6 @@ public class ModPacketsC2S {
                 component.sync();
             } else {
                 Origins.LOGGER.warn("Player " + playerEntity.getDisplayName().asString() + " tried to choose origin for layer " + layerId + " while having one already.");
-            }
-        });
-    }
-
-    private static void useActivePower(MinecraftServer minecraftServer, ServerPlayerEntity playerEntity, ServerPlayNetworkHandler serverPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
-        Active.KeyType keyType = Active.KeyType.values()[packetByteBuf.readInt()];
-        minecraftServer.execute(() -> {
-            OriginComponent component = ModComponents.ORIGIN.get(playerEntity);
-            if(component.hasAllOrigins()) {
-                component.getPowers().stream().filter(p -> p instanceof Active && ((Active)p).getKey() == keyType).forEach(p -> ((Active)p).onUse());
             }
         });
     }

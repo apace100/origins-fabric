@@ -3,8 +3,8 @@ package io.github.apace100.origins.power;
 public interface Active {
 
     void onUse();
-    KeyType getKey();
-    void setKey(KeyType type);
+    String getKey();
+    void setKey(String key);
 
     enum KeyType {
         PRIMARY, SECONDARY

@@ -23,15 +23,15 @@ public class ActiveCooldownPower extends CooldownPower implements Active {
         }
     }
 
-    private KeyType keyType;
+    private String key;
 
     @Override
-    public KeyType getKey() {
-        return keyType;
+    public String getKey() {
+        return key;
     }
 
     @Override
-    public void setKey(KeyType type) {
-        keyType = type;
+    public void setKey(String key) {
+        this.key = key;
     }
 }

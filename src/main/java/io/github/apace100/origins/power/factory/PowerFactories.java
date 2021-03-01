@@ -47,11 +47,11 @@ public class PowerFactories {
         register(new PowerFactory<>(Origins.identifier("toggle"),
             new SerializableData()
                 .add("active_by_default", SerializableDataType.BOOLEAN, true)
-                .add("key", SerializableDataType.ACTIVE_KEY_TYPE, Active.KeyType.PRIMARY),
+                .add("key", SerializableDataType.STRING, "primary"),
             data ->
                 (type, player) -> {
                     TogglePower power = new TogglePower(type, player, data.getBoolean("active_by_default"));
-                    power.setKey((Active.KeyType)data.get("key"));
+                    power.setKey(data.getString("key"));
                     return power;
                 })
             .allowCondition());
@@ -132,7 +132,7 @@ public class PowerFactories {
                 .add("entity_type", SerializableDataType.ENTITY_TYPE)
                 .add("hud_render", SerializableDataType.HUD_RENDER)
                 .add("tag", SerializableDataType.NBT, null)
-                .add("key", SerializableDataType.ACTIVE_KEY_TYPE, Active.KeyType.PRIMARY),
+                .add("key", SerializableDataType.STRING, "primary"),
             data ->
                 (type, player) -> {
                     FireProjectilePower power = new FireProjectilePower(type, player,
@@ -144,7 +144,7 @@ public class PowerFactories {
                         data.getFloat("divergence"),
                         (SoundEvent)data.get("sound"),
                         (CompoundTag)data.get("tag"));
-                    power.setKey((Active.KeyType)data.get("key"));
+                    power.setKey(data.getString("key"));
                     return power;
                 })
             .allowCondition());
@@ -153,14 +153,14 @@ public class PowerFactories {
                 .add("name", SerializableDataType.STRING, "container.inventory")
                 .add("drop_on_death", SerializableDataType.BOOLEAN, false)
                 .add("drop_on_death_filter", SerializableDataType.ITEM_CONDITION, null)
-                .add("key", SerializableDataType.ACTIVE_KEY_TYPE, Active.KeyType.PRIMARY),
+                .add("key", SerializableDataType.STRING, "primary"),
             data ->
                 (type, player) -> {
                     InventoryPower power = new InventoryPower(type, player, data.getString("name"), 9,
                         data.getBoolean("drop_on_death"),
                         data.isPresent("drop_on_death_filter") ? (ConditionFactory<ItemStack>.Instance) data.get("drop_on_death_filter") :
                             itemStack -> true);
-                    power.setKey((Active.KeyType)data.get("key"));
+                    power.setKey(data.getString("key"));
                     return power;
                 })
             .allowCondition());
@@ -186,7 +186,7 @@ public class PowerFactories {
                 .add("speed", SerializableDataType.FLOAT)
                 .add("sound", SerializableDataType.SOUND_EVENT, null)
                 .add("hud_render", SerializableDataType.HUD_RENDER)
-                .add("key", SerializableDataType.ACTIVE_KEY_TYPE, Active.KeyType.PRIMARY),
+                .add("key", SerializableDataType.STRING, "primary"),
             data -> {
                 SoundEvent soundEvent = (SoundEvent)data.get("sound");
                 return (type, player) -> {
@@ -206,7 +206,7 @@ public class PowerFactories {
                                 }
                             }
                         });
-                    power.setKey((Active.KeyType)data.get("key"));
+                    power.setKey(data.getString("key"));
                     return power;
                 };
             }).allowCondition());
@@ -470,11 +470,11 @@ public class PowerFactories {
             new SerializableData()
                 .add("active_by_default", SerializableDataType.BOOLEAN, false)
                 .add("strength", SerializableDataType.FLOAT, 1.0F)
-                .add("key", SerializableDataType.ACTIVE_KEY_TYPE, Active.KeyType.PRIMARY),
+                .add("key", SerializableDataType.STRING, "primary"),
             data ->
                 (type, player) -> {
                     ToggleNightVisionPower power = new ToggleNightVisionPower(type, player, data.getFloat("strength"), data.getBoolean("active_by_default"));
-                    power.setKey((Active.KeyType)data.get("key"));
+                    power.setKey(data.getString("key"));
                     return power;
                 })
             .allowCondition());
@@ -547,12 +547,12 @@ public class PowerFactories {
                 .add("entity_action", SerializableDataType.ENTITY_ACTION)
                 .add("cooldown", SerializableDataType.INT)
                 .add("hud_render", SerializableDataType.HUD_RENDER)
-                .add("key", SerializableDataType.ACTIVE_KEY_TYPE, Active.KeyType.PRIMARY),
+                .add("key", SerializableDataType.STRING, "primary"),
             data ->
                 (type, player) -> {
                     ActiveCooldownPower power = new ActiveCooldownPower(type, player, data.getInt("cooldown"), (HudRender)data.get("hud_render"),
                         (ActionFactory<Entity>.Instance)data.get("entity_action"));
-                    power.setKey((Active.KeyType)data.get("key"));
+                    power.setKey(data.getString("key"));
                     return power;
                 })
             .allowCondition());
