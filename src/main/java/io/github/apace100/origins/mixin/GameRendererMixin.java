@@ -13,6 +13,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
@@ -56,6 +57,8 @@ public abstract class GameRendererMixin {
 
     @Shadow protected abstract void loadShader(Identifier identifier);
 
+    @Shadow private ShaderEffect shader;
+    @Shadow private boolean shadersEnabled;
     @Unique
     private Identifier currentlyLoadedShader;
 
@@ -77,6 +80,12 @@ public abstract class GameRendererMixin {
                 currentlyLoadedShader = shaderLoc;
             }
         });
+        if(!OriginComponent.hasPower(client.getCameraEntity(), ShaderPower.class) && currentlyLoadedShader != null) {
+            this.shader.close();
+            this.shader = null;
+            this.shadersEnabled = false;
+            currentlyLoadedShader = null;
+        }
     }
 
     @Inject(
@@ -86,25 +95,30 @@ public abstract class GameRendererMixin {
     private void fixHudWithShaderEnabled(float tickDelta, long nanoTime, boolean renderLevel, CallbackInfo info) {
         RenderSystem.enableTexture();
     }
-
+/*
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setCameraEntity(Lnet/minecraft/entity/Entity;)V"))
     private void updateShaderPowers(CallbackInfo ci) {
-        OriginComponent.withPower(client.getCameraEntity(), ShaderPower.class, null, shaderPower -> {
-            Identifier shaderLoc = shaderPower.getShaderLocation();
-            loadShader(shaderLoc);
-            currentlyLoadedShader = shaderLoc;
-        });
-    }
+        if(OriginComponent.hasPower(client.getCameraEntity(), ShaderPower.class)) {
+            OriginComponent.withPower(client.getCameraEntity(), ShaderPower.class, null, shaderPower -> {
+                Identifier shaderLoc = shaderPower.getShaderLocation();
+                loadShader(shaderLoc);
+                currentlyLoadedShader = shaderLoc;
+            });
+        } else {
+            this.shader.close();
+            this.shader = null;
+            this.shadersEnabled = false;
+            currentlyLoadedShader = null;
+        }
+    }*/
 
     // NightVisionPower
     @Inject(at = @At("HEAD"), method = "getNightVisionStrength", cancellable = true)
     private static void getNightVisionStrength(LivingEntity livingEntity, float f, CallbackInfoReturnable<Float> info) {
-        if (livingEntity != null && livingEntity instanceof PlayerEntity && !livingEntity.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
+        if (livingEntity instanceof PlayerEntity && !livingEntity.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
             List<NightVisionPower> nvs = ModComponents.ORIGIN.get(livingEntity).getPowers(NightVisionPower.class);
             Optional<Float> strength = nvs.stream().filter(NightVisionPower::isActive).map(NightVisionPower::getStrength).max(Float::compareTo);
-            if(strength.isPresent()) {
-                info.setReturnValue(strength.get());
-            }
+            strength.ifPresent(info::setReturnValue);
         }
     }
 

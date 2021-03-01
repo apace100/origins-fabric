@@ -47,8 +47,8 @@ public interface OriginComponent extends AutoSyncedComponent, ServerTickingCompo
 
 	static <T extends Power> void withPower(Entity entity, Class<T> powerClass, Predicate<T> power, Consumer<T> with) {
 		if(entity instanceof PlayerEntity) {
-			Optional<Power> optional = ModComponents.ORIGIN.get(entity).getPowers().stream().filter(p -> powerClass.isAssignableFrom(p.getClass()) && (power == null || power.test((T)p))).findAny();
-			optional.ifPresent(p -> with.accept((T)p));
+			Optional<T> optional = ModComponents.ORIGIN.get(entity).getPowers(powerClass).stream().filter(p -> power == null || power.test(p)).findAny();
+			optional.ifPresent(with);
 		}
 	}
 
