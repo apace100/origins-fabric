@@ -241,11 +241,13 @@ public class PowerFactories {
             new SerializableData()
                 .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
                 .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
-                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null),
+                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null)
+                .add("target_condition", SerializableDataType.ENTITY_CONDITION, null),
             data ->
                 (type, player) -> {
                     ModifyDamageDealtPower power = new ModifyDamageDealtPower(type, player,
-                        data.isPresent("damage_condition") ? (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition") : dmg -> true);
+                        data.isPresent("damage_condition") ? (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition") : dmg -> true,
+                        (ConditionFactory<LivingEntity>.Instance)data.get("target_condition"));
                     if(data.isPresent("modifier")) {
                         power.addModifier(data.getModifier("modifier"));
                     }
