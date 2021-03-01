@@ -24,6 +24,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
+import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.CommandOutput;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -273,6 +279,47 @@ public class EntityConditions {
         register(new ConditionFactory<>(Origins.identifier("entity_type"), new SerializableData()
             .add("entity_type", SerializableDataType.ENTITY_TYPE),
             (data, entity) -> entity.getType() == data.get("entity_type")));
+        register(new ConditionFactory<>(Origins.identifier("scoreboard"), new SerializableData()
+            .add("objective", SerializableDataType.STRING)
+            .add("comparison", SerializableDataType.COMPARISON)
+            .add("compare_to", SerializableDataType.INT),
+            (data, entity) -> {
+                if(entity instanceof PlayerEntity) {
+                    PlayerEntity player = (PlayerEntity)entity;
+                    Scoreboard scoreboard = player.getScoreboard();
+                    ScoreboardObjective objective = scoreboard.getObjective(data.getString("objective"));
+                    String playerName = player.getName().asString();
+
+                    if (scoreboard.playerHasObjective(playerName, objective)) {
+                        int value = scoreboard.getPlayerScore(playerName, objective).getScore();
+                        return ((Comparison)data.get("comparison")).compare(value, data.getInt("compare_to"));
+                    }
+                }
+                return false;
+            }));
+        register(new ConditionFactory<>(Origins.identifier("command"), new SerializableData()
+            .add("command", SerializableDataType.STRING)
+            .add("permission_level", SerializableDataType.INT, 4)
+            .add("comparison", SerializableDataType.COMPARISON)
+            .add("compare_to", SerializableDataType.INT),
+            (data, entity) -> {
+                MinecraftServer server = entity.world.getServer();
+                if(server != null) {
+                    ServerCommandSource source = new ServerCommandSource(
+                        CommandOutput.DUMMY,
+                        entity.getPos(),
+                        entity.getRotationClient(),
+                        entity.world instanceof ServerWorld ? (ServerWorld)entity.world : null,
+                        data.getInt("permission_level"),
+                        entity.getName().getString(),
+                        entity.getDisplayName(),
+                        server,
+                        entity);
+                    int output = server.getCommandManager().execute(source, data.getString("command"));
+                    return ((Comparison)data.get("comparison")).compare(output, data.getInt("compare_to"));
+                }
+                return false;
+            }));
     }
 
     private static void register(ConditionFactory<LivingEntity> conditionFactory) {
