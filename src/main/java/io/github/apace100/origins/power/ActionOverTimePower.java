@@ -2,6 +2,8 @@ package io.github.apace100.origins.power;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.ByteTag;
+import net.minecraft.nbt.Tag;
 
 import java.util.function.Consumer;
 
@@ -40,5 +42,15 @@ public class ActionOverTimePower extends Power {
                 wasActive = false;
             }
         }
+    }
+
+    @Override
+    public Tag toTag() {
+        return ByteTag.of(wasActive);
+    }
+
+    @Override
+    public void fromTag(Tag tag) {
+        wasActive = tag.equals(ByteTag.ONE);
     }
 }
