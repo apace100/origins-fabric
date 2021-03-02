@@ -24,6 +24,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.condition.LootCondition;
+import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.loot.context.LootContextTypes;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.server.MinecraftServer;
@@ -320,6 +324,22 @@ public class EntityConditions {
                 }
                 return false;
             }));
+        register(new ConditionFactory<>(Origins.identifier("predicate"), new SerializableData()
+            .add("predicate", SerializableDataType.IDENTIFIER),
+            (data, entity) -> {
+                MinecraftServer server = entity.world.getServer();
+                if (server != null) {
+                    LootCondition lootCondition = server.getPredicateManager().get((Identifier) data.get("predicate"));
+                    if (lootCondition != null) {
+                        LootContext.Builder lootBuilder = (new LootContext.Builder((ServerWorld) entity.world))
+                            .parameter(LootContextParameters.ORIGIN, entity.getPos())
+                            .optionalParameter(LootContextParameters.THIS_ENTITY, entity);
+                        return lootCondition.test(lootBuilder.build(LootContextTypes.COMMAND));
+                    }
+                }
+                return false;
+            }
+        ));
     }
 
     private static void register(ConditionFactory<LivingEntity> conditionFactory) {
