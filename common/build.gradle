@@ -16,6 +16,11 @@ architectury {
 	common()
 }
 
+dependencies {
+	minecraft("com.mojang:minecraft:${rootProject.architectury.minecraft}")
+	mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}"
+}
+
 java {
 	withSourcesJar()
 }

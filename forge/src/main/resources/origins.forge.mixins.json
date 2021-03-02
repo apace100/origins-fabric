@@ -5,8 +5,7 @@
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
 		"EnderianPearlEntityMixin",
-		"ForgeHooksMixin",
-		"LivingEntityMixin"
+		"ForgeHooksMixin"
 	],
 	"client": [
 		"BackgroundRendererMixin",

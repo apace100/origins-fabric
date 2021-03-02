@@ -36,3 +36,10 @@ mandatory=true
 versionRange="[1.8.128,)"
 ordering="NONE"
 side="BOTH"
+
+[[dependencies.origins]]
+modId="caelus"
+mandatory=true
+versionRange="[1.16.5-2.1.1.0,)"
+ordering="NONE"
+side="BOTH"

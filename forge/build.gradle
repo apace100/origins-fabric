@@ -4,6 +4,7 @@ plugins {
 
 configurations {
 	shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+	dev
 }
 
 architectury {
@@ -23,14 +24,22 @@ loom {
 	}
 }
 
+repositories {
+	maven { url 'https://maven.theillusivec4.top' }
+}
+
 if (rootProject.file("run/log4j.xml").exists())
 	loom.log4jConfigs.from(rootProject.file("run/log4j.xml"))
 
 dependencies {
+	minecraft("com.mojang:minecraft:${rootProject.architectury.minecraft}")
+	mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}"
 	forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
 	// Remove the next line if you don't want to depend on the API
 	modApi "me.shedaniel:architectury-forge:${rootProject.architectury_version}"
 	modApi "me.shedaniel.cloth:cloth-config-forge:${rootProject.clothconfig_version}"
+	modApi "top.theillusivec4.caelus:caelus-forge:${rootProject.caelus_forge_version}"
+
 
 	implementation(project(path: ":common")) {
 		transitive = false

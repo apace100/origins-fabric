@@ -22,7 +22,6 @@ import java.util.Random;
 public class ModPacketsC2S {
 
     public static void register() {
-        //TODO Handshake
         NetworkManager.registerReceiver(NetworkManager.c2s(), ModPackets.CHOOSE_ORIGIN, ModPacketsC2S::chooseOrigin);
         NetworkManager.registerReceiver(NetworkManager.c2s(), ModPackets.CHOOSE_RANDOM_ORIGIN, ModPacketsC2S::chooseRandomOrigin);
         NetworkManager.registerReceiver(NetworkManager.c2s(), ModPackets.USE_ACTIVE_POWER, ModPacketsC2S::useActivePower);
