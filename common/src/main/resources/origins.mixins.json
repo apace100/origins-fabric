@@ -1,0 +1,37 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "io.github.apace100.origins.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "AbstractBlockStateMixin",
+    "ArmorItemMixin",
+    "ConduitBlockEntityMixin",
+    "CreeperEntityMixin",
+    "EntityMixin",
+    "EntityShapeContextMixin",
+    "ExperienceOrbEntityMixin",
+    "HungerManagerMixin",
+    "LivingEntityMixin",
+    "LoginMixin",
+    "PlayerAdvancementTrackerMixin",
+    "PlayerEntityMixin",
+    "PlayerScreenHandlerMixin",
+    "PotionItemMixin",
+    "ServerPlayerEntityMixin",
+    "ServerPlayNetworkHandlerMixin",
+    "WeightedListEntryAccessor"
+  ],
+  "client": [
+    "BackgroundRendererMixin",
+    "ClientPlayerEntityMixin",
+    "GameRendererMixin",
+    "InGameOverlayRendererMixin",
+    "LightmapTextureManagerMixin",
+    "LivingEntityRendererMixin",
+    "PlayerEntityRendererMixin"
+  ]
+}

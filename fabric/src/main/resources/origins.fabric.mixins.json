@@ -1,0 +1,21 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "io.github.apace100.origins.mixin.fabric",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [
+		"AbstractBlockMixin",
+		"OriginLayersMixin",
+		"OriginManagerMixin",
+		"PlayerEntityMixin",
+		"PowerTypesMixin",
+		"ServerPlayerEntityMixin",
+		"ServerPlayerInteractionManagerMixin"
+	],
+	"client": [
+		"BackgroundRendererMixin",
+		"ClientPlayNetworkHandlerMixin",
+		"ConnectScreenMixin",
+		"ElytraFeatureRendererMixin"
+	]
+}

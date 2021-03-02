@@ -1,0 +1,38 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="CC0-1.0"
+
+[[mods]]
+modId="origins"
+version="${version}"
+displayName="Origins"
+# A URL to query for updates for this mod. See the JSON update specification https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/
+#updateJSONURL="https://change.me.example.invalid/updates.json" #optional
+displayURL="https://apace100.github.io/origins-fabric"
+logoFile="origins_icon.png"
+#credits=""
+authors="Apace"
+description='''
+This mod adds several origins with passive abilities to the game, which you can choose from at the beginning of the game.
+'''
+
+[[dependencies.origins]] #optional
+modId="forge" #mandatory
+mandatory=true #mandatory
+versionRange="[36,)" #mandatory
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.origins]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.16.5,1.17)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.origins]]
+modId="architectury"
+mandatory=true
+versionRange="[1.8.128,)"
+ordering="NONE"
+side="BOTH"

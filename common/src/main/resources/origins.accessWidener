@@ -1,0 +1,13 @@
+accessWidener v1 named
+accessible	field	net/minecraft/client/network/ClientPlayerInteractionManager	currentBreakingPos	Lnet/minecraft/util/math/BlockPos;
+accessible	field	net/minecraft/server/network/ServerPlayerInteractionManager	miningPos	Lnet/minecraft/util/math/BlockPos;
+accessible	field	net/minecraft/server/network/ServerPlayerInteractionManager	mining	Z
+accessible	method	net/minecraft/entity/Entity	isBeingRainedOn	()Z
+accessible	method	net/minecraft/entity/damage/DamageSource	<init>	(Ljava/lang/String;)V
+accessible	method	net/minecraft/entity/damage/DamageSource	setBypassesArmor	()Lnet/minecraft/entity/damage/DamageSource;
+accessible	method	net/minecraft/entity/damage/DamageSource	setOutOfWorld	()Lnet/minecraft/entity/damage/DamageSource;
+accessible	method	net/minecraft/entity/damage/DamageSource	setUnblockable	()Lnet/minecraft/entity/damage/DamageSource;
+accessible	method	net/minecraft/entity/damage/DamageSource	setFire	()Lnet/minecraft/entity/damage/DamageSource;
+accessible	method	net/minecraft/entity/damage/DamageSource	setUsesMagic	()Lnet/minecraft/entity/damage/DamageSource;
+accessible	method	net/minecraft/entity/LivingEntity	getEyeHeight	(Lnet/minecraft/entity/EntityPose;Lnet/minecraft/entity/EntityDimensions;)F
+accessible	field	net/minecraft/util/collection/WeightedList$Entry	weight	I

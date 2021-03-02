@@ -1,0 +1,15 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "io.github.apace100.origins.mixin.forge",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [
+		"EnderianPearlEntityMixin",
+		"ForgeHooksMixin",
+		"LivingEntityMixin"
+	],
+	"client": [
+		"BackgroundRendererMixin",
+		"ElytraFeatureRendererMixin"
+	]
+}

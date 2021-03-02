@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "id": "origins-res",
+  "version": "${version}",
+  "accessWidener": "origins.accessWidener"
+}
