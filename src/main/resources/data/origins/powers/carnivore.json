@@ -9,6 +9,13 @@
       },
       {
         "type": "origins:food"
+      },
+      {
+        "type": "origins:ingredient",
+        "ingredient": {
+          "tag": "origins:ignored_foods"
+        },
+        "inverted": true
       }
     ]
   }
