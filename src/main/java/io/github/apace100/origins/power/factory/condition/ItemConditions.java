@@ -2,6 +2,7 @@ package io.github.apace100.origins.power.factory.condition;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.registry.ModRegistries;
+import io.github.apace100.origins.registry.ModTags;
 import io.github.apace100.origins.util.Comparison;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
@@ -34,6 +35,8 @@ public class ItemConditions {
             )));
         register(new ConditionFactory<>(Origins.identifier("food"), new SerializableData(),
             (data, stack) -> stack.isFood()));
+        register(new ConditionFactory<>(Origins.identifier("meat"), new SerializableData(),
+                (data, stack) -> stack.getItem().getFoodComponent() != null && (stack.getItem().getFoodComponent().isMeat() || ModTags.EXTRA_MEATS.contains(stack.getItem()))));
         register(new ConditionFactory<>(Origins.identifier("ingredient"), new SerializableData()
             .add("ingredient", SerializableDataType.INGREDIENT),
             (data, stack) -> ((Ingredient)data.get("ingredient")).test(stack)));

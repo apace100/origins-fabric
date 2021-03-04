@@ -4,10 +4,7 @@
     "type": "origins:and",
     "conditions": [
       {
-        "type": "origins:ingredient",
-        "ingredient":{
-          "tag": "origins:meat"
-        },
+        "type": "origins:meat",
         "inverted": true
       },
       {
