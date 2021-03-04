@@ -111,15 +111,15 @@ public class InventoryPower extends Power implements Active, Inventory {
         return shouldDropOnDeath && dropOnDeathFilter.test(stack);
     }
 
-    private String key;
+    private Key key;
 
     @Override
-    public String getKey() {
+    public Key getKey() {
         return key;
     }
 
     @Override
-    public void setKey(String key) {
+    public void setKey(Key key) {
         this.key = key;
     }
 }

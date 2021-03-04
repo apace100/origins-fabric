@@ -365,13 +365,40 @@ public class SerializableDataType<T> {
 
     public static final SerializableDataType<List<Pair<Integer, ItemStack>>> POSITIONED_ITEM_STACKS = SerializableDataType.list(POSITIONED_ITEM_STACK);
 
-    public static final SerializableDataType<Active.KeyType> ACTIVE_KEY_TYPE = SerializableDataType.enumValue(Active.KeyType.class);
-
     public static SerializableDataType<RegistryKey<World>> DIMENSION = SerializableDataType.wrap(
             ClassUtil.castClass(RegistryKey.class),
             SerializableDataType.IDENTIFIER,
             RegistryKey::getValue, identifier -> RegistryKey.of(Registry.DIMENSION, identifier)
     );
+
+    public static final SerializableDataType<Active.Key> KEY = SerializableDataType.compound(Active.Key.class,
+        new SerializableData()
+            .add("key", SerializableDataType.STRING)
+            .add("continuous", SerializableDataType.BOOLEAN, false),
+        (data) ->  {
+            Active.Key key = new Active.Key();
+            key.key = data.getString("key");
+            key.continuous = data.getBoolean("continuous");
+            return key;
+        },
+        ((serializableData, key) -> {
+            SerializableData.Instance data = serializableData.new Instance();
+            data.set("key", key.key);
+            data.set("continuous", key.continuous);
+            return data;
+        }));
+
+    public static final SerializableDataType<Active.Key> BACKWARDS_COMPATIBLE_KEY = new SerializableDataType<>(Active.Key.class,
+        KEY.send, KEY.receive, jsonElement -> {
+        if(jsonElement.isJsonPrimitive() && jsonElement.getAsJsonPrimitive().isString()) {
+            String keyString = jsonElement.getAsString();
+            Active.Key key = new Active.Key();
+            key.key = keyString.equals("secondary") ? "key.origins.secondary_active" : "key.origins.primary_active";
+            key.continuous = false;
+            return key;
+        }
+        return KEY.read.apply(jsonElement);
+    });
 
     private final Class<T> dataClass;
     private final BiConsumer<PacketByteBuf, T> send;

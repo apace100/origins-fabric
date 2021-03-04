@@ -158,6 +158,9 @@
   "power.origins.translucent.name": "Translucent",
   "power.origins.translucent.description": "Your skin is translucent.",
 
+  "power.origins.double_jump.name": "Flap",
+  "power.origins.double_jump.description": "Flap your wings in the air to perform a second jump.",
+
   "category.origins": "Origins",
   "key.origins.primary_active": "Active Power (Primary)",
   "key.origins.secondary_active": "Active Power (Secondary)",

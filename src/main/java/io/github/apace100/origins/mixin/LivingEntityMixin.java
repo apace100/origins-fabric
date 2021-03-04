@@ -143,9 +143,11 @@ public abstract class LivingEntityMixin extends Entity {
     // SLOW_FALLING
     @ModifyVariable(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getFluidState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/fluid/FluidState;"), method = "travel", name = "d", ordinal = 0)
     public double doAvianSlowFalling(double in) {
-        if(!this.isSneaking() && this.getVelocity().y <= 0.0D && PowerTypes.SLOW_FALLING.isActive(this)) {
+        if(PowerTypes.SLOW_FALLING.isActive(this)) {
             this.fallDistance = 0;
-            return 0.01D;
+            if(this.getVelocity().y <= 0.0D) {
+                return 0.01D;
+            }
         }
         return in;
     }

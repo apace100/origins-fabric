@@ -3,10 +3,12 @@ package io.github.apace100.origins.power;
 public interface Active {
 
     void onUse();
-    String getKey();
-    void setKey(String key);
+    Key getKey();
+    void setKey(Key key);
 
-    enum KeyType {
-        PRIMARY, SECONDARY
+    class Key {
+
+        public String key = "key.origins.primary_active";
+        public boolean continuous = false;
     }
 }

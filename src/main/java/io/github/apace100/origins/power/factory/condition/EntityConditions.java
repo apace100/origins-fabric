@@ -320,6 +320,10 @@ public class EntityConditions {
                 }
                 return false;
             }));
+        register(new ConditionFactory<>(Origins.identifier("fall_distance"), new SerializableData()
+            .add("comparison", SerializableDataType.COMPARISON)
+            .add("compare_to", SerializableDataType.FLOAT),
+            (data, entity) -> ((Comparison)data.get("comparison")).compare(entity.fallDistance, data.getFloat("compare_to"))));
     }
 
     private static void register(ConditionFactory<LivingEntity> conditionFactory) {

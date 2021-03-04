@@ -3,6 +3,7 @@ package io.github.apace100.origins.mixin;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModComponents;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,6 +12,7 @@ import net.minecraft.tag.FluidTags;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,6 +36,16 @@ public abstract class EntityMixin {
     @Shadow public World world;
 
     @Shadow public abstract double getFluidHeight(Tag<Fluid> fluid);
+/*
+    @Inject(method = "fall", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;onLandedUpon(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/Entity;F)V"))
+    private void invokeActionOnLand(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition, CallbackInfo ci) {
+        OriginComponent.getPowers((Entity)(Object)this, ActionOnLandPower.class).forEach(ActionOnLandPower::executeAction);
+    }*/
+
+    @Inject(method = "fall", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;fallDistance:F", opcode = Opcodes.PUTFIELD, ordinal = 0))
+    private void invokeActionOnSoftLand(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition, CallbackInfo ci) {
+        OriginComponent.getPowers((Entity)(Object)this, ActionOnLandPower.class).forEach(ActionOnLandPower::executeAction);
+    }
 
     @Inject(at = @At("HEAD"), method = "isInvulnerableTo", cancellable = true)
     private void makeOriginInvulnerable(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {

@@ -10,10 +10,10 @@ import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginManager;
 import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.power.factory.PowerFactories;
-import io.github.apace100.origins.power.factory.condition.*;
 import io.github.apace100.origins.power.factory.action.BlockActions;
 import io.github.apace100.origins.power.factory.action.EntityActions;
 import io.github.apace100.origins.power.factory.action.ItemActions;
+import io.github.apace100.origins.power.factory.condition.*;
 import io.github.apace100.origins.registry.*;
 import io.github.apace100.origins.util.ChoseOriginCriterion;
 import io.github.apace100.origins.util.ElytraPowerFallFlying;
@@ -76,6 +76,7 @@ public class Origins implements ModInitializer {
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new PowerTypes());
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginManager());
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginLayers());
+
 	}
 
 	public static Identifier identifier(String path) {

@@ -44,6 +44,7 @@ public class OriginsClient implements ClientModInitializer {
     public static boolean isServerRunningOrigins = false;
 
     private static HashMap<String, KeyBinding> idToKeyBindingMap = new HashMap<>();
+    private static HashMap<String, Boolean> lastKeyBindingStates = new HashMap<>();
     private static boolean initializedKeyBindingMap = false;
 
     @Override
@@ -81,11 +82,13 @@ public class OriginsClient implements ClientModInitializer {
                 for(Power power : powers) {
                     if(power instanceof Active) {
                         Active active = (Active)power;
-                        KeyBinding key = getKeyBinding(active.getKey());
-                        if(key != null) {
-                            if(key.isPressed()) {
+                        Active.Key key = active.getKey();
+                        KeyBinding keyBinding = getKeyBinding(key.key);
+                        if(keyBinding != null) {
+                            if(keyBinding.isPressed() && (key.continuous || !lastKeyBindingStates.getOrDefault(key.key, false))) {
                                 pressedPowers.add(power);
                             }
+                            lastKeyBindingStates.put(key.key, keyBinding.isPressed());
                         }
                     }
                 }

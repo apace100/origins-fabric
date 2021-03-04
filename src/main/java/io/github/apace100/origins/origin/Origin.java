@@ -1,11 +1,13 @@
 package io.github.apace100.origins.origin;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.power.MultiplePowerType;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.PowerTypeRegistry;
 import io.github.apace100.origins.registry.ModComponents;
@@ -291,15 +293,23 @@ public class Origin {
             throw new JsonParseException("Origin json requires array with key \"powers\".");
         }
         JsonArray powerArray = json.getAsJsonArray("powers");
-        PowerType<?>[] powers = new PowerType<?>[powerArray.size()];
-        for (int i = 0; i < powers.length; i++) {
+        List<PowerType<?>> powers = new LinkedList<>();
+        for (int i = 0; i < powerArray.size(); i++) {
             Identifier powerId = Identifier.tryParse(powerArray.get(i).getAsString());
             if(powerId == null) {
                 throw new JsonParseException("Invalid power ID in Origin json: " + powerArray.get(i).getAsString());
             }
-            powers[i] = PowerTypeRegistry.get(powerId);
-            if (powers[i] == null) {
+            PowerType<?> power = PowerTypeRegistry.get(powerId);
+            if (power == null) {
                 throw new JsonParseException("Unregistered power ID in Origin json: " + powerId.toString());
+            } else {
+                powers.add(power);
+                if(power instanceof MultiplePowerType) {
+                    ImmutableList<Identifier> subPowers = ((MultiplePowerType)power).getSubPowers();
+                    for(Identifier subPowerId : subPowers) {
+                        powers.add(PowerTypeRegistry.get(subPowerId));
+                    }
+                }
             }
         }
         Identifier iconItemIdentifier = Identifier.tryParse(json.get("icon").getAsString());
@@ -327,7 +337,7 @@ public class Origin {
         if (isUnchoosable) {
             origin.setUnchoosable();
         }
-        origin.add(powers);
+        origin.add(powers.toArray(new PowerType<?>[0]));
         if(json.has("upgrades") && json.get("upgrades").isJsonArray()) {
             JsonArray array = json.getAsJsonArray("upgrades");
             array.forEach(jsonElement -> origin.addUpgrade(OriginUpgrade.fromJson(jsonElement)));
