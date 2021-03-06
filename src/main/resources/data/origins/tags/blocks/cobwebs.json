@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:cobweb",
+    "origins:temporary_cobweb"
+  ]
+}

@@ -14,6 +14,7 @@ import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import io.github.apace100.origins.util.Shape;
 import net.minecraft.block.pattern.CachedBlockPosition;
+import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -33,6 +34,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 
@@ -324,6 +326,44 @@ public class EntityConditions {
             .add("comparison", SerializableDataType.COMPARISON)
             .add("compare_to", SerializableDataType.FLOAT),
             (data, entity) -> ((Comparison)data.get("comparison")).compare(entity.fallDistance, data.getFloat("compare_to"))));
+        register(new ConditionFactory<>(Origins.identifier("collided_horizontally"), new SerializableData(),
+            (data, entity) -> entity.horizontalCollision));
+        register(new ConditionFactory<>(Origins.identifier("in_block_anywhere"), new SerializableData()
+            .add("block_condition", SerializableDataType.BLOCK_CONDITION)
+            .add("comparison", SerializableDataType.COMPARISON, Comparison.GREATER_THAN_OR_EQUAL)
+            .add("compare_to", SerializableDataType.INT, 1),
+            (data, entity) -> {
+                Predicate<CachedBlockPosition> blockCondition = ((ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition"));
+                int stopAt = -1;
+                Comparison comparison = ((Comparison)data.get("comparison"));
+                int compareTo = data.getInt("compare_to");
+                switch(comparison) {
+                    case EQUAL: case LESS_THAN_OR_EQUAL: case GREATER_THAN:
+                        stopAt = compareTo + 1;
+                        break;
+                    case LESS_THAN: case GREATER_THAN_OR_EQUAL:
+                        stopAt = compareTo;
+                        break;
+                }
+                int count = 0;
+                Box box = entity.getBoundingBox();
+                BlockPos blockPos = new BlockPos(box.minX + 0.001D, box.minY + 0.001D, box.minZ + 0.001D);
+                BlockPos blockPos2 = new BlockPos(box.maxX - 0.001D, box.maxY - 0.001D, box.maxZ - 0.001D);
+                BlockPos.Mutable mutable = new BlockPos.Mutable();
+                for(int i = blockPos.getX(); i <= blockPos2.getX() && count < stopAt; ++i) {
+                    for(int j = blockPos.getY(); j <= blockPos2.getY() && count < stopAt; ++j) {
+                        for(int k = blockPos.getZ(); k <= blockPos2.getZ() && count < stopAt; ++k) {
+                            mutable.set(i, j, k);
+                            if(blockCondition.test(new CachedBlockPosition(entity.world, mutable, false))) {
+                                count++;
+                            }
+                        }
+                    }
+                }
+                return comparison.compare(count, compareTo);}));
+        register(new ConditionFactory<>(Origins.identifier("entity_group"), new SerializableData()
+            .add("group", SerializableDataType.ENTITY_GROUP),
+            (data, entity) -> entity.getGroup() == (EntityGroup)data.get("group")));
     }
 
     private static void register(ConditionFactory<LivingEntity> conditionFactory) {

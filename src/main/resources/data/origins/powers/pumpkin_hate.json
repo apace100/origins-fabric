@@ -1,9 +1,25 @@
 {
-  "type": "origins:prevent_item_use",
-  "item_condition": {
-    "type": "origins:ingredient",
-    "ingredient": {
-      "item": "minecraft:pumpkin_pie"
+  "type": "origins:multiple",
+  "prevent_eating": {
+    "type": "origins:prevent_item_use",
+    "item_condition": {
+      "type": "origins:ingredient",
+      "ingredient": {
+        "item": "minecraft:pumpkin_pie"
+      }
+    }
+  },
+  "prevent_seeing": {
+    "type": "origins:prevent_entity_render",
+    "entity_condition": {
+      "type": "origins:equipped_item",
+      "equipment_slot": "head",
+      "item_condition": {
+        "type": "origins:ingredient",
+        "ingredient": {
+          "item": "minecraft:carved_pumpkin"
+        }
+      }
     }
   }
 }

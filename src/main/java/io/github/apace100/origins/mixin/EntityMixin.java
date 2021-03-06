@@ -3,8 +3,13 @@ package io.github.apace100.origins.mixin;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModComponents;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
@@ -36,11 +41,18 @@ public abstract class EntityMixin {
     @Shadow public World world;
 
     @Shadow public abstract double getFluidHeight(Tag<Fluid> fluid);
-/*
-    @Inject(method = "fall", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;onLandedUpon(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/Entity;F)V"))
-    private void invokeActionOnLand(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition, CallbackInfo ci) {
-        OriginComponent.getPowers((Entity)(Object)this, ActionOnLandPower.class).forEach(ActionOnLandPower::executeAction);
-    }*/
+
+    @Environment(EnvType.CLIENT)
+    @Inject(method = "isGlowing", at = @At("HEAD"), cancellable = true)
+    private void makeEntitiesGlow(CallbackInfoReturnable<Boolean> cir) {
+        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        Entity thisEntity = (Entity)(Object)this;
+        if(player != null && player != thisEntity && thisEntity instanceof LivingEntity) {
+            if(OriginComponent.getPowers(player, EntityGlowPower.class).stream().anyMatch(p -> p.doesApply(thisEntity))) {
+                cir.setReturnValue(true);
+            }
+        }
+    }
 
     @Inject(method = "fall", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;fallDistance:F", opcode = Opcodes.PUTFIELD, ordinal = 0))
     private void invokeActionOnSoftLand(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition, CallbackInfo ci) {

@@ -13,6 +13,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.tag.FluidTags;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,12 +22,17 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
     @Shadow protected abstract float getJumpVelocity();
 
     @Shadow public abstract float getMovementSpeed();
+
+    @Shadow private Optional<BlockPos> climbingPos;
+
+    @Shadow public abstract boolean isHoldingOntoLadder();
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -104,12 +110,29 @@ public abstract class LivingEntityMixin extends Entity {
         }
     }
 
+    private Vec3d origins_lastClimbingPos;
     // CLIMBING
-    @Inject(at = @At("HEAD"), method = "isClimbing", cancellable = true)
+    @Inject(at = @At("RETURN"), method = "isClimbing", cancellable = true)
     public void doSpiderClimbing(CallbackInfoReturnable<Boolean> info) {
-        if(PowerTypes.CLIMBING.isActive(this)) {
-            if(this.horizontalCollision) {
-                info.setReturnValue(true);
+        if(!info.getReturnValue()) {
+            if((Entity)this instanceof PlayerEntity) {
+                List<ClimbingPower> climbingPowers = ModComponents.ORIGIN.get((Entity)this).getPowers(ClimbingPower.class, true);
+                if(climbingPowers.size() > 0) {
+                    if(climbingPowers.stream().anyMatch(ClimbingPower::isActive)) {
+                        BlockPos pos = getBlockPos();
+                        this.climbingPos = Optional.of(pos);
+                        origins_lastClimbingPos = getPos();
+                        info.setReturnValue(true);
+                    } else {
+                        if(origins_lastClimbingPos != null && isHoldingOntoLadder()) {
+                            if(origins_lastClimbingPos.squaredDistanceTo(getPos()) <= 0.25) {
+                                if(climbingPowers.stream().anyMatch(p -> p.allowHolding)) {
+                                    info.setReturnValue(true);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

@@ -749,6 +749,31 @@ public class PowerFactories {
                 (type, player) -> new ActionOnLandPower(type, player,
                     (ActionFactory<Entity>.Instance)data.get("entity_action")))
             .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("prevent_entity_render"),
+            new SerializableData()
+                .add("entity_condition", SerializableDataType.ENTITY_CONDITION, null),
+            data ->
+                (type, player) -> new PreventEntityRenderPower(type, player, (ConditionFactory<LivingEntity>.Instance)data.get("entity_condition")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("entity_glow"),
+            new SerializableData()
+                .add("entity_condition", SerializableDataType.ENTITY_CONDITION, null),
+            data ->
+                (type, player) -> new EntityGlowPower(type, player, (ConditionFactory<LivingEntity>.Instance)data.get("entity_condition")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("climbing"),
+            new SerializableData()
+                .add("allow_holding", SerializableDataType.BOOLEAN, true),
+            data ->
+                (type, player) -> new ClimbingPower(type, player, data.getBoolean("allow_holding")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("prevent_block_selection"),
+            new SerializableData()
+                .add("block_condition", SerializableDataType.BLOCK_CONDITION, null),
+            data ->
+                (type, player) -> new PreventBlockSelectionPower(type, player,
+                    (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition")))
+            .allowCondition());
     }
 
     private static void register(PowerFactory serializer) {

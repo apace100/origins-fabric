@@ -28,9 +28,9 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
     public static final PowerType<CooldownPower> WEBBING;
     public static final PowerType<TogglePower> CLIMBING;
     public static final PowerType<Power> NO_COBWEB_SLOWDOWN;
+    public static final PowerType<Power> MASTER_OF_WEBS_NO_SLOWDOWN;
     public static final PowerType<Power> SLOW_FALLING;
     public static final PowerType<Power> SCARE_CREEPERS;
-    public static final PowerType<PreventItemUsePower> PUMPKIN_HATE;
 
     static {
         WATER_BREATHING = new PowerTypeReference<>(new Identifier(Origins.MODID, "water_breathing"));
@@ -41,9 +41,9 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
         WEBBING = new PowerTypeReference<>(new Identifier(Origins.MODID, "webbing"));
         CLIMBING = new PowerTypeReference<>(new Identifier(Origins.MODID, "climbing"));
         NO_COBWEB_SLOWDOWN = new PowerTypeReference<>(new Identifier(Origins.MODID, "no_cobweb_slowdown"));
+        MASTER_OF_WEBS_NO_SLOWDOWN = new PowerTypeReference<>(new Identifier(Origins.MODID, "master_of_webs_no_slowdown"));
         SLOW_FALLING = new PowerTypeReference<>(new Identifier(Origins.MODID, "slow_falling"));
         SCARE_CREEPERS = new PowerTypeReference<>(new Identifier(Origins.MODID, "scare_creepers"));
-        PUMPKIN_HATE = new PowerTypeReference<>(new Identifier(Origins.MODID, "pumpkin_hate"));
     }
 
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();

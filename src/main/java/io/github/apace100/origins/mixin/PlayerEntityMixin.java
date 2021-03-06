@@ -79,7 +79,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
     // NO_COBWEB_SLOWDOWN
     @Inject(at = @At("HEAD"), method = "slowMovement", cancellable = true)
     public void slowMovement(BlockState state, Vec3d multiplier, CallbackInfo info) {
-        if (PowerTypes.NO_COBWEB_SLOWDOWN.isActive(this)) {
+        if (PowerTypes.NO_COBWEB_SLOWDOWN.isActive(this) || PowerTypes.MASTER_OF_WEBS_NO_SLOWDOWN.isActive(this)) {
             info.cancel();
         }
     }
