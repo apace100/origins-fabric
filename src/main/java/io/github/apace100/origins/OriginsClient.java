@@ -12,7 +12,7 @@ import io.github.apace100.origins.screen.PowerHudRenderer;
 import io.github.apace100.origins.screen.ViewOriginScreen;
 import io.github.apace100.origins.util.OriginsConfig;
 import io.netty.buffer.Unpooled;
-import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
+import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

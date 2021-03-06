@@ -1,10 +1,10 @@
 package io.github.apace100.origins.util;
 
 import io.github.apace100.origins.Origins;
-import me.sargunvohra.mcmods.autoconfig1u.ConfigData;
-import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
-import me.sargunvohra.mcmods.autoconfig1u.serializer.Toml4jConfigSerializer;
-import me.sargunvohra.mcmods.autoconfig1u.shadowed.com.moandjiezana.toml.TomlWriter;
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
+import me.shedaniel.cloth.clothconfig.shadowed.com.moandjiezana.toml.TomlWriter;
 
 @Config(name = Origins.MODID)
 public class OriginsConfig implements ConfigData {
@@ -15,7 +15,7 @@ public class OriginsConfig implements ConfigData {
     public float phantomizedOverlayStrength = 0.8F;
 
     @Override
-    public void validatePostLoad() throws ValidationException {
+    public void validatePostLoad() {
         if(phantomizedOverlayStrength < 0F) {
             phantomizedOverlayStrength = 0F;
         } else if(phantomizedOverlayStrength > 1F) {
@@ -34,7 +34,7 @@ public class OriginsConfig implements ConfigData {
         }
 
         @Override
-        public T deserialize() throws SerializationException {
+        public T deserialize() {
             T t;
             try {
                 t = super.deserialize();
