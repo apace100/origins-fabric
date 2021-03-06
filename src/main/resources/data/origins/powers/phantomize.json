@@ -3,6 +3,6 @@
   "hidden": true,
   "key": {
     "key": "key.origins.primary_active",
-    "continuous": true
+    "continuous": false
   }
 }

@@ -1,7 +1,11 @@
 {
   "type": "origins:multiple",
   "toggle": {
-    "type": "origins:toggle"
+    "type": "origins:toggle",
+    "key": {
+      "key": "key.origins.primary_active",
+      "continuous": false
+    }
   },
   "climbing": {
     "type": "origins:climbing",

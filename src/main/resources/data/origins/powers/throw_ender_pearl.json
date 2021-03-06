@@ -8,5 +8,8 @@
   "sound": "minecraft:entity.ender_pearl.throw",
   "speed": 1.5,
   "divergence": 1,
-  "key": "primary"
+  "key": {
+    "key": "key.origins.primary_active",
+    "continuous": false
+  }
 }

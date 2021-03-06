@@ -45,7 +45,7 @@ public class ModPacketsC2S {
             for(Identifier id : powerIds) {
                 PowerType<?> type = PowerTypeRegistry.get(id);
                 Power power = component.getPower(type);
-                if(power instanceof Active && power.isActive()) {
+                if(power instanceof Active) {
                     ((Active)power).onUse();
                 }
             }
