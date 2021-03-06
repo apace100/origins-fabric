@@ -3,6 +3,7 @@ package io.github.apace100.origins;
 import io.github.apace100.origins.command.LayerArgument;
 import io.github.apace100.origins.command.OriginArgument;
 import io.github.apace100.origins.command.OriginCommand;
+import io.github.apace100.origins.command.ResourceCommand;
 import io.github.apace100.origins.mixin.CriteriaRegistryInvoker;
 import io.github.apace100.origins.networking.ModPacketsC2S;
 import io.github.apace100.origins.origin.Origin;
@@ -68,6 +69,7 @@ public class Origins implements ModInitializer {
 		FallFlyingLib.registerAccessor(ElytraPowerFallFlying::new);
 		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
 			OriginCommand.register(dispatcher);
+			ResourceCommand.register(dispatcher);
 		});
 		CriteriaRegistryInvoker.callRegister(ChoseOriginCriterion.INSTANCE);
 		CriteriaRegistryInvoker.callRegister(GainedPowerCriterion.INSTANCE);
