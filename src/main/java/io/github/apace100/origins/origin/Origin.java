@@ -363,4 +363,17 @@ public class Origin {
         str = str.substring(0, str.length() - 1) + "]";
         return str;
     }
+
+    @Override
+    public int hashCode() {
+        return identifier.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Origin) {
+            return ((Origin)obj).identifier.equals(identifier);
+        }
+        return false;
+    }
 }
