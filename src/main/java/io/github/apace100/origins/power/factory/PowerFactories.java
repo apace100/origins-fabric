@@ -558,10 +558,13 @@ public class PowerFactories {
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("action_over_time"),
             new SerializableData()
-                .add("entity_action", SerializableDataType.ENTITY_ACTION)
+                .add("entity_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("rising_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("falling_action", SerializableDataType.ENTITY_ACTION, null)
                 .add("interval", SerializableDataType.INT),
             data ->
-                (type, player) -> new ActionOverTimePower(type, player, data.getInt("interval"), (ActionFactory<Entity>.Instance)data.get("entity_action")))
+                (type, player) -> new ActionOverTimePower(type, player, data.getInt("interval"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action"), (ActionFactory<Entity>.Instance)data.get("rising_action"), (ActionFactory<Entity>.Instance)data.get("falling_action")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("self_action_when_hit"),
             new SerializableData()
