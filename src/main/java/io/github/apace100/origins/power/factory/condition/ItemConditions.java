@@ -67,6 +67,8 @@ public class ItemConditions {
                 int enchantLevel = EnchantmentHelper.getLevel((Enchantment)data.get("enchantment"), stack);
                 return ((Comparison)data.get("comparison")).compare(enchantLevel, data.getInt("compare_to"));
             }));
+        register(new ConditionFactory<>(Origins.identifier("meat"), new SerializableData(),
+            (data, stack) -> stack.isFood() && stack.getItem().getFoodComponent().isMeat()));
     }
 
     private static void register(ConditionFactory<ItemStack> conditionFactory) {
