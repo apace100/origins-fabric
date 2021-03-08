@@ -23,6 +23,7 @@ import io.github.apace100.origins.power.factory.action.ActionTypes;
 import io.github.apace100.origins.power.factory.condition.ConditionFactory;
 import io.github.apace100.origins.power.factory.condition.ConditionType;
 import io.github.apace100.origins.power.factory.condition.ConditionTypes;
+import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.enchantment.Enchantment;
@@ -399,6 +400,10 @@ public class SerializableDataType<T> {
         }
         return KEY.read.apply(jsonElement);
     });
+
+    public static final SerializableDataType<Tag<EntityType<?>>> ENTITY_TAG = SerializableDataType.wrap(ClassUtil.castClass(Tag.class), IDENTIFIER,
+        tag -> ServerTagManagerHolder.getTagManager().getEntityTypes().getTagId(tag),
+        TagRegistry::entityType);
 
     private final Class<T> dataClass;
     private final BiConsumer<PacketByteBuf, T> send;

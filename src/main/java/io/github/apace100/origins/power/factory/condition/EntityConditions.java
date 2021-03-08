@@ -15,6 +15,7 @@ import io.github.apace100.origins.util.SerializableDataType;
 import io.github.apace100.origins.util.Shape;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.entity.EntityGroup;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -364,6 +365,9 @@ public class EntityConditions {
         register(new ConditionFactory<>(Origins.identifier("entity_group"), new SerializableData()
             .add("group", SerializableDataType.ENTITY_GROUP),
             (data, entity) -> entity.getGroup() == (EntityGroup)data.get("group")));
+        register(new ConditionFactory<>(Origins.identifier("in_tag"), new SerializableData()
+            .add("tag", SerializableDataType.ENTITY_TAG),
+            (data, entity) -> ((Tag<EntityType<?>>)data.get("tag")).contains(entity.getType())));
     }
 
     private static void register(ConditionFactory<LivingEntity> conditionFactory) {
