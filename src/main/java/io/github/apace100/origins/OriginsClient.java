@@ -1,9 +1,9 @@
 package io.github.apace100.origins;
 
-import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.networking.ModPacketsS2C;
 import io.github.apace100.origins.power.Active;
+import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.power.factory.condition.EntityConditionsClient;
 import io.github.apace100.origins.registry.ModBlocks;
 import io.github.apace100.origins.registry.ModComponents;
@@ -12,7 +12,7 @@ import io.github.apace100.origins.screen.PowerHudRenderer;
 import io.github.apace100.origins.screen.ViewOriginScreen;
 import io.github.apace100.origins.util.OriginsConfig;
 import io.netty.buffer.Unpooled;
-import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
+import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -29,6 +29,10 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.network.PacketByteBuf;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+
 public class OriginsClient implements ClientModInitializer {
 
     public static KeyBinding usePrimaryActivePowerKeybind;
@@ -38,6 +42,10 @@ public class OriginsClient implements ClientModInitializer {
     public static OriginsConfig config;
 
     public static boolean isServerRunningOrigins = false;
+
+    private static HashMap<String, KeyBinding> idToKeyBindingMap = new HashMap<>();
+    private static HashMap<String, Boolean> lastKeyBindingStates = new HashMap<>();
+    private static boolean initializedKeyBindingMap = false;
 
     @Override
     @Environment(EnvType.CLIENT)
@@ -57,16 +65,36 @@ public class OriginsClient implements ClientModInitializer {
         usePrimaryActivePowerKeybind = new KeyBinding("key.origins.primary_active", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_G, "category." + Origins.MODID);
         useSecondaryActivePowerKeybind = new KeyBinding("key.origins.secondary_active", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "category." + Origins.MODID);
         viewCurrentOriginKeybind = new KeyBinding("key.origins.view_origin", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_O, "category." + Origins.MODID);
+
+        idToKeyBindingMap.put("key.origins.primary_active", usePrimaryActivePowerKeybind);
+        idToKeyBindingMap.put("key.origins.secondary_active", useSecondaryActivePowerKeybind);
+        idToKeyBindingMap.put("primary", usePrimaryActivePowerKeybind);
+        idToKeyBindingMap.put("secondary", useSecondaryActivePowerKeybind);
+
         KeyBindingHelper.registerKeyBinding(usePrimaryActivePowerKeybind);
         KeyBindingHelper.registerKeyBinding(useSecondaryActivePowerKeybind);
         KeyBindingHelper.registerKeyBinding(viewCurrentOriginKeybind);
 
         ClientTickEvents.START_CLIENT_TICK.register(tick -> {
-            while(usePrimaryActivePowerKeybind.wasPressed()) {
-                performActivePower(Active.KeyType.PRIMARY);
-            }
-            while(useSecondaryActivePowerKeybind.wasPressed()) {
-                performActivePower(Active.KeyType.SECONDARY);
+            if(tick.player != null) {
+                List<Power> powers = ModComponents.ORIGIN.get(tick.player).getPowers();
+                List<Power> pressedPowers = new LinkedList<>();
+                for(Power power : powers) {
+                    if(power instanceof Active) {
+                        Active active = (Active)power;
+                        Active.Key key = active.getKey();
+                        KeyBinding keyBinding = getKeyBinding(key.key);
+                        if(keyBinding != null) {
+                            if(keyBinding.isPressed() && (key.continuous || !lastKeyBindingStates.getOrDefault(key.key, false))) {
+                                pressedPowers.add(power);
+                            }
+                            lastKeyBindingStates.put(key.key, keyBinding.isPressed());
+                        }
+                    }
+                }
+                if(pressedPowers.size() > 0) {
+                    performActivePowers(pressedPowers);
+                }
             }
             while(viewCurrentOriginKeybind.wasPressed()) {
                 if(!(MinecraftClient.getInstance().currentScreen instanceof ViewOriginScreen)) {
@@ -78,13 +106,29 @@ public class OriginsClient implements ClientModInitializer {
     }
 
     @Environment(EnvType.CLIENT)
-    private void performActivePower(Active.KeyType key) {
+    private void performActivePowers(List<Power> powers) {
         PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
-        buffer.writeInt(key.ordinal());
-        ClientPlayNetworking.send(ModPackets.USE_ACTIVE_POWER, buffer);
-        OriginComponent component = ModComponents.ORIGIN.get(MinecraftClient.getInstance().player);
-        if(component.hasAllOrigins()) {
-            component.getPowers().stream().filter(p -> p instanceof Active && ((Active)p).getKey() == key).forEach(p -> ((Active)p).onUse());
+        buffer.writeInt(powers.size());
+        for(Power power : powers) {
+            buffer.writeIdentifier(power.getType().getIdentifier());
+            ((Active)power).onUse();
         }
+        ClientPlayNetworking.send(ModPackets.USE_ACTIVE_POWERS, buffer);
+    }
+
+    @Environment(EnvType.CLIENT)
+    private KeyBinding getKeyBinding(String key) {
+        if(!idToKeyBindingMap.containsKey(key)) {
+            if(!initializedKeyBindingMap) {
+                initializedKeyBindingMap = true;
+                MinecraftClient client = MinecraftClient.getInstance();
+                for(int i = 0; i < client.options.keysAll.length; i++) {
+                    idToKeyBindingMap.put(client.options.keysAll[i].getTranslationKey(), client.options.keysAll[i]);
+                }
+                return getKeyBinding(key);
+            }
+            return null;
+        }
+        return idToKeyBindingMap.get(key);
     }
 }

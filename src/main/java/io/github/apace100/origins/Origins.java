@@ -1,8 +1,6 @@
 package io.github.apace100.origins;
 
-import io.github.apace100.origins.command.LayerArgument;
-import io.github.apace100.origins.command.OriginArgument;
-import io.github.apace100.origins.command.OriginCommand;
+import io.github.apace100.origins.command.*;
 import io.github.apace100.origins.mixin.CriteriaRegistryInvoker;
 import io.github.apace100.origins.networking.ModPacketsC2S;
 import io.github.apace100.origins.origin.Origin;
@@ -10,10 +8,10 @@ import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginManager;
 import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.power.factory.PowerFactories;
-import io.github.apace100.origins.power.factory.condition.*;
 import io.github.apace100.origins.power.factory.action.BlockActions;
 import io.github.apace100.origins.power.factory.action.EntityActions;
 import io.github.apace100.origins.power.factory.action.ItemActions;
+import io.github.apace100.origins.power.factory.condition.*;
 import io.github.apace100.origins.registry.*;
 import io.github.apace100.origins.util.ChoseOriginCriterion;
 import io.github.apace100.origins.util.ElytraPowerFallFlying;
@@ -61,6 +59,7 @@ public class Origins implements ModInitializer {
 		BlockConditions.register();
 		DamageConditions.register();
 		FluidConditions.register();
+		BiomeConditions.register();
 		EntityActions.register();
 		ItemActions.register();
 		BlockActions.register();
@@ -68,14 +67,17 @@ public class Origins implements ModInitializer {
 		FallFlyingLib.registerAccessor(ElytraPowerFallFlying::new);
 		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
 			OriginCommand.register(dispatcher);
+			ResourceCommand.register(dispatcher);
 		});
 		CriteriaRegistryInvoker.callRegister(ChoseOriginCriterion.INSTANCE);
 		CriteriaRegistryInvoker.callRegister(GainedPowerCriterion.INSTANCE);
 		ArgumentTypes.register("origins:origin", OriginArgument.class, new ConstantArgumentSerializer<>(OriginArgument::origin));
 		ArgumentTypes.register("origins:layer", LayerArgument.class, new ConstantArgumentSerializer<>(LayerArgument::layer));
+		ArgumentTypes.register("origins:power", PowerArgument.class, new ConstantArgumentSerializer<>(PowerArgument::power));
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new PowerTypes());
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginManager());
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginLayers());
+
 	}
 
 	public static Identifier identifier(String path) {

@@ -1,3 +1,25 @@
 {
-  "type": "origins:toggle"
+  "type": "origins:multiple",
+  "toggle": {
+    "type": "origins:toggle",
+    "key": {
+      "key": "key.origins.primary_active",
+      "continuous": false
+    }
+  },
+  "climbing": {
+    "type": "origins:climbing",
+    "condition": {
+      "type": "origins:and",
+      "conditions": [
+        {
+          "type": "origins:collided_horizontally"
+        },
+        {
+          "type": "origins:power_active",
+          "power": "origins:climbing_toggle"
+        }
+      ]
+    }
+  }
 }

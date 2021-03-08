@@ -3,11 +3,9 @@ package io.github.apace100.origins.mixin;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.InvisibilityPower;
 import io.github.apace100.origins.power.ModelColorPower;
-import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.power.ShakingPower;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -16,10 +14,8 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -46,11 +42,6 @@ public abstract class LivingEntityRendererMixin extends EntityRenderer<LivingEnt
 
     @Inject(method = "render", at = @At(value = "HEAD"), cancellable = true)
     private void preventPumpkinRendering(LivingEntity livingEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo info) {
-        if(MinecraftClient.getInstance().player != null && PowerTypes.PUMPKIN_HATE.isActive(MinecraftClient.getInstance().player)) {
-            if(livingEntity.getEquippedStack(EquipmentSlot.HEAD).getItem() == Items.CARVED_PUMPKIN) {
-                info.cancel();
-            }
-        }
         List<InvisibilityPower> invisibilityPowers = OriginComponent.getPowers(livingEntity, InvisibilityPower.class);
         if(invisibilityPowers.size() > 0 && invisibilityPowers.stream().noneMatch(InvisibilityPower::shouldRenderArmor)) {
             info.cancel();

@@ -63,6 +63,15 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
         }
     }
 
+    // Prevent healing if DisableRegenPower
+    // Note that this function was called "shouldHeal" instead of "canFoodHeal" at some point in time.
+    @Inject(method = "canFoodHeal", at = @At("HEAD"), cancellable = true)
+    private void disableHeal(CallbackInfoReturnable<Boolean> info) {
+        if(OriginComponent.hasPower(this, DisableRegenPower.class)) {
+            info.setReturnValue(false);
+        }
+    }
+
     // ModifyExhaustion
     @ModifyVariable(at = @At("HEAD"), method = "addExhaustion", ordinal = 0, name = "exhaustion")
     private float modifyExhaustion(float exhaustionIn) {
@@ -79,7 +88,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
     // NO_COBWEB_SLOWDOWN
     @Inject(at = @At("HEAD"), method = "slowMovement", cancellable = true)
     public void slowMovement(BlockState state, Vec3d multiplier, CallbackInfo info) {
-        if (PowerTypes.NO_COBWEB_SLOWDOWN.isActive(this)) {
+        if (PowerTypes.NO_COBWEB_SLOWDOWN.isActive(this) || PowerTypes.MASTER_OF_WEBS_NO_SLOWDOWN.isActive(this)) {
             info.cancel();
         }
     }

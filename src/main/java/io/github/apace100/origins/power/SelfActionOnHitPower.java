@@ -13,19 +13,23 @@ import java.util.function.Predicate;
 public class SelfActionOnHitPower extends CooldownPower {
 
     private final Predicate<Pair<DamageSource, Float>> damageCondition;
+    private final Predicate<LivingEntity> targetCondition;
     private final Consumer<Entity> entityAction;
 
-    public SelfActionOnHitPower(PowerType<?> type, PlayerEntity player, int cooldownDuration, HudRender hudRender, Predicate<Pair<DamageSource, Float>> damageCondition, Consumer<Entity> entityAction) {
+    public SelfActionOnHitPower(PowerType<?> type, PlayerEntity player, int cooldownDuration, HudRender hudRender, Predicate<Pair<DamageSource, Float>> damageCondition, Consumer<Entity> entityAction, Predicate<LivingEntity> targetCondition) {
         super(type, player, cooldownDuration, hudRender);
         this.damageCondition = damageCondition;
         this.entityAction = entityAction;
+        this.targetCondition = targetCondition;
     }
 
     public void onHit(LivingEntity target, DamageSource damageSource, float damageAmount) {
-        if(damageCondition == null || damageCondition.test(new Pair<>(damageSource, damageAmount))) {
-            if(canUse()) {
-                this.entityAction.accept(this.player);
-                use();
+        if(targetCondition == null || targetCondition.test(target)) {
+            if(damageCondition == null || damageCondition.test(new Pair<>(damageSource, damageAmount))) {
+                if(canUse()) {
+                    this.entityAction.accept(this.player);
+                    use();
+                }
             }
         }
     }

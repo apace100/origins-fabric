@@ -2,16 +2,14 @@ package io.github.apace100.origins.power.factory.action;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.power.CooldownPower;
 import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.VariableIntPower;
 import io.github.apace100.origins.power.factory.condition.ConditionFactory;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModRegistries;
-import io.github.apace100.origins.util.FilterableWeightedList;
-import io.github.apace100.origins.util.SerializableData;
-import io.github.apace100.origins.util.SerializableDataType;
-import io.github.apace100.origins.util.Space;
+import io.github.apace100.origins.util.*;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.Entity;
@@ -27,9 +25,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandOutput;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
@@ -59,8 +57,8 @@ public class EntityActions {
             .add("if_action", SerializableDataType.ENTITY_ACTION)
             .add("else_action", SerializableDataType.ENTITY_ACTION, null),
             (data, entity) -> {
-                if(entity instanceof PlayerEntity) {
-                    if(((ConditionFactory<PlayerEntity>.Instance)data.get("condition")).test((PlayerEntity)entity)) {
+                if(entity instanceof LivingEntity) {
+                    if(((ConditionFactory<LivingEntity>.Instance)data.get("condition")).test((LivingEntity)entity)) {
                         ((ActionFactory<Entity>.Instance)data.get("if_action")).accept(entity);
                     } else {
                         if(data.isPresent("else_action")) {
@@ -75,6 +73,29 @@ public class EntityActions {
                 FilterableWeightedList<ActionFactory<Entity>.Instance> actionList = (FilterableWeightedList<ActionFactory<Entity>.Instance>)data.get("actions");
                 ActionFactory<Entity>.Instance action = actionList.pickRandom(new Random());
                 action.accept(entity);
+            }));
+        register(new ActionFactory<>(Origins.identifier("if_else_list"), new SerializableData()
+            .add("actions", SerializableDataType.list(SerializableDataType.compound(ClassUtil.castClass(Pair.class), new SerializableData()
+                .add("action", SerializableDataType.ENTITY_ACTION)
+                .add("condition", SerializableDataType.ENTITY_CONDITION),
+                inst -> new Pair<>((ConditionFactory<LivingEntity>.Instance)inst.get("condition"), (ActionFactory<Entity>.Instance)inst.get("action")),
+                (data, pair) -> {
+                    SerializableData.Instance inst = data.new Instance();
+                    inst.set("condition", pair.getLeft());
+                    inst.set("action", pair.getRight());
+                    return inst;
+                }))),
+            (data, entity) -> {
+                if(entity instanceof LivingEntity) {
+                    List<Pair<ConditionFactory<Entity>.Instance, ActionFactory<Entity>.Instance>> actions =
+                        (List<Pair<ConditionFactory<Entity>.Instance, ActionFactory<Entity>.Instance>>)data.get("actions");
+                    for (Pair<ConditionFactory<Entity>.Instance, ActionFactory<Entity>.Instance> action: actions) {
+                        if(action.getLeft().test(entity)) {
+                            action.getRight().accept(entity);
+                            break;
+                        }
+                    }
+                }
             }));
 
         register(new ActionFactory<>(Origins.identifier("damage"), new SerializableData()
@@ -132,17 +153,50 @@ public class EntityActions {
             .add("z", SerializableDataType.FLOAT, 0F)
             .add("space", SerializableDataType.SPACE, Space.WORLD),
             (data, entity) -> {
-                if(data.get("space") == Space.WORLD) {
-                    entity.addVelocity(data.getFloat("x"), data.getFloat("y"), data.getFloat("z"));
-                } else {
-                    Vec3d lookVec = entity.getRotationVector();
-                    Vec3d globalForward = new Vec3d(0, 0, 1);
-                    Vec3d v = globalForward.crossProduct(lookVec).normalize();
-                    double c = Math.acos(globalForward.dotProduct(lookVec));
-                    Quaternion quat = new Quaternion(new Vector3f((float)v.x, (float)v.y, (float)v.z), (float)c, false);
-                    Vector3f vec = new Vector3f(data.getFloat("x"), data.getFloat("y"), data.getFloat("z"));
-                    vec.rotate(quat);
-                    entity.addVelocity(vec.getX(), vec.getY(), vec.getZ());
+                Space space = (Space)data.get("space");
+                Vector3f vec = new Vector3f(data.getFloat("x"), data.getFloat("y"), data.getFloat("z"));
+                Vec3d vel;
+                Vec3d velH;
+                switch(space) {
+                    case WORLD:
+                        entity.addVelocity(data.getFloat("x"), data.getFloat("y"), data.getFloat("z"));
+                        break;
+                    case LOCAL:
+                        Space.rotateVectorToBase(entity.getRotationVector(), vec);
+                        entity.addVelocity(vec.getX(), vec.getY(), vec.getZ());
+                        break;
+                    case LOCAL_HORIZONTAL:
+                        vel = entity.getRotationVector();
+                        velH = new Vec3d(vel.x, 0, vel.z);
+                        if(velH.lengthSquared() > 0.00005) {
+                            velH = velH.normalize();
+                            Space.rotateVectorToBase(velH, vec);
+                            entity.addVelocity(vec.getX(), vec.getY(), vec.getZ());
+                        }
+                        break;
+                    case VELOCITY:
+                        Space.rotateVectorToBase(entity.getVelocity(), vec);
+                        entity.addVelocity(vec.getX(), vec.getY(), vec.getZ());
+                        break;
+                    case VELOCITY_NORMALIZED:
+                        Space.rotateVectorToBase(entity.getVelocity().normalize(), vec);
+                        entity.addVelocity(vec.getX(), vec.getY(), vec.getZ());
+                        break;
+                    case VELOCITY_HORIZONTAL:
+                        vel = entity.getVelocity();
+                        velH = new Vec3d(vel.x, 0, vel.z);
+                        Space.rotateVectorToBase(velH, vec);
+                        entity.addVelocity(vec.getX(), vec.getY(), vec.getZ());
+                        break;
+                    case VELOCITY_HORIZONTAL_NORMALIZED:
+                        vel = entity.getVelocity();
+                        velH = new Vec3d(vel.x, 0, vel.z);
+                        if(velH.lengthSquared() > 0.00005) {
+                            velH = velH.normalize();
+                            Space.rotateVectorToBase(velH, vec);
+                            entity.addVelocity(vec.getX(), vec.getY(), vec.getZ());
+                        }
+                        break;
                 }
                 entity.velocityModified = true;
             }));
@@ -238,6 +292,10 @@ public class EntityActions {
                         int newValue = vip.getValue() + data.getInt("change");
                         vip.setValue(newValue);
                         OriginComponent.sync((PlayerEntity)entity);
+                    } else if(p instanceof CooldownPower) {
+                        CooldownPower cp = (CooldownPower)p;
+                        cp.modify(data.getInt("change"));
+                        OriginComponent.sync((PlayerEntity)entity);
                     }
                 }
             }));
@@ -261,6 +319,15 @@ public class EntityActions {
                     }
                     ((PlayerEntity)entity).addExperienceLevels(levels);
                 }
+            }));
+
+        Scheduler scheduler = new Scheduler();
+        register(new ActionFactory<>(Origins.identifier("delay"), new SerializableData()
+            .add("ticks", SerializableDataType.INT)
+            .add("action", SerializableDataType.ENTITY_ACTION),
+            (data, entity) -> {
+                ActionFactory<Entity>.Instance action = (ActionFactory<Entity>.Instance)data.get("action");
+                scheduler.queue(s -> action.accept(entity), data.getInt("ticks"));
             }));
     }
 

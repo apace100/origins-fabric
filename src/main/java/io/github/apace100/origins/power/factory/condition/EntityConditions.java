@@ -14,6 +14,8 @@ import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import io.github.apace100.origins.util.Shape;
 import net.minecraft.block.pattern.CachedBlockPosition;
+import net.minecraft.entity.EntityGroup;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -37,8 +39,10 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.biome.Biome;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -207,6 +211,8 @@ public class EntityConditions {
                 Power p = component.getPower((PowerType<?>)data.get("resource"));
                 if(p instanceof VariableIntPower) {
                     resourceValue = ((VariableIntPower)p).getValue();
+                } else if(p instanceof CooldownPower) {
+                    resourceValue = ((CooldownPower)p).getRemainingTicks();
                 }
                 return ((Comparison)data.get("comparison")).compare(resourceValue, data.getInt("compare_to"));
             }));
@@ -278,8 +284,24 @@ public class EntityConditions {
             .add("compare_to", SerializableDataType.FLOAT),
             (data, entity) -> ((Comparison)data.get("comparison")).compare(entity.getHealth() / entity.getMaxHealth(), data.getFloat("compare_to"))));
         register(new ConditionFactory<>(Origins.identifier("biome"), new SerializableData()
-            .add("biome", SerializableDataType.IDENTIFIER),
-            (data, entity) -> entity.world.getRegistryManager().get(Registry.BIOME_KEY).getId(entity.world.getBiome(entity.getBlockPos())).equals(data.getId("biome"))));
+            .add("biome", SerializableDataType.IDENTIFIER, null)
+            .add("biomes", SerializableDataType.IDENTIFIERS, null)
+            .add("condition", SerializableDataType.BIOME_CONDITION, null),
+            (data, entity) -> {
+                Biome biome = entity.world.getBiome(entity.getBlockPos());
+                ConditionFactory<Biome>.Instance condition = (ConditionFactory<Biome>.Instance)data.get("condition");
+                if(data.isPresent("biome") || data.isPresent("biomes")) {
+                    Identifier biomeId = entity.world.getRegistryManager().get(Registry.BIOME_KEY).getId(biome);
+                    if(data.isPresent("biome") && biomeId.equals(data.getId("biome"))) {
+                        return condition == null || condition.test(biome);
+                    }
+                    if(data.isPresent("biomes") && ((List<Identifier>)data.get("biomes")).contains(biomeId)) {
+                        return condition == null || condition.test(biome);
+                    }
+                    return false;
+                }
+                return condition == null || condition.test(biome);
+            }));
         register(new ConditionFactory<>(Origins.identifier("entity_type"), new SerializableData()
             .add("entity_type", SerializableDataType.ENTITY_TYPE),
             (data, entity) -> entity.getType() == data.get("entity_type")));
@@ -340,6 +362,51 @@ public class EntityConditions {
                 return false;
             }
         ));
+        register(new ConditionFactory<>(Origins.identifier("fall_distance"), new SerializableData()
+            .add("comparison", SerializableDataType.COMPARISON)
+            .add("compare_to", SerializableDataType.FLOAT),
+            (data, entity) -> ((Comparison)data.get("comparison")).compare(entity.fallDistance, data.getFloat("compare_to"))));
+        register(new ConditionFactory<>(Origins.identifier("collided_horizontally"), new SerializableData(),
+            (data, entity) -> entity.horizontalCollision));
+        register(new ConditionFactory<>(Origins.identifier("in_block_anywhere"), new SerializableData()
+            .add("block_condition", SerializableDataType.BLOCK_CONDITION)
+            .add("comparison", SerializableDataType.COMPARISON, Comparison.GREATER_THAN_OR_EQUAL)
+            .add("compare_to", SerializableDataType.INT, 1),
+            (data, entity) -> {
+                Predicate<CachedBlockPosition> blockCondition = ((ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition"));
+                int stopAt = -1;
+                Comparison comparison = ((Comparison)data.get("comparison"));
+                int compareTo = data.getInt("compare_to");
+                switch(comparison) {
+                    case EQUAL: case LESS_THAN_OR_EQUAL: case GREATER_THAN:
+                        stopAt = compareTo + 1;
+                        break;
+                    case LESS_THAN: case GREATER_THAN_OR_EQUAL:
+                        stopAt = compareTo;
+                        break;
+                }
+                int count = 0;
+                Box box = entity.getBoundingBox();
+                BlockPos blockPos = new BlockPos(box.minX + 0.001D, box.minY + 0.001D, box.minZ + 0.001D);
+                BlockPos blockPos2 = new BlockPos(box.maxX - 0.001D, box.maxY - 0.001D, box.maxZ - 0.001D);
+                BlockPos.Mutable mutable = new BlockPos.Mutable();
+                for(int i = blockPos.getX(); i <= blockPos2.getX() && count < stopAt; ++i) {
+                    for(int j = blockPos.getY(); j <= blockPos2.getY() && count < stopAt; ++j) {
+                        for(int k = blockPos.getZ(); k <= blockPos2.getZ() && count < stopAt; ++k) {
+                            mutable.set(i, j, k);
+                            if(blockCondition.test(new CachedBlockPosition(entity.world, mutable, false))) {
+                                count++;
+                            }
+                        }
+                    }
+                }
+                return comparison.compare(count, compareTo);}));
+        register(new ConditionFactory<>(Origins.identifier("entity_group"), new SerializableData()
+            .add("group", SerializableDataType.ENTITY_GROUP),
+            (data, entity) -> entity.getGroup() == (EntityGroup)data.get("group")));
+        register(new ConditionFactory<>(Origins.identifier("in_tag"), new SerializableData()
+            .add("tag", SerializableDataType.ENTITY_TAG),
+            (data, entity) -> ((Tag<EntityType<?>>)data.get("tag")).contains(entity.getType())));
     }
 
     private static void register(ConditionFactory<LivingEntity> conditionFactory) {

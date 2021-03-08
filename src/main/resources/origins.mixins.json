@@ -37,6 +37,7 @@
     "ClientPlayerInteractionManagerAccessor",
     "ClientPlayNetworkHandlerMixin",
     "ConnectScreenMixin",
+    "EntityRenderDispatcherMixin",
     "ElytraFeatureRendererMixin",
     "GameRendererMixin",
     "InGameOverlayRendererMixin",

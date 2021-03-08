@@ -3,7 +3,13 @@ package io.github.apace100.origins.mixin;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModComponents;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
@@ -11,6 +17,7 @@ import net.minecraft.tag.FluidTags;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,6 +41,23 @@ public abstract class EntityMixin {
     @Shadow public World world;
 
     @Shadow public abstract double getFluidHeight(Tag<Fluid> fluid);
+
+    @Environment(EnvType.CLIENT)
+    @Inject(method = "isGlowing", at = @At("HEAD"), cancellable = true)
+    private void makeEntitiesGlow(CallbackInfoReturnable<Boolean> cir) {
+        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        Entity thisEntity = (Entity)(Object)this;
+        if(player != null && player != thisEntity && thisEntity instanceof LivingEntity) {
+            if(OriginComponent.getPowers(player, EntityGlowPower.class).stream().anyMatch(p -> p.doesApply(thisEntity))) {
+                cir.setReturnValue(true);
+            }
+        }
+    }
+
+    @Inject(method = "fall", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;fallDistance:F", opcode = Opcodes.PUTFIELD, ordinal = 0))
+    private void invokeActionOnSoftLand(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition, CallbackInfo ci) {
+        OriginComponent.getPowers((Entity)(Object)this, ActionOnLandPower.class).forEach(ActionOnLandPower::executeAction);
+    }
 
     @Inject(at = @At("HEAD"), method = "isInvulnerableTo", cancellable = true)
     private void makeOriginInvulnerable(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {

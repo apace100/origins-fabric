@@ -33,6 +33,18 @@ public class CooldownPower extends Power implements HudRendered {
         return Math.min(1F, Math.max(time / (float)cooldownDuration, 0F));
     }
 
+    public int getRemainingTicks() {
+        return (int)Math.max(0, cooldownDuration - (player.getEntityWorld().getTime() - lastUseTime));
+    }
+
+    public void modify(int changeInTicks){
+        this.lastUseTime += changeInTicks;
+        long currentTime = player.getEntityWorld().getTime();
+        if(this.lastUseTime > currentTime) {
+            lastUseTime = currentTime;
+        }
+    }
+
     @Override
     public Tag toTag() {
         return LongTag.of(lastUseTime);
