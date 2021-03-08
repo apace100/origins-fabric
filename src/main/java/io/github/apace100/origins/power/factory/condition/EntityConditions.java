@@ -206,6 +206,8 @@ public class EntityConditions {
                 Power p = component.getPower((PowerType<?>)data.get("resource"));
                 if(p instanceof VariableIntPower) {
                     resourceValue = ((VariableIntPower)p).getValue();
+                } else if(p instanceof CooldownPower) {
+                    resourceValue = ((CooldownPower)p).getRemainingTicks();
                 }
                 return ((Comparison)data.get("comparison")).compare(resourceValue, data.getInt("compare_to"));
             }));

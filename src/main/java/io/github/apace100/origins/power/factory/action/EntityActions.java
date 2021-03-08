@@ -2,6 +2,7 @@ package io.github.apace100.origins.power.factory.action;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.power.CooldownPower;
 import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.VariableIntPower;
@@ -266,6 +267,10 @@ public class EntityActions {
                         VariableIntPower vip = (VariableIntPower)p;
                         int newValue = vip.getValue() + data.getInt("change");
                         vip.setValue(newValue);
+                        OriginComponent.sync((PlayerEntity)entity);
+                    } else if(p instanceof CooldownPower) {
+                        CooldownPower cp = (CooldownPower)p;
+                        cp.modify(data.getInt("change"));
                         OriginComponent.sync((PlayerEntity)entity);
                     }
                 }
