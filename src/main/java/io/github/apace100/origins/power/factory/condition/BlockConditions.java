@@ -56,7 +56,12 @@ public class BlockConditions {
             (data, block) -> block.getBlockState().isOf((Block)data.get("block"))));
         register(new ConditionFactory<>(Origins.identifier("in_tag"), new SerializableData()
             .add("tag", SerializableDataType.BLOCK_TAG),
-            (data, block) -> block.getBlockState().isIn((Tag<Block>)data.get("tag"))));
+            (data, block) -> {
+                if(block == null || block.getBlockState() == null) {
+                    return false;
+                }
+                return block.getBlockState().isIn((Tag<Block>)data.get("tag"));
+            }));
         register(new ConditionFactory<>(Origins.identifier("adjacent"), new SerializableData()
             .add("comparison", SerializableDataType.COMPARISON)
             .add("compare_to", SerializableDataType.INT)

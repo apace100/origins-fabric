@@ -42,6 +42,8 @@ import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.tag.ServerTagManagerHolder;
 import net.minecraft.tag.Tag;
@@ -417,6 +419,29 @@ public class SerializableDataType<T> {
     public static final SerializableDataType<Tag<EntityType<?>>> ENTITY_TAG = SerializableDataType.wrap(ClassUtil.castClass(Tag.class), IDENTIFIER,
         tag -> ServerTagManagerHolder.getTagManager().getEntityTypes().getTagId(tag),
         TagRegistry::entityType);
+
+    public static final SerializableDataType<Recipe> RECIPE = new SerializableDataType<>(Recipe.class,
+        (buffer, recipe) -> {
+            buffer.writeIdentifier(Registry.RECIPE_SERIALIZER.getId(recipe.getSerializer()));
+            buffer.writeIdentifier(recipe.getId());
+            recipe.getSerializer().write(buffer, recipe);
+        },
+        (buffer) -> {
+            Identifier recipeSerializerId = buffer.readIdentifier();
+            Identifier recipeId = buffer.readIdentifier();
+            RecipeSerializer serializer = Registry.RECIPE_SERIALIZER.get(recipeSerializerId);
+            return serializer.read(recipeId, buffer);
+        },
+        (jsonElement) -> {
+            if(!jsonElement.isJsonObject()) {
+                throw new RuntimeException("Expected recipe to be a JSON object.");
+            }
+            JsonObject json = jsonElement.getAsJsonObject();
+            Identifier recipeSerializerId = Identifier.tryParse(JsonHelper.getString(json, "type"));
+            Identifier recipeId = Identifier.tryParse(JsonHelper.getString(json, "id"));
+            RecipeSerializer serializer = Registry.RECIPE_SERIALIZER.get(recipeSerializerId);
+            return serializer.read(recipeId, json);
+        });
 
     private final Class<T> dataClass;
     private final BiConsumer<PacketByteBuf, T> send;
