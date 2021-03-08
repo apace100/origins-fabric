@@ -29,6 +29,11 @@ public class ConditionedAttributePower extends Power {
         }
     }
 
+    @Override
+    public void onRemoved() {
+        removeMods();
+    }
+
     public ConditionedAttributePower addModifier(AttributedEntityAttributeModifier modifier) {
         this.modifiers.add(modifier);
         return this;
