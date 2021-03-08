@@ -593,22 +593,26 @@ public class PowerFactories {
                 .add("entity_action", SerializableDataType.ENTITY_ACTION)
                 .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
                 .add("cooldown", SerializableDataType.INT)
-                .add("hud_render", SerializableDataType.HUD_RENDER, HudRender.DONT_RENDER),
+                .add("hud_render", SerializableDataType.HUD_RENDER, HudRender.DONT_RENDER)
+                .add("target_condition", SerializableDataType.ENTITY_CONDITION, null),
             data ->
                 (type, player) -> new SelfActionOnHitPower(type, player, data.getInt("cooldown"),
                     (HudRender)data.get("hud_render"), (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition"),
-                    (ActionFactory<Entity>.Instance)data.get("entity_action")))
+                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
+                    (ConditionFactory<LivingEntity>.Instance)data.get("target_condition")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("target_action_on_hit"),
             new SerializableData()
                 .add("entity_action", SerializableDataType.ENTITY_ACTION)
                 .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
                 .add("cooldown", SerializableDataType.INT)
-                .add("hud_render", SerializableDataType.HUD_RENDER, HudRender.DONT_RENDER),
+                .add("hud_render", SerializableDataType.HUD_RENDER, HudRender.DONT_RENDER)
+                .add("target_condition", SerializableDataType.ENTITY_CONDITION, null),
             data ->
                 (type, player) -> new TargetActionOnHitPower(type, player, data.getInt("cooldown"),
                     (HudRender)data.get("hud_render"), (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition"),
-                    (ActionFactory<Entity>.Instance)data.get("entity_action")))
+                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
+                    (ConditionFactory<LivingEntity>.Instance)data.get("target_condition")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("starting_equipment"),
             new SerializableData()
@@ -778,6 +782,19 @@ public class PowerFactories {
             data ->
                 (type, player) -> new PreventBlockSelectionPower(type, player,
                     (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("self_action_on_kill"),
+            new SerializableData()
+                .add("entity_action", SerializableDataType.ENTITY_ACTION)
+                .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
+                .add("cooldown", SerializableDataType.INT)
+                .add("hud_render", SerializableDataType.HUD_RENDER, HudRender.DONT_RENDER)
+                .add("target_condition", SerializableDataType.ENTITY_CONDITION, null),
+            data ->
+                (type, player) -> new SelfActionOnKillPower(type, player, data.getInt("cooldown"),
+                    (HudRender)data.get("hud_render"), (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
+                    (ConditionFactory<LivingEntity>.Instance)data.get("target_condition")))
             .allowCondition());
     }
 

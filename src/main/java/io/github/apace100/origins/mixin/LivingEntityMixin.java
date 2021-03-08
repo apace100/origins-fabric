@@ -55,6 +55,11 @@ public abstract class LivingEntityMixin extends Entity {
         }
     }
 
+    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;onDeath(Lnet/minecraft/entity/damage/DamageSource;)V"))
+    private void invokeKillAction(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        OriginComponent.getPowers(source.getAttacker(), SelfActionOnKillPower.class).forEach(p -> p.onKill((LivingEntity)(Object)this, source, amount));
+    }
+
     // ModifyLavaSpeedPower
     @ModifyConstant(method = "travel", constant = {
         @Constant(doubleValue = 0.5D, ordinal = 0),

@@ -10,24 +10,24 @@ import net.minecraft.util.Pair;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class TargetActionOnHitPower extends CooldownPower {
+public class SelfActionOnKillPower extends CooldownPower {
 
     private final Predicate<Pair<DamageSource, Float>> damageCondition;
     private final Predicate<LivingEntity> targetCondition;
     private final Consumer<Entity> entityAction;
 
-    public TargetActionOnHitPower(PowerType<?> type, PlayerEntity player, int cooldownDuration, HudRender hudRender, Predicate<Pair<DamageSource, Float>> damageCondition, Consumer<Entity> entityAction, Predicate<LivingEntity> targetCondition) {
+    public SelfActionOnKillPower(PowerType<?> type, PlayerEntity player, int cooldownDuration, HudRender hudRender, Predicate<Pair<DamageSource, Float>> damageCondition, Consumer<Entity> entityAction, Predicate<LivingEntity> targetCondition) {
         super(type, player, cooldownDuration, hudRender);
         this.damageCondition = damageCondition;
         this.entityAction = entityAction;
         this.targetCondition = targetCondition;
     }
 
-    public void onHit(LivingEntity target, DamageSource damageSource, float damageAmount) {
+    public void onKill(LivingEntity target, DamageSource damageSource, float damageAmount) {
         if(targetCondition == null || targetCondition.test(target)) {
             if(damageCondition == null || damageCondition.test(new Pair<>(damageSource, damageAmount))) {
                 if(canUse()) {
-                    this.entityAction.accept(target);
+                    this.entityAction.accept(this.player);
                     use();
                 }
             }
