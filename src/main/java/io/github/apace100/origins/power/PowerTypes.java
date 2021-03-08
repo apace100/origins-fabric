@@ -70,7 +70,8 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
                             ||  entry.getKey().equals("loading_priority")
                             ||  entry.getKey().equals("name")
                             ||  entry.getKey().equals("description")
-                            ||  entry.getKey().equals("hidden")) {
+                            ||  entry.getKey().equals("hidden")
+                            ||  entry.getKey().equals("condition")) {
                                 continue;
                             }
                             Identifier subId = new Identifier(id.toString() + "_" + entry.getKey());

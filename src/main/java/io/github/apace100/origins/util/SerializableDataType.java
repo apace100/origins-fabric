@@ -283,13 +283,19 @@ public class SerializableDataType<T> {
         SerializableData()
             .add("should_render", BOOLEAN, true)
             .add("bar_index", INT, 0)
-            .add("sprite_location", IDENTIFIER, Origins.identifier("textures/gui/resource_bar.png")),
-        (dataInst) -> new HudRender(dataInst.getBoolean("should_render"), dataInst.getInt("bar_index"), dataInst.getId("sprite_location")),
+            .add("sprite_location", IDENTIFIER, Origins.identifier("textures/gui/resource_bar.png"))
+            .add("condition", ENTITY_CONDITION, null),
+        (dataInst) -> new HudRender(
+            dataInst.getBoolean("should_render"),
+            dataInst.getInt("bar_index"),
+            dataInst.getId("sprite_location"),
+            (ConditionFactory<LivingEntity>.Instance)dataInst.get("condition")),
         (data, inst) -> {
             SerializableData.Instance dataInst = data.new Instance();
             dataInst.set("should_render", inst.shouldRender());
             dataInst.set("bar_index", inst.getBarIndex());
             dataInst.set("sprite_location", inst.getSpriteLocation());
+            dataInst.set("condition", inst.getCondition());
             return dataInst;
         });
 
