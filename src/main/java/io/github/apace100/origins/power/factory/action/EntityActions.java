@@ -25,6 +25,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandOutput;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -56,8 +57,8 @@ public class EntityActions {
             .add("if_action", SerializableDataType.ENTITY_ACTION)
             .add("else_action", SerializableDataType.ENTITY_ACTION, null),
             (data, entity) -> {
-                if(entity instanceof PlayerEntity) {
-                    if(((ConditionFactory<PlayerEntity>.Instance)data.get("condition")).test((PlayerEntity)entity)) {
+                if(entity instanceof LivingEntity) {
+                    if(((ConditionFactory<LivingEntity>.Instance)data.get("condition")).test((LivingEntity)entity)) {
                         ((ActionFactory<Entity>.Instance)data.get("if_action")).accept(entity);
                     } else {
                         if(data.isPresent("else_action")) {
@@ -72,6 +73,29 @@ public class EntityActions {
                 FilterableWeightedList<ActionFactory<Entity>.Instance> actionList = (FilterableWeightedList<ActionFactory<Entity>.Instance>)data.get("actions");
                 ActionFactory<Entity>.Instance action = actionList.pickRandom(new Random());
                 action.accept(entity);
+            }));
+        register(new ActionFactory<>(Origins.identifier("if_else_list"), new SerializableData()
+            .add("actions", SerializableDataType.list(SerializableDataType.compound(ClassUtil.castClass(Pair.class), new SerializableData()
+                .add("action", SerializableDataType.ENTITY_ACTION)
+                .add("condition", SerializableDataType.ENTITY_CONDITION),
+                inst -> new Pair<>((ConditionFactory<LivingEntity>.Instance)inst.get("condition"), (ActionFactory<Entity>.Instance)inst.get("action")),
+                (data, pair) -> {
+                    SerializableData.Instance inst = data.new Instance();
+                    inst.set("condition", pair.getLeft());
+                    inst.set("action", pair.getRight());
+                    return inst;
+                }))),
+            (data, entity) -> {
+                if(entity instanceof LivingEntity) {
+                    List<Pair<ConditionFactory<Entity>.Instance, ActionFactory<Entity>.Instance>> actions =
+                        (List<Pair<ConditionFactory<Entity>.Instance, ActionFactory<Entity>.Instance>>)data.get("actions");
+                    for (Pair<ConditionFactory<Entity>.Instance, ActionFactory<Entity>.Instance> action: actions) {
+                        if(action.getLeft().test(entity)) {
+                            action.getRight().accept(entity);
+                            break;
+                        }
+                    }
+                }
             }));
 
         register(new ActionFactory<>(Origins.identifier("damage"), new SerializableData()
