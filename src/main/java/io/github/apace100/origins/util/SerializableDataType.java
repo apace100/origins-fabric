@@ -53,6 +53,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.HashMap;
@@ -252,6 +253,12 @@ public class SerializableDataType<T> {
 
     public static final SerializableDataType<List<ConditionFactory<Pair<DamageSource, Float>>.Instance>> DAMAGE_CONDITIONS =
         SerializableDataType.list(DAMAGE_CONDITION);
+
+    public static final SerializableDataType<ConditionFactory<Biome>.Instance> BIOME_CONDITION =
+        SerializableDataType.condition(ClassUtil.castClass(ConditionFactory.Instance.class), ConditionTypes.BIOME);
+
+    public static final SerializableDataType<List<ConditionFactory<Biome>.Instance>> BIOME_CONDITIONS =
+        SerializableDataType.list(BIOME_CONDITION);
 
     public static final SerializableDataType<ActionFactory<Entity>.Instance> ENTITY_ACTION =
         SerializableDataType.effect(ClassUtil.castClass(ActionFactory.Instance.class), ActionTypes.ENTITY);

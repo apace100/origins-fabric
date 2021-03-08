@@ -1,9 +1,6 @@
 package io.github.apace100.origins;
 
-import io.github.apace100.origins.command.LayerArgument;
-import io.github.apace100.origins.command.OriginArgument;
-import io.github.apace100.origins.command.OriginCommand;
-import io.github.apace100.origins.command.ResourceCommand;
+import io.github.apace100.origins.command.*;
 import io.github.apace100.origins.mixin.CriteriaRegistryInvoker;
 import io.github.apace100.origins.networking.ModPacketsC2S;
 import io.github.apace100.origins.origin.Origin;
@@ -62,6 +59,7 @@ public class Origins implements ModInitializer {
 		BlockConditions.register();
 		DamageConditions.register();
 		FluidConditions.register();
+		BiomeConditions.register();
 		EntityActions.register();
 		ItemActions.register();
 		BlockActions.register();
@@ -75,6 +73,7 @@ public class Origins implements ModInitializer {
 		CriteriaRegistryInvoker.callRegister(GainedPowerCriterion.INSTANCE);
 		ArgumentTypes.register("origins:origin", OriginArgument.class, new ConstantArgumentSerializer<>(OriginArgument::origin));
 		ArgumentTypes.register("origins:layer", LayerArgument.class, new ConstantArgumentSerializer<>(LayerArgument::layer));
+		ArgumentTypes.register("origins:power", PowerArgument.class, new ConstantArgumentSerializer<>(PowerArgument::power));
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new PowerTypes());
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginManager());
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginLayers());

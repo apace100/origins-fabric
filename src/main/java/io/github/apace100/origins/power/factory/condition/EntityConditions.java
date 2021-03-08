@@ -38,6 +38,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.biome.Biome;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -279,8 +280,24 @@ public class EntityConditions {
             .add("compare_to", SerializableDataType.FLOAT),
             (data, entity) -> ((Comparison)data.get("comparison")).compare(entity.getHealth() / entity.getMaxHealth(), data.getFloat("compare_to"))));
         register(new ConditionFactory<>(Origins.identifier("biome"), new SerializableData()
-            .add("biome", SerializableDataType.IDENTIFIER),
-            (data, entity) -> entity.world.getRegistryManager().get(Registry.BIOME_KEY).getId(entity.world.getBiome(entity.getBlockPos())).equals(data.getId("biome"))));
+            .add("biome", SerializableDataType.IDENTIFIER, null)
+            .add("biomes", SerializableDataType.IDENTIFIERS, null)
+            .add("condition", SerializableDataType.BIOME_CONDITION, null),
+            (data, entity) -> {
+                Biome biome = entity.world.getBiome(entity.getBlockPos());
+                ConditionFactory<Biome>.Instance condition = (ConditionFactory<Biome>.Instance)data.get("condition");
+                if(data.isPresent("biome") || data.isPresent("biomes")) {
+                    Identifier biomeId = entity.world.getRegistryManager().get(Registry.BIOME_KEY).getId(biome);
+                    if(data.isPresent("biome") && biomeId.equals(data.getId("biome"))) {
+                        return condition == null || condition.test(biome);
+                    }
+                    if(data.isPresent("biomes") && ((List<Identifier>)data.get("biomes")).contains(biomeId)) {
+                        return condition == null || condition.test(biome);
+                    }
+                    return false;
+                }
+                return condition == null || condition.test(biome);
+            }));
         register(new ConditionFactory<>(Origins.identifier("entity_type"), new SerializableData()
             .add("entity_type", SerializableDataType.ENTITY_TYPE),
             (data, entity) -> entity.getType() == data.get("entity_type")));
