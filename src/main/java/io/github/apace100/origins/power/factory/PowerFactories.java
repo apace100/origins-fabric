@@ -16,10 +16,12 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.recipe.Recipe;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -795,6 +797,15 @@ public class PowerFactories {
                     (HudRender)data.get("hud_render"), (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition"),
                     (ActionFactory<Entity>.Instance)data.get("entity_action"),
                     (ConditionFactory<LivingEntity>.Instance)data.get("target_condition")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("recipe"),
+            new SerializableData()
+                .add("recipe", SerializableDataType.RECIPE),
+            data ->
+                (type, player) -> {
+                    Recipe<CraftingInventory> recipe = (Recipe<CraftingInventory>)data.get("recipe");
+                    return new RecipePower(type, player, recipe);
+                })
             .allowCondition());
     }
 

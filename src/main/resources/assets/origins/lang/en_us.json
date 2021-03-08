@@ -158,11 +158,11 @@
   "power.origins.translucent.name": "Translucent",
   "power.origins.translucent.description": "Your skin is translucent.",
 
-  "power.origins.double_jump.name": "Flap",
-  "power.origins.double_jump.description": "Flap your wings in the air to perform a second jump.",
+  "power.origins.end_spawn.name": "End Inhabitant",
+  "power.origins.end_spawn.description": "Your journey begins in the End.",
 
   "power.origins.master_of_webs.name": "Master of Webs",
-  "power.origins.master_of_webs.description": "You navigate cobweb perfectly, and are able to climb in them. When you hit an enemy in melee, they get stuck in cobweb for a while. Non-arthropods stuck in cobweb will be sensed by you.",
+  "power.origins.master_of_webs.description": "You navigate cobweb perfectly, and are able to climb in them. When you hit an enemy in melee, they get stuck in cobweb for a while. Non-arthropods stuck in cobweb will be sensed by you. You are able to craft cobweb from string.",
 
   "category.origins": "Origins",
   "key.origins.primary_active": "Active Power (Primary)",
