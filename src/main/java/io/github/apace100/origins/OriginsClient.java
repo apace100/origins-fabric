@@ -79,19 +79,23 @@ public class OriginsClient implements ClientModInitializer {
             if(tick.player != null) {
                 List<Power> powers = ModComponents.ORIGIN.get(tick.player).getPowers();
                 List<Power> pressedPowers = new LinkedList<>();
+                HashMap<String, Boolean> currentKeyBindingStates = new HashMap<>();
                 for(Power power : powers) {
                     if(power instanceof Active) {
                         Active active = (Active)power;
                         Active.Key key = active.getKey();
                         KeyBinding keyBinding = getKeyBinding(key.key);
                         if(keyBinding != null) {
-                            if(keyBinding.isPressed() && (key.continuous || !lastKeyBindingStates.getOrDefault(key.key, false))) {
+                            if(!currentKeyBindingStates.containsKey(key.key)) {
+                               currentKeyBindingStates.put(key.key, keyBinding.isPressed());
+                            }
+                            if(currentKeyBindingStates.get(key.key) && (key.continuous || !lastKeyBindingStates.getOrDefault(key.key, false))) {
                                 pressedPowers.add(power);
                             }
-                            lastKeyBindingStates.put(key.key, keyBinding.isPressed());
                         }
                     }
                 }
+                lastKeyBindingStates = currentKeyBindingStates;
                 if(pressedPowers.size() > 0) {
                     performActivePowers(pressedPowers);
                 }
