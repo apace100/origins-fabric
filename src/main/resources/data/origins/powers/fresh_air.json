@@ -5,5 +5,5 @@
     "comparison": "<",
     "compare_to": 86
   },
-  "message": "You need fresh air to sleep."
+  "message": "origins.avian_sleep_fail"
 }
