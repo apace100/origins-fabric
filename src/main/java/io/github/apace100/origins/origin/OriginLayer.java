@@ -75,6 +75,14 @@ public class OriginLayer implements Comparable<OriginLayer> {
         return conditionedOrigins.stream().filter(co -> co.isConditionFulfilled(playerEntity)).flatMap(co -> co.getOrigins().stream()).filter(OriginRegistry::contains).collect(Collectors.toList());
     }
 
+    public int getOriginOptionCount(PlayerEntity playerEntity) {
+        long choosableOrigins = getOrigins(playerEntity).stream().map(OriginRegistry::get).filter(Origin::isChoosable).count();
+        if(isRandomAllowed && getRandomOrigins(playerEntity).size() > 0) {
+            choosableOrigins++;
+        }
+        return (int)choosableOrigins;
+    }
+
     public boolean contains(Origin origin) {
         return conditionedOrigins.stream().anyMatch(co -> co.getOrigins().stream().anyMatch(o -> o.equals(origin.getIdentifier())));
     }

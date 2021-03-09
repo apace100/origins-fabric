@@ -74,15 +74,15 @@ public class ViewOriginScreen extends Screen {
 				MinecraftClient.getInstance().openScreen(new ChooseOriginScreen(Lists.newArrayList(originLayers.get(currentLayer).getLeft()), 0, false));
 			}));
 			PlayerEntity player = MinecraftClient.getInstance().player;
-			chooseOriginButton.active = chooseOriginButton.visible = originLayers.get(currentLayer).getRight() == Origin.EMPTY && originLayers.get(currentLayer).getLeft().getOrigins(player).size() > 0;
+			chooseOriginButton.active = chooseOriginButton.visible = originLayers.get(currentLayer).getRight() == Origin.EMPTY && originLayers.get(currentLayer).getLeft().getOriginOptionCount(player) > 0;
 			addButton(new ButtonWidget(guiLeft - 40,this.height / 2 - 10, 20, 20, new LiteralText("<"), b -> {
 				currentLayer = (currentLayer - 1 + originLayers.size()) % originLayers.size();
-				chooseOriginButton.active = chooseOriginButton.visible = originLayers.get(currentLayer).getRight() == Origin.EMPTY && originLayers.get(currentLayer).getLeft().getOrigins(player).size() > 0;
+				chooseOriginButton.active = chooseOriginButton.visible = originLayers.get(currentLayer).getRight() == Origin.EMPTY && originLayers.get(currentLayer).getLeft().getOriginOptionCount(player) > 0;
 				scrollPos = 0;
 			}));
 			addButton(new ButtonWidget(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20, new LiteralText(">"), b -> {
 				currentLayer = (currentLayer + 1) % originLayers.size();
-				chooseOriginButton.active = chooseOriginButton.visible = originLayers.get(currentLayer).getRight() == Origin.EMPTY && originLayers.get(currentLayer).getLeft().getOrigins(player).size() > 0;
+				chooseOriginButton.active = chooseOriginButton.visible = originLayers.get(currentLayer).getRight() == Origin.EMPTY && originLayers.get(currentLayer).getLeft().getOriginOptionCount(player) > 0;
 				scrollPos = 0;
 			}));
 		}

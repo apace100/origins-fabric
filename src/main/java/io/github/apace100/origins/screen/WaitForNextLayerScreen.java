@@ -14,12 +14,16 @@ public class WaitForNextLayerScreen extends Screen {
     private final ArrayList<OriginLayer> layerList;
     private final int currentLayerIndex;
     private final boolean showDirtBackground;
+    private final int maxSelection;
 
     protected WaitForNextLayerScreen(ArrayList<OriginLayer> layerList, int currentLayerIndex, boolean showDirtBackground) {
         super(LiteralText.EMPTY);
         this.layerList = layerList;
         this.currentLayerIndex = currentLayerIndex;
         this.showDirtBackground = showDirtBackground;
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        OriginLayer currentLayer = layerList.get(currentLayerIndex);
+        maxSelection = currentLayer.getOriginOptionCount(player);
     }
 
     public void openSelection() {
@@ -37,6 +41,10 @@ public class WaitForNextLayerScreen extends Screen {
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        if(maxSelection == 0) {
+            openSelection();
+            return;
+        }
         this.renderBackground(matrices);
     }
 
