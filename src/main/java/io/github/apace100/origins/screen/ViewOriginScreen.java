@@ -52,7 +52,7 @@ public class ViewOriginScreen extends Screen {
 			if(origin.getDisplayItem().getItem() == Items.PLAYER_HEAD) {
 				origin.getDisplayItem().getOrCreateTag().putString("SkullOwner", player.getDisplayName().getString());
 			}
-			if(origin != Origin.EMPTY || layer.getOrigins(player).size() > 0) {
+			if(origin != Origin.EMPTY || layer.getOriginOptionCount(player) > 0) {
 				originLayers.add(new Pair<>(layer, origin));
 			}
 		});
