@@ -157,6 +157,12 @@
 
   "power.origins.translucent.name": "Полупрозрачный",
   "power.origins.translucent.description": "Ваша кожа полупрозрачная.",
+  
+  "power.origins.end_spawn.name": "Житель Края",
+  "power.origins.end_spawn.description": "Твои приключения начинаются в Крае.",
+
+  "power.origins.master_of_webs.name": "Мастер паутин",
+  "power.origins.master_of_webs.description": "Ты отлично ориентируешься в паутине и умеешь по ней лазить. Когда ты бьёшь врага вблизи, он на время застревает в паутине. Ты почувствуешь, когда не членистоногие существа застревают в паутине. Ты можешь создавать паутину из нитки.",
 
   "category.origins": "Origins",
   "key.origins.primary_active": "Активная сила (Главная)",
@@ -180,11 +186,13 @@
   "origins.gui.choose_origin.title": "Выберите ваше %s.",
   "origins.gui.view_origin.title": "Это ваше %s.",
   "origins.gui.view_origin.empty": "Вы не выбрали происхождение.",
+  "origins.gui.view_origin.not_installed": "На это сервере не установлен Origins.",
   "origins.gui.impact.impact": "Влияние",
   "origins.gui.impact.none": "Никакое",
   "origins.gui.impact.low": "Низкое",
   "origins.gui.impact.medium": "Среднее",
   "origins.gui.impact.high": "Высокое",
+  "origins.gui.version_mismatch": "На это сервере установлена другая версия Origins (v%1$s), которая несовместима с той, что у вас (v%2$s).",
   
   "origin.origins.random.name": "Случайный",
   "origin.origins.random.description": "Вам будет назначен один из следующих:",
@@ -202,5 +210,7 @@
 
   "commands.origin.origin_not_found": "Неизвестное происхождение: %s",
   "commands.origin.set.success.single": "Выбрать происхождение %s в слое %s к %s.",
-  "commands.origin.set.success.multiple": "Выбрать происхождение %s целям в слое %s к %s."
+  "commands.origin.set.success.multiple": "Выбрать происхождение %s целям в слое %s к %s.",
+  
+  "origins.avian_sleep_fail": "Тебе нужен свежий воздух для сна."
 }
