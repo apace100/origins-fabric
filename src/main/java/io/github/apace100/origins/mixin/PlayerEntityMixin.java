@@ -82,7 +82,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
     @ModifyVariable(method = "attack", at = @At(value = "STORE", ordinal = 0), name = "f", ordinal = 0)
     public float modifyDamage(float f, Entity target) {
         DamageSource source = DamageSource.player((PlayerEntity)(Object)this);
-        return OriginComponent.modify(this, ModifyDamageDealtPower.class, f, p -> p.doesApply(source, f, (LivingEntity)target));
+        return OriginComponent.modify(this, ModifyDamageDealtPower.class, f, p -> p.doesApply(source, f, target instanceof LivingEntity ? (LivingEntity)target : null));
     }
 
     // NO_COBWEB_SLOWDOWN
