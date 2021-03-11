@@ -14,9 +14,7 @@ import io.github.apace100.origins.power.factory.action.ItemActions;
 import io.github.apace100.origins.power.factory.condition.*;
 import io.github.apace100.origins.registry.*;
 import io.github.apace100.origins.util.ChoseOriginCriterion;
-import io.github.apace100.origins.util.ElytraPowerFallFlying;
 import io.github.apace100.origins.util.GainedPowerCriterion;
-import net.adriantodt.fallflyinglib.FallFlyingLib;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -65,7 +63,6 @@ public class Origins implements ModInitializer {
 		ItemActions.register();
 		BlockActions.register();
 		Origin.init();
-		FallFlyingLib.registerAccessor(ElytraPowerFallFlying::new);
 		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
 			OriginCommand.register(dispatcher);
 			ResourceCommand.register(dispatcher);

@@ -1,0 +1,9 @@
+{
+  "type": "origins:attribute",
+  "modifier": {
+    "name": "Allows elytra flight",
+    "attribute": "minecraft:caelus.elytra_flight",
+    "value": 1,
+    "operation": "addition"
+  }
+}
