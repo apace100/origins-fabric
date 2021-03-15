@@ -10,9 +10,12 @@ import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModEntities;
 import io.github.apace100.origins.screen.PowerHudRenderer;
 import io.github.apace100.origins.screen.ViewOriginScreen;
-import io.github.apace100.origins.util.OriginsConfig;
+import io.github.apace100.origins.util.OriginsConfigSerializer;
 import io.netty.buffer.Unpooled;
 import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -39,7 +42,7 @@ public class OriginsClient implements ClientModInitializer {
     public static KeyBinding useSecondaryActivePowerKeybind;
     public static KeyBinding viewCurrentOriginKeybind;
 
-    public static OriginsConfig config;
+    public static ClientConfig config;
 
     public static boolean isServerRunningOrigins = false;
 
@@ -59,8 +62,8 @@ public class OriginsClient implements ClientModInitializer {
 
         EntityConditionsClient.register();
 
-        AutoConfig.register(OriginsConfig.class, OriginsConfig.Serializer::new);
-        config = AutoConfig.getConfigHolder(OriginsConfig.class).getConfig();
+        AutoConfig.register(ClientConfig.class, OriginsConfigSerializer::new);
+        config = AutoConfig.getConfigHolder(ClientConfig.class).getConfig();
 
         usePrimaryActivePowerKeybind = new KeyBinding("key.origins.primary_active", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_G, "category." + Origins.MODID);
         useSecondaryActivePowerKeybind = new KeyBinding("key.origins.secondary_active", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "category." + Origins.MODID);
@@ -134,5 +137,24 @@ public class OriginsClient implements ClientModInitializer {
             return null;
         }
         return idToKeyBindingMap.get(key);
+    }
+
+    @Config(name = Origins.MODID)
+    public static class ClientConfig implements ConfigData {
+
+        public int xOffset = 0;
+        public int yOffset = 0;
+
+        @ConfigEntry.BoundedDiscrete(max = 1)
+        public float phantomizedOverlayStrength = 0.8F;
+
+        @Override
+        public void validatePostLoad() {
+            if (phantomizedOverlayStrength < 0F) {
+                phantomizedOverlayStrength = 0F;
+            } else if (phantomizedOverlayStrength > 1F) {
+                phantomizedOverlayStrength = 1F;
+            }
+        }
     }
 }

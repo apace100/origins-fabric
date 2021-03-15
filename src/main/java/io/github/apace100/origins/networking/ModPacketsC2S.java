@@ -27,8 +27,10 @@ import java.util.Random;
 public class ModPacketsC2S {
 
     public static void register() {
-        ServerLoginConnectionEvents.QUERY_START.register(ModPacketsC2S::handshake);
-        ServerLoginNetworking.registerGlobalReceiver(ModPackets.HANDSHAKE, ModPacketsC2S::handleHandshakeReply);
+        if(Origins.config.performVersionCheck) {
+            ServerLoginConnectionEvents.QUERY_START.register(ModPacketsC2S::handshake);
+            ServerLoginNetworking.registerGlobalReceiver(ModPackets.HANDSHAKE, ModPacketsC2S::handleHandshakeReply);
+        }
         ServerPlayNetworking.registerGlobalReceiver(ModPackets.CHOOSE_ORIGIN, ModPacketsC2S::chooseOrigin);
         ServerPlayNetworking.registerGlobalReceiver(ModPackets.CHOOSE_RANDOM_ORIGIN, ModPacketsC2S::chooseRandomOrigin);
         ServerPlayNetworking.registerGlobalReceiver(ModPackets.USE_ACTIVE_POWERS, ModPacketsC2S::useActivePowers);

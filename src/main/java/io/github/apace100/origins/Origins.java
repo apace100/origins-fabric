@@ -16,6 +16,10 @@ import io.github.apace100.origins.registry.*;
 import io.github.apace100.origins.util.ChoseOriginCriterion;
 import io.github.apace100.origins.util.ElytraPowerFallFlying;
 import io.github.apace100.origins.util.GainedPowerCriterion;
+import io.github.apace100.origins.util.OriginsConfigSerializer;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.annotation.Config;
 import net.adriantodt.fallflyinglib.FallFlyingLib;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
@@ -35,10 +39,18 @@ public class Origins implements ModInitializer {
 	public static int[] SEMVER;
 	public static final Logger LOGGER = LogManager.getLogger(Origins.class);
 
+	public static ServerConfig config;
+
 	@Override
 	public void onInitialize() {
 		FabricLoader.getInstance().getModContainer(MODID).ifPresent(modContainer -> {
 			VERSION = modContainer.getMetadata().getVersion().getFriendlyString();
+			if(VERSION.contains("+")) {
+				VERSION = VERSION.split("\\+")[0];
+			}
+			if(VERSION.contains("-")) {
+				VERSION = VERSION.split("-")[0];
+			}
 			String[] splitVersion = VERSION.split("\\.");
 			SEMVER = new int[splitVersion.length];
 			for(int i = 0; i < SEMVER.length; i++) {
@@ -46,6 +58,9 @@ public class Origins implements ModInitializer {
 			}
 		});
 		LOGGER.info("Origins " + VERSION + " is initializing. Have fun!");
+		AutoConfig.register(ServerConfig.class, OriginsConfigSerializer::new);
+		config = AutoConfig.getConfigHolder(ServerConfig.class).getConfig();
+
 		ModBlocks.register();
 		ModItems.register();
 		ModTags.register();
@@ -84,5 +99,11 @@ public class Origins implements ModInitializer {
 
 	public static Identifier identifier(String path) {
 		return new Identifier(Origins.MODID, path);
+	}
+
+	@Config(name = Origins.MODID + "_server")
+	public static class ServerConfig implements ConfigData {
+
+		public boolean performVersionCheck;
 	}
 }
