@@ -807,6 +807,13 @@ public class PowerFactories {
                     return new RecipePower(type, player, recipe);
                 })
             .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("ignore_water"),
+            new SerializableData(),
+            data ->
+                (type, player) -> {
+                    return new IgnoreWaterPower(type, player);
+                })
+            .allowCondition());
     }
 
     private static void register(PowerFactory serializer) {

@@ -42,6 +42,13 @@ public abstract class EntityMixin {
 
     @Shadow public abstract double getFluidHeight(Tag<Fluid> fluid);
 
+    @Inject(method = "isTouchingWater", at = @At("HEAD"), cancellable = true)
+    private void makeEntitiesIgnoreWater(CallbackInfoReturnable<Boolean> cir) {
+        if(OriginComponent.hasPower((Entity)(Object)this, IgnoreWaterPower.class)) {
+            cir.setReturnValue(false);
+        }
+    }
+
     @Environment(EnvType.CLIENT)
     @Inject(method = "isGlowing", at = @At("HEAD"), cancellable = true)
     private void makeEntitiesGlow(CallbackInfoReturnable<Boolean> cir) {

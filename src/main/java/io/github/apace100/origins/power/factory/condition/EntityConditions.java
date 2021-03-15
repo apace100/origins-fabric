@@ -407,6 +407,7 @@ public class EntityConditions {
         register(new ConditionFactory<>(Origins.identifier("in_tag"), new SerializableData()
             .add("tag", SerializableDataType.ENTITY_TAG),
             (data, entity) -> ((Tag<EntityType<?>>)data.get("tag")).contains(entity.getType())));
+        register(new ConditionFactory<>(Origins.identifier("climbing"), new SerializableData(), (data, entity) -> entity.isClimbing()));
     }
 
     private static void register(ConditionFactory<LivingEntity> conditionFactory) {
