@@ -104,6 +104,6 @@ public class Origins implements ModInitializer {
 	@Config(name = Origins.MODID + "_server")
 	public static class ServerConfig implements ConfigData {
 
-		public boolean performVersionCheck;
+		public boolean performVersionCheck = true;
 	}
 }
