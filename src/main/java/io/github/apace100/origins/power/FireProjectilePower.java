@@ -57,9 +57,6 @@ public class FireProjectilePower extends ActiveCooldownPower {
             if(entity == null) {
                 return;
             }
-            if(tag != null) {
-                entity.fromTag(tag);
-            }
             Vec3d rotationVector = player.getRotationVector();
             Vec3d spawnPos = player.getPos().add(0, ((EyeHeightAccess)player).callGetEyeHeight(player.getPose(), player.getDimensions(player.getPose())), 0).add(rotationVector);
             entity.refreshPositionAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), player.pitch, player.yaw);
@@ -82,6 +79,9 @@ public class FireProjectilePower extends ActiveCooldownPower {
                 Vec3d playerVelo = player.getVelocity();
                 entity.setVelocity(entity.getVelocity().add(playerVelo.x, player.isOnGround() ? 0.0D : playerVelo.y, playerVelo.z));
             }
+            CompoundTag mergedTag = entity.toTag(new CompoundTag());
+            mergedTag.copyFrom(tag);
+            entity.fromTag(mergedTag);
             player.world.spawnEntity(entity);
         }
     }

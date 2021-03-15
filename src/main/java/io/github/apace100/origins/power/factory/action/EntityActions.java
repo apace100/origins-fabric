@@ -209,7 +209,9 @@ public class EntityActions {
                 if(e != null) {
                     e.refreshPositionAndAngles(entity.getPos().x, entity.getPos().y, entity.getPos().z, entity.yaw, entity.pitch);
                     if(data.isPresent("tag")) {
-                        e.fromTag((CompoundTag)data.get("tag"));
+                        CompoundTag mergedTag = e.toTag(new CompoundTag());
+                        mergedTag.copyFrom((CompoundTag)data.get("tag"));
+                        e.fromTag(mergedTag);
                     }
 
                     entity.world.spawnEntity(e);
