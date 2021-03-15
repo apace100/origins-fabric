@@ -50,6 +50,10 @@ public class OriginsClient implements ClientModInitializer {
     private static HashMap<String, Boolean> lastKeyBindingStates = new HashMap<>();
     private static boolean initializedKeyBindingMap = false;
 
+    public static void registerPowerKeybinding(String keyId, KeyBinding keyBinding) {
+        idToKeyBindingMap.put(keyId, keyBinding);
+    }
+
     @Override
     @Environment(EnvType.CLIENT)
     public void onInitializeClient() {
@@ -69,10 +73,10 @@ public class OriginsClient implements ClientModInitializer {
         useSecondaryActivePowerKeybind = new KeyBinding("key.origins.secondary_active", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "category." + Origins.MODID);
         viewCurrentOriginKeybind = new KeyBinding("key.origins.view_origin", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_O, "category." + Origins.MODID);
 
-        idToKeyBindingMap.put("key.origins.primary_active", usePrimaryActivePowerKeybind);
-        idToKeyBindingMap.put("key.origins.secondary_active", useSecondaryActivePowerKeybind);
-        idToKeyBindingMap.put("primary", usePrimaryActivePowerKeybind);
-        idToKeyBindingMap.put("secondary", useSecondaryActivePowerKeybind);
+        registerPowerKeybinding("key.origins.primary_active", usePrimaryActivePowerKeybind);
+        registerPowerKeybinding("key.origins.secondary_active", useSecondaryActivePowerKeybind);
+        registerPowerKeybinding("primary", usePrimaryActivePowerKeybind);
+        registerPowerKeybinding("secondary", useSecondaryActivePowerKeybind);
 
         KeyBindingHelper.registerKeyBinding(usePrimaryActivePowerKeybind);
         KeyBindingHelper.registerKeyBinding(useSecondaryActivePowerKeybind);
