@@ -5,6 +5,7 @@ import io.github.apace100.origins.util.HudRender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ExplosiveProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sound.SoundCategory;
@@ -59,9 +60,16 @@ public class FireProjectilePower extends ActiveCooldownPower {
             if(tag != null) {
                 entity.fromTag(tag);
             }
-            Vec3d spawnPos = player.getPos().add(0, ((EyeHeightAccess)player).callGetEyeHeight(player.getPose(), player.getDimensions(player.getPose())), 0).add(player.getRotationVector());
+            Vec3d rotationVector = player.getRotationVector();
+            Vec3d spawnPos = player.getPos().add(0, ((EyeHeightAccess)player).callGetEyeHeight(player.getPose(), player.getDimensions(player.getPose())), 0).add(rotationVector);
             entity.refreshPositionAndAngles(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), player.pitch, player.yaw);
             if(entity instanceof ProjectileEntity) {
+                if(entity instanceof ExplosiveProjectileEntity) {
+                    ExplosiveProjectileEntity explosiveProjectileEntity = (ExplosiveProjectileEntity)entity;
+                    explosiveProjectileEntity.posX = rotationVector.x * speed;
+                    explosiveProjectileEntity.posY = rotationVector.y * speed;
+                    explosiveProjectileEntity.posZ = rotationVector.z * speed;
+                }
                 ProjectileEntity projectile = (ProjectileEntity)entity;
                 projectile.setOwner(player);
                 projectile.setProperties(player, player.pitch, player.yaw, 0F, speed, divergence);
