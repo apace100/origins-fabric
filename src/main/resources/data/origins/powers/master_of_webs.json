@@ -40,6 +40,10 @@
           "power": "origins:climbing_toggle"
         }
       ]
+    },
+    "hold_condition": {
+      "type": "origins:power_active",
+      "power": "origins:master_of_webs_climbing"
     }
   },
   "punch_through": {

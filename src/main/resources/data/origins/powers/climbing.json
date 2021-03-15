@@ -9,6 +9,32 @@
   },
   "climbing": {
     "type": "origins:climbing",
+    "hold_condition": {
+      "type": "origins:and",
+      "conditions": [
+        {
+          "type": "origins:or",
+          "conditions": [
+            {
+              "type": "origins:block_collision",
+              "offset_x": 0.01,
+              "offset_z": 0.01,
+              "offset_y": 0
+            },
+            {
+              "type": "origins:block_collision",
+              "offset_x": -0.01,
+              "offset_z": -0.01,
+              "offset_y": 0
+            }
+          ]
+        },
+        {
+          "type": "origins:power_active",
+          "power": "origins:climbing_toggle"
+        }
+      ]
+    },
     "condition": {
       "type": "origins:and",
       "conditions": [

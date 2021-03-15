@@ -774,9 +774,13 @@ public class PowerFactories {
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("climbing"),
             new SerializableData()
-                .add("allow_holding", SerializableDataType.BOOLEAN, true),
+                .add("allow_holding", SerializableDataType.BOOLEAN, true)
+                .add("hold_condition", SerializableDataType.ENTITY_CONDITION, null),
             data ->
-                (type, player) -> new ClimbingPower(type, player, data.getBoolean("allow_holding")))
+                (type, player) -> {
+                    Predicate<LivingEntity> holdCondition = (ConditionFactory<LivingEntity>.Instance)data.get("hold_condition");
+                    return new ClimbingPower(type, player, data.getBoolean("allow_holding"), holdCondition);
+                })
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("prevent_block_selection"),
             new SerializableData()

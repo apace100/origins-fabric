@@ -115,7 +115,6 @@ public abstract class LivingEntityMixin extends Entity {
         }
     }
 
-    private Vec3d origins_lastClimbingPos;
     // CLIMBING
     @Inject(at = @At("RETURN"), method = "isClimbing", cancellable = true)
     public void doSpiderClimbing(CallbackInfoReturnable<Boolean> info) {
@@ -126,16 +125,14 @@ public abstract class LivingEntityMixin extends Entity {
                     if(climbingPowers.stream().anyMatch(ClimbingPower::isActive)) {
                         BlockPos pos = getBlockPos();
                         this.climbingPos = Optional.of(pos);
-                        origins_lastClimbingPos = getPos();
+                        //origins_lastClimbingPos = getPos();
                         info.setReturnValue(true);
-                    } else {
-                        if(origins_lastClimbingPos != null && isHoldingOntoLadder()) {
-                            if(origins_lastClimbingPos.squaredDistanceTo(getPos()) <= 0.25) {
-                                if(climbingPowers.stream().anyMatch(p -> p.allowHolding)) {
+                    } else if(isHoldingOntoLadder()) {
+                        //if(origins_lastClimbingPos != null && isHoldingOntoLadder()) {
+                            if(climbingPowers.stream().anyMatch(ClimbingPower::canHold)) {
                                     info.setReturnValue(true);
-                                }
                             }
-                        }
+                        //}
                     }
                 }
             }
