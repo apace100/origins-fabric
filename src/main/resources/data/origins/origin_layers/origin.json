@@ -12,8 +12,7 @@
     "origins:human",
     "origins:merling",
     "origins:phantom",
-    "origins:shulk",
-    "origins:test"
+    "origins:shulk"
   ],
   "allow_random": true,
   "exclude_random": [
