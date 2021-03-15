@@ -1,7 +1,7 @@
 package io.github.apace100.origins.integration;
 
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.util.OriginsConfig;
+import io.github.apace100.origins.OriginsClient;
 import io.github.prospector.modmenu.api.ConfigScreenFactory;
 import io.github.prospector.modmenu.api.ModMenuApi;
 import me.shedaniel.autoconfig.AutoConfig;
@@ -17,6 +17,6 @@ public class ModMenuIntegration implements ModMenuApi {
     @Override
     @Environment(EnvType.CLIENT)
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return parent -> AutoConfig.getConfigScreen(OriginsConfig.class, parent).get();
+        return parent -> AutoConfig.getConfigScreen(OriginsClient.ClientConfig.class, parent).get();
     }
 }
