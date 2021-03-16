@@ -23,6 +23,7 @@
     "ItemStackMixin",
     "LivingEntityMixin",
     "LoginMixin",
+    "PersistentProjectileEntityMixin",
     "PlayerAdvancementTrackerMixin",
     "PlayerEntityMixin",
     "PlayerScreenHandlerAccessor",

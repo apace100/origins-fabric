@@ -818,6 +818,26 @@ public class PowerFactories {
                     return new IgnoreWaterPower(type, player);
                 })
             .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("modify_projectile_damage"),
+            new SerializableData()
+                .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
+                .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
+                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null)
+                .add("target_condition", SerializableDataType.ENTITY_CONDITION, null),
+            data ->
+                (type, player) -> {
+                    ModifyProjectileDamagePower power = new ModifyProjectileDamagePower(type, player,
+                        data.isPresent("damage_condition") ? (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition") : dmg -> true,
+                        (ConditionFactory<LivingEntity>.Instance)data.get("target_condition"));
+                    if(data.isPresent("modifier")) {
+                        power.addModifier(data.getModifier("modifier"));
+                    }
+                    if(data.isPresent("modifiers")) {
+                        ((List<EntityAttributeModifier>)data.get("modifiers")).forEach(power::addModifier);
+                    }
+                    return power;
+                })
+            .allowCondition());
     }
 
     private static void register(PowerFactory serializer) {
