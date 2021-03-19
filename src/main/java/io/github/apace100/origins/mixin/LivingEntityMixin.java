@@ -4,6 +4,7 @@ import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModComponents;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
@@ -20,6 +21,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import java.util.NoSuchElementException;
 
 import java.util.List;
 import java.util.Optional;
@@ -166,6 +168,17 @@ public abstract class LivingEntityMixin extends Entity {
             }
         }
         return entity.method_26317(d, bl, vec3d);
+    }
+    
+    @Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getDepthStrider(Lnet/minecraft/entity/LivingEntity;)I"))
+    public int getDepthStriderProxy(LivingEntity entity) {
+    	if (entity instanceof PlayerEntity) {
+            List<ModifySwimSpeedPower> swimspeedpowers = ModComponents.ORIGIN.get(entity).getPowers(ModifySwimSpeedPower.class);
+            if (swimspeedpowers.size()>0) {
+                return 0;
+            }
+    	}
+        return EnchantmentHelper.getDepthStrider(entity);
     }
 
     // SLOW_FALLING

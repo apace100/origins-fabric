@@ -1,8 +1,50 @@
 {
-  "type": "origins:modify_swim_speed",
-  "modifier": {
-    "name": "Additional swim speed",
-    "value": 0.04,
-    "operation": "addition"
+  "type": "origins:multiple",
+  "main": {
+      "type": "origins:modify_swim_speed",
+      "modifier": {
+        "name": "Additional swim speed",
+        "value": 0.04,
+        "operation": "addition"
+      }
+  },
+  "depth_strider_1": {
+      "type": "origins:modify_swim_speed",
+      "modifier": {
+        "name": "Additional swim speed for Depth Strider 1",
+        "value": 0.04,
+        "operation": "addition"
+      },
+      "condition": {
+        "type": "origins:depth_strider",
+        "comparison": ">=",
+        "compare_to": 1
+      }
+  },
+  "depth_strider_2": {
+      "type": "origins:modify_swim_speed",
+      "modifier": {
+        "name": "Additional swim speed for Depth Strider 1",
+        "value": 0.04,
+        "operation": "addition"
+      },
+      "condition": {
+        "type": "origins:depth_strider",
+        "comparison": ">=",
+        "compare_to": 2
+      }
+  },
+  "depth_strider_3": {
+      "type": "origins:modify_swim_speed",
+      "modifier": {
+        "name": "Additional swim speed for Depth Strider 1",
+        "value": 0.04,
+        "operation": "addition"
+      },
+      "condition": {
+        "type": "origins:depth_strider",
+        "comparison": ">=",
+        "compare_to": 3
+      }
   }
 }

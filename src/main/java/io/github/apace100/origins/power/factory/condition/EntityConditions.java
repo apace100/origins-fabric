@@ -43,6 +43,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.enchantment.EnchantmentHelper;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -220,6 +221,10 @@ public class EntityConditions {
             .add("comparison", SerializableDataType.COMPARISON)
             .add("compare_to", SerializableDataType.INT),
             (data, entity) -> ((Comparison)data.get("comparison")).compare(entity.getAir(), data.getInt("compare_to"))));
+        register(new ConditionFactory<>(Origins.identifier("depth_strider"), new SerializableData()
+                .add("comparison", SerializableDataType.COMPARISON)
+                .add("compare_to", SerializableDataType.INT),
+                (data, entity) -> ((Comparison)data.get("comparison")).compare(EnchantmentHelper.getDepthStrider(entity), data.getInt("compare_to"))));
         register(new ConditionFactory<>(Origins.identifier("in_block"), new SerializableData()
             .add("block_condition", SerializableDataType.BLOCK_CONDITION),
             (data, entity) ->((ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition")).test(
