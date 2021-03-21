@@ -13,14 +13,14 @@ import java.util.function.Predicate;
 
 public class ActionOnBlockBreakPower extends Power {
 
-    private final Predicate<CachedBlockPosition> predicate;
+    private final Predicate<CachedBlockPosition> blockCondition;
     private final Consumer<Entity> entityAction;
     private final Consumer<Triple<World, BlockPos, Direction>> blockAction;
-    private boolean onlyWhenHarvested;
+    private final boolean onlyWhenHarvested;
 
-    public ActionOnBlockBreakPower(PowerType<?> type, PlayerEntity player, Predicate<CachedBlockPosition> predicate, Consumer<Entity> entityAction, Consumer<Triple<World, BlockPos, Direction>> blockAction, boolean onlyWhenHarvested) {
+    public ActionOnBlockBreakPower(PowerType<?> type, PlayerEntity player, Predicate<CachedBlockPosition> blockCondition, Consumer<Entity> entityAction, Consumer<Triple<World, BlockPos, Direction>> blockAction, boolean onlyWhenHarvested) {
         super(type, player);
-        this.predicate = predicate;
+        this.blockCondition = blockCondition;
         this.entityAction = entityAction;
         this.blockAction = blockAction;
         this.onlyWhenHarvested = onlyWhenHarvested;
@@ -32,7 +32,7 @@ public class ActionOnBlockBreakPower extends Power {
     }
 
     public boolean doesApply(CachedBlockPosition pos) {
-        return predicate.test(pos);
+        return blockCondition == null || blockCondition.test(pos);
     }
 
     public void executeActions(boolean successfulHarvest, BlockPos pos, Direction dir) {
