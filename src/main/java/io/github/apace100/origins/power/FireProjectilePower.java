@@ -79,9 +79,11 @@ public class FireProjectilePower extends ActiveCooldownPower {
                 Vec3d playerVelo = player.getVelocity();
                 entity.setVelocity(entity.getVelocity().add(playerVelo.x, player.isOnGround() ? 0.0D : playerVelo.y, playerVelo.z));
             }
-            CompoundTag mergedTag = entity.toTag(new CompoundTag());
-            mergedTag.copyFrom(tag);
-            entity.fromTag(mergedTag);
+            if(tag != null) {
+                CompoundTag mergedTag = entity.toTag(new CompoundTag());
+                mergedTag.copyFrom(tag);
+                entity.fromTag(mergedTag);
+            }
             player.world.spawnEntity(entity);
         }
     }
