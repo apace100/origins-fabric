@@ -22,6 +22,7 @@ import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.fluid.Fluid;
@@ -408,6 +409,12 @@ public class EntityConditions {
             .add("tag", SerializableDataType.ENTITY_TAG),
             (data, entity) -> ((Tag<EntityType<?>>)data.get("tag")).contains(entity.getType())));
         register(new ConditionFactory<>(Origins.identifier("climbing"), new SerializableData(), (data, entity) -> entity.isClimbing()));
+        register(new ConditionFactory<>(Origins.identifier("tamed"), new SerializableData(), (data, entity) -> {
+            if(entity instanceof TameableEntity) {
+                return ((TameableEntity)entity).isTamed();
+            }
+            return false;
+        }));
     }
 
     private static void register(ConditionFactory<LivingEntity> conditionFactory) {

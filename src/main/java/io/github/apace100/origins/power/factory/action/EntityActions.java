@@ -11,14 +11,12 @@ import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.util.*;
 import net.minecraft.client.util.math.Vector3f;
-import net.minecraft.entity.AreaEffectCloudEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.server.MinecraftServer;
@@ -32,6 +30,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Triple;
+import org.apache.logging.log4j.util.TriConsumer;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -151,19 +150,24 @@ public class EntityActions {
             .add("x", SerializableDataType.FLOAT, 0F)
             .add("y", SerializableDataType.FLOAT, 0F)
             .add("z", SerializableDataType.FLOAT, 0F)
-            .add("space", SerializableDataType.SPACE, Space.WORLD),
+            .add("space", SerializableDataType.SPACE, Space.WORLD)
+            .add("set", SerializableDataType.BOOLEAN, false),
             (data, entity) -> {
                 Space space = (Space)data.get("space");
                 Vector3f vec = new Vector3f(data.getFloat("x"), data.getFloat("y"), data.getFloat("z"));
                 Vec3d vel;
                 Vec3d velH;
+                TriConsumer<Float, Float, Float> method = entity::addVelocity;
+                if(data.getBoolean("set")) {
+                    method = entity::setVelocity;
+                }
                 switch(space) {
                     case WORLD:
-                        entity.addVelocity(data.getFloat("x"), data.getFloat("y"), data.getFloat("z"));
+                        method.accept(data.getFloat("x"), data.getFloat("y"), data.getFloat("z"));
                         break;
                     case LOCAL:
                         Space.rotateVectorToBase(entity.getRotationVector(), vec);
-                        entity.addVelocity(vec.getX(), vec.getY(), vec.getZ());
+                        method.accept(vec.getX(), vec.getY(), vec.getZ());
                         break;
                     case LOCAL_HORIZONTAL:
                         vel = entity.getRotationVector();
@@ -171,22 +175,22 @@ public class EntityActions {
                         if(velH.lengthSquared() > 0.00005) {
                             velH = velH.normalize();
                             Space.rotateVectorToBase(velH, vec);
-                            entity.addVelocity(vec.getX(), vec.getY(), vec.getZ());
+                            method.accept(vec.getX(), vec.getY(), vec.getZ());
                         }
                         break;
                     case VELOCITY:
                         Space.rotateVectorToBase(entity.getVelocity(), vec);
-                        entity.addVelocity(vec.getX(), vec.getY(), vec.getZ());
+                        method.accept(vec.getX(), vec.getY(), vec.getZ());
                         break;
                     case VELOCITY_NORMALIZED:
                         Space.rotateVectorToBase(entity.getVelocity().normalize(), vec);
-                        entity.addVelocity(vec.getX(), vec.getY(), vec.getZ());
+                        method.accept(vec.getX(), vec.getY(), vec.getZ());
                         break;
                     case VELOCITY_HORIZONTAL:
                         vel = entity.getVelocity();
                         velH = new Vec3d(vel.x, 0, vel.z);
                         Space.rotateVectorToBase(velH, vec);
-                        entity.addVelocity(vec.getX(), vec.getY(), vec.getZ());
+                        method.accept(vec.getX(), vec.getY(), vec.getZ());
                         break;
                     case VELOCITY_HORIZONTAL_NORMALIZED:
                         vel = entity.getVelocity();
@@ -194,7 +198,7 @@ public class EntityActions {
                         if(velH.lengthSquared() > 0.00005) {
                             velH = velH.normalize();
                             Space.rotateVectorToBase(velH, vec);
-                            entity.addVelocity(vec.getX(), vec.getY(), vec.getZ());
+                            method.accept(vec.getX(), vec.getY(), vec.getZ());
                         }
                         break;
                 }
@@ -330,6 +334,34 @@ public class EntityActions {
             (data, entity) -> {
                 ActionFactory<Entity>.Instance action = (ActionFactory<Entity>.Instance)data.get("action");
                 scheduler.queue(s -> action.accept(entity), data.getInt("ticks"));
+            }));
+        register(new ActionFactory<>(Origins.identifier("set_fall_distance"), new SerializableData()
+            .add("fall_distance", SerializableDataType.FLOAT),
+            (data, entity) -> {
+                entity.fallDistance = data.getFloat("fall_distance");
+            }));
+        register(new ActionFactory<>(Origins.identifier("give"), new SerializableData()
+            .add("stack", SerializableDataType.ITEM_STACK),
+            (data, entity) -> {
+                if(!entity.world.isClient()) {
+                    ItemStack stack = (ItemStack)data.get("stack");
+                    stack = stack.copy();
+                    if(entity instanceof PlayerEntity) {
+                        ((PlayerEntity)entity).inventory.offerOrDrop(entity.world, stack);
+                    } else {
+                        entity.world.spawnEntity(new ItemEntity(entity.world, entity.getX(), entity.getY(), entity.getZ(), stack));
+                    }
+                }
+            }));
+        register(new ActionFactory<>(Origins.identifier("equipped_item_action"), new SerializableData()
+            .add("equipment_slot", SerializableDataType.EQUIPMENT_SLOT)
+            .add("action", SerializableDataType.ITEM_ACTION),
+            (data, entity) -> {
+                if(entity instanceof LivingEntity) {
+                    ItemStack stack = ((LivingEntity)entity).getEquippedStack((EquipmentSlot)data.get("equipment_slot"));
+                    ActionFactory<ItemStack>.Instance action = (ActionFactory<ItemStack>.Instance)data.get("action");
+                    action.accept(stack);
+                }
             }));
     }
 
