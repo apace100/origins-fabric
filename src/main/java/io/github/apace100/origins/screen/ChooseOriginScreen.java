@@ -60,8 +60,11 @@ public class ChooseOriginScreen extends Screen {
 		originIdentifiers.forEach(originId -> {
 			Origin origin = OriginRegistry.get(originId);
 			if(origin.isChoosable()) {
-				if(origin.getDisplayItem().getItem() == Items.PLAYER_HEAD) {
-					origin.getDisplayItem().getOrCreateTag().putString("SkullOwner", player.getDisplayName().getString());
+				ItemStack displayItem = origin.getDisplayItem();
+				if(displayItem.getItem() == Items.PLAYER_HEAD) {
+					if(!displayItem.hasTag() || !displayItem.getTag().contains("SkullOwner")) {
+						displayItem.getOrCreateTag().putString("SkullOwner", player.getDisplayName().getString());
+					}
 				}
 				this.originSelection.add(origin);
 			}
@@ -128,7 +131,7 @@ public class ChooseOriginScreen extends Screen {
 	}
 
 	private void initRandomOrigin() {
-		this.randomOrigin = new Origin(Origins.identifier("random"), ModItems.ORB_OF_ORIGIN, Impact.NONE, -1, Integer.MAX_VALUE);
+		this.randomOrigin = new Origin(Origins.identifier("random"), new ItemStack(ModItems.ORB_OF_ORIGIN), Impact.NONE, -1, Integer.MAX_VALUE);
 		this.randomOriginText = new LiteralText("");
 		List<Identifier> randoms = layerList.get(currentLayerIndex).getRandomOrigins(MinecraftClient.getInstance().player);
 		randoms.sort((ia, ib) -> {

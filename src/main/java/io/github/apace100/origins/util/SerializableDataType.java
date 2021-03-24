@@ -443,6 +443,15 @@ public class SerializableDataType<T> {
             return serializer.read(recipeId, json);
         });
 
+    public static final SerializableDataType<ItemStack> ITEM_OR_ITEM_STACK = new SerializableDataType<>(ItemStack.class,
+        ITEM_STACK.send, ITEM_STACK.receive, jsonElement -> {
+        if(jsonElement.isJsonPrimitive() && jsonElement.getAsJsonPrimitive().isString()) {
+            Item item = ITEM.read(jsonElement);
+            return new ItemStack(item);
+        }
+        return ITEM_STACK.read.apply(jsonElement);
+    });
+
     private final Class<T> dataClass;
     private final BiConsumer<PacketByteBuf, T> send;
     private final Function<PacketByteBuf, T> receive;

@@ -5,7 +5,9 @@
 		"origins:tailwind",
 		"origins:vegetarian"
 	],
-	"icon": "minecraft:feather",
+	"icon": {
+		"item": "minecraft:feather"
+	},
 	"order": 0,
 	"impact": 1
 }

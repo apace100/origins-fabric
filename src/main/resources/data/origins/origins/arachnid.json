@@ -6,7 +6,9 @@
 		"origins:fragile",
 		"origins:arthropod"
 	],
-	"icon": "minecraft:cobweb",
+	"icon": {
+		"item": "minecraft:cobweb"
+	},
 	"order": 1,
 	"impact": 1
 }

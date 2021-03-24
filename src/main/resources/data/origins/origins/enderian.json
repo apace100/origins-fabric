@@ -6,7 +6,9 @@
 		"origins:extra_reach",
 		"origins:ender_particles"
 	],
-	"icon": "minecraft:ender_pearl",
+	"icon": {
+		"item": "minecraft:ender_pearl"
+	},
 	"order": 1,
 	"impact": 2
 }

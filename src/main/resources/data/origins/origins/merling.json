@@ -8,7 +8,9 @@
 		"origins:aquatic",
 		"origins:conduit_power_on_land"
 	],
-	"icon": "minecraft:cod",
+	"icon": {
+		"item": "minecraft:cod"
+	},
 	"order": 0,
 	"impact": 3
 }

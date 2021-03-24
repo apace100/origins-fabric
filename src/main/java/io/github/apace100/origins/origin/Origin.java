@@ -1,13 +1,8 @@
 package io.github.apace100.origins.origin;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.power.MultiplePowerType;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.PowerTypeRegistry;
 import io.github.apace100.origins.registry.ModComponents;
@@ -18,15 +13,11 @@ import net.fabricmc.api.Environment;
 import net.minecraft.advancement.Advancement;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.JsonHelper;
-import net.minecraft.util.registry.Registry;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -37,8 +28,8 @@ import java.util.stream.Collectors;
 public class Origin {
 
     public static final SerializableData DATA = new SerializableData()
-        .add("powers", SerializableDataType.IDENTIFIERS)
-        .add("icon", SerializableDataType.ITEM, Items.AIR)
+        .add("powers", SerializableDataType.IDENTIFIERS, Lists.newArrayList())
+        .add("icon", SerializableDataType.ITEM_OR_ITEM_STACK, new ItemStack(Items.AIR))
         .add("unchoosable", SerializableDataType.BOOLEAN, false)
         .add("order", SerializableDataType.INT, Integer.MAX_VALUE)
         .add("impact", SerializableDataType.IMPACT, Impact.NONE)
@@ -50,7 +41,7 @@ public class Origin {
     public static final Origin EMPTY;
 
     static {
-        EMPTY = register(new Origin(new Identifier(Origins.MODID, "empty"), Items.AIR, Impact.NONE, -1, Integer.MAX_VALUE).setUnchoosable().setSpecial());
+        EMPTY = register(new Origin(new Identifier(Origins.MODID, "empty"), new ItemStack(Items.AIR), Impact.NONE, -1, Integer.MAX_VALUE).setUnchoosable().setSpecial());
     }
 
     public static void init() {
@@ -86,9 +77,9 @@ public class Origin {
     private String nameTranslationKey;
     private String descriptionTranslationKey;
 
-    public Origin(Identifier id, ItemConvertible item, Impact impact, int order, int loadingPriority) {
+    public Origin(Identifier id, ItemStack icon, Impact impact, int order, int loadingPriority) {
         this.identifier = id;
-        this.displayItem = new ItemStack(item);
+        this.displayItem = icon.copy();
         this.impact = impact;
         this.isChoosable = true;
         this.order = order;
@@ -203,7 +194,7 @@ public class Origin {
 
     public void write(PacketByteBuf buffer) {
         SerializableData.Instance data = DATA.new Instance();
-        data.set("icon", displayItem.getItem());
+        data.set("icon", displayItem);
         data.set("impact", impact);
         data.set("order", order);
         data.set("loading_priority", loadingPriority);
@@ -218,7 +209,7 @@ public class Origin {
     @SuppressWarnings("unchecked")
     public static Origin createFromData(Identifier id, SerializableData.Instance data) {
         Origin origin = new Origin(id,
-            (Item)data.get("icon"),
+            (ItemStack)data.get("icon"),
             (Impact)data.get("impact"),
             data.getInt("order"),
             data.getInt("loading_priority"));
@@ -248,109 +239,11 @@ public class Origin {
     @Environment(EnvType.CLIENT)
     public static Origin read(PacketByteBuf buffer) {
         Identifier identifier = Identifier.tryParse(buffer.readString(32767));
-        Identifier iconItemId = Identifier.tryParse(buffer.readString(32767));
-        Item icon = Items.AIR;
-        if(iconItemId != null) {
-            icon = Registry.ITEM.get(iconItemId);
-        }
-        Impact impact = Impact.getByValue(buffer.readInt());
-        int order = buffer.readInt();
-        int loadingPriority = buffer.readInt();
-        Origin origin = new Origin(identifier, icon, impact, order, loadingPriority);
-        if(!buffer.readBoolean()) {
-            origin.setUnchoosable();
-        }
-        int powerCount = buffer.readInt();
-        PowerType<?>[] powers = new PowerType<?>[powerCount];
-        for(int i = 0; i < powerCount; i++) {
-            String s = buffer.readString();
-            try {
-                Identifier id = Identifier.tryParse(s);
-                if(id != null) {
-                    powers[i] = PowerTypeRegistry.get(id);
-                } else {
-                    Origins.LOGGER.error("Received invalid power type from server in origin: '" + s + "'.");
-                }
-            } catch(IllegalArgumentException e) {
-                Origins.LOGGER.error("Failed to get power with id " + s + " which was received from the server.");
-            }
-        }
-        origin.add(powers);
-
-        int upgradeCount = buffer.readInt();
-        for(int i = 0; i < upgradeCount; i++) {
-            origin.addUpgrade(OriginUpgrade.read(buffer));
-        }
-
-        origin.setName(buffer.readString());
-        origin.setDescription(buffer.readString());
-
-        return origin;
+        return createFromData(identifier, DATA.read(buffer));
     }
 
     public static Origin fromJson(Identifier id, JsonObject json) {
-        if(!json.has("powers") || !json.get("powers").isJsonArray()) {
-            throw new JsonParseException("Origin json requires array with key \"powers\".");
-        }
-        JsonArray powerArray = json.getAsJsonArray("powers");
-        List<PowerType<?>> powers = new LinkedList<>();
-        for (int i = 0; i < powerArray.size(); i++) {
-            Identifier powerId = Identifier.tryParse(powerArray.get(i).getAsString());
-            if(powerId == null) {
-                throw new JsonParseException("Invalid power ID in Origin json: " + powerArray.get(i).getAsString());
-            }
-            PowerType<?> power = PowerTypeRegistry.get(powerId);
-            if (power == null) {
-                throw new JsonParseException("Unregistered power ID in Origin json: " + powerId.toString());
-            } else {
-                powers.add(power);
-                if(power instanceof MultiplePowerType) {
-                    ImmutableList<Identifier> subPowers = ((MultiplePowerType)power).getSubPowers();
-                    for(Identifier subPowerId : subPowers) {
-                        powers.add(PowerTypeRegistry.get(subPowerId));
-                    }
-                }
-            }
-        }
-        Identifier iconItemIdentifier = Identifier.tryParse(json.get("icon").getAsString());
-        Item icon = Items.AIR;
-        if (iconItemIdentifier != null) {
-            icon = Registry.ITEM.get(iconItemIdentifier);
-        }
-        boolean isUnchoosable = JsonHelper.getBoolean(json, "unchoosable", false);
-        int orderNum = JsonHelper.getInt(json, "order", Integer.MAX_VALUE);
-
-        JsonElement impactJson = json.get("impact");
-        int impactNum = 0;
-        if (impactJson != null) {
-            impactNum = impactJson.getAsInt();
-            if (impactNum < 0) {
-                impactNum = 0;
-            }
-            if (impactNum > 3) {
-                impactNum = 3;
-            }
-        }
-        Impact impact = Impact.getByValue(impactNum);
-        int loadingPriority = JsonHelper.getInt(json, "loading_priority", 0);
-        Origin origin = new Origin(id, icon, impact, orderNum, loadingPriority);
-        if (isUnchoosable) {
-            origin.setUnchoosable();
-        }
-        origin.add(powers.toArray(new PowerType<?>[0]));
-        if(json.has("upgrades") && json.get("upgrades").isJsonArray()) {
-            JsonArray array = json.getAsJsonArray("upgrades");
-            array.forEach(jsonElement -> origin.addUpgrade(OriginUpgrade.fromJson(jsonElement)));
-        }
-
-        if(json.has("name")) {
-            origin.setName(JsonHelper.getString(json, "name", ""));
-        }
-
-        if(json.has("description")) {
-            origin.setDescription(JsonHelper.getString(json, "description", ""));
-        }
-        return origin;
+        return createFromData(id, DATA.read(json));
     }
 
     @Override
