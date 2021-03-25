@@ -17,6 +17,7 @@ import io.github.apace100.origins.origin.OriginUpgrade;
 import io.github.apace100.origins.power.Active;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.PowerTypeReference;
+import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.power.factory.action.ActionFactory;
 import io.github.apace100.origins.power.factory.action.ActionType;
 import io.github.apace100.origins.power.factory.action.ActionTypes;
@@ -48,6 +49,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.tag.ServerTagManagerHolder;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
@@ -102,7 +104,45 @@ public class SerializableDataType<T> {
         Identifier.class,
         PacketByteBuf::writeIdentifier,
         PacketByteBuf::readIdentifier,
-        (json) -> Identifier.tryParse(json.getAsString()));
+        (json) -> {
+            String idString = json.getAsString();
+            if(idString.contains(":")) {
+                String[] idSplit = idString.split(":");
+                boolean starred = false;
+                if(idSplit.length != 2) {
+                    throw new InvalidIdentifierException("Incorrect number of `:` in identifier: \"" + idString + "\".");
+                }
+                if(idSplit[0].contains("*")) {
+                    if(PowerTypes.CURRENT_NAMESPACE != null) {
+                        idSplit[0] = idSplit[0].replace("*", PowerTypes.CURRENT_NAMESPACE);
+                        starred = true;
+                    } else {
+                        throw new InvalidIdentifierException("Identifier may only contain a `*` in the namespace inside of powers.");
+                    }
+                }
+                if(idSplit[1].contains("*")) {
+                    if(PowerTypes.CURRENT_PATH != null) {
+                        idSplit[1] = idSplit[1].replace("*", PowerTypes.CURRENT_PATH);
+                        starred = true;
+                    } else {
+                        throw new InvalidIdentifierException("Identifier may only contain a `*` in the path inside of powers.");
+                    }
+                }
+                idString = idSplit[0] + ":" + idSplit[1];
+                if(starred) {
+                    Origins.LOGGER.info("Found *ed identifier: \"" + json.getAsString() + "\" -> \"" + idString + "\"");
+                }
+            } else {
+                if(idString.contains("*")) {
+                    if(PowerTypes.CURRENT_PATH != null) {
+                        idString = idString.replace("*", PowerTypes.CURRENT_PATH);
+                    } else {
+                        throw new InvalidIdentifierException("Identifier may only contain a `*` in the path inside of powers.");
+                    }
+                }
+            }
+            return Identifier.tryParse(idString);
+        });
 
     public static final SerializableDataType<List<Identifier>> IDENTIFIERS = SerializableDataType.list(IDENTIFIER);
 

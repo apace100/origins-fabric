@@ -17,6 +17,9 @@ import java.util.function.BiFunction;
 @SuppressWarnings("rawtypes")
 public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResourceReloadListener {
 
+    public static String CURRENT_NAMESPACE = "";
+    public static String CURRENT_PATH = "";
+
     private static final Identifier MULTIPLE = Origins.identifier("multiple");
     private static final Identifier SIMPLE = Origins.identifier("simple");
 
@@ -61,6 +64,8 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
         loader.forEach((id, jel) -> {
             jel.forEach(je -> {
                 try {
+                    CURRENT_NAMESPACE = id.getNamespace();
+                    CURRENT_PATH = id.getPath();
                     JsonObject jo = je.getAsJsonObject();
                     Identifier factoryId = Identifier.tryParse(JsonHelper.getString(jo, "type"));
                     if(MULTIPLE.equals(factoryId)) {
@@ -78,11 +83,13 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
                             try {
                                 readPower(subId, entry.getValue(), true);
                                 subPowers.add(subId);
+                                Origins.LOGGER.info("Read sub-power for " + id.toString() + ": " + entry.getKey());
                             } catch(Exception e) {
                                 Origins.LOGGER.error("There was a problem reading sub-power \"" +
                                     subId.toString() + "\" in power file \"" + id.toString() + "\": " + e.getMessage());
                             }
                         }
+                        Origins.LOGGER.info("Read " + subPowers.size() + " sub-powers.");
                         MultiplePowerType superPower = (MultiplePowerType)readPower(id, je, false, MultiplePowerType::new);
                         superPower.setSubPowers(subPowers);
                     } else {
@@ -94,6 +101,8 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
             });
         });
         loadingPriorities.clear();
+        CURRENT_NAMESPACE = null;
+        CURRENT_PATH = null;
         Origins.LOGGER.info("Finished loading powers from data files. Registry contains " + PowerTypeRegistry.size() + " powers.");
     }
 

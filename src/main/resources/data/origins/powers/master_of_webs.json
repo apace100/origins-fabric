@@ -37,13 +37,13 @@
         },
         {
           "type": "origins:power_active",
-          "power": "origins:climbing_toggle"
+          "power": "*:climbing_toggle"
         }
       ]
     },
     "hold_condition": {
       "type": "origins:power_active",
-      "power": "origins:master_of_webs_climbing"
+      "power": "*:*_climbing"
     }
   },
   "punch_through": {
