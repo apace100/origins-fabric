@@ -61,10 +61,13 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
     }
 
     // FRESH_AIR
-    @Inject(at = @At("HEAD"), method = "trySleep", cancellable = true)
+    @Inject(method = "trySleep", at = @At(value = "INVOKE",target = "Lnet/minecraft/server/network/ServerPlayerEntity;setSpawnPoint(Lnet/minecraft/util/registry/RegistryKey;Lnet/minecraft/util/math/BlockPos;FZZ)V"), cancellable = true)
     public void preventAvianSleep(BlockPos pos, CallbackInfoReturnable<Either<PlayerEntity.SleepFailureReason, Unit>> info) {
         OriginComponent.getPowers(this, PreventSleepPower.class).forEach(p -> {
                 if(p.doesPrevent(world, pos)) {
+                    if(p.doesAllowSpawnPoint()) {
+                        ((ServerPlayerEntity)(Object)this).setSpawnPoint(this.world.getRegistryKey(), pos, this.yaw, false, true);
+                    }
                     info.setReturnValue(Either.left(null));
                     this.sendMessage(new TranslatableText(p.getMessage()), true);
                 }

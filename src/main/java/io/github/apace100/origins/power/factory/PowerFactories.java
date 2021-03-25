@@ -374,12 +374,13 @@ public class PowerFactories {
         register(new PowerFactory<>(Origins.identifier("prevent_sleep"),
             new SerializableData()
                 .add("block_condition", SerializableDataType.BLOCK_CONDITION, null)
-                .add("message", SerializableDataType.STRING, "origins.cant_sleep"),
+                .add("message", SerializableDataType.STRING, "origins.cant_sleep")
+                .add("set_spawn_point", SerializableDataType.BOOLEAN, false),
             data ->
                 (type, player) ->
                     new PreventSleepPower(type, player,
                         data.isPresent("block_condition") ? (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition") : cbp -> true,
-                        data.getString("message")))
+                        data.getString("message"), data.getBoolean("set_spawn_point")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("restrict_armor"),
             new SerializableData()
