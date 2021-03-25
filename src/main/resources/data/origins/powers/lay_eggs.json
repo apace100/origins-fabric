@@ -1,0 +1,9 @@
+{
+  "type": "origins:action_on_wake_up",
+  "entity_action": {
+    "type": "origins:give",
+    "stack": {
+      "item": "minecraft:egg"
+    }
+  }
+}

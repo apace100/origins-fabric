@@ -164,6 +164,9 @@
   "power.origins.master_of_webs.name": "Master of Webs",
   "power.origins.master_of_webs.description": "You navigate cobweb perfectly, and are able to climb in them. When you hit an enemy in melee, they get stuck in cobweb for a while. Non-arthropods stuck in cobweb will be sensed by you. You are able to craft cobweb from string.",
 
+  "power.origins.lay_eggs.name": "Oviparous",
+  "power.origins.lay_eggs.description": "Whenever you wake up in the morning, you will lay an egg.",
+
   "category.origins": "Origins",
   "key.origins.primary_active": "Active Power (Primary)",
   "key.origins.secondary_active": "Active Power (Secondary)",

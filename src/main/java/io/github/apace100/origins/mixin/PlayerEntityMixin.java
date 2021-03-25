@@ -22,6 +22,7 @@ import net.minecraft.tag.FluidTags;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Nameable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
@@ -60,6 +61,14 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
                 Vec3d look = this.getRotationVector();
                 move(MovementType.SELF, new Vec3d(look.x/4, look.y/4, look.z/4));
             }
+        }
+    }
+
+    @Inject(method = "wakeUp(ZZ)V", at = @At("HEAD"))
+    private void invokeWakeUpAction(boolean bl, boolean updateSleepingPlayers, CallbackInfo ci) {
+        if(!bl && !updateSleepingPlayers && getSleepingPosition().isPresent()) {
+            BlockPos sleepingPos = getSleepingPosition().get();
+            OriginComponent.getPowers(this, ActionOnWakeUp.class).stream().filter(p -> p.doesApply(sleepingPos)).forEach(p -> p.executeActions(sleepingPos, Direction.DOWN));
         }
     }
 

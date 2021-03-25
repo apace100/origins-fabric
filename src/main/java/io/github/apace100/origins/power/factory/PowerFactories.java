@@ -839,6 +839,17 @@ public class PowerFactories {
                     return power;
                 })
             .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("action_on_wake_up"),
+            new SerializableData()
+                .add("entity_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("block_action", SerializableDataType.BLOCK_ACTION, null)
+                .add("block_condition", SerializableDataType.BLOCK_CONDITION, null),
+            data ->
+                (type, player) -> new ActionOnWakeUp(type, player,
+                    (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
+                    (ActionFactory<Triple<World, BlockPos, Direction>>.Instance)data.get("block_action")))
+            .allowCondition());
     }
 
     private static void register(PowerFactory serializer) {
