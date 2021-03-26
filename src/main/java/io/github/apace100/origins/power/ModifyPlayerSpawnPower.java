@@ -9,28 +9,35 @@ import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.structure.StructureStart;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.Unit;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.StructureFeature;
+
+import java.util.Optional;
 
 public class ModifyPlayerSpawnPower extends Power {
     public final RegistryKey<World> dimension;
-    public final int dimensionDistanceMultiplier;
+    public final float dimensionDistanceMultiplier;
+    public final Identifier biomeId;
     public final String spawnStrategy;
     public final StructureFeature structure;
     public final SoundEvent spawnSound;
 
 
-    public ModifyPlayerSpawnPower(PowerType<?> type, PlayerEntity player, RegistryKey<World> dimension, int dimensionDistanceMultiplier, String spawnStrategy, StructureFeature<?> structure, SoundEvent spawnSound) {
+    public ModifyPlayerSpawnPower(PowerType<?> type, PlayerEntity player, RegistryKey<World> dimension, int dimensionDistanceMultiplier, Identifier biomeId, String spawnStrategy, StructureFeature<?> structure, SoundEvent spawnSound) {
         super(type, player);
         this.dimension = dimension;
         this.dimensionDistanceMultiplier = dimensionDistanceMultiplier;
+        this.biomeId = biomeId;
         this.spawnStrategy = spawnStrategy;
         this.structure = structure;
         this.spawnSound = spawnSound;
@@ -99,6 +106,20 @@ public class ModifyPlayerSpawnPower extends Power {
                     }
             }
 
+            if(biomeId != null) {
+                Optional<Biome> biomeOptional = world.getRegistryManager().get(Registry.BIOME_KEY).getOrEmpty(biomeId);
+                if(biomeOptional.isPresent()) {
+                    BlockPos biomePos = world.locateBiome(biomeOptional.get(), spawnToDimPos, 6400, 8);
+                    if(biomePos != null) {
+                        spawnToDimPos = biomePos;
+                    } else {
+                        Origins.LOGGER.warn("Could not find biome \"" + biomeId.toString() + "\" in dimension \"" + dimension.toString() + "\".");
+                    }
+                } else {
+                    Origins.LOGGER.warn("Biome with ID \"" + biomeId.toString() + "\" was not registered.");
+                }
+            }
+
             if(structure == null) {
                 tpPos = getValidSpawn(spawnToDimPos, range, world);
             } else {
@@ -137,6 +158,7 @@ public class ModifyPlayerSpawnPower extends Power {
             return blockPos2;
         }
     }
+
     private Vec3d getValidSpawn(BlockPos startPos, int range, ServerWorld world) {
         // (di, dj) is a vector - direction in which we move right now
         int dx = 1;

@@ -324,6 +324,7 @@ public class PowerFactories {
                 new SerializableData()
                         .add("dimension", SerializableDataType.DIMENSION)
                         .add("dimension_distance_multiplier", SerializableDataType.FLOAT, 0F)
+                        .add("biome", SerializableDataType.IDENTIFIER, null)
                         .add("spawn_strategy", SerializableDataType.STRING, "default")
                         .add("structure", SerializableDataType.registry(ClassUtil.castClass(StructureFeature.class), Registry.STRUCTURE_FEATURE), null)
                         .add("respawn_sound", SerializableDataType.SOUND_EVENT, null),
@@ -332,6 +333,7 @@ public class PowerFactories {
                                 new ModifyPlayerSpawnPower(type, player,
                                         (RegistryKey<World>)data.get("dimension"),
                                         (int)data.getFloat("dimension_distance_multiplier"),
+                                        data.getId("biome"),
                                         data.getString("spawn_strategy"),
                                         data.isPresent("structure") ? (StructureFeature<?>)data.get("structure") : null,
                                         (SoundEvent)data.get("respawn_sound")))
