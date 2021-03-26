@@ -83,13 +83,11 @@ public class PowerTypes extends MultiJsonDataLoader implements IdentifiableResou
                             try {
                                 readPower(subId, entry.getValue(), true);
                                 subPowers.add(subId);
-                                Origins.LOGGER.info("Read sub-power for " + id.toString() + ": " + entry.getKey());
                             } catch(Exception e) {
                                 Origins.LOGGER.error("There was a problem reading sub-power \"" +
                                     subId.toString() + "\" in power file \"" + id.toString() + "\": " + e.getMessage());
                             }
                         }
-                        Origins.LOGGER.info("Read " + subPowers.size() + " sub-powers.");
                         MultiplePowerType superPower = (MultiplePowerType)readPower(id, je, false, MultiplePowerType::new);
                         superPower.setSubPowers(subPowers);
                     } else {
