@@ -68,7 +68,19 @@ public class BlockActions {
             (data, block) -> {
                 block.getLeft().setBlockState(block.getMiddle(), ((Block)data.get("block")).getDefaultState());
             }));
+        register(new ActionFactory<>(Origins.identifier("conditioned_set_block"), new SerializableData()
+            .add("condition", SerializableDataType.BLOCK_CONDITION)
+            .add("block", SerializableDataType.BLOCK),
+            (data, block) -> {
+                block.getLeft().setBlockState(block.getMiddle(), ((Block)data.get("block")).getDefaultState());
+            }));
         register(new ActionFactory<>(Origins.identifier("add_block"), new SerializableData()
+            .add("block", SerializableDataType.BLOCK),
+            (data, block) -> {
+                block.getLeft().setBlockState(block.getMiddle().offset(block.getRight()), ((Block)data.get("block")).getDefaultState());
+            }));
+        register(new ActionFactory<>(Origins.identifier("conditioned_add_block"), new SerializableData()
+            .add("condition", SerializableDataType.BLOCK_CONDITION)
             .add("block", SerializableDataType.BLOCK),
             (data, block) -> {
                 block.getLeft().setBlockState(block.getMiddle().offset(block.getRight()), ((Block)data.get("block")).getDefaultState());
