@@ -5,6 +5,7 @@ import io.github.apace100.origins.mixin.ClientPlayerInteractionManagerAccessor;
 import io.github.apace100.origins.mixin.ServerPlayerInteractionManagerAccessor;
 import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.util.SerializableData;
+import io.github.apace100.origins.util.SerializableDataType;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -35,6 +36,18 @@ public final class EntityConditionsClient {
                 }
                 return false;
             }));
+        register(new ConditionFactory<>(Origins.identifier("gamemode"), new SerializableData()
+            .add("gamemode", SerializableDataType.STRING), (data, entity) -> {
+            if(entity instanceof ServerPlayerEntity) {
+                ServerPlayerInteractionManagerAccessor interactionMngr = ((ServerPlayerInteractionManagerAccessor)((ServerPlayerEntity)entity).interactionManager);
+                return interactionMngr.getGameMode().getName().equals(data.getString("gamemode"));
+            } else
+            if(entity instanceof ClientPlayerEntity) {
+                ClientPlayerInteractionManagerAccessor interactionMngr = (ClientPlayerInteractionManagerAccessor) MinecraftClient.getInstance().interactionManager;
+                return interactionMngr.getGameMode().getName().equals(data.getString("gamemode"));
+            }
+            return false;
+        }));
     }
 
     private static void register(ConditionFactory<LivingEntity> conditionFactory) {

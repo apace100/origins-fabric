@@ -2,6 +2,7 @@ package io.github.apace100.origins.mixin;
 
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameMode;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
@@ -13,4 +14,7 @@ public interface ClientPlayerInteractionManagerAccessor {
 
     @Accessor
     boolean getBreakingBlock();
+
+    @Accessor
+    GameMode getGameMode();
 }
