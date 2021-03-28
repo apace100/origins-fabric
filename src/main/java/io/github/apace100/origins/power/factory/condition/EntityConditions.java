@@ -38,6 +38,7 @@ import net.minecraft.server.command.CommandOutput;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.Tag;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -412,6 +413,20 @@ public class EntityConditions {
         register(new ConditionFactory<>(Origins.identifier("tamed"), new SerializableData(), (data, entity) -> {
             if(entity instanceof TameableEntity) {
                 return ((TameableEntity)entity).isTamed();
+            }
+            return false;
+        }));
+        register(new ConditionFactory<>(Origins.identifier("using_item"), new SerializableData()
+            .add("item_condition", SerializableDataType.ITEM_CONDITION, null), (data, entity) -> {
+            if(entity.isUsingItem()) {
+                ConditionFactory<ItemStack>.Instance condition = (ConditionFactory<ItemStack>.Instance)data.get("item_condition");
+                if(condition != null) {
+                    Hand activeHand = entity.getActiveHand();
+                    ItemStack handStack = entity.getStackInHand(activeHand);
+                    return condition.test(handStack);
+                } else {
+                    return true;
+                }
             }
             return false;
         }));
