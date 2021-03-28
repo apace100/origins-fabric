@@ -4,6 +4,8 @@ import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModComponents;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
@@ -148,9 +150,20 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
     // SWIM_SPEED
-    @ModifyConstant(method = "travel", constant = @Constant(floatValue = 0.02F, ordinal = 0))
-    public float modifyBaseUnderwaterSpeed(float in) {
-        return OriginComponent.modify(this, ModifySwimSpeedPower.class, in);
+    @Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateVelocity(FLnet/minecraft/util/math/Vec3d;)V", ordinal = 0))
+    public void modifyUnderwaterMovementSpeed(LivingEntity livingEntity, float speedMultiplier, Vec3d movementInput) {
+        livingEntity.updateVelocity(OriginComponent.modify(livingEntity, ModifySwimSpeedPower.class, speedMultiplier), movementInput);
+    }
+
+    @ModifyConstant(method = "swimUpward", constant = @Constant(doubleValue = 0.03999999910593033D))
+    public double modifyUpwardSwimming(double original) {
+        return OriginComponent.modify(this, ModifySwimSpeedPower.class, original);
+    }
+
+    @Environment(EnvType.CLIENT)
+    @ModifyConstant(method = "knockDownwards", constant = @Constant(doubleValue = -0.03999999910593033D))
+    public double swimDown(double original) {
+        return OriginComponent.modify(this, ModifySwimSpeedPower.class, original);
     }
 
     // LIKE_WATER
