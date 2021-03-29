@@ -1,6 +1,7 @@
 package io.github.apace100.origins.power.factory.condition;
 
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.access.MovingEntity;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.mixin.EntityAccessor;
 import io.github.apace100.origins.origin.Origin;
@@ -430,6 +431,8 @@ public class EntityConditions {
             }
             return false;
         }));
+        register(new ConditionFactory<>(Origins.identifier("moving"), new SerializableData(),
+            (data, entity) -> ((MovingEntity)entity).isMoving()));
     }
 
     private static void register(ConditionFactory<LivingEntity> conditionFactory) {

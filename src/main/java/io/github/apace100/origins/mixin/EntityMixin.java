@@ -1,5 +1,6 @@
 package io.github.apace100.origins.mixin;
 
+import io.github.apace100.origins.access.MovingEntity;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModComponents;
@@ -10,12 +11,14 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MovementType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,7 +32,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 @Mixin(Entity.class)
-public abstract class EntityMixin {
+public abstract class EntityMixin implements MovingEntity {
 
     @Inject(method = "isFireImmune", at = @At("HEAD"), cancellable = true)
     private void makeFullyFireImmune(CallbackInfoReturnable<Boolean> cir) {
@@ -41,6 +44,10 @@ public abstract class EntityMixin {
     @Shadow public World world;
 
     @Shadow public abstract double getFluidHeight(Tag<Fluid> fluid);
+
+    @Shadow public abstract Vec3d getVelocity();
+
+    @Shadow public float distanceTraveled;
 
     @Inject(method = "isTouchingWater", at = @At("HEAD"), cancellable = true)
     private void makeEntitiesIgnoreWater(CallbackInfoReturnable<Boolean> cir) {
@@ -102,5 +109,26 @@ public abstract class EntityMixin {
                 info.cancel();
             }
         }
+    }
+
+    private boolean isMoving;
+    private float distanceBefore;
+
+    @Inject(method = "move", at = @At("HEAD"))
+    private void saveDistanceTraveled(MovementType type, Vec3d movement, CallbackInfo ci) {
+        this.isMoving = false;
+        this.distanceBefore = this.distanceTraveled;
+    }
+
+    @Inject(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;pop()V"))
+    private void checkIsMoving(MovementType type, Vec3d movement, CallbackInfo ci) {
+        if(this.distanceTraveled > this.distanceBefore) {
+            this.isMoving = true;
+        }
+    }
+
+    @Override
+    public boolean isMoving() {
+        return isMoving;
     }
 }

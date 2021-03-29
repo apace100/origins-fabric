@@ -859,6 +859,15 @@ public class PowerFactories {
                 (type, player) -> new PreventBlockUsePower(type, player,
                     (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition")))
             .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("prevent_death"),
+            new SerializableData()
+                .add("entity_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null),
+            data ->
+                (type, player) -> new PreventDeathPower(type, player,
+                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
+                    (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition")))
+            .allowCondition());
     }
 
     private static void register(PowerFactory serializer) {

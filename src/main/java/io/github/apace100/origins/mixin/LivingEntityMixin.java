@@ -20,6 +20,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -35,6 +36,8 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow private Optional<BlockPos> climbingPos;
 
     @Shadow public abstract boolean isHoldingOntoLadder();
+
+    @Shadow public abstract void setHealth(float health);
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -188,5 +191,23 @@ public abstract class LivingEntityMixin extends Entity {
             }
         }
         return in;
+    }
+
+    @Unique
+    private float cachedDamageAmount;
+
+    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;tryUseTotem(Lnet/minecraft/entity/damage/DamageSource;)Z"))
+    private void cacheDamageAmount(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        this.cachedDamageAmount = amount;
+    }
+
+    @Inject(method = "tryUseTotem", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Hand;values()[Lnet/minecraft/util/Hand;"), cancellable = true)
+    private void preventDeath(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
+        Optional<PreventDeathPower> preventDeathPower = OriginComponent.getPowers(this, PreventDeathPower.class).stream().filter(p -> p.doesApply(source, cachedDamageAmount)).findFirst();
+        if(preventDeathPower.isPresent()) {
+            this.setHealth(1.0F);
+            preventDeathPower.get().executeAction();
+            cir.setReturnValue(true);
+        }
     }
 }
