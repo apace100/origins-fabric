@@ -3,6 +3,7 @@ package io.github.apace100.origins.mixin;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.ActionOnBlockBreakPower;
 import io.github.apace100.origins.power.ModifyHarvestPower;
+import io.github.apace100.origins.power.PreventBlockUsePower;
 import io.github.apace100.origins.util.SavedBlockPosition;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -11,7 +12,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -48,4 +53,11 @@ public class ServerPlayerInteractionManagerMixin {
             .forEach(aobbp -> aobbp.executeActions(bl && bl2, pos, null));
     }
 
+
+    @Inject(method = "interactBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;shouldCancelInteraction()Z"), cancellable = true)
+    private void preventBlockInteraction(ServerPlayerEntity player, World world, ItemStack stack, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir) {
+        if(OriginComponent.getPowers(player, PreventBlockUsePower.class).stream().anyMatch(p -> p.doesPrevent(world, hitResult.getBlockPos()))) {
+            cir.setReturnValue(ActionResult.FAIL);
+        }
+    }
 }

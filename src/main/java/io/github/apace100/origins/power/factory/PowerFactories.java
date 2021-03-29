@@ -852,6 +852,13 @@ public class PowerFactories {
                     (ActionFactory<Entity>.Instance)data.get("entity_action"),
                     (ActionFactory<Triple<World, BlockPos, Direction>>.Instance)data.get("block_action")))
             .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("prevent_block_use"),
+            new SerializableData()
+                .add("block_condition", SerializableDataType.BLOCK_CONDITION, null),
+            data ->
+                (type, player) -> new PreventBlockUsePower(type, player,
+                    (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition")))
+            .allowCondition());
     }
 
     private static void register(PowerFactory serializer) {

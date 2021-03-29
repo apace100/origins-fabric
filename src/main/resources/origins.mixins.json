@@ -39,6 +39,7 @@
     "BackgroundRendererMixin",
     "ClientPlayerEntityMixin",
     "ClientPlayerInteractionManagerAccessor",
+    "ClientPlayerInteractionManagerMixin",
     "ClientPlayNetworkHandlerMixin",
     "ConnectScreenMixin",
     "ElytraFeatureRendererMixin",
