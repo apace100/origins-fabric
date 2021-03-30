@@ -868,6 +868,17 @@ public class PowerFactories {
                     (ActionFactory<Entity>.Instance)data.get("entity_action"),
                     (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition")))
             .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("action_on_item_use"),
+            new SerializableData()
+                .add("entity_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("item_action", SerializableDataType.ITEM_ACTION, null)
+                .add("item_condition", SerializableDataType.ITEM_CONDITION, null),
+            data ->
+                (type, player) -> new ActionOnItemUsePower(type, player,
+                    (ConditionFactory<ItemStack>.Instance)data.get("item_condition"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
+                    (ActionFactory<ItemStack>.Instance)data.get("item_action")))
+            .allowCondition());
     }
 
     private static void register(PowerFactory serializer) {

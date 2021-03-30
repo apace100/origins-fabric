@@ -6,7 +6,8 @@
 		"origins:hotblooded",
 		"origins:water_vulnerability",
 		"origins:flame_particles",
-		"origins:damage_from_snowballs"
+		"origins:damage_from_snowballs",
+		"origins:damage_from_potions"
 	],
 	"icon": {
 		"item": "minecraft:blaze_powder"

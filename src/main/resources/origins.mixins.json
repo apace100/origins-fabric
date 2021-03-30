@@ -28,7 +28,6 @@
     "PlayerEntityMixin",
     "PlayerScreenHandlerAccessor",
     "PlayerScreenHandlerMixin",
-    "PotionItemMixin",
     "ServerPlayerEntityMixin",
     "ServerPlayerInteractionManagerAccessor",
     "ServerPlayerInteractionManagerMixin",
