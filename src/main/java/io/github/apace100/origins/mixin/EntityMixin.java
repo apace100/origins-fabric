@@ -23,6 +23,7 @@ import net.minecraft.world.World;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -49,6 +50,8 @@ public abstract class EntityMixin implements MovingEntity {
 
     @Shadow public float distanceTraveled;
 
+    @Shadow protected boolean onGround;
+
     @Inject(method = "isTouchingWater", at = @At("HEAD"), cancellable = true)
     private void makeEntitiesIgnoreWater(CallbackInfoReturnable<Boolean> cir) {
         if(OriginComponent.hasPower((Entity)(Object)this, IgnoreWaterPower.class)) {
@@ -68,9 +71,19 @@ public abstract class EntityMixin implements MovingEntity {
         }
     }
 
+    @Unique
+    private boolean wasGrounded = false;
+
+    @Inject(method = "move", at = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/util/profiler/Profiler;push(Ljava/lang/String;)V", args = {"ldc=rest"}))
+    private void checkWasGrounded(MovementType type, Vec3d movement, CallbackInfo ci) {
+        wasGrounded = this.onGround;
+    }
+
     @Inject(method = "fall", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;fallDistance:F", opcode = Opcodes.PUTFIELD, ordinal = 0))
     private void invokeActionOnSoftLand(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition, CallbackInfo ci) {
-        OriginComponent.getPowers((Entity)(Object)this, ActionOnLandPower.class).forEach(ActionOnLandPower::executeAction);
+        if(!wasGrounded) {
+            OriginComponent.getPowers((Entity)(Object)this, ActionOnLandPower.class).forEach(ActionOnLandPower::executeAction);
+        }
     }
 
     @Inject(at = @At("HEAD"), method = "isInvulnerableTo", cancellable = true)
