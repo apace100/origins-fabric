@@ -15,6 +15,8 @@ import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import io.github.apace100.origins.util.Shape;
 import net.minecraft.block.pattern.CachedBlockPosition;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -185,7 +187,7 @@ public class EntityConditions {
             .add("block_condition", SerializableDataType.BLOCK_CONDITION, null),
             (data, entity) -> entity.isOnGround() &&
                 (!data.isPresent("block_condition") || ((ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition")).test(
-            new CachedBlockPosition(entity.world, entity.getBlockPos().down(), true)))));
+                    new CachedBlockPosition(entity.world, entity.getBlockPos().down(), true)))));
         register(new ConditionFactory<>(Origins.identifier("equipped_item"), new SerializableData()
             .add("equipment_slot", SerializableDataType.EQUIPMENT_SLOT)
             .add("item_condition", SerializableDataType.ITEM_CONDITION),
@@ -433,6 +435,30 @@ public class EntityConditions {
         }));
         register(new ConditionFactory<>(Origins.identifier("moving"), new SerializableData(),
             (data, entity) -> ((MovingEntity)entity).isMoving()));
+        register(new ConditionFactory<>(Origins.identifier("enchantment"), new SerializableData()
+            .add("enchantment", SerializableDataType.ENCHANTMENT)
+            .add("comparison", SerializableDataType.COMPARISON)
+            .add("compare_to", SerializableDataType.INT)
+            .add("calculation", SerializableDataType.STRING, "sum"),
+            (data, entity) -> {
+                int value = 0;
+                Enchantment enchantment = (Enchantment)data.get("enchantment");
+                String calculation = data.getString("calculation");
+                switch(calculation) {
+                    case "sum":
+                        for(ItemStack stack : enchantment.getEquipment(entity).values()) {
+                            value += EnchantmentHelper.getLevel(enchantment, stack);
+                        }
+                        break;
+                    case "max":
+                        value = EnchantmentHelper.getEquipmentLevel(enchantment, entity);
+                        break;
+                    default:
+                        Origins.LOGGER.error("Error in \"enchantment\" entity condition, undefined calculation type: \"" + calculation + "\".");
+                        break;
+                }
+                return ((Comparison)data.get("comparison")).compare(value, data.getInt("compare_to"));
+            }));
     }
 
     private static void register(ConditionFactory<LivingEntity> conditionFactory) {
