@@ -21,7 +21,7 @@ public abstract class PersistentProjectileEntityMixin {
         if(owner != null) {
             Entity target = entityHitResult.getEntity();
             DamageSource source = DamageSource.arrow((PersistentProjectileEntity)(Object)this, owner);
-            return (int) OriginComponent.modify(owner, ModifyProjectileDamagePower.class, original, p -> p.doesApply(source, original, target instanceof LivingEntity ? (LivingEntity)target : null));
+            return (int) OriginComponent.modify(owner, ModifyProjectileDamagePower.class, original, p -> p.doesApply(source, original, target instanceof LivingEntity ? (LivingEntity)target : null), p -> p.executeActions(target));
         }
         return original;
     }

@@ -67,22 +67,30 @@ public interface OriginComponent extends AutoSyncedComponent, ServerTickingCompo
 	}
 
 	static <T extends ValueModifyingPower> float modify(Entity entity, Class<T> powerClass, float baseValue) {
-		return (float)modify(entity, powerClass, (double)baseValue, null);
+		return (float)modify(entity, powerClass, (double)baseValue, null, null);
 	}
 
 	static <T extends ValueModifyingPower> float modify(Entity entity, Class<T> powerClass, float baseValue, Predicate<T> powerFilter) {
-		return (float)modify(entity, powerClass, (double)baseValue, powerFilter);
+		return (float)modify(entity, powerClass, (double)baseValue, powerFilter, null);
+	}
+
+	static <T extends ValueModifyingPower> float modify(Entity entity, Class<T> powerClass, float baseValue, Predicate<T> powerFilter, Consumer<T> powerAction) {
+		return (float)modify(entity, powerClass, (double)baseValue, powerFilter, powerAction);
 	}
 
 	static <T extends ValueModifyingPower> double modify(Entity entity, Class<T> powerClass, double baseValue) {
-		return modify(entity, powerClass, baseValue, null);
+		return modify(entity, powerClass, baseValue, null, null);
 	}
 
-	static <T extends ValueModifyingPower> double modify(Entity entity, Class<T> powerClass, double baseValue, Predicate<T> powerFilter) {
+	static <T extends ValueModifyingPower> double modify(Entity entity, Class<T> powerClass, double baseValue, Predicate<T> powerFilter, Consumer<T> powerAction) {
 		if(entity instanceof PlayerEntity) {
-			List<EntityAttributeModifier> mps = ModComponents.ORIGIN.get(entity).getPowers(powerClass).stream()
+			List<T> powers = ModComponents.ORIGIN.get(entity).getPowers(powerClass);
+			List<EntityAttributeModifier> mps = powers.stream()
 				.filter(p -> powerFilter == null || powerFilter.test(p))
 				.flatMap(p -> p.getModifiers().stream()).collect(Collectors.toList());
+			if(powerAction != null) {
+				powers.forEach(powerAction);
+			}
 			return AttributeUtil.sortAndApplyModifiers(mps, baseValue);
 		}
 		return baseValue;

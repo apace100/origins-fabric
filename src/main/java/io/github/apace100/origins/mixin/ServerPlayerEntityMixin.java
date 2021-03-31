@@ -57,7 +57,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Sc
 
     @ModifyArg(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
     private float modifyDamageAmount(DamageSource source, float originalAmount) {
-        return OriginComponent.modify(this, ModifyDamageTakenPower.class, originalAmount, p -> p.doesApply(source, originalAmount));
+        return OriginComponent.modify(this, ModifyDamageTakenPower.class, originalAmount, p -> p.doesApply(source, originalAmount), p -> p.executeActions(source.getAttacker()));
     }
 
     // FRESH_AIR

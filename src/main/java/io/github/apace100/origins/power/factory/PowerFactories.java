@@ -244,7 +244,9 @@ public class PowerFactories {
                 .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
                 .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
                 .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null)
-                .add("target_condition", SerializableDataType.ENTITY_CONDITION, null),
+                .add("target_condition", SerializableDataType.ENTITY_CONDITION, null)
+                .add("self_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("target_action", SerializableDataType.ENTITY_ACTION, null),
             data ->
                 (type, player) -> {
                     ModifyDamageDealtPower power = new ModifyDamageDealtPower(type, player,
@@ -256,6 +258,12 @@ public class PowerFactories {
                     if(data.isPresent("modifiers")) {
                         ((List<EntityAttributeModifier>)data.get("modifiers")).forEach(power::addModifier);
                     }
+                    if(data.isPresent("self_action")) {
+                        power.setSelfAction((ActionFactory<LivingEntity>.Instance)data.get("self_action"));
+                    }
+                    if(data.isPresent("target_action")) {
+                        power.setTargetAction((ActionFactory<LivingEntity>.Instance)data.get("target_action"));
+                    }
                     return power;
                 })
             .allowCondition());
@@ -263,7 +271,9 @@ public class PowerFactories {
             new SerializableData()
                 .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
                 .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
-                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null),
+                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null)
+                .add("self_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("attacker_action", SerializableDataType.ENTITY_ACTION, null),
             data ->
                 (type, player) -> {
                     ModifyDamageTakenPower power = new ModifyDamageTakenPower(type, player,
@@ -273,6 +283,12 @@ public class PowerFactories {
                     }
                     if(data.isPresent("modifiers")) {
                         ((List<EntityAttributeModifier>)data.get("modifiers")).forEach(power::addModifier);
+                    }
+                    if(data.isPresent("self_action")) {
+                        power.setSelfAction((ActionFactory<LivingEntity>.Instance)data.get("self_action"));
+                    }
+                    if(data.isPresent("attacker_action")) {
+                        power.setAttackerAction((ActionFactory<LivingEntity>.Instance)data.get("attacker_action"));
                     }
                     return power;
                 })
@@ -826,7 +842,9 @@ public class PowerFactories {
                 .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
                 .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
                 .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null)
-                .add("target_condition", SerializableDataType.ENTITY_CONDITION, null),
+                .add("target_condition", SerializableDataType.ENTITY_CONDITION, null)
+                .add("self_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("target_action", SerializableDataType.ENTITY_ACTION, null),
             data ->
                 (type, player) -> {
                     ModifyProjectileDamagePower power = new ModifyProjectileDamagePower(type, player,
@@ -837,6 +855,12 @@ public class PowerFactories {
                     }
                     if(data.isPresent("modifiers")) {
                         ((List<EntityAttributeModifier>)data.get("modifiers")).forEach(power::addModifier);
+                    }
+                    if(data.isPresent("self_action")) {
+                        power.setSelfAction((ActionFactory<LivingEntity>.Instance)data.get("self_action"));
+                    }
+                    if(data.isPresent("target_action")) {
+                        power.setTargetAction((ActionFactory<LivingEntity>.Instance)data.get("target_action"));
                     }
                     return power;
                 })
