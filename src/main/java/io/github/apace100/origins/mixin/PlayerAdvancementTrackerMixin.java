@@ -28,24 +28,26 @@ public class PlayerAdvancementTrackerMixin {
 
     @Inject(method = "grantCriterion", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancement/PlayerAdvancementTracker;endTrackingCompleted(Lnet/minecraft/advancement/Advancement;)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void checkOriginUpgrade(Advancement advancement, String criterionName, CallbackInfoReturnable<Boolean> info, boolean bl, AdvancementProgress advancementProgress, boolean bl2) {
-        Origin.get(owner).forEach((layer, o) -> {
-            Optional<OriginUpgrade> upgrade = o.getUpgrade(advancement);
-            if(upgrade.isPresent()) {
-                try {
-                    Origin upgradeTo = OriginRegistry.get(upgrade.get().getUpgradeToOrigin());
-                    if(upgradeTo != null) {
-                        OriginComponent component = ModComponents.ORIGIN.get(owner);
-                        component.setOrigin(layer, upgradeTo);
-                        component.sync();
-                        String announcement = upgrade.get().getAnnouncement();
-                        if (!announcement.isEmpty()) {
-                            owner.sendMessage(new TranslatableText(announcement).formatted(Formatting.GOLD), false);
+        if(advancementProgress.isDone()) {
+            Origin.get(owner).forEach((layer, o) -> {
+                Optional<OriginUpgrade> upgrade = o.getUpgrade(advancement);
+                if(upgrade.isPresent()) {
+                    try {
+                        Origin upgradeTo = OriginRegistry.get(upgrade.get().getUpgradeToOrigin());
+                        if(upgradeTo != null) {
+                            OriginComponent component = ModComponents.ORIGIN.get(owner);
+                            component.setOrigin(layer, upgradeTo);
+                            component.sync();
+                            String announcement = upgrade.get().getAnnouncement();
+                            if (!announcement.isEmpty()) {
+                                owner.sendMessage(new TranslatableText(announcement).formatted(Formatting.GOLD), false);
+                            }
                         }
+                    } catch(IllegalArgumentException e) {
+                        Origins.LOGGER.error("Could not perform Origins upgrade from " + o.getIdentifier().toString() + " to " + upgrade.get().getUpgradeToOrigin().toString() + ", as the upgrade origin did not exist!");
                     }
-                } catch(IllegalArgumentException e) {
-                    Origins.LOGGER.error("Could not perform Origins upgrade from " + o.getIdentifier().toString() + " to " + upgrade.get().getUpgradeToOrigin().toString() + ", as the upgrade origin did not exist!");
                 }
-            }
-        });
+            });
+        }
     }
 }
