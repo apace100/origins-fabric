@@ -43,11 +43,13 @@ public class ItemStackMixin {
 
     @Inject(method = "finishUsing", at = @At("RETURN"))
     public void callActionOnUse(World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
-        ItemStack returnStack = cir.getReturnValue();
-        OriginComponent component = ModComponents.ORIGIN.get(user);
-        for(ActionOnItemUsePower p : component.getPowers(ActionOnItemUsePower.class)) {
-            if(p.doesApply(usedItemStack)) {
-                p.executeActions(returnStack);
+        if(user instanceof PlayerEntity) {
+            ItemStack returnStack = cir.getReturnValue();
+            OriginComponent component = ModComponents.ORIGIN.get(user);
+            for(ActionOnItemUsePower p : component.getPowers(ActionOnItemUsePower.class)) {
+                if(p.doesApply(usedItemStack)) {
+                    p.executeActions(returnStack);
+                }
             }
         }
     }

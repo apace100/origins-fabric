@@ -6,8 +6,8 @@ import net.minecraft.nbt.Tag;
 
 public class VariableIntPower extends Power {
 
-    private final int min, max;
-    private int currentValue;
+    protected final int min, max;
+    protected int currentValue;
 
     public VariableIntPower(PowerType<?> type, PlayerEntity player, int startValue) {
         this(type, player, startValue, Integer.MIN_VALUE, Integer.MAX_VALUE);

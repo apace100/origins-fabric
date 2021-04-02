@@ -705,14 +705,18 @@ public class PowerFactories {
                 .add("min", SerializableDataType.INT)
                 .add("max", SerializableDataType.INT)
                 .addFunctionedDefault("start_value", SerializableDataType.INT, data -> data.getInt("min"))
-                .add("hud_render", SerializableDataType.HUD_RENDER),
+                .add("hud_render", SerializableDataType.HUD_RENDER)
+                .add("min_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("max_action", SerializableDataType.ENTITY_ACTION, null),
             data ->
                 (type, player) ->
-                    new HudRenderedVariableIntPower(type, player,
+                    new ResourcePower(type, player,
                         (HudRender)data.get("hud_render"),
                         data.getInt("start_value"),
                         data.getInt("min"),
-                        data.getInt("max")))
+                        data.getInt("max"),
+                        (ActionFactory<Entity>.Instance)data.get("min_action"),
+                        (ActionFactory<Entity>.Instance)data.get("max_action")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("modify_food"),
             new SerializableData()
