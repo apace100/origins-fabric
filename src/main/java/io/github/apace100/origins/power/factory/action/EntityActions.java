@@ -23,6 +23,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandOutput;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -108,12 +110,13 @@ public class EntityActions {
                 }
             }));
         register(new ActionFactory<>(Origins.identifier("play_sound"), new SerializableData()
-                .add("namespace", SerializableDataType.STRING, "minecraft")
-                .add("sound", SerializableDataType.STRING),
+                .add("sound", SerializableDataType.SOUND_EVENT)
+                .add("volume", SerializableDataType.FLOAT, 1F)
+                .add("pitch", SerializableDataType.FLOAT, 1F),
                 (data, entity) -> {
                     if(entity instanceof PlayerEntity) {
-                        (entity).world.playSound((PlayerEntity) null, (entity).getX(), (entity).getY(), (entity).getZ(), new SoundEvent(new Identifier(data.getString("namespace"), data.getString("sound"))),
-                        SoundCategory.PLAYERS, 1F, 1F);
+                        entity.world.playSound((PlayerEntity) null, (entity).getX(), (entity).getY(), (entity).getZ(), (SoundEvent)data.get("sound"),
+                        SoundCategory.PLAYERS, data.getFloat("volume"), data.getFloat("pitch"));
                     }
                 }));
         register(new ActionFactory<>(Origins.identifier("exhaust"), new SerializableData()
