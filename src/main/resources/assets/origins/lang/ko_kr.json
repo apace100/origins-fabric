@@ -1,0 +1,216 @@
+{
+    "origin.origins.human.name": "평범한 인간",
+    "origin.origins.human.description": "평범한 인간. 평범한 마인크래프트에서에 경험이 당신을 기다립니다.",
+  
+    "origin.origins.merling.name": "물고기 인간",
+    "origin.origins.merling.description": "이 바다의 자연 거주자들은 너무 오랫동안 물 밖에있는데 익숙하지 않습니다.",
+  
+    "origin.origins.arachnid.name": "거미류 인간",
+    "origin.origins.arachnid.description": "그들의 등반 능력과 거미줄에 적을 가두는 능력은 거미류를 완벽한 사냥꾼으로 만듭니다.",
+  
+    "origin.origins.blazeborn.name": "블레이즈 인간",
+    "origin.origins.blazeborn.description": "블레이즈의 후손 인 블레이즈 인간은 자연적으로 네더의 위험에 면역입니다.",
+  
+    "origin.origins.avian.name": "조류 인간",
+    "origin.origins.avian.description": "조류 종족은 오래 전에 비행 능력을 상실했습니다. 이제이 평화로운 생물들이 한 곳에서 다른 곳으로 미끄러지는 것을 볼 수 있습니다.",
+  
+    "origin.origins.phantom.name": "팬텀 인간",
+    "origin.origins.phantom.description": "반은 인간이고 반은 팬텀인 팬텀 인간은 팬텀과 사람이 낳은 그들의 자손입니다 이 팬텀 인간은 팬텀과 일반 사람 형태 사이를 전환 할 수 있습니다.",
+  
+    "origin.origins.feline.name": "고양이 같은 인간",
+    "origin.origins.feline.description": "고양이 같은 외모로 고양이는 겁쟁이를 두려워합니다. 고양이의 손재주로 항상 안전하게 착지합니다..",
+  
+    "origin.origins.elytrian.name": "나는 인간",
+    "origin.origins.elytrian.description": "종종 바람에 따라 날아 다니는 나는 인간은 머리 위에 충분한 공간이 없을 못 날수도 있습니다.",
+  
+    "origin.origins.enderian.name": "엔더 인간",
+    "origin.origins.enderian.description": "엔더 드래곤의 아들과 딸로 태어난 엔더 인간은 순간 가능하지만 기존 엔더맨 처럼 물에 취약합니다.",
+  
+    "origin.origins.shulk.name": "셜커 인간",
+    "origin.origins.shulk.description": "셜커 인간의 몸에는 셜커 껍질 기본적으로 장착되어 있습니다.",
+  
+    "power.origins.water_breathing.name": "아가미",
+    "power.origins.water_breathing.description": "수중에서는 숨을 쉴 수 있지만 육지에서는 숨을 쉴 수 없습니다.",
+  
+    "power.origins.aqua_affinity.name": "인어 인간",
+    "power.origins.aqua_affinity.description": "다른 사람들이 육지에서 캐는 것 처럼 물속에서 블럭을 빨리 캘수 있습니다.",
+  
+    "power.origins.water_vision.name": "젖은 눈",
+    "power.origins.water_vision.description": "수중에서에도 시야가 흐릿하지 않습니다.",
+  
+    "power.origins.swim_speed.name": "지느러미",
+    "power.origins.swim_speed.description": "수중에서 속도가 아주 빨라집니다.",
+  
+    "power.origins.like_water.name": "물 같은",
+    "power.origins.like_water.description": "수중에서는 원하지 않는 한 땅에 가라 앉지 않습니다.",
+  
+    "power.origins.fragile.name": "파손주의!",
+    "power.origins.fragile.description": "인간보다 하트 3 개 적습니다.",
+  
+    "power.origins.webbing.name": "거미줄",
+    "power.origins.webbing.description": "근접 공격으로 적을 공격하면 상대방이 거미줄에 갇히게됩니다.",
+  
+    "power.origins.climbing.name": "등반",
+    "power.origins.climbing.description": "사다리뿐만 아니라 모든 종류의 벽을 오를 수 있습니다.",
+  
+    "power.origins.carnivore.name": "육식 동물",
+    "power.origins.carnivore.description": "당신의 식단은 고기로 제한되어 있고 야채는 먹을 수 없습니다.",
+  
+    "power.origins.fire_immunity.name": "내화성",
+    "power.origins.fire_immunity.description": "모든 유형의 화재 피해에 면역입니다.",
+  
+    "power.origins.nether_spawn.name": "네더 주민",
+    "power.origins.nether_spawn.description": "자연적으로 네더에서 스폰합니다.",
+  
+    "power.origins.burning_wrath.name": "불타는 분노",
+    "power.origins.burning_wrath.description": "불이 붙으면 공격력이 더 세집니다.",
+  
+    "power.origins.hotblooded.name": "끓는 피",
+    "power.origins.hotblooded.description": "몸이 뜨거워서 독 디버프와 배고픈 상태 효과에 면역이됩니다.",
+  
+    "power.origins.water_vulnerability.name": "공수병",
+    "power.origins.water_vulnerability.description": "물과 접촉하는 동안 시간이 지남에 따라 손상을 입습니다.",
+  
+    "power.origins.tailwind.name": "등뒤에서 부는 바람",
+    "power.origins.tailwind.description": "당신은 다른 사람들 보다 더 조금 빠르게 걷습니다.",
+  
+    "power.origins.slow_falling.name": "가벼운 체중",
+    "power.origins.slow_falling.description": "깃털처럼 부드럽게 땅에 떨어집니다.",
+  
+    "power.origins.vegetarian.name": "채식",
+    "power.origins.vegetarian.description": "어떤 고기도 소화 할 수 없습니다.",
+  
+    "power.origins.fresh_air.name": "맑은 공기",
+    "power.origins.fresh_air.description": "잠을 잘 때 침대의 y값이 86 이상이어야만 신선한 공기를 마실 수 있습니다.",
+  
+    "power.origins.phasing.name": "X-ray 처럼",
+    "power.origins.phasing.description": "유령 상태에서 흑요석을 제외한 단단한 물질을 걸을 수 있습니다.",
+  
+    "power.origins.invisibility.name": "투명",
+    "power.origins.invisibility.description": "유령화되는 동안 당신은 보이지 않습니다.",
+  
+    "power.origins.hunger_over_time.name": "빠른 신진 대사",
+    "power.origins.hunger_over_time.description": "유령화가 되면 배고프게 됩니다.",
+  
+    "power.origins.burn_in_daylight.name": "햇빛 알레르기",
+    "power.origins.burn_in_daylight.description": "투명 상태일때 햇빛에 타기 시작합니다.",
+  
+    "power.origins.fall_immunity.name": "좋은 낙하",
+    "power.origins.fall_immunity.description": "어떤 높이에서 떨어지더라도 추락 피해를 입지 않습니다.",
+  
+    "power.origins.sprint_jump.name": "강한 발목",
+    "power.origins.sprint_jump.description": "달리는 동안 점프를 하면 더 높이 점프 할 수 있습니다.",
+  
+    "power.origins.nine_lives.name": "9 개의 생명",
+    "power.origins.nine_lives.description": "인간보다 하트가 1 개 적습니다.",
+  
+    "power.origins.cat_vision.name": "야행성",
+    "power.origins.cat_vision.description": "물이 없을 때 어둠 속에서 빛을 약간 볼 수 있습니다.",
+  
+    "power.origins.weak_arms.name": "약한 팔",
+    "power.origins.weak_arms.description": "힘 버프의 영향을받지 않을 때, 주변에 다른 천연석(자연적인 광물 돌,석탄,다이아몬드 등 등....) 블록이 최대 2 개있는 경우에만 천연석을 채굴 할 수 있습니다.",
+  
+    "power.origins.scare_creepers.name": "고양이 같이",
+    "power.origins.scare_creepers.description": "크리퍼는 당신을 무서워하고 먼저 공격해야 폭발합니다.",
+  
+    "power.origins.launch_into_air.name": "바람의 선물",
+    "power.origins.launch_into_air.description": "30 초마다 약 20 개의 블록을 공중으로 날릴 수 있습니다.",
+  
+    "power.origins.elytra.name": "날개",
+    "power.origins.elytra.description": "겉날개 없이도 나는 인간은 기본적으로 겉날개가 있습니다.",
+  
+    "power.origins.light_armor.name": "이동성 필요",
+    "power.origins.light_armor.description": "중갑 (사슬 갑옷보다 보호 값이 높은 갑옷)은 착용 할 수 없습니다.",
+  
+    "power.origins.claustrophobia.name": "낮음 공포증",
+    "power.origins.claustrophobia.description": "천장이 낮은 곳에 너무 오래 있으면 약해지고 느려질 것입니다.",
+  
+    "power.origins.more_kinetic_damage.name": "부서지기 쉬운 뼈",
+    "power.origins.more_kinetic_damage.description": "당신은 블록으로 떨어지거나 날아갈 때 더 많은 피해를 입습니다.",
+  
+    "power.origins.aerial_combatant.name": "공중 전투",
+    "power.origins.aerial_combatant.description": "비행 중에 훨씬 더 많은 피해를 입 힙니다.",
+  
+    "power.origins.throw_ender_pearl.name": "순간 이동",
+    "power.origins.throw_ender_pearl.description": "원할 때마다 데미지가없는 엔더 진주를 던져 순간 이동할 수 있습니다.",
+  
+    "power.origins.pumpkin_hate.name": "무서운 호박",
+    "power.origins.pumpkin_hate.description": "당신은 호박을 두려워합니다. 좋은 이유가 있습니다.",
+  
+    "power.origins.extra_reach.name": "날씬한 몸",
+    "power.origins.extra_reach.description": "더 멀리있는 블록과 엔티티에 캐거나 때릴수 있습니다.",
+  
+    "power.origins.shulker_inventory.name": "추억",
+    "power.origins.shulker_inventory.description": "추가 인벤토리 슬롯 9 개에 액세스 할 수있어 아이템을 계속 죽일 수 있습니다.",
+  
+    "power.origins.natural_armor.name": "튼튼한 피부",
+    "power.origins.natural_armor.description": "갑옷을 입지 않아도 피부는 자연스럽게 보호됩니다.",
+  
+    "power.origins.more_exhaustion.name": "큰 식욕",
+    "power.origins.more_exhaustion.description": "남들보다 훨씬 빨리 지쳐서 더 많이 먹어야합니다.",
+  
+    "power.origins.no_shield.name": "다루기 어려운",
+    "power.origins.no_shield.description": "당신의 손이 형성되는 방식은 방패를 똑바로 세울 방법을 절대 절어~얼 때 제공해 주지 않습니다.",
+  
+    "power.origins.strong_arms.name": "강한 팔",
+    "power.origins.strong_arms.description": "곡괭이를 사용하지 않고도 자연석을 부술 수있을만큼 강합니다.",
+  
+    "power.origins.translucent.name": "투명",
+    "power.origins.translucent.description": "당신의 스킨는 반투명합니다.",
+  
+    "power.origins.end_spawn.name": "주민의 끝",
+    "power.origins.end_spawn.description": "당신의 여정은 끝에서 시작됩니다.",
+  
+    "power.origins.master_of_webs.name": "거미줄 마스터",
+    "power.origins.master_of_webs.description": "당신은 거미줄을 완벽하게 탐색하고 그 안에 올라갈 수 있습니다. 근접 공격으로 적을 공격하면 거미줄에 잠시 갇히게됩니다. 거미줄에 갇힌 비 절지 동물을 감지합니다. 끈으로 거미줄을 만들 수 있습니다.",
+  
+    "category.origins": "종족",
+    "key.origins.primary_active": "종족 활성화 (1차)",
+    "key.origins.secondary_active": "종족 활성화 (2차)",
+    "key.origins.view_origin": "종족 보기",
+  
+    "text.autoconfig.origins.title": "종족 구성",
+    "text.autoconfig.origins.option.xOffset": "오프셋 쿨다운 바 X",
+    "text.autoconfig.origins.option.yOffset": "오프셋 쿨다운 바 Y",
+    "text.autoconfig.origins.option.phantomizedOverlayStrength": "팬텀 오버레이 강도",
+  
+    "item.origins.orb_of_origin": "종족 오브",
+  
+    "enchantment.origins.water_protection": "물 보호",
+  
+    "container.shulker_inventory_power": "셜커 인벤토리",
+  
+    "origins.gui.select": "선택",
+    "origins.gui.close": "닫기",
+    "origins.gui.choose": "고르기",
+    "origins.gui.choose_origin.title": "당신의 %s를 선택하세요.",
+    "origins.gui.view_origin.title": "이것은 당신의 %s입니다.",
+    "origins.gui.view_origin.empty": "당신은 어떤 종족도 가질 수 없습니다.",
+    "origins.gui.view_origin.not_installed": "서버에 Origins가 설치되어 있지 않습니다.",
+    "origins.gui.impact.impact": "Impact",
+    "origins.gui.impact.none": "없음",
+    "origins.gui.impact.low": "낮은",
+    "origins.gui.impact.medium": "중간",
+    "origins.gui.impact.high": "높은",
+    "origins.gui.version_mismatch": "이 서버는 설치 한 버전 (v%2$s)과 호환되지 않는 다른 버전의 Origins (v%1$s)를 실행하고 있습니다..",
+  
+    "origin.origins.random.name": "랜덤",
+    "origin.origins.random.description": "다음 중 하나가 할당됩니다.",
+  
+    "layer.origins.origin.name": "특성",
+    "layer.origins.origin.missing_origin.name": "없음",
+    "layer.origins.origin.missing_origin.description": "종족이 없습니다.",
+  
+    "death.attack.no_water_for_gills": "%1$s는 젖지 않았습니다.",
+    "death.attack.no_water_for_gills.player": "%1$s은 (는) %2$s와 싸우고 있었기 때문에 젖지 않았습니다.",
+    "death.attack.hurt_by_water": "%1$s이 (가) 너무 오래 목욕했습니다.",
+    "death.attack.hurt_by_water.player": "%1$s이 (가) %2$s에 의해 수중에 저장되었습니다.",
+    "death.attack.genericDamageOverTime": "%1$s은 (는) 시간이 지남에 따라 손상되어 사망했습니다.",
+    "death.attack.genericDamageOverTime.player": "%1$s이(가) %2$s와 싸우는 동안 시간이 지남에 따라 피해를 입어 사망했습니다.",
+  
+    "commands.origin.origin_not_found": "알 수없는 종족 : s%",
+    "commands.origin.set.success.single": "레이어 s%의 s% 종족을 s%로 설정.",
+    "commands.origin.set.success.multiple": "s% 레이어의 s% 대상을 s%으로 설정합니다.",
+  
+    "origins.avian_sleep_fail": "당신이 잠을 자려면 신선한 공기가 필요합니다."
+  }
