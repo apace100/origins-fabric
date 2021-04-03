@@ -374,6 +374,18 @@ public class EntityActions {
                     action.accept(stack);
                 }
             }));
+        register(new ActionFactory<>(Origins.identifier("trigger_cooldown"), new SerializableData()
+            .add("power", SerializableDataType.POWER_TYPE),
+            (data, entity) -> {
+                if(entity instanceof PlayerEntity) {
+                    OriginComponent component = ModComponents.ORIGIN.get(entity);
+                    Power p = component.getPower((PowerType<?>)data.get("power"));
+                    if(p instanceof CooldownPower) {
+                        CooldownPower cp = (CooldownPower)p;
+                        cp.use();
+                    }
+                }
+            }));
     }
 
     private static void register(ActionFactory<Entity> actionFactory) {
