@@ -34,6 +34,9 @@ public class OriginLayer implements Comparable<OriginLayer> {
     private boolean doesRandomAllowUnchoosable = false;
     private List<Identifier> originsExcludedFromRandom = null;
 
+    private Identifier defaultOrigin = null;
+    private boolean autoChooseIfNoChoice = false;
+
     public String getOrCreateTranslationKey() {
         if(nameTranslationKey == null || nameTranslationKey.isEmpty()) {
             this.nameTranslationKey = "layer." + identifier.getNamespace() + "." + identifier.getPath() + ".name";
@@ -65,6 +68,18 @@ public class OriginLayer implements Comparable<OriginLayer> {
 
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public boolean hasDefaultOrigin() {
+        return defaultOrigin != null;
+    }
+
+    public Identifier getDefaultOrigin() {
+        return defaultOrigin;
+    }
+
+    public boolean shouldAutoChoose() {
+        return autoChooseIfNoChoice;
     }
 
     public List<Identifier> getOrigins() {
@@ -133,6 +148,12 @@ public class OriginLayer implements Comparable<OriginLayer> {
             JsonArray excludeRandomArray = json.getAsJsonArray("exclude_random");
             excludeRandomArray.forEach(je -> originsExcludedFromRandom.add(Identifier.tryParse(je.getAsString())));
         }
+        if(json.has("default_origin")) {
+            this.defaultOrigin = new Identifier(JsonHelper.getString(json, "default_origin"));
+        }
+        if(json.has("auto_choose")) {
+            this.autoChooseIfNoChoice = JsonHelper.getBoolean(json, "auto_choose");
+        }
     }
 
     @Override
@@ -171,6 +192,11 @@ public class OriginLayer implements Comparable<OriginLayer> {
             buffer.writeInt(originsExcludedFromRandom.size());
             originsExcludedFromRandom.forEach(buffer::writeIdentifier);
         }
+        buffer.writeBoolean(hasDefaultOrigin());
+        if(hasDefaultOrigin()) {
+            buffer.writeIdentifier(defaultOrigin);
+        }
+        buffer.writeBoolean(autoChooseIfNoChoice);
     }
 
     @Environment(EnvType.CLIENT)
@@ -196,6 +222,10 @@ public class OriginLayer implements Comparable<OriginLayer> {
                 layer.originsExcludedFromRandom.add(buffer.readIdentifier());
             }
         }
+        if(buffer.readBoolean()) {
+            layer.defaultOrigin = buffer.readIdentifier();
+        }
+        layer.autoChooseIfNoChoice = buffer.readBoolean();
         return layer;
     }
 
@@ -224,7 +254,10 @@ public class OriginLayer implements Comparable<OriginLayer> {
             JsonArray excludeRandomArray = json.getAsJsonArray("exclude_random");
             excludeRandomArray.forEach(je -> layer.originsExcludedFromRandom.add(Identifier.tryParse(je.getAsString())));
         }
-
+        if(json.has("default_origin")) {
+            layer.defaultOrigin = new Identifier(JsonHelper.getString(json, "default_origin"));
+        }
+        layer.autoChooseIfNoChoice = JsonHelper.getBoolean(json, "auto_choose", false);
         return layer;
     }
 
