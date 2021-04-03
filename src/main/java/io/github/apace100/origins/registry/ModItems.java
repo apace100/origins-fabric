@@ -32,6 +32,7 @@ public class ModItems {
                         component.setOrigin(layer, Origin.EMPTY);
                     }
                 }
+                component.checkAutoChoosingLayers(user, false);
                 component.sync();
                 PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
                 data.writeBoolean(false);

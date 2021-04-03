@@ -5,6 +5,8 @@ import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
+import io.github.apace100.origins.origin.OriginLayers;
+import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.ValueModifyingPower;
@@ -13,10 +15,9 @@ import io.github.apace100.origins.util.AttributeUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Identifier;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -94,5 +95,42 @@ public interface OriginComponent extends AutoSyncedComponent, ServerTickingCompo
 			return AttributeUtil.sortAndApplyModifiers(mps, baseValue);
 		}
 		return baseValue;
+	}
+
+	default boolean checkAutoChoosingLayers(PlayerEntity player, boolean includeDefaults) {
+		boolean choseOneAutomatically = false;
+		ArrayList<OriginLayer> layers = new ArrayList<>();
+		for(OriginLayer layer : OriginLayers.getLayers()) {
+			if(layer.isEnabled()) {
+				layers.add(layer);
+			}
+		}
+		Collections.sort(layers);
+		for(OriginLayer layer : layers) {
+			boolean shouldContinue = false;
+			if (layer.isEnabled() && !hasOrigin(layer)) {
+				if (includeDefaults && layer.hasDefaultOrigin()) {
+					setOrigin(layer, OriginRegistry.get(layer.getDefaultOrigin()));
+					choseOneAutomatically = true;
+					shouldContinue = true;
+				} else if (layer.getOriginOptionCount(player) == 1 && layer.shouldAutoChoose()) {
+					List<Origin> origins = layer.getOrigins(player).stream().map(OriginRegistry::get).filter(Origin::isChoosable).collect(Collectors.toList());
+					if (origins.size() == 0) {
+						List<Identifier> randomOrigins = layer.getRandomOrigins(player);
+						setOrigin(layer, OriginRegistry.get(randomOrigins.get(player.getRandom().nextInt(randomOrigins.size()))));
+					} else {
+						setOrigin(layer, origins.get(0));
+					}
+					choseOneAutomatically = true;
+					shouldContinue = true;
+				}
+			} else {
+				shouldContinue = true;
+			}
+			if(!shouldContinue) {
+				break;
+			}
+		}
+		return choseOneAutomatically;
 	}
 }

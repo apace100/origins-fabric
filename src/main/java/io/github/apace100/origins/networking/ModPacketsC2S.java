@@ -72,6 +72,7 @@ public class ModPacketsC2S {
                         boolean hadOriginBefore = component.hadOriginBefore();
                         boolean hadAllOrigins = component.hasAllOrigins();
                         component.setOrigin(layer, origin);
+                        component.checkAutoChoosingLayers(playerEntity, false);
                         component.sync();
                         if(component.hasAllOrigins() && !hadAllOrigins) {
                             component.getOrigins().values().forEach(o -> {
@@ -107,6 +108,7 @@ public class ModPacketsC2S {
                     boolean hadOriginBefore = component.hadOriginBefore();
                     boolean hadAllOrigins = component.hasAllOrigins();
                     component.setOrigin(layer, origin);
+                    component.checkAutoChoosingLayers(playerEntity, false);
                     component.sync();
                     if(component.hasAllOrigins() && !hadAllOrigins) {
                         component.getOrigins().values().forEach(o -> {

@@ -24,7 +24,6 @@ import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.RegistryKey;
@@ -40,7 +39,6 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("rawtypes")
 @Mixin(PlayerManager.class)
@@ -94,22 +92,9 @@ public abstract class LoginMixin {
 		playerList.forEach(spe -> ModComponents.ORIGIN.syncWith(spe, ComponentProvider.fromEntity(player)));
 		OriginComponent.sync(player);
 		if(!component.hasAllOrigins()) {
-			OriginLayers.getLayers().forEach(layer -> {
-				if(layer.isEnabled() && !component.hasOrigin(layer)) {
-					if(layer.hasDefaultOrigin()) {
-						component.setOrigin(layer, OriginRegistry.get(layer.getDefaultOrigin()));
-					} else if(layer.getOriginOptionCount(player) == 1 && layer.shouldAutoChoose()) {
-						List<Origin> origins = layer.getOrigins(player).stream().map(OriginRegistry::get).filter(Origin::isChoosable).collect(Collectors.toList());
-						if(origins.size() == 0) {
-							List<Identifier> randomOrigins = layer.getRandomOrigins(player);
-							component.setOrigin(layer, OriginRegistry.get(randomOrigins.get(player.getRandom().nextInt(randomOrigins.size()))));
-						} else {
-							component.setOrigin(layer, origins.get(0));
-						}
-					}
-				}
-			});
-			component.sync();
+			if(component.checkAutoChoosingLayers(player, true)) {
+				component.sync();
+			}
 			if(component.hasAllOrigins()) {
 				component.getOrigins().values().forEach(o -> {
 					o.getPowerTypes().forEach(powerType -> component.getPower(powerType).onChosen(false));
