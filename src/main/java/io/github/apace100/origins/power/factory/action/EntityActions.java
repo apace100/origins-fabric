@@ -96,7 +96,6 @@ public class EntityActions {
                     }
                 }
             }));
-
         register(new ActionFactory<>(Origins.identifier("damage"), new SerializableData()
             .add("amount", SerializableDataType.FLOAT)
             .add("source", SerializableDataType.DAMAGE_SOURCE),
@@ -108,6 +107,15 @@ public class EntityActions {
                     ((LivingEntity)entity).heal(data.getFloat("amount"));
                 }
             }));
+        register(new ActionFactory<>(Origins.identifier("play_sound"), new SerializableData()
+                .add("namespace", SerializableDataType.STRING, "minecraft")
+                .add("sound", SerializableDataType.STRING),
+                (data, entity) -> {
+                    if(entity instanceof PlayerEntity) {
+                        (entity).world.playSound((PlayerEntity) null, (entity).getX(), (entity).getY(), (entity).getZ(), new SoundEvent(new Identifier(data.getString("namespace"), data.getString("sound"))),
+                        SoundCategory.PLAYERS, 1F, 1F);
+                    }
+                }));
         register(new ActionFactory<>(Origins.identifier("exhaust"), new SerializableData()
             .add("amount", SerializableDataType.FLOAT),
             (data, entity) -> {
