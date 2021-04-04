@@ -26,7 +26,7 @@
   "origin.origins.enderian.name": "Enderian",
   "origin.origins.enderian.description": "Urodzeni jako synowie i córki Smoka Kresu, Enderianie potrafią się teleportować, ale rani ich woda.",
 
-  "origin.origins.shulk.name": "Shulkowie",
+  "origin.origins.shulk.name": "Shulk",
   "origin.origins.shulk.description": "Podobnie jak Shulkery, ciała Shulków są stworzone z ochronnej skóry podobnej do muszli.",
 
   "power.origins.water_breathing.name": "Skrzela",
@@ -39,7 +39,7 @@
   "power.origins.water_vision.description": "Doskonale widzisz pod wodą.",
 
   "power.origins.swim_speed.name": "Płetwy",
-  "power.origins.swim_speed.description": "Twoja prędkość poruszania się pod wodą jest wyższa niż u ludzi.",
+  "power.origins.swim_speed.description": "Twoja prędkość poruszania się w wodzie jest wyższa niż u ludzi.",
 
   "power.origins.like_water.name": "Jak Woda",
   "power.origins.like_water.description": "Pod wodą nie opadasz na dno, chyba że chcesz.",
@@ -54,7 +54,7 @@
   "power.origins.climbing.description": "Możesz wspinać się po każdej powierzchni, nie tylko po drabinie.",
 
   "power.origins.carnivore.name": "Mięzożerca",
-  "power.origins.carnivore.description": "Nie trawisz warzyw.",
+  "power.origins.carnivore.description": "Nie trawisz warzyw i owoców.",
 
   "power.origins.fire_immunity.name": "Ognioodpornosć",
   "power.origins.fire_immunity.description": "Jesteś odporny na wszystkie rodzaje obrażeń od ognia.",
@@ -168,8 +168,8 @@
   "power.origins.lay_eggs.description": "Za każdym razem, gdy się budzisz, składasz jajko.",
 
   "category.origins": "Origins",
-  "key.origins.primary_active": "Active Power (Primary)",
-  "key.origins.secondary_active": "Active Power (Secondary)",
+  "key.origins.primary_active": "Użyj umiejętności głównej",
+  "key.origins.secondary_active": "Użyj umiejętności dodatkowej",
   "key.origins.view_origin": "Wyświetl Pochodzenie",
 
   "text.autoconfig.origins.title": "Konfiguracja Origins",
