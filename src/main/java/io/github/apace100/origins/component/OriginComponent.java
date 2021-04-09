@@ -123,6 +123,8 @@ public interface OriginComponent extends AutoSyncedComponent, ServerTickingCompo
 					}
 					choseOneAutomatically = true;
 					shouldContinue = true;
+				} else if(layer.getOriginOptionCount(player) == 0) {
+					shouldContinue = true;
 				}
 			} else {
 				shouldContinue = true;
