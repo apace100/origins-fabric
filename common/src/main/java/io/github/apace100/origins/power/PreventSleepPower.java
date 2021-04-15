@@ -11,11 +11,13 @@ public class PreventSleepPower extends Power {
 
     private final Predicate<CachedBlockPosition> predicate;
     private final String message;
+    private final boolean allowSpawnPoint;
 
-    public PreventSleepPower(PowerType<?> type, PlayerEntity player, Predicate<CachedBlockPosition> predicate, String message) {
+    public PreventSleepPower(PowerType<?> type, PlayerEntity player, Predicate<CachedBlockPosition> predicate, String message, boolean allowSpawnPoint) {
         super(type, player);
         this.predicate = predicate;
         this.message = message;
+        this.allowSpawnPoint = allowSpawnPoint;
     }
 
     public boolean doesPrevent(WorldView world, BlockPos pos) {
@@ -25,5 +27,9 @@ public class PreventSleepPower extends Power {
 
     public String getMessage() {
         return message;
+    }
+
+    public boolean doesAllowSpawnPoint() {
+        return allowSpawnPoint;
     }
 }

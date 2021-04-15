@@ -6,9 +6,12 @@
 		"origins:swim_speed",
 		"origins:like_water",
 		"origins:aquatic",
-		"origins:conduit_power_on_land"
+		"origins:conduit_power_on_land",
+		"origins:air_from_potions"
 	],
-	"icon": "minecraft:cod",
+	"icon": {
+		"item": "minecraft:cod"
+	},
 	"order": 0,
 	"impact": 3
 }

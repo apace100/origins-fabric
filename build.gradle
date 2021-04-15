@@ -33,15 +33,28 @@ allprojects {
 	version = rootProject.mod_version
 	group = rootProject.maven_group
 
-	repositories {
-		maven { url "https://maven.shedaniel.me" }
-		maven { url "https://dl.bintray.com/ladysnake/libs" }
-		maven { url "https://dl.bintray.com/adriantodt/maven" }
-		maven { url "https://jitpack.io" }
-		maven { url "https://maven.jamieswhiteshirt.com/libs-release/" }
-		jcenter()
-		mavenLocal()
+repositories {
+	maven {
+		name = "Ladysnake Libs"
+		url = 'https://dl.bintray.com/ladysnake/libs'
 	}
+	maven {
+		name = "AdrianTodt's Maven"
+		url = "https://dl.bintray.com/adriantodt/maven"
+	}
+	maven {
+		name = "Jitpack"
+		url = "https://jitpack.io"
+	}
+	maven {
+		url "https://maven.jamieswhiteshirt.com/libs-release/"
+	}
+	maven {
+		url "https://maven.shedaniel.me/"
+	}
+	jcenter()
+	mavenLocal()
+}
 
 	tasks.withType(JavaCompile) {
 		options.encoding = "UTF-8"

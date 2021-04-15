@@ -2,6 +2,7 @@ package io.github.apace100.origins.mixin;
 
 import com.mojang.authlib.GameProfile;
 import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.power.IgnoreWaterPower;
 import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.power.SwimmingPower;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -35,6 +36,8 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     private void allowSwimming(CallbackInfoReturnable<Boolean> cir)  {
         if(OriginComponent.hasPower(this, SwimmingPower.class)) {
             cir.setReturnValue(true);
+        } else if(OriginComponent.hasPower(this, IgnoreWaterPower.class)) {
+            cir.setReturnValue(false);
         }
     }
 }

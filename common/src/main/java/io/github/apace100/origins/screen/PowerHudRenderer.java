@@ -47,7 +47,7 @@ public class PowerHudRenderer extends DrawableHelper {
                 RenderSystem.color3f(1f, 1f, 1f);
                 for (HudRendered hudPower : hudPowers) {
                     HudRender render = hudPower.getRenderSettings();
-                    if(render.shouldRender() && hudPower.shouldRender()) {
+                    if(render.shouldRender(client.player) && hudPower.shouldRender()) {
                         Identifier currentLocation = render.getSpriteLocation();
                         if(currentLocation != lastLocation) {
                             client.getTextureManager().bindTexture(currentLocation);

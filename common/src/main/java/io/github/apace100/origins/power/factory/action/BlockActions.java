@@ -8,8 +8,15 @@ import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import net.minecraft.block.Block;
 import net.minecraft.block.pattern.CachedBlockPosition;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.CommandOutput;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Triple;
@@ -68,7 +75,29 @@ public class BlockActions {
             (data, block) -> block.getLeft().setBlockState(block.getMiddle(), ((Block)data.get("block")).getDefaultState())));
         register(new ActionFactory<>(Origins.identifier("add_block"), new SerializableData()
             .add("block", SerializableDataType.BLOCK),
-            (data, block) -> block.getLeft().setBlockState(block.getMiddle().offset(block.getRight()), ((Block)data.get("block")).getDefaultState())));
+            (data, block) -> {
+                block.getLeft().setBlockState(block.getMiddle().offset(block.getRight()), ((Block)data.get("block")).getDefaultState());
+            }));
+        register(new ActionFactory<>(Origins.identifier("execute_command"), new SerializableData()
+            .add("command", SerializableDataType.STRING)
+            .add("permission_level", SerializableDataType.INT, 4),
+            (data, block) -> {
+                MinecraftServer server = block.getLeft().getServer();
+                if(server != null) {
+                    String blockName = block.getLeft().getBlockState(block.getMiddle()).getBlock().getTranslationKey();
+                    ServerCommandSource source = new ServerCommandSource(
+                        CommandOutput.DUMMY,
+                        new Vec3d(block.getMiddle().getX() + 0.5, block.getMiddle().getY() + 0.5, block.getMiddle().getZ() + 0.5),
+                        new Vec2f(0, 0),
+                        (ServerWorld)block.getLeft(),
+                        data.getInt("permission_level"),
+                        blockName,
+                        new TranslatableText(blockName),
+                        server,
+                        null);
+                    server.getCommandManager().execute(source, data.getString("command"));
+                }
+            }));
     }
 
     private static void register(ActionFactory<Triple<World, BlockPos, Direction>> actionFactory) {

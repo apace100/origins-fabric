@@ -7,7 +7,9 @@
 		"origins:scare_creepers",
 		"origins:cat_vision"
 	],
-	"icon": "minecraft:orange_wool",
+	"icon": {
+		"item": "minecraft:orange_wool"
+	},
 	"order": 0,
 	"impact": 2
 }

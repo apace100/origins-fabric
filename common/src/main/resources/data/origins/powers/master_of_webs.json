@@ -1,0 +1,98 @@
+{
+  "type": "origins:multiple",
+  "webbing": {
+    "type": "origins:target_action_on_hit",
+    "cooldown": 120,
+    "hud_render": {
+      "bar_index": 5
+    },
+    "entity_action": {
+      "type": "origins:block_action_at",
+      "block_action": {
+        "type": "origins:if_else",
+        "condition": {
+          "type": "origins:replacable"
+        },
+        "if_action": {
+          "type": "origins:set_block",
+          "block": "origins:temporary_cobweb"
+        }
+      }
+    }
+  },
+  "no_slowdown": {
+    "type": "origins:simple"
+  },
+  "climbing": {
+    "type": "origins:climbing",
+    "condition": {
+      "type": "origins:and",
+      "conditions": [
+        {
+          "type": "origins:in_block_anywhere",
+          "block_condition": {
+            "type": "origins:in_tag",
+            "tag": "origins:cobwebs"
+          }
+        },
+        {
+          "type": "origins:power_active",
+          "power": "*:climbing_toggle"
+        }
+      ]
+    },
+    "hold_condition": {
+      "type": "origins:power_active",
+      "power": "*:*_climbing"
+    }
+  },
+  "punch_through": {
+    "type": "origins:prevent_block_selection",
+    "block_condition": {
+      "type": "origins:in_tag",
+      "tag": "origins:cobwebs"
+    },
+    "condition": {
+      "type": "origins:sneaking",
+      "inverted": true
+    }
+  },
+  "sense": {
+    "type": "origins:entity_glow",
+    "entity_condition": {
+      "type": "origins:and",
+      "conditions": [
+        {
+          "type": "origins:in_block_anywhere",
+          "block_condition": {
+            "type": "origins:in_tag",
+            "tag": "origins:cobwebs"
+          }
+        },
+        {
+          "type": "origins:entity_group",
+          "group": "arthropod",
+          "inverted": true
+        }
+      ]
+    }
+  },
+  "web_crafting": {
+    "type": "origins:recipe",
+    "recipe": {
+      "id": "origins:master_of_webs/web_crafting",
+      "type": "minecraft:crafting_shapeless",
+      "ingredients": [
+        {
+          "item": "minecraft:string"
+        },
+        {
+          "item": "minecraft:string"
+        }
+      ],
+      "result": {
+        "item": "minecraft:cobweb"
+      }
+    }
+  }
+}

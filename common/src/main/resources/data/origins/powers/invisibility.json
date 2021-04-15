@@ -3,6 +3,6 @@
   "render_armor": true,
   "condition": {
     "type": "origins:power_active",
-    "power": "origins:phantomize"
+    "power": "*:phantomize"
   }
 }

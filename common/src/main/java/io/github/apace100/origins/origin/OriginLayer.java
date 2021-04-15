@@ -8,6 +8,7 @@ import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -32,6 +33,9 @@ public class OriginLayer implements Comparable<OriginLayer> {
     private boolean isRandomAllowed = false;
     private boolean doesRandomAllowUnchoosable = false;
     private List<Identifier> originsExcludedFromRandom = null;
+
+    private Identifier defaultOrigin = null;
+    private boolean autoChooseIfNoChoice = false;
 
     public String getOrCreateTranslationKey() {
         if(nameTranslationKey == null || nameTranslationKey.isEmpty()) {
@@ -66,6 +70,18 @@ public class OriginLayer implements Comparable<OriginLayer> {
         return enabled;
     }
 
+    public boolean hasDefaultOrigin() {
+        return defaultOrigin != null;
+    }
+
+    public Identifier getDefaultOrigin() {
+        return defaultOrigin;
+    }
+
+    public boolean shouldAutoChoose() {
+        return autoChooseIfNoChoice;
+    }
+
     public List<Identifier> getOrigins() {
         //Workspace fix: to build in a dev environment, we need two fabric.mod.json, but that causes resources to double load
         //To solve this we just force Identifiers to be distinct.
@@ -74,6 +90,14 @@ public class OriginLayer implements Comparable<OriginLayer> {
 
     public List<Identifier> getOrigins(PlayerEntity playerEntity) {
         return conditionedOrigins.stream().filter(co -> co.isConditionFulfilled(playerEntity)).flatMap(co -> co.getOrigins().stream()).filter(OriginRegistry::contains).distinct().collect(Collectors.toList());
+    }
+
+    public int getOriginOptionCount(PlayerEntity playerEntity) {
+        long choosableOrigins = getOrigins(playerEntity).stream().map(OriginRegistry::get).filter(Origin::isChoosable).count();
+        if(isRandomAllowed && getRandomOrigins(playerEntity).size() > 0) {
+            choosableOrigins++;
+        }
+        return (int)choosableOrigins;
     }
 
     public boolean contains(Origin origin) {
@@ -126,6 +150,12 @@ public class OriginLayer implements Comparable<OriginLayer> {
             JsonArray excludeRandomArray = json.getAsJsonArray("exclude_random");
             excludeRandomArray.forEach(je -> originsExcludedFromRandom.add(Identifier.tryParse(je.getAsString())));
         }
+        if(json.has("default_origin")) {
+            this.defaultOrigin = new Identifier(JsonHelper.getString(json, "default_origin"));
+        }
+        if(json.has("auto_choose")) {
+            this.autoChooseIfNoChoice = JsonHelper.getBoolean(json, "auto_choose");
+        }
     }
 
     @Override
@@ -164,6 +194,11 @@ public class OriginLayer implements Comparable<OriginLayer> {
             buffer.writeInt(originsExcludedFromRandom.size());
             originsExcludedFromRandom.forEach(buffer::writeIdentifier);
         }
+        buffer.writeBoolean(hasDefaultOrigin());
+        if(hasDefaultOrigin()) {
+            buffer.writeIdentifier(defaultOrigin);
+        }
+        buffer.writeBoolean(autoChooseIfNoChoice);
     }
 
     @Environment(EnvType.CLIENT)
@@ -189,6 +224,10 @@ public class OriginLayer implements Comparable<OriginLayer> {
                 layer.originsExcludedFromRandom.add(buffer.readIdentifier());
             }
         }
+        if(buffer.readBoolean()) {
+            layer.defaultOrigin = buffer.readIdentifier();
+        }
+        layer.autoChooseIfNoChoice = buffer.readBoolean();
         return layer;
     }
 
@@ -217,15 +256,18 @@ public class OriginLayer implements Comparable<OriginLayer> {
             JsonArray excludeRandomArray = json.getAsJsonArray("exclude_random");
             excludeRandomArray.forEach(je -> layer.originsExcludedFromRandom.add(Identifier.tryParse(je.getAsString())));
         }
-
+        if(json.has("default_origin")) {
+            layer.defaultOrigin = new Identifier(JsonHelper.getString(json, "default_origin"));
+        }
+        layer.autoChooseIfNoChoice = JsonHelper.getBoolean(json, "auto_choose", false);
         return layer;
     }
 
     public static class ConditionedOrigin {
-        private final ConditionFactory<PlayerEntity>.Instance condition;
+        private final ConditionFactory<LivingEntity>.Instance condition;
         private final List<Identifier> origins;
 
-        public ConditionedOrigin(ConditionFactory<PlayerEntity>.Instance condition, List<Identifier> origins) {
+        public ConditionedOrigin(ConditionFactory<LivingEntity>.Instance condition, List<Identifier> origins) {
             this.condition = condition;
             this.origins = origins;
         }
@@ -238,7 +280,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
             return origins;
         }
         private static final SerializableData conditionedOriginObjectData = new SerializableData()
-            .add("condition", SerializableDataType.PLAYER_CONDITION)
+            .add("condition", SerializableDataType.ENTITY_CONDITION)
             .add("origins", SerializableDataType.IDENTIFIERS);
 
         public void write(PacketByteBuf buffer) {
@@ -251,9 +293,9 @@ public class OriginLayer implements Comparable<OriginLayer> {
 
         @Environment(EnvType.CLIENT)
         public static ConditionedOrigin read(PacketByteBuf buffer) {
-            ConditionFactory<PlayerEntity>.Instance condition = null;
+            ConditionFactory<LivingEntity>.Instance condition = null;
             if(buffer.readBoolean()) {
-                condition = ConditionTypes.PLAYER.read(buffer);
+                condition = ConditionTypes.ENTITY.read(buffer);
             }
             int originCount = buffer.readInt();
             List<Identifier> originList = new ArrayList<>(originCount);

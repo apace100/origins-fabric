@@ -8,7 +8,9 @@
 		"origins:hunger_over_time",
 		"origins:fragile"
 	],
-	"icon": "minecraft:phantom_membrane",
+	"icon": {
+		"item": "minecraft:phantom_membrane"
+	},
 	"order": 2,
 	"impact": 3
 }

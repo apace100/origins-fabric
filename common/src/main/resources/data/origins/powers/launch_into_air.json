@@ -6,5 +6,8 @@
   },
   "sound": "minecraft:entity.parrot.fly",
   "speed": 2,
-  "key": "primary"
+  "key": {
+    "key": "key.origins.primary_active",
+    "continuous": true
+  }
 }

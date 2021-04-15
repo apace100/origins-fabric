@@ -11,7 +11,7 @@ public class ItemActions {
 
     public static void register() {
         register(new ActionFactory<>(Origins.identifier("consume"), new SerializableData()
-            .add("amount", SerializableDataType.INT),
+            .add("amount", SerializableDataType.INT, 1),
             (data, stack) -> stack.decrement(data.getInt("amount"))));
     }
 

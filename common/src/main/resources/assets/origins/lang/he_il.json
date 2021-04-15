@@ -1,0 +1,216 @@
+{
+  "origin.origins.human.name": "בן אדם",
+  "origin.origins.human.description": "איש רגיל, חווית המיינקראפט הרגילה שלך מחכה לך.",
+
+  "origin.origins.merling.name": "בת ים",
+  "origin.origins.merling.description": "תושבי האוקיינוס הנייטרלים האלה לא רגילים לחיות מחוץ למים ליתור מדי זמן.",
+
+  "origin.origins.arachnid.name": "עכבישאי",
+  "origin.origins.arachnid.description": "יכולות הטיפוס שלהם והיכולת לטפוס את אויביהם ברשתות הופכות אותם לצייד מעולים .",
+
+  "origin.origins.blazeborn.name": "בלייזבורן",
+  "origin.origins.blazeborn.description": "צאציאו המאוחרים של הבלייז, בלייזבורן חסינים באופן טיבעי לסכנותי של הנ'תר'.",
+
+  "origin.origins.avian.name": "עוף",
+  "origin.origins.avian.description": "העופות איבדו מזמן את יכולות התעופה שלהם. כעת ניתן לראות את יצורים שלווים אלה דואים ממקום למקום.",
+
+  "origin.origins.phantom.name": "פאנטום",
+  "origin.origins.phantom.description": "בתור חצי בן אנוש חצי פאנטום, היצורים האלה יכולים להחליף בין צורתם האנושית לצורת הרפאים שלהם.",
+
+  "origin.origins.feline.name": "חתול",
+  "origin.origins.feline.description": "עם צורת דמויית החתול שלהם החתולים מפחידים קריפרים. עם זריזות החתול שלהם הם תמיד בתוחים על הרגליים.",
+
+  "origin.origins.elytrian.name": "אלייטרן",
+  "origin.origins.elytrian.description": "לעיתים קרובות הם עפים ברוח, האלייטרנים מרגישים לא בנוח כשאין מעליהם מספיק אוויר.",
+
+  "origin.origins.enderian.name": "אנדריין",
+  "origin.origins.enderian.description": "נולדו כילד והילדה של האנדר דרגון, אנדרייאנים מסוגלים להשתגר ממקום למקום אבל יש להם חולשה למים.",
+
+  "origin.origins.shulk.name": "שאלק",
+  "origin.origins.shulk.description": "בדומה לשאלקרין, גופות השאלק מצוייד בעור דמוי מגן.",
+
+  "power.origins.water_breathing.name": "זימים",
+  "power.origins.water_breathing.description": "אתה יכול לנשום מתחת למים, אבל לא על היבשה.",
+
+  "power.origins.aqua_affinity.name": "חציבת מים",
+  "power.origins.aqua_affinity.description": "אתה יכול לחצוב בלוקים מתמחת למים, כמו שהיית עושה על הייבשה.",
+
+  "power.origins.water_vision.name": "עיינים רטובות",
+  "power.origins.water_vision.description": "הראייה שלך מתחת למים מושלמת.",
+
+  "power.origins.swim_speed.name": "סנפירים",
+  "power.origins.swim_speed.description": "מהירות השחייה שלך מוגברת.",
+
+  "power.origins.like_water.name": "כמו מים",
+  "power.origins.like_water.description": "כשאתה מתחת למים, אתה לא שוקע אלא עם אתה רוצה.",
+
+  "power.origins.fragile.name": "שביר",
+  "power.origins.fragile.description": "יש לך פחות 3 לבבות מאשר בני אדם.",
+
+  "power.origins.webbing.name": "קורי עכביש",
+  "power.origins.webbing.description": "כשאתה מכה במישהו עם נשק לתווח קרוב, הוא נתיקע ברשת.",
+
+  "power.origins.climbing.name": "טיפוס",
+  "power.origins.climbing.description": "אתה יכול לטפס על כל קיר, לא רק סולמות.",
+
+  "power.origins.carnivore.name": "בשרי",
+  "power.origins.carnivore.description": "התזונה שלך היא בשר בלבד, בלי ירקות.",
+
+  "power.origins.fire_immunity.name": "חסינות לאש",
+  "power.origins.fire_immunity.description": "אתה חסין לכל סוגי האש.",
+
+  "power.origins.nether_spawn.name": "תושבי נת'ר'",
+  "power.origins.nether_spawn.description": "אתה עושה ספאון בנת'ר'.",
+
+  "power.origins.burning_wrath.name": "שווה לבעור",
+  "power.origins.burning_wrath.description": "אתה עושה יותר דמאג' כשאתה עולה בלהבות'.",
+
+  "power.origins.hotblooded.name": "דם רותח",
+  "power.origins.hotblooded.description": "מפני גופך החם אתה חסין לאפכתים של רעל ושל רעב.",
+
+  "power.origins.water_vulnerability.name": "היידרופוביה",
+  "power.origins.water_vulnerability.description": "אתה מקבל דאמג' כשאתה נמצא במים.",
+
+  "power.origins.tailwind.name": "קל רגליים",
+  "power.origins.tailwind.description": "אתה קצת יותר מהיר ברגל מאחרים.",
+
+  "power.origins.slow_falling.name": "קל נוצה",
+  "power.origins.slow_falling.description": "אתה נופל למטה כמו שנוצה נופלת, אלא עם אתה מתכופף.",
+
+  "power.origins.vegetarian.name": "צמחוני",
+  "power.origins.vegetarian.description": "אתה לא יכול לאכול בשר.",
+
+  "power.origins.fresh_air.name": "אוויר צח",
+  "power.origins.fresh_air.description": "כשאתה ישן, המיתה שלך צריכה אוויר של לפחות 86 בלוקים, כדי שתוכל לנשום אוויר צח .",
+
+  "power.origins.phasing.name": "לפלס",
+  "power.origins.phasing.description": "כשאתה במצב פאנטוםפ, אתה יכול לעבור דרך חומר מוצק, חוץ מאובסידיאן.",
+
+  "power.origins.invisibility.name": "בלתי נראות",
+  "power.origins.invisibility.description": "כשאתה במצב פאנטום, אתה בלתי נראה.",
+
+  "power.origins.hunger_over_time.name": "חילוף חומרים",
+  "power.origins.hunger_over_time.description": "להיות מצב פאנטום גורם לך לרעוב מהר יותר.",
+
+  "power.origins.burn_in_daylight.name": "פוטו-אלרגי",
+  "power.origins.burn_in_daylight.description": "אתה נשרף באור יום אם אתה לא בלתי נראה.",
+
+  "power.origins.fall_immunity.name": "אקרובט",
+  "power.origins.fall_immunity.description": "אתה לא תקבל דמאג' מנפילה, לא משנה מאיזה גובה אתה נופל.",
+
+  "power.origins.sprint_jump.name": "רגליים חזקות",
+  "power.origins.sprint_jump.description": "אתה יכול לקפוץ גבוה יותר באמצעות קפיצה בזמן ריצה.",
+
+  "power.origins.nine_lives.name": "תשע נשמות",
+  "power.origins.nine_lives.description": "יש לך פחות לב 1 מאשר בני אדם רגילים.",
+
+  "power.origins.cat_vision.name": "לילי",
+  "power.origins.cat_vision.description": "אתה יכול לראות בחושך טפונת יותר טוב אם אתה לא במים.",
+
+  "power.origins.weak_arms.name": "ידיים חלשות",
+  "power.origins.weak_arms.description": "כאשר לא משפיע עליך שיקוי כח, אתה יכול לחצוב אבן רק אם יש לפחות 2 אבנים טבעיות הסמוכים עליה.",
+
+  "power.origins.scare_creepers.name": "צורת חתול",
+  "power.origins.scare_creepers.description": "קריפרים מפחדים ממך ולא יתפוצצו אלא עם אתה תוקף אותם קודם.",
+
+  "power.origins.launch_into_air.name": "מתנת הכנפיים",
+  "power.origins.launch_into_air.description": "כל 30 שניות אתה מסוגל לדחוף את עצמך 20 בלוקים לאוויר.",
+
+  "power.origins.elytra.name": "מכונף",
+  "power.origins.elytra.description": "יש לך אלייטרה בלי שתצתרך ללבוש אותם.",
+
+  "power.origins.light_armor.name": "צריך תזוזה",
+  "power.origins.light_armor.description": "אתה לא יכול ללבוש שום שריון כבד (שריון עם פרוטקשין חזק יותר משרשראות).",
+
+  "power.origins.claustrophobia.name": "קלאסטרופוביה",
+  "power.origins.claustrophobia.description": "להיות במקום עם תקרה נמוכה הופך אותך לאיטי יותר.",
+
+  "power.origins.more_kinetic_damage.name": "עצמות שבירות",
+  "power.origins.more_kinetic_damage.description": "אתה מקבל יותר דאמג' אם אתה עף לתוך בלוק'.",
+
+  "power.origins.aerial_combatant.name": "קרב אוויר",
+  "power.origins.aerial_combatant.description": "אתה מוריד יותר דאמג' כשאתה עף עם האלייטרה'.",
+
+  "power.origins.throw_ender_pearl.name": "טלפורטציה",
+  "power.origins.throw_ender_pearl.description": "מתי שאתה רוצה, אתה זורק אנדר-פירל שלא עושה דמאג' שמאפשר לך להשתגר '.",
+
+  "power.origins.pumpkin_hate.name": "מפחד מדלעות",
+  "power.origins.pumpkin_hate.description": "אתה מפחד מדלעות, מסיבה טובה.",
+
+  "power.origins.extra_reach.name": "גוף גבוה",
+  "power.origins.extra_reach.description": "אתה יכול להגיע לבלוקים ולמובים מהרבה יותר רחוק.",
+
+  "power.origins.shulker_inventory.name": "אוגר",
+  "power.origins.shulker_inventory.description": "יש לך גישה לעוד 9 מקומות אכסון, שהדברים שבתוכם ישארו לאחר המוות.",
+
+  "power.origins.natural_armor.name": "גוף קשיח",
+  "power.origins.natural_armor.description": "אפילו בלי שריון, לגוף שלך יש הגנה טבעית.",
+
+  "power.origins.more_exhaustion.name": "תיאבון גדול",
+  "power.origins.more_exhaustion.description": "אתה נרעב הרבה יותר מהר מאחרים, אז אתה צריך לאכול יותר.",
+
+  "power.origins.no_shield.name": "מגושם",
+  "power.origins.no_shield.description": "הדרך שבה היידים שלך בנוייות לא מאפשרות לך  להחזיק מגן כמו שצריך.",
+
+  "power.origins.strong_arms.name": "זרועות חזקות",
+  "power.origins.strong_arms.description": "אתה מספיק חזק בדי לשבור אבן רגילה בלי מכוש.",
+
+  "power.origins.translucent.name": "שקוף למחצה",
+  "power.origins.translucent.description": "הגוף שלך שקוף.",
+
+  "power.origins.end_spawn.name": "תושב האנד",
+  "power.origins.end_spawn.description": "המסע שלך מתחיל באנד.",
+
+  "power.origins.master_of_webs.name": "מומכה בקורים",
+  "power.origins.master_of_webs.description": "אתה טווה את קורי העכביש שלך בצורה מושלמת ומסוגל לטפס איתם. כשאתה פוגע באויב עם נשק לתווך קרוב הם נתקעים ברשת לזמן מה. פרוקי רגליים לא יתקעו בקורים שלך. אתה מסוגל לבנות קורי עכביש באמצעות חוטים.",
+
+  "category.origins": "מקורות",
+  "key.origins.primary_active": "כח פעיל (ראשי)",
+  "key.origins.secondary_active": "כח פעיל (משני)",
+  "key.origins.view_origin": "צפה במקור",
+
+  "text.autoconfig.origins.title": "קונפיג מקורות",
+  "text.autoconfig.origins.option.xOffset": ",תצורת מד הטעינה X",
+  "text.autoconfig.origins.option.yOffset": "תצורת מד הטעינה Y",
+  "text.autoconfig.origins.option.phantomizedOverlayStrength": "חוזק כיסוי פאנטום",
+
+  "item.origins.orb_of_origin": "ליבת המקור",
+
+  "enchantment.origins.water_protection": "חסינות למים",
+
+  "container.shulker_inventory_power": "שאלקר אינוונטורי",
+
+  "origins.gui.select": "לבחור",
+  "origins.gui.close": "לסגור",
+  "origins.gui.choose": "לבחור",
+  "origins.gui.choose_origin.title": "תבחר את האחוזים.",
+  "origins.gui.view_origin.title": "אלה האחוזים.",
+  "origins.gui.view_origin.empty": "אתה לא יכול לבחור במקור.",
+  "origins.gui.view_origin.not_installed": "לשרת אין מקורות מותקן.",
+  "origins.gui.impact.impact": "השפעה",
+  "origins.gui.impact.none": "ללא",
+  "origins.gui.impact.low": "נמוך",
+  "origins.gui.impact.medium": "בינוני",
+  "origins.gui.impact.high": "גבוה",
+  "origins.gui.version_mismatch": "השרת הזה מריץ גירסה אחרת של מקורות (v%1$s) שאינה תואמת לזו שהתקנת (v%2$s).",
+
+  "origin.origins.random.name": "אקראי",
+  "origin.origins.random.description": "יוקצה לך אחד מהבאים:",
+
+  "layer.origins.origin.name": "מקור",
+  "layer.origins.origin.missing_origin.name": "חסר",
+  "layer.origins.origin.missing_origin.description": "אין לך מקור.",
+
+  "death.attack.no_water_for_gills": "%1$s לא הצליח להישאר רטוב.",
+  "death.attack.no_water_for_gills.player": "%1$s לא הצליחו להשאר רטובים מפני שהם נלחמו ב-%2$s.",
+  "death.attack.hurt_by_water": "%1$s היה באמבט יותר מדי זמן.",
+  "death.attack.hurt_by_water.player": "%1$s הוכנס למים על ידי %2$s.",
+  "death.attack.genericDamageOverTime": "%1$s מת כתוצאה מנזק לאורך זמן.",
+  "death.attack.genericDamageOverTime.player": "%1$s מת מפגיעה לאורך זמן בזמן שנלכם ב-%2$s.",
+
+  "commands.origin.origin_not_found": "מקורות לא ידועים %s",
+  "commands.origin.set.success.single": "הגדר מקור של %s בשכבה של %s  ל%s.",
+  "commands.origin.set.success.multiple": "הגדר מקום של %s מטרות בשכבה של %s ל-%s.",
+
+  "origins.avian_sleep_fail": "אתה צריך אוויר צח כדי לנשום"
+}

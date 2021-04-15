@@ -2,38 +2,37 @@ package io.github.apace100.origins.power.factory.action;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.power.CooldownPower;
 import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.VariableIntPower;
 import io.github.apace100.origins.power.factory.condition.ConditionFactory;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModRegistries;
-import io.github.apace100.origins.util.FilterableWeightedList;
-import io.github.apace100.origins.util.SerializableData;
-import io.github.apace100.origins.util.SerializableDataType;
-import io.github.apace100.origins.util.Space;
+import io.github.apace100.origins.util.*;
 import net.minecraft.client.util.math.Vector3f;
-import net.minecraft.entity.AreaEffectCloudEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandOutput;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Triple;
+import org.apache.logging.log4j.util.TriConsumer;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -55,12 +54,12 @@ public class EntityActions {
                 }
             }));
         register(new ActionFactory<>(Origins.identifier("if_else"), new SerializableData()
-            .add("condition", SerializableDataType.PLAYER_CONDITION)
+            .add("condition", SerializableDataType.ENTITY_CONDITION)
             .add("if_action", SerializableDataType.ENTITY_ACTION)
             .add("else_action", SerializableDataType.ENTITY_ACTION, null),
             (data, entity) -> {
-                if(entity instanceof PlayerEntity) {
-                    if(((ConditionFactory<PlayerEntity>.Instance)data.get("condition")).test((PlayerEntity)entity)) {
+                if(entity instanceof LivingEntity) {
+                    if(((ConditionFactory<LivingEntity>.Instance)data.get("condition")).test((LivingEntity)entity)) {
                         ((ActionFactory<Entity>.Instance)data.get("if_action")).accept(entity);
                     } else {
                         if(data.isPresent("else_action")) {
@@ -76,7 +75,29 @@ public class EntityActions {
                 ActionFactory<Entity>.Instance action = actionList.pickRandom(new Random());
                 action.accept(entity);
             }));
-
+        register(new ActionFactory<>(Origins.identifier("if_else_list"), new SerializableData()
+            .add("actions", SerializableDataType.list(SerializableDataType.compound(ClassUtil.castClass(Pair.class), new SerializableData()
+                .add("action", SerializableDataType.ENTITY_ACTION)
+                .add("condition", SerializableDataType.ENTITY_CONDITION),
+                inst -> new Pair<>((ConditionFactory<LivingEntity>.Instance)inst.get("condition"), (ActionFactory<Entity>.Instance)inst.get("action")),
+                (data, pair) -> {
+                    SerializableData.Instance inst = data.new Instance();
+                    inst.set("condition", pair.getLeft());
+                    inst.set("action", pair.getRight());
+                    return inst;
+                }))),
+            (data, entity) -> {
+                if(entity instanceof LivingEntity) {
+                    List<Pair<ConditionFactory<Entity>.Instance, ActionFactory<Entity>.Instance>> actions =
+                        (List<Pair<ConditionFactory<Entity>.Instance, ActionFactory<Entity>.Instance>>)data.get("actions");
+                    for (Pair<ConditionFactory<Entity>.Instance, ActionFactory<Entity>.Instance> action: actions) {
+                        if(action.getLeft().test(entity)) {
+                            action.getRight().accept(entity);
+                            break;
+                        }
+                    }
+                }
+            }));
         register(new ActionFactory<>(Origins.identifier("damage"), new SerializableData()
             .add("amount", SerializableDataType.FLOAT)
             .add("source", SerializableDataType.DAMAGE_SOURCE),
@@ -88,6 +109,16 @@ public class EntityActions {
                     ((LivingEntity)entity).heal(data.getFloat("amount"));
                 }
             }));
+        register(new ActionFactory<>(Origins.identifier("play_sound"), new SerializableData()
+                .add("sound", SerializableDataType.SOUND_EVENT)
+                .add("volume", SerializableDataType.FLOAT, 1F)
+                .add("pitch", SerializableDataType.FLOAT, 1F),
+                (data, entity) -> {
+                    if(entity instanceof PlayerEntity) {
+                        entity.world.playSound((PlayerEntity) null, (entity).getX(), (entity).getY(), (entity).getZ(), (SoundEvent)data.get("sound"),
+                        SoundCategory.PLAYERS, data.getFloat("volume"), data.getFloat("pitch"));
+                    }
+                }));
         register(new ActionFactory<>(Origins.identifier("exhaust"), new SerializableData()
             .add("amount", SerializableDataType.FLOAT),
             (data, entity) -> {
@@ -128,19 +159,57 @@ public class EntityActions {
             .add("x", SerializableDataType.FLOAT, 0F)
             .add("y", SerializableDataType.FLOAT, 0F)
             .add("z", SerializableDataType.FLOAT, 0F)
-            .add("space", SerializableDataType.SPACE, Space.WORLD),
+            .add("space", SerializableDataType.SPACE, Space.WORLD)
+            .add("set", SerializableDataType.BOOLEAN, false),
             (data, entity) -> {
-                if(data.get("space") == Space.WORLD) {
-                    entity.addVelocity(data.getFloat("x"), data.getFloat("y"), data.getFloat("z"));
-                } else {
-                    Vec3d lookVec = entity.getRotationVector();
-                    Vec3d globalForward = new Vec3d(0, 0, 1);
-                    Vec3d v = globalForward.crossProduct(lookVec).normalize();
-                    double c = Math.acos(globalForward.dotProduct(lookVec));
-                    Quaternion quat = new Quaternion(new Vector3f((float)v.x, (float)v.y, (float)v.z), (float)c, false);
-                    Vector3f vec = new Vector3f(data.getFloat("x"), data.getFloat("y"), data.getFloat("z"));
-                    vec.rotate(quat);
-                    entity.addVelocity(vec.getX(), vec.getY(), vec.getZ());
+                Space space = (Space)data.get("space");
+                Vector3f vec = new Vector3f(data.getFloat("x"), data.getFloat("y"), data.getFloat("z"));
+                Vec3d vel;
+                Vec3d velH;
+                TriConsumer<Float, Float, Float> method = entity::addVelocity;
+                if(data.getBoolean("set")) {
+                    method = entity::setVelocity;
+                }
+                switch(space) {
+                    case WORLD:
+                        method.accept(data.getFloat("x"), data.getFloat("y"), data.getFloat("z"));
+                        break;
+                    case LOCAL:
+                        Space.rotateVectorToBase(entity.getRotationVector(), vec);
+                        method.accept(vec.getX(), vec.getY(), vec.getZ());
+                        break;
+                    case LOCAL_HORIZONTAL:
+                        vel = entity.getRotationVector();
+                        velH = new Vec3d(vel.x, 0, vel.z);
+                        if(velH.lengthSquared() > 0.00005) {
+                            velH = velH.normalize();
+                            Space.rotateVectorToBase(velH, vec);
+                            method.accept(vec.getX(), vec.getY(), vec.getZ());
+                        }
+                        break;
+                    case VELOCITY:
+                        Space.rotateVectorToBase(entity.getVelocity(), vec);
+                        method.accept(vec.getX(), vec.getY(), vec.getZ());
+                        break;
+                    case VELOCITY_NORMALIZED:
+                        Space.rotateVectorToBase(entity.getVelocity().normalize(), vec);
+                        method.accept(vec.getX(), vec.getY(), vec.getZ());
+                        break;
+                    case VELOCITY_HORIZONTAL:
+                        vel = entity.getVelocity();
+                        velH = new Vec3d(vel.x, 0, vel.z);
+                        Space.rotateVectorToBase(velH, vec);
+                        method.accept(vec.getX(), vec.getY(), vec.getZ());
+                        break;
+                    case VELOCITY_HORIZONTAL_NORMALIZED:
+                        vel = entity.getVelocity();
+                        velH = new Vec3d(vel.x, 0, vel.z);
+                        if(velH.lengthSquared() > 0.00005) {
+                            velH = velH.normalize();
+                            Space.rotateVectorToBase(velH, vec);
+                            method.accept(vec.getX(), vec.getY(), vec.getZ());
+                        }
+                        break;
                 }
                 entity.velocityModified = true;
             }));
@@ -153,7 +222,9 @@ public class EntityActions {
                 if(e != null) {
                     e.refreshPositionAndAngles(entity.getPos().x, entity.getPos().y, entity.getPos().z, entity.yaw, entity.pitch);
                     if(data.isPresent("tag")) {
-                        e.fromTag(data.get("tag"));
+                        CompoundTag mergedTag = e.toTag(new CompoundTag());
+                        mergedTag.copyFrom((CompoundTag)data.get("tag"));
+                        e.fromTag(mergedTag);
                     }
 
                     entity.world.spawnEntity(e);
@@ -205,7 +276,7 @@ public class EntityActions {
             (data, entity) -> entity.extinguish()));
         register(new ActionFactory<>(Origins.identifier("execute_command"), new SerializableData()
             .add("command", SerializableDataType.STRING)
-            .add("permission_level", SerializableDataType.INT, 0),
+            .add("permission_level", SerializableDataType.INT, 4),
             (data, entity) -> {
                 MinecraftServer server = entity.world.getServer();
                 if(server != null) {
@@ -234,6 +305,10 @@ public class EntityActions {
                         int newValue = vip.getValue() + data.getInt("change");
                         vip.setValue(newValue);
                         OriginComponent.sync((PlayerEntity)entity);
+                    } else if(p instanceof CooldownPower) {
+                        CooldownPower cp = (CooldownPower)p;
+                        cp.modify(data.getInt("change"));
+                        OriginComponent.sync((PlayerEntity)entity);
                     }
                 }
             }));
@@ -256,6 +331,55 @@ public class EntityActions {
                         ((PlayerEntity)entity).addExperience(points);
                     }
                     ((PlayerEntity)entity).addExperienceLevels(levels);
+                }
+            }));
+
+        Scheduler scheduler = new Scheduler();
+        register(new ActionFactory<>(Origins.identifier("delay"), new SerializableData()
+            .add("ticks", SerializableDataType.INT)
+            .add("action", SerializableDataType.ENTITY_ACTION),
+            (data, entity) -> {
+                ActionFactory<Entity>.Instance action = (ActionFactory<Entity>.Instance)data.get("action");
+                scheduler.queue(s -> action.accept(entity), data.getInt("ticks"));
+            }));
+        register(new ActionFactory<>(Origins.identifier("set_fall_distance"), new SerializableData()
+            .add("fall_distance", SerializableDataType.FLOAT),
+            (data, entity) -> {
+                entity.fallDistance = data.getFloat("fall_distance");
+            }));
+        register(new ActionFactory<>(Origins.identifier("give"), new SerializableData()
+            .add("stack", SerializableDataType.ITEM_STACK),
+            (data, entity) -> {
+                if(!entity.world.isClient()) {
+                    ItemStack stack = (ItemStack)data.get("stack");
+                    stack = stack.copy();
+                    if(entity instanceof PlayerEntity) {
+                        ((PlayerEntity)entity).inventory.offerOrDrop(entity.world, stack);
+                    } else {
+                        entity.world.spawnEntity(new ItemEntity(entity.world, entity.getX(), entity.getY(), entity.getZ(), stack));
+                    }
+                }
+            }));
+        register(new ActionFactory<>(Origins.identifier("equipped_item_action"), new SerializableData()
+            .add("equipment_slot", SerializableDataType.EQUIPMENT_SLOT)
+            .add("action", SerializableDataType.ITEM_ACTION),
+            (data, entity) -> {
+                if(entity instanceof LivingEntity) {
+                    ItemStack stack = ((LivingEntity)entity).getEquippedStack((EquipmentSlot)data.get("equipment_slot"));
+                    ActionFactory<ItemStack>.Instance action = (ActionFactory<ItemStack>.Instance)data.get("action");
+                    action.accept(stack);
+                }
+            }));
+        register(new ActionFactory<>(Origins.identifier("trigger_cooldown"), new SerializableData()
+            .add("power", SerializableDataType.POWER_TYPE),
+            (data, entity) -> {
+                if(entity instanceof PlayerEntity) {
+                    OriginComponent component = ModComponents.ORIGIN.get(entity);
+                    Power p = component.getPower((PowerType<?>)data.get("power"));
+                    if(p instanceof CooldownPower) {
+                        CooldownPower cp = (CooldownPower)p;
+                        cp.use();
+                    }
                 }
             }));
     }

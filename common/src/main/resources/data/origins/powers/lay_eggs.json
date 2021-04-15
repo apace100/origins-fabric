@@ -1,0 +1,18 @@
+{
+  "type": "origins:action_on_wake_up",
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "origins:give",
+        "stack": {
+          "item": "minecraft:egg"
+        }
+      },
+      {
+        "type": "origins:play_sound",
+        "sound": "minecraft:entity.chicken.egg"
+      }
+    ]
+  }
+}

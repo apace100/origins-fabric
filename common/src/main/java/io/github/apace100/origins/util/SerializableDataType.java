@@ -16,6 +16,7 @@ import io.github.apace100.origins.origin.OriginUpgrade;
 import io.github.apace100.origins.power.Active;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.PowerTypeReference;
+import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.power.factory.action.ActionFactory;
 import io.github.apace100.origins.power.factory.action.ActionType;
 import io.github.apace100.origins.power.factory.action.ActionTypes;
@@ -27,16 +28,12 @@ import me.shedaniel.architectury.platform.Platform;
 import net.minecraft.block.Block;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityGroup;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
@@ -46,10 +43,13 @@ import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.tag.ServerTagManagerHolder;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
@@ -57,6 +57,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.HashMap;
@@ -103,7 +104,39 @@ public class SerializableDataType<T> {
         Identifier.class,
         PacketByteBuf::writeIdentifier,
         PacketByteBuf::readIdentifier,
-        (json) -> Identifier.tryParse(json.getAsString()));
+        (json) -> {
+            String idString = json.getAsString();
+            if(idString.contains(":")) {
+                String[] idSplit = idString.split(":");
+                if(idSplit.length != 2) {
+                    throw new InvalidIdentifierException("Incorrect number of `:` in identifier: \"" + idString + "\".");
+                }
+                if(idSplit[0].contains("*")) {
+                    if(PowerTypes.CURRENT_NAMESPACE != null) {
+                        idSplit[0] = idSplit[0].replace("*", PowerTypes.CURRENT_NAMESPACE);
+                    } else {
+                        throw new InvalidIdentifierException("Identifier may only contain a `*` in the namespace inside of powers.");
+                    }
+                }
+                if(idSplit[1].contains("*")) {
+                    if(PowerTypes.CURRENT_PATH != null) {
+                        idSplit[1] = idSplit[1].replace("*", PowerTypes.CURRENT_PATH);
+                    } else {
+                        throw new InvalidIdentifierException("Identifier may only contain a `*` in the path inside of powers.");
+                    }
+                }
+                idString = idSplit[0] + ":" + idSplit[1];
+            } else {
+                if(idString.contains("*")) {
+                    if(PowerTypes.CURRENT_PATH != null) {
+                        idString = idString.replace("*", PowerTypes.CURRENT_PATH);
+                    } else {
+                        throw new InvalidIdentifierException("Identifier may only contain a `*` in the path inside of powers.");
+                    }
+                }
+            }
+            return Identifier.tryParse(idString);
+        });
 
     public static final SerializableDataType<List<Identifier>> IDENTIFIERS = SerializableDataType.list(IDENTIFIER);
 
@@ -230,11 +263,11 @@ public class SerializableDataType<T> {
 
     public static final SerializableDataType<Space> SPACE = SerializableDataType.enumValue(Space.class);
 
-    public static final SerializableDataType<ConditionFactory<PlayerEntity>.Instance> PLAYER_CONDITION =
-        SerializableDataType.condition(ClassUtil.castClass(ConditionFactory.Instance.class), ConditionTypes.PLAYER);
+    public static final SerializableDataType<ConditionFactory<LivingEntity>.Instance> ENTITY_CONDITION =
+        SerializableDataType.condition(ClassUtil.castClass(ConditionFactory.Instance.class), ConditionTypes.ENTITY);
 
-    public static final SerializableDataType<List<ConditionFactory<PlayerEntity>.Instance>> PLAYER_CONDITIONS =
-        SerializableDataType.list(PLAYER_CONDITION);
+    public static final SerializableDataType<List<ConditionFactory<LivingEntity>.Instance>> ENTITY_CONDITIONS =
+        SerializableDataType.list(ENTITY_CONDITION);
 
     public static final SerializableDataType<ConditionFactory<ItemStack>.Instance> ITEM_CONDITION =
         SerializableDataType.condition(ClassUtil.castClass(ConditionFactory.Instance.class), ConditionTypes.ITEM);
@@ -259,6 +292,12 @@ public class SerializableDataType<T> {
 
     public static final SerializableDataType<List<ConditionFactory<Pair<DamageSource, Float>>.Instance>> DAMAGE_CONDITIONS =
         SerializableDataType.list(DAMAGE_CONDITION);
+
+    public static final SerializableDataType<ConditionFactory<Biome>.Instance> BIOME_CONDITION =
+        SerializableDataType.condition(ClassUtil.castClass(ConditionFactory.Instance.class), ConditionTypes.BIOME);
+
+    public static final SerializableDataType<List<ConditionFactory<Biome>.Instance>> BIOME_CONDITIONS =
+        SerializableDataType.list(BIOME_CONDITION);
 
     public static final SerializableDataType<ActionFactory<Entity>.Instance> ENTITY_ACTION =
         SerializableDataType.effect(ClassUtil.castClass(ActionFactory.Instance.class), ActionTypes.ENTITY);
@@ -290,13 +329,19 @@ public class SerializableDataType<T> {
         SerializableData()
             .add("should_render", BOOLEAN, true)
             .add("bar_index", INT, 0)
-            .add("sprite_location", IDENTIFIER, Origins.identifier("textures/gui/resource_bar.png")),
-        (dataInst) -> new HudRender(dataInst.getBoolean("should_render"), dataInst.getInt("bar_index"), dataInst.get("sprite_location")),
+            .add("sprite_location", IDENTIFIER, Origins.identifier("textures/gui/resource_bar.png"))
+            .add("condition", ENTITY_CONDITION, null),
+        (dataInst) -> new HudRender(
+            dataInst.getBoolean("should_render"),
+            dataInst.getInt("bar_index"),
+            dataInst.getId("sprite_location"),
+            (ConditionFactory<LivingEntity>.Instance)dataInst.get("condition")),
         (data, inst) -> {
             SerializableData.Instance dataInst = data.new Instance();
             dataInst.set("should_render", inst.shouldRender());
             dataInst.set("bar_index", inst.getBarIndex());
             dataInst.set("sprite_location", inst.getSpriteLocation());
+            dataInst.set("condition", inst.getCondition());
             return dataInst;
         });
 
@@ -373,13 +418,76 @@ public class SerializableDataType<T> {
 
     public static final SerializableDataType<List<Pair<Integer, ItemStack>>> POSITIONED_ITEM_STACKS = SerializableDataType.list(POSITIONED_ITEM_STACK);
 
-    public static final SerializableDataType<Active.KeyType> ACTIVE_KEY_TYPE = SerializableDataType.enumValue(Active.KeyType.class);
-
     public static SerializableDataType<RegistryKey<World>> DIMENSION = SerializableDataType.wrap(
             ClassUtil.castClass(RegistryKey.class),
             SerializableDataType.IDENTIFIER,
             RegistryKey::getValue, identifier -> RegistryKey.of(Registry.DIMENSION, identifier)
     );
+
+    public static final SerializableDataType<Active.Key> KEY = SerializableDataType.compound(Active.Key.class,
+        new SerializableData()
+            .add("key", SerializableDataType.STRING)
+            .add("continuous", SerializableDataType.BOOLEAN, false),
+        (data) ->  {
+            Active.Key key = new Active.Key();
+            key.key = data.getString("key");
+            key.continuous = data.getBoolean("continuous");
+            return key;
+        },
+        ((serializableData, key) -> {
+            SerializableData.Instance data = serializableData.new Instance();
+            data.set("key", key.key);
+            data.set("continuous", key.continuous);
+            return data;
+        }));
+
+    public static final SerializableDataType<Active.Key> BACKWARDS_COMPATIBLE_KEY = new SerializableDataType<>(Active.Key.class,
+        KEY.send, KEY.receive, jsonElement -> {
+        if(jsonElement.isJsonPrimitive() && jsonElement.getAsJsonPrimitive().isString()) {
+            String keyString = jsonElement.getAsString();
+            Active.Key key = new Active.Key();
+            key.key = keyString.equals("secondary") ? "key.origins.secondary_active" : "key.origins.primary_active";
+            key.continuous = false;
+            return key;
+        }
+        return KEY.read.apply(jsonElement);
+    });
+
+    public static final SerializableDataType<Tag<EntityType<?>>> ENTITY_TAG = SerializableDataType.wrap(ClassUtil.castClass(Tag.class), IDENTIFIER,
+        tag -> ServerTagManagerHolder.getTagManager().getEntityTypes().getTagId(tag),
+        TagRegistry::entityType);
+
+    public static final SerializableDataType<Recipe> RECIPE = new SerializableDataType<>(Recipe.class,
+        (buffer, recipe) -> {
+            buffer.writeIdentifier(Registry.RECIPE_SERIALIZER.getId(recipe.getSerializer()));
+            buffer.writeIdentifier(recipe.getId());
+            recipe.getSerializer().write(buffer, recipe);
+        },
+        (buffer) -> {
+            Identifier recipeSerializerId = buffer.readIdentifier();
+            Identifier recipeId = buffer.readIdentifier();
+            RecipeSerializer serializer = Registry.RECIPE_SERIALIZER.get(recipeSerializerId);
+            return serializer.read(recipeId, buffer);
+        },
+        (jsonElement) -> {
+            if(!jsonElement.isJsonObject()) {
+                throw new RuntimeException("Expected recipe to be a JSON object.");
+            }
+            JsonObject json = jsonElement.getAsJsonObject();
+            Identifier recipeSerializerId = Identifier.tryParse(JsonHelper.getString(json, "type"));
+            Identifier recipeId = Identifier.tryParse(JsonHelper.getString(json, "id"));
+            RecipeSerializer serializer = Registry.RECIPE_SERIALIZER.get(recipeSerializerId);
+            return serializer.read(recipeId, json);
+        });
+
+    public static final SerializableDataType<ItemStack> ITEM_OR_ITEM_STACK = new SerializableDataType<>(ItemStack.class,
+        ITEM_STACK.send, ITEM_STACK.receive, jsonElement -> {
+        if(jsonElement.isJsonPrimitive() && jsonElement.getAsJsonPrimitive().isString()) {
+            Item item = ITEM.read(jsonElement);
+            return new ItemStack(item);
+        }
+        return ITEM_STACK.read.apply(jsonElement);
+    });
 
     private final Class<T> dataClass;
     private final BiConsumer<PacketByteBuf, T> send;

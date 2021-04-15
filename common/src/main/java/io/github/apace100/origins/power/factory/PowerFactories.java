@@ -9,29 +9,31 @@ import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.util.*;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityGroup;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.recipe.Recipe;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Pair;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.StructureFeature;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -47,7 +49,7 @@ public class PowerFactories {
         register(new PowerFactory<>(Origins.identifier("toggle"),
             new SerializableData()
                 .add("active_by_default", SerializableDataType.BOOLEAN, true)
-                .add("key", SerializableDataType.ACTIVE_KEY_TYPE, Active.KeyType.PRIMARY),
+                .add("key", SerializableDataType.BACKWARDS_COMPATIBLE_KEY, new Active.Key()),
             data ->
                 (type, player) -> {
                     TogglePower power = new TogglePower(type, player, data.getBoolean("active_by_default"));
@@ -132,18 +134,18 @@ public class PowerFactories {
                 .add("entity_type", SerializableDataType.ENTITY_TYPE)
                 .add("hud_render", SerializableDataType.HUD_RENDER)
                 .add("tag", SerializableDataType.NBT, null)
-                .add("key", SerializableDataType.ACTIVE_KEY_TYPE, Active.KeyType.PRIMARY),
+                .add("key", SerializableDataType.BACKWARDS_COMPATIBLE_KEY, new Active.Key()),
             data ->
                 (type, player) -> {
                     FireProjectilePower power = new FireProjectilePower(type, player,
                         data.getInt("cooldown"),
-                            data.get("hud_render"),
-                            data.get("entity_type"),
+                        data.get("hud_render"),
+                        data.get("entity_type"),
                         data.getInt("count"),
                         data.getFloat("speed"),
                         data.getFloat("divergence"),
-                            data.get("sound"),
-                            data.get("tag"));
+                        data.get("sound"),
+                        data.get("tag"));
                     power.setKey(data.get("key"));
                     return power;
                 })
@@ -153,7 +155,7 @@ public class PowerFactories {
                 .add("name", SerializableDataType.STRING, "container.inventory")
                 .add("drop_on_death", SerializableDataType.BOOLEAN, false)
                 .add("drop_on_death_filter", SerializableDataType.ITEM_CONDITION, null)
-                .add("key", SerializableDataType.ACTIVE_KEY_TYPE, Active.KeyType.PRIMARY),
+                .add("key", SerializableDataType.BACKWARDS_COMPATIBLE_KEY, new Active.Key()),
             data ->
                 (type, player) -> {
                     InventoryPower power = new InventoryPower(type, player, data.get("name"), 9,
@@ -186,7 +188,7 @@ public class PowerFactories {
                 .add("speed", SerializableDataType.FLOAT)
                 .add("sound", SerializableDataType.SOUND_EVENT, null)
                 .add("hud_render", SerializableDataType.HUD_RENDER)
-                .add("key", SerializableDataType.ACTIVE_KEY_TYPE, Active.KeyType.PRIMARY),
+                .add("key", SerializableDataType.BACKWARDS_COMPATIBLE_KEY, new Active.Key()),
             data -> {
                 SoundEvent soundEvent = data.get("sound");
                 return (type, player) -> {
@@ -241,16 +243,26 @@ public class PowerFactories {
             new SerializableData()
                 .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
                 .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
-                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null),
+                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null)
+                .add("target_condition", SerializableDataType.ENTITY_CONDITION, null)
+                .add("self_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("target_action", SerializableDataType.ENTITY_ACTION, null),
             data ->
                 (type, player) -> {
                     ModifyDamageDealtPower power = new ModifyDamageDealtPower(type, player,
-                        data.isPresent("damage_condition") ? data.get("damage_condition") : dmg -> true);
+                        data.isPresent("damage_condition") ? data.get("damage_condition") : dmg -> true,
+                        data.get("target_condition"));
                     if(data.isPresent("modifier")) {
                         power.addModifier(data.get("modifier"));
                     }
                     if(data.isPresent("modifiers")) {
                         ((List<EntityAttributeModifier>)data.get("modifiers")).forEach(power::addModifier);
+                    }
+                    if(data.isPresent("self_action")) {
+                        power.setSelfAction((ActionFactory<LivingEntity>.Instance)data.get("self_action"));
+                    }
+                    if(data.isPresent("target_action")) {
+                        power.setTargetAction((ActionFactory<LivingEntity>.Instance)data.get("target_action"));
                     }
                     return power;
                 })
@@ -259,7 +271,9 @@ public class PowerFactories {
             new SerializableData()
                 .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
                 .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
-                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null),
+                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null)
+                .add("self_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("attacker_action", SerializableDataType.ENTITY_ACTION, null),
             data ->
                 (type, player) -> {
                     ModifyDamageTakenPower power = new ModifyDamageTakenPower(type, player,
@@ -269,6 +283,12 @@ public class PowerFactories {
                     }
                     if(data.isPresent("modifiers")) {
                         ((List<EntityAttributeModifier>)data.get("modifiers")).forEach(power::addModifier);
+                    }
+                    if(data.isPresent("self_action")) {
+                        power.setSelfAction((ActionFactory<LivingEntity>.Instance)data.get("self_action"));
+                    }
+                    if(data.isPresent("attacker_action")) {
+                        power.setAttackerAction((ActionFactory<LivingEntity>.Instance)data.get("attacker_action"));
                     }
                     return power;
                 })
@@ -302,10 +322,11 @@ public class PowerFactories {
         register(new PowerFactory<>(Origins.identifier("modify_jump"),
             new SerializableData()
                 .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
-                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null),
+                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null)
+                .add("entity_action", SerializableDataType.ENTITY_ACTION, null),
             data ->
                 (type, player) -> {
-                    ModifyJumpPower power = new ModifyJumpPower(type, player);
+                    ModifyJumpPower power = new ModifyJumpPower(type, player, (ActionFactory<Entity>.Instance)data.get("entity_action"));
                     if(data.isPresent("modifier")) {
                         power.addModifier(data.get("modifier"));
                     }
@@ -319,6 +340,7 @@ public class PowerFactories {
                 new SerializableData()
                         .add("dimension", SerializableDataType.DIMENSION)
                         .add("dimension_distance_multiplier", SerializableDataType.FLOAT, 0F)
+                        .add("biome", SerializableDataType.IDENTIFIER, null)
                         .add("spawn_strategy", SerializableDataType.STRING, "default")
                         .add("structure", SerializableDataType.registry(ClassUtil.castClass(StructureFeature.class), Registry.STRUCTURE_FEATURE), null)
                         .add("respawn_sound", SerializableDataType.SOUND_EVENT, null),
@@ -327,8 +349,9 @@ public class PowerFactories {
                                 new ModifyPlayerSpawnPower(type, player,
                                         data.get("dimension"),
                                         (int)data.getFloat("dimension_distance_multiplier"),
-                                        data.get("spawn_strategy"),
-                                        data.isPresent("structure") ? data.get("structure") : null,
+                                        data.getId("biome"),
+                                        data.getString("spawn_strategy"),
+                                        data.isPresent("structure") ? (StructureFeature<?>)data.get("structure") : null,
                                         data.get("respawn_sound")))
                 .allowCondition());
         register(new PowerFactory<>(Origins.identifier("night_vision"),
@@ -352,7 +375,7 @@ public class PowerFactories {
                 .add("blacklist", SerializableDataType.BOOLEAN, false)
                 .add("render_type", SerializableDataType.enumValue(PhasingPower.RenderType.class), PhasingPower.RenderType.BLINDNESS)
                 .add("view_distance", SerializableDataType.FLOAT, 10F)
-                .add("phase_down_condition", SerializableDataType.PLAYER_CONDITION, null),
+                .add("phase_down_condition", SerializableDataType.ENTITY_CONDITION, null),
             data ->
                 (type, player) ->
                     new PhasingPower(type, player, data.isPresent("block_condition") ? data.get("block_condition") : cbp -> true,
@@ -369,12 +392,13 @@ public class PowerFactories {
         register(new PowerFactory<>(Origins.identifier("prevent_sleep"),
             new SerializableData()
                 .add("block_condition", SerializableDataType.BLOCK_CONDITION, null)
-                .add("message", SerializableDataType.STRING, "origins.cant_sleep"),
+                .add("message", SerializableDataType.STRING, "origins.cant_sleep")
+                .add("set_spawn_point", SerializableDataType.BOOLEAN, false),
             data ->
                 (type, player) ->
                     new PreventSleepPower(type, player,
                         data.isPresent("block_condition") ? data.get("block_condition") : cbp -> true,
-                        data.get("message")))
+                        data.getString("message"), data.getBoolean("set_spawn_point")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("restrict_armor"),
             new SerializableData()
@@ -467,7 +491,7 @@ public class PowerFactories {
             new SerializableData()
                 .add("active_by_default", SerializableDataType.BOOLEAN, false)
                 .add("strength", SerializableDataType.FLOAT, 1.0F)
-                .add("key", SerializableDataType.ACTIVE_KEY_TYPE, Active.KeyType.PRIMARY),
+                .add("key", SerializableDataType.BACKWARDS_COMPATIBLE_KEY, new Active.Key()),
             data ->
                 (type, player) -> {
                     ToggleNightVisionPower power = new ToggleNightVisionPower(type, player, data.getFloat("strength"), data.getBoolean("active_by_default"));
@@ -544,21 +568,24 @@ public class PowerFactories {
                 .add("entity_action", SerializableDataType.ENTITY_ACTION)
                 .add("cooldown", SerializableDataType.INT)
                 .add("hud_render", SerializableDataType.HUD_RENDER)
-                .add("key", SerializableDataType.ACTIVE_KEY_TYPE, Active.KeyType.PRIMARY),
+                .add("key", SerializableDataType.BACKWARDS_COMPATIBLE_KEY, new Active.Key()),
             data ->
                 (type, player) -> {
                     ActiveCooldownPower power = new ActiveCooldownPower(type, player, data.getInt("cooldown"), data.get("hud_render"),
-                            data.get("entity_action"));
+                        data.get("entity_action"));
                     power.setKey(data.get("key"));
                     return power;
                 })
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("action_over_time"),
             new SerializableData()
-                .add("entity_action", SerializableDataType.ENTITY_ACTION)
+                .add("entity_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("rising_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("falling_action", SerializableDataType.ENTITY_ACTION, null)
                 .add("interval", SerializableDataType.INT),
             data ->
-                (type, player) -> new ActionOverTimePower(type, player, data.getInt("interval"), data.get("entity_action")))
+                (type, player) -> new ActionOverTimePower(type, player, data.getInt("interval"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action"), (ActionFactory<Entity>.Instance)data.get("rising_action"), (ActionFactory<Entity>.Instance)data.get("falling_action")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("self_action_when_hit"),
             new SerializableData()
@@ -587,22 +614,26 @@ public class PowerFactories {
                 .add("entity_action", SerializableDataType.ENTITY_ACTION)
                 .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
                 .add("cooldown", SerializableDataType.INT)
-                .add("hud_render", SerializableDataType.HUD_RENDER, HudRender.DONT_RENDER),
+                .add("hud_render", SerializableDataType.HUD_RENDER, HudRender.DONT_RENDER)
+                .add("target_condition", SerializableDataType.ENTITY_CONDITION, null),
             data ->
                 (type, player) -> new SelfActionOnHitPower(type, player, data.getInt("cooldown"),
-                        data.get("hud_render"), data.get("damage_condition"),
-                        data.get("entity_action")))
+                    (HudRender)data.get("hud_render"), (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
+                    (ConditionFactory<LivingEntity>.Instance)data.get("target_condition")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("target_action_on_hit"),
             new SerializableData()
                 .add("entity_action", SerializableDataType.ENTITY_ACTION)
                 .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
                 .add("cooldown", SerializableDataType.INT)
-                .add("hud_render", SerializableDataType.HUD_RENDER, HudRender.DONT_RENDER),
+                .add("hud_render", SerializableDataType.HUD_RENDER, HudRender.DONT_RENDER)
+                .add("target_condition", SerializableDataType.ENTITY_CONDITION, null),
             data ->
                 (type, player) -> new TargetActionOnHitPower(type, player, data.getInt("cooldown"),
-                        data.get("hud_render"), data.get("damage_condition"),
-                        data.get("entity_action")))
+                    (HudRender)data.get("hud_render"), (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
+                    (ConditionFactory<LivingEntity>.Instance)data.get("target_condition")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("starting_equipment"),
             new SerializableData()
@@ -667,19 +698,25 @@ public class PowerFactories {
         register(new PowerFactory<>(Origins.identifier("shaking"),
             new SerializableData(), data -> (BiFunction<PowerType<Power>, PlayerEntity, Power>) ShakingPower::new)
             .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("disable_regen"),
+            new SerializableData(), data -> DisableRegenPower::new).allowCondition());
         register(new PowerFactory<>(Origins.identifier("resource"),
             new SerializableData()
                 .add("min", SerializableDataType.INT)
                 .add("max", SerializableDataType.INT)
                 .addFunctionedDefault("start_value", SerializableDataType.INT, data -> data.getInt("min"))
-                .add("hud_render", SerializableDataType.HUD_RENDER),
+                .add("hud_render", SerializableDataType.HUD_RENDER)
+                .add("min_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("max_action", SerializableDataType.ENTITY_ACTION, null),
             data ->
                 (type, player) ->
-                    new HudRenderedVariableIntPower(type, player,
-                            data.get("hud_render"),
+                    new ResourcePower(type, player,
+                        (HudRender)data.get("hud_render"),
                         data.getInt("start_value"),
                         data.getInt("min"),
-                        data.getInt("max")))
+                        data.getInt("max"),
+                        (ActionFactory<Entity>.Instance)data.get("min_action"),
+                        (ActionFactory<Entity>.Instance)data.get("max_action")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("modify_food"),
             new SerializableData()
@@ -725,6 +762,150 @@ public class PowerFactories {
                     }
                     return power;
                 })
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("action_on_block_break"),
+            new SerializableData()
+                .add("entity_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("block_action", SerializableDataType.BLOCK_ACTION, null)
+                .add("block_condition", SerializableDataType.BLOCK_CONDITION, null)
+                .add("only_when_harvested", SerializableDataType.BOOLEAN, true),
+            data ->
+                (type, player) -> new ActionOnBlockBreakPower(type, player,
+                    (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
+                    (ActionFactory<Triple<World, BlockPos, Direction>>.Instance)data.get("block_action"),
+                    data.getBoolean("only_when_harvested")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("action_on_land"),
+            new SerializableData()
+                .add("entity_action", SerializableDataType.ENTITY_ACTION, null),
+            data ->
+                (type, player) -> new ActionOnLandPower(type, player,
+                    (ActionFactory<Entity>.Instance)data.get("entity_action")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("prevent_entity_render"),
+            new SerializableData()
+                .add("entity_condition", SerializableDataType.ENTITY_CONDITION, null),
+            data ->
+                (type, player) -> new PreventEntityRenderPower(type, player, (ConditionFactory<LivingEntity>.Instance)data.get("entity_condition")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("entity_glow"),
+            new SerializableData()
+                .add("entity_condition", SerializableDataType.ENTITY_CONDITION, null),
+            data ->
+                (type, player) -> new EntityGlowPower(type, player, (ConditionFactory<LivingEntity>.Instance)data.get("entity_condition")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("climbing"),
+            new SerializableData()
+                .add("allow_holding", SerializableDataType.BOOLEAN, true)
+                .add("hold_condition", SerializableDataType.ENTITY_CONDITION, null),
+            data ->
+                (type, player) -> {
+                    Predicate<LivingEntity> holdCondition = (ConditionFactory<LivingEntity>.Instance)data.get("hold_condition");
+                    return new ClimbingPower(type, player, data.getBoolean("allow_holding"), holdCondition);
+                })
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("prevent_block_selection"),
+            new SerializableData()
+                .add("block_condition", SerializableDataType.BLOCK_CONDITION, null),
+            data ->
+                (type, player) -> new PreventBlockSelectionPower(type, player,
+                    (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("self_action_on_kill"),
+            new SerializableData()
+                .add("entity_action", SerializableDataType.ENTITY_ACTION)
+                .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
+                .add("cooldown", SerializableDataType.INT)
+                .add("hud_render", SerializableDataType.HUD_RENDER, HudRender.DONT_RENDER)
+                .add("target_condition", SerializableDataType.ENTITY_CONDITION, null),
+            data ->
+                (type, player) -> new SelfActionOnKillPower(type, player, data.getInt("cooldown"),
+                    (HudRender)data.get("hud_render"), (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
+                    (ConditionFactory<LivingEntity>.Instance)data.get("target_condition")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("recipe"),
+            new SerializableData()
+                .add("recipe", SerializableDataType.RECIPE),
+            data ->
+                (type, player) -> {
+                    Recipe<CraftingInventory> recipe = (Recipe<CraftingInventory>)data.get("recipe");
+                    return new RecipePower(type, player, recipe);
+                })
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("ignore_water"),
+            new SerializableData(),
+            data ->
+                (type, player) -> {
+                    return new IgnoreWaterPower(type, player);
+                })
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("modify_projectile_damage"),
+            new SerializableData()
+                .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null)
+                .add("modifier", SerializableDataType.ATTRIBUTE_MODIFIER, null)
+                .add("modifiers", SerializableDataType.ATTRIBUTE_MODIFIERS, null)
+                .add("target_condition", SerializableDataType.ENTITY_CONDITION, null)
+                .add("self_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("target_action", SerializableDataType.ENTITY_ACTION, null),
+            data ->
+                (type, player) -> {
+                    ModifyProjectileDamagePower power = new ModifyProjectileDamagePower(type, player,
+                        data.isPresent("damage_condition") ? (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition") : dmg -> true,
+                        (ConditionFactory<LivingEntity>.Instance)data.get("target_condition"));
+                    if(data.isPresent("modifier")) {
+                        power.addModifier(data.getModifier("modifier"));
+                    }
+                    if(data.isPresent("modifiers")) {
+                        ((List<EntityAttributeModifier>)data.get("modifiers")).forEach(power::addModifier);
+                    }
+                    if(data.isPresent("self_action")) {
+                        power.setSelfAction((ActionFactory<LivingEntity>.Instance)data.get("self_action"));
+                    }
+                    if(data.isPresent("target_action")) {
+                        power.setTargetAction((ActionFactory<LivingEntity>.Instance)data.get("target_action"));
+                    }
+                    return power;
+                })
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("action_on_wake_up"),
+            new SerializableData()
+                .add("entity_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("block_action", SerializableDataType.BLOCK_ACTION, null)
+                .add("block_condition", SerializableDataType.BLOCK_CONDITION, null),
+            data ->
+                (type, player) -> new ActionOnWakeUp(type, player,
+                    (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
+                    (ActionFactory<Triple<World, BlockPos, Direction>>.Instance)data.get("block_action")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("prevent_block_use"),
+            new SerializableData()
+                .add("block_condition", SerializableDataType.BLOCK_CONDITION, null),
+            data ->
+                (type, player) -> new PreventBlockUsePower(type, player,
+                    (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("prevent_death"),
+            new SerializableData()
+                .add("entity_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null),
+            data ->
+                (type, player) -> new PreventDeathPower(type, player,
+                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
+                    (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition")))
+            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("action_on_item_use"),
+            new SerializableData()
+                .add("entity_action", SerializableDataType.ENTITY_ACTION, null)
+                .add("item_action", SerializableDataType.ITEM_ACTION, null)
+                .add("item_condition", SerializableDataType.ITEM_CONDITION, null),
+            data ->
+                (type, player) -> new ActionOnItemUsePower(type, player,
+                    (ConditionFactory<ItemStack>.Instance)data.get("item_condition"),
+                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
+                    (ActionFactory<ItemStack>.Instance)data.get("item_action")))
             .allowCondition());
     }
 

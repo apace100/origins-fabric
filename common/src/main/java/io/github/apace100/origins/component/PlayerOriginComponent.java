@@ -15,12 +15,13 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerOriginComponent implements OriginComponent {
 
     private final PlayerEntity player;
     private final HashMap<OriginLayer, Origin> origins = new HashMap<>();
-    private final HashMap<PowerType<?>, Power> powers = new HashMap<>();
+    private final ConcurrentHashMap<PowerType<?>, Power> powers = new ConcurrentHashMap<>();
 
     private boolean hadOriginBefore = false;
 

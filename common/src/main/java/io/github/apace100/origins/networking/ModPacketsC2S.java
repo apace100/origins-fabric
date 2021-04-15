@@ -6,7 +6,7 @@ import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
-import io.github.apace100.origins.power.Active;
+import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModComponents;
 import io.netty.buffer.Unpooled;
 import me.shedaniel.architectury.annotations.ExpectPlatform;
@@ -24,13 +24,40 @@ public class ModPacketsC2S {
     public static void register() {
         NetworkManager.registerReceiver(NetworkManager.c2s(), ModPackets.CHOOSE_ORIGIN, ModPacketsC2S::chooseOrigin);
         NetworkManager.registerReceiver(NetworkManager.c2s(), ModPackets.CHOOSE_RANDOM_ORIGIN, ModPacketsC2S::chooseRandomOrigin);
-        NetworkManager.registerReceiver(NetworkManager.c2s(), ModPackets.USE_ACTIVE_POWER, ModPacketsC2S::useActivePower);
+        NetworkManager.registerReceiver(NetworkManager.c2s(), ModPackets.USE_ACTIVE_POWERS, ModPacketsC2S::useActivePowers);
+        NetworkManager.registerReceiver(NetworkManager.c2s(), ModPackets.PLAYER_LANDED, ModPacketsC2S::playerLanded);
         registerPlatformSpecificPackets();
     }
 
     @ExpectPlatform
     private static void registerPlatformSpecificPackets() {
         throw new AssertionError();
+    }
+
+    private static void playerLanded(PacketByteBuf packetByteBuf, NetworkManager.PacketContext context) {
+        PlayerEntity playerEntity = context.getPlayer();
+        context.queue(() -> {
+            OriginComponent.getPowers(playerEntity, ActionOnLandPower.class).forEach(ActionOnLandPower::executeAction);
+        });
+    }
+
+    private static void useActivePowers(PacketByteBuf packetByteBuf, NetworkManager.PacketContext context) {
+        PlayerEntity playerEntity = context.getPlayer();
+        int count = packetByteBuf.readInt();
+        Identifier[] powerIds = new Identifier[count];
+        for(int i = 0; i < count; i++) {
+            powerIds[i] = packetByteBuf.readIdentifier();
+        }
+        context.queue(() -> {
+            OriginComponent component = ModComponents.ORIGIN.get(playerEntity);
+            for(Identifier id : powerIds) {
+                PowerType<?> type = PowerTypeRegistry.get(id);
+                Power power = component.getPower(type);
+                if(power instanceof Active) {
+                    ((Active)power).onUse();
+                }
+            }
+        });
     }
 
     private static void chooseOrigin(PacketByteBuf packetByteBuf, NetworkManager.PacketContext context) {
@@ -48,6 +75,7 @@ public class ModPacketsC2S {
                         boolean hadOriginBefore = component.hadOriginBefore();
                         boolean hadAllOrigins = component.hasAllOrigins();
                         component.setOrigin(layer, origin);
+                        component.checkAutoChoosingLayers(playerEntity, false);
                         component.sync();
                         if(component.hasAllOrigins() && !hadAllOrigins) {
                             component.getOrigins().values().forEach(o -> o.getPowerTypes().forEach(powerType -> component.getPower(powerType).onChosen(hadOriginBefore)));
@@ -82,6 +110,7 @@ public class ModPacketsC2S {
                     boolean hadOriginBefore = component.hadOriginBefore();
                     boolean hadAllOrigins = component.hasAllOrigins();
                     component.setOrigin(layer, origin);
+                    component.checkAutoChoosingLayers(playerEntity, false);
                     component.sync();
                     if(component.hasAllOrigins() && !hadAllOrigins) {
                         component.getOrigins().values().forEach(o -> o.getPowerTypes().forEach(powerType -> component.getPower(powerType).onChosen(hadOriginBefore)));
@@ -95,17 +124,6 @@ public class ModPacketsC2S {
                 component.sync();
             } else {
                 Origins.LOGGER.warn("Player " + playerEntity.getDisplayName().asString() + " tried to choose origin for layer " + layerId + " while having one already.");
-            }
-        });
-    }
-
-    private static void useActivePower(PacketByteBuf packetByteBuf, NetworkManager.PacketContext context) {
-        PlayerEntity playerEntity = context.getPlayer();
-        Active.KeyType keyType = Active.KeyType.values()[packetByteBuf.readInt()];
-        context.queue(() -> {
-            OriginComponent component = ModComponents.getOriginComponent(playerEntity);
-            if(component.hasAllOrigins()) {
-                component.getPowers().stream().filter(p -> p instanceof Active && ((Active)p).getKey() == keyType).forEach(p -> ((Active)p).onUse());
             }
         });
     }

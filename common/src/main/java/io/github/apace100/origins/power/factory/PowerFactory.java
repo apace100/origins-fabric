@@ -30,7 +30,7 @@ public class PowerFactory<P extends Power> extends RegistryEntry<PowerFactory<?>
     public PowerFactory<P> allowCondition() {
         if(!hasConditions) {
             hasConditions = true;
-            data.add("condition", SerializableDataType.PLAYER_CONDITION, null);
+            data.add("condition", SerializableDataType.ENTITY_CONDITION, null);
         }
         return this;
     }

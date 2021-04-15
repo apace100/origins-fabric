@@ -4,9 +4,12 @@
 		"origins:water_vulnerability",
 		"origins:pumpkin_hate",
 		"origins:extra_reach",
-		"origins:ender_particles"
+		"origins:ender_particles",
+		"origins:damage_from_potions"
 	],
-	"icon": "minecraft:ender_pearl",
+	"icon": {
+		"item": "minecraft:ender_pearl"
+	},
 	"order": 1,
 	"impact": 2
 }

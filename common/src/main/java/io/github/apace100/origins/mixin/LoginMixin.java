@@ -1,5 +1,6 @@
 package io.github.apace100.origins.mixin;
 
+import dev.onyxstudios.cca.api.v3.component.ComponentProvider;
 import io.github.apace100.origins.access.EndRespawningEntity;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.networking.ModPackets;

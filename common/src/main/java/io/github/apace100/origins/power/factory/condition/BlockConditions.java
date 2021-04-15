@@ -6,14 +6,18 @@ import io.github.apace100.origins.util.Comparison;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidFillable;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.state.property.Property;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.LightType;
 
+import java.util.Collection;
 import java.util.List;
 
 public class BlockConditions {
@@ -56,7 +60,12 @@ public class BlockConditions {
             (data, block) -> block.getBlockState().isOf(data.get("block"))));
         register(new ConditionFactory<>(Origins.identifier("in_tag"), new SerializableData()
             .add("tag", SerializableDataType.BLOCK_TAG),
-            (data, block) -> block.getBlockState().isIn(data.get("tag"))));
+            (data, block) -> {
+                if(block == null || block.getBlockState() == null) {
+                    return false;
+                }
+                return block.getBlockState().isIn((Tag<Block>)data.get("tag"));
+            }));
         register(new ConditionFactory<>(Origins.identifier("adjacent"), new SerializableData()
             .add("comparison", SerializableDataType.COMPARISON)
             .add("compare_to", SerializableDataType.INT)
@@ -92,6 +101,51 @@ public class BlockConditions {
             (data, block) -> block.getBlockState().getMaterial().blocksLight()));
         register(new ConditionFactory<>(Origins.identifier("water_loggable"), new SerializableData(),
             (data, block) -> block.getBlockState().getBlock() instanceof FluidFillable));
+        register(new ConditionFactory<>(Origins.identifier("exposed_to_sky"), new SerializableData(),
+            (data, block) -> block.getWorld().isSkyVisible(block.getBlockPos())));
+        register(new ConditionFactory<>(Origins.identifier("light_level"), new SerializableData()
+            .add("comparison", SerializableDataType.COMPARISON)
+            .add("compare_to", SerializableDataType.INT)
+            .add("light_type", SerializableDataType.enumValue(LightType.class), null),
+            (data, block) -> {
+                int value;
+                if(data.isPresent("light_type")) {
+                    LightType lightType = (LightType)data.get("light_type");
+                    value = block.getWorld().getLightLevel(lightType, block.getBlockPos());
+                } else {
+                    value = block.getWorld().getLightLevel(block.getBlockPos());
+                }
+                return ((Comparison)data.get("comparison")).compare(value, data.getInt("compare_to"));
+            }));
+        register(new ConditionFactory<>(Origins.identifier("block_state"), new SerializableData()
+            .add("property", SerializableDataType.STRING)
+            .add("comparison", SerializableDataType.COMPARISON, null)
+            .add("compare_to", SerializableDataType.INT, null)
+            .add("value", SerializableDataType.BOOLEAN, null)
+            .add("enum", SerializableDataType.STRING, null),
+            (data, block) -> {
+                BlockState state = block.getBlockState();
+                Collection<Property<?>> properties = state.getProperties();
+                String desiredPropertyName = data.getString("property");
+                Property<?> property = null;
+                for(Property<?> p : properties) {
+                    if(p.getName().equals(desiredPropertyName)) {
+                        property = p;
+                        break;
+                    }
+                }
+                if(property != null) {
+                    Object value = state.get(property);
+                    if(data.isPresent("enum") && value instanceof Enum) {
+                        return ((Enum)value).name().equalsIgnoreCase(data.getString("enum"));
+                    } else if(data.isPresent("value") && value instanceof Boolean) {
+                        return (Boolean) value == data.getBoolean("value");
+                    } else if(data.isPresent("comparison") && data.isPresent("compare_to") && value instanceof Integer) {
+                        return ((Comparison)data.get("comparison")).compare((Integer) value, data.getInt("compare_to"));
+                    }
+                }
+                return false;
+            }));
     }
 
     private static void register(ConditionFactory<CachedBlockPosition> conditionFactory) {

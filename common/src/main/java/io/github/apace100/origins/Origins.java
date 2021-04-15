@@ -1,21 +1,23 @@
 package io.github.apace100.origins;
 
-import io.github.apace100.origins.command.LayerArgument;
-import io.github.apace100.origins.command.OriginArgument;
-import io.github.apace100.origins.command.OriginCommand;
+import io.github.apace100.origins.command.*;
 import io.github.apace100.origins.networking.ModPacketsC2S;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginManager;
 import io.github.apace100.origins.power.PowerTypes;
 import io.github.apace100.origins.power.factory.PowerFactories;
-import io.github.apace100.origins.power.factory.condition.*;
 import io.github.apace100.origins.power.factory.action.BlockActions;
 import io.github.apace100.origins.power.factory.action.EntityActions;
 import io.github.apace100.origins.power.factory.action.ItemActions;
+import io.github.apace100.origins.power.factory.condition.*;
 import io.github.apace100.origins.registry.*;
 import io.github.apace100.origins.util.ChoseOriginCriterion;
 import io.github.apace100.origins.util.GainedPowerCriterion;
+import io.github.apace100.origins.util.OriginsConfigSerializer;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.architectury.event.events.CommandRegistrationEvent;
 import me.shedaniel.architectury.registry.CriteriaTriggersRegistry;
 import me.shedaniel.architectury.registry.ReloadListeners;
@@ -36,29 +38,39 @@ public class Origins {
 
 	public static void register() {
 		LOGGER.info("Origins " + VERSION + " is initializing. Have fun!");
+		AutoConfig.register(ServerConfig.class, OriginsConfigSerializer::new);
+		config = AutoConfig.getConfigHolder(ServerConfig.class).getConfig();
+
 		ModBlocks.register();
 		ModItems.register();
 		ModTags.register();
 		ModPacketsC2S.register();
 		ModEnchantments.register();
 		ModEntities.register();
-		ModLoot.register();
+		ModLoot.registerLootTables();
+		ModRecipes.register();
 		PowerFactories.register();
-		PlayerConditions.register();
+		EntityConditions.register();
 		ItemConditions.register();
 		BlockConditions.register();
 		DamageConditions.register();
 		FluidConditions.register();
+		BiomeConditions.register();
 		EntityActions.register();
 		ItemActions.register();
 		BlockActions.register();
 		Origin.init();
 		OriginEventHandler.register();
-		CommandRegistrationEvent.EVENT.register((dispatcher, dedicated) -> OriginCommand.register(dispatcher));
+		CommandRegistrationEvent.EVENT.register((dispatcher, dedicated) -> {
+			OriginCommand.register(dispatcher);
+			ResourceCommand.register(dispatcher);
+		});
 		CriteriaTriggersRegistry.register(ChoseOriginCriterion.INSTANCE);
 		CriteriaTriggersRegistry.register(GainedPowerCriterion.INSTANCE);
 		ArgumentTypes.register("origins:origin", OriginArgument.class, new ConstantArgumentSerializer<>(OriginArgument::origin));
 		ArgumentTypes.register("origins:layer", LayerArgument.class, new ConstantArgumentSerializer<>(LayerArgument::layer));
+		ArgumentTypes.register("origins:power", PowerArgument.class, new ConstantArgumentSerializer<>(PowerArgument::power));
+		ArgumentTypes.register("origins:power_operation", PowerOperation.class, new ConstantArgumentSerializer<>(PowerOperation::operation));
 		ReloadListeners.registerReloadListener(ResourceType.SERVER_DATA, new PowerTypes());
 		ReloadListeners.registerReloadListener(ResourceType.SERVER_DATA, new OriginManager());
 		ReloadListeners.registerReloadListener(ResourceType.SERVER_DATA, new OriginLayers());
@@ -66,5 +78,11 @@ public class Origins {
 
 	public static Identifier identifier(String path) {
 		return new Identifier(Origins.MODID, path);
+	}
+
+	@Config(name = Origins.MODID + "_server")
+	public static class ServerConfig implements ConfigData {
+
+		public boolean performVersionCheck = true;
 	}
 }

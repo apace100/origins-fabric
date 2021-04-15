@@ -4,6 +4,8 @@ import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModComponents;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
@@ -13,20 +15,29 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.tag.FluidTags;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
     @Shadow protected abstract float getJumpVelocity();
 
     @Shadow public abstract float getMovementSpeed();
+
+    @Shadow private Optional<BlockPos> climbingPos;
+
+    @Shadow public abstract boolean isHoldingOntoLadder();
+
+    @Shadow public abstract void setHealth(float health);
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -48,6 +59,11 @@ public abstract class LivingEntityMixin extends Entity {
             OriginComponent.getPowers(source.getAttacker(), SelfActionOnHitPower.class).forEach(p -> p.onHit((LivingEntity)(Object)this, source, amount));
             OriginComponent.getPowers(source.getAttacker(), TargetActionOnHitPower.class).forEach(p -> p.onHit((LivingEntity)(Object)this, source, amount));
         }
+    }
+
+    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;onDeath(Lnet/minecraft/entity/damage/DamageSource;)V"))
+    private void invokeKillAction(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        OriginComponent.getPowers(source.getAttacker(), SelfActionOnKillPower.class).forEach(p -> p.onKill((LivingEntity)(Object)this, source, amount));
     }
 
     // ModifyLavaSpeedPower
@@ -87,7 +103,10 @@ public abstract class LivingEntityMixin extends Entity {
     @Inject(at = @At("HEAD"), method = "getJumpVelocity", cancellable = true)
     private void modifyJumpVelocity(CallbackInfoReturnable<Float> info) {
         float base = 0.42F * this.getJumpVelocityMultiplier();
-        float modified = OriginComponent.modify(this, ModifyJumpPower.class, base);
+        float modified = OriginComponent.modify(this, ModifyJumpPower.class, base, p -> {
+            p.executeAction();
+            return true;
+        });
         info.setReturnValue(modified);
     }
 
@@ -103,11 +122,25 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
     // CLIMBING
-    @Inject(at = @At("HEAD"), method = "isClimbing", cancellable = true)
+    @Inject(at = @At("RETURN"), method = "isClimbing", cancellable = true)
     public void doSpiderClimbing(CallbackInfoReturnable<Boolean> info) {
-        if(PowerTypes.CLIMBING.isActive(this)) {
-            if(this.horizontalCollision) {
-                info.setReturnValue(true);
+        if(!info.getReturnValue()) {
+            if((Entity)this instanceof PlayerEntity) {
+                List<ClimbingPower> climbingPowers = ModComponents.ORIGIN.get((Entity)this).getPowers(ClimbingPower.class, true);
+                if(climbingPowers.size() > 0) {
+                    if(climbingPowers.stream().anyMatch(ClimbingPower::isActive)) {
+                        BlockPos pos = getBlockPos();
+                        this.climbingPos = Optional.of(pos);
+                        //origins_lastClimbingPos = getPos();
+                        info.setReturnValue(true);
+                    } else if(isHoldingOntoLadder()) {
+                        //if(origins_lastClimbingPos != null && isHoldingOntoLadder()) {
+                            if(climbingPowers.stream().anyMatch(ClimbingPower::canHold)) {
+                                    info.setReturnValue(true);
+                            }
+                        //}
+                    }
+                }
             }
         }
     }
@@ -121,9 +154,20 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
     // SWIM_SPEED
-    @ModifyConstant(method = "travel", constant = @Constant(floatValue = 0.02F, ordinal = 0))
-    public float modifyBaseUnderwaterSpeed(float in) {
-        return OriginComponent.modify(this, ModifySwimSpeedPower.class, in);
+    @Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateVelocity(FLnet/minecraft/util/math/Vec3d;)V", ordinal = 0))
+    public void modifyUnderwaterMovementSpeed(LivingEntity livingEntity, float speedMultiplier, Vec3d movementInput) {
+        livingEntity.updateVelocity(OriginComponent.modify(livingEntity, ModifySwimSpeedPower.class, speedMultiplier), movementInput);
+    }
+
+    @ModifyConstant(method = "swimUpward", constant = @Constant(doubleValue = 0.03999999910593033D))
+    public double modifyUpwardSwimming(double original) {
+        return OriginComponent.modify(this, ModifySwimSpeedPower.class, original);
+    }
+
+    @Environment(EnvType.CLIENT)
+    @ModifyConstant(method = "knockDownwards", constant = @Constant(doubleValue = -0.03999999910593033D))
+    public double swimDown(double original) {
+        return OriginComponent.modify(this, ModifySwimSpeedPower.class, original);
     }
 
     // LIKE_WATER
@@ -141,10 +185,30 @@ public abstract class LivingEntityMixin extends Entity {
     // SLOW_FALLING
     @ModifyVariable(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getFluidState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/fluid/FluidState;"), method = "travel", name = "d", ordinal = 0)
     public double doAvianSlowFalling(double in) {
-        if(!this.isSneaking() && this.getVelocity().y <= 0.0D && PowerTypes.SLOW_FALLING.isActive(this)) {
+        if(PowerTypes.SLOW_FALLING.isActive(this)) {
             this.fallDistance = 0;
-            return 0.01D;
+            if(this.getVelocity().y <= 0.0D) {
+                return 0.01D;
+            }
         }
         return in;
+    }
+
+    @Unique
+    private float cachedDamageAmount;
+
+    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;tryUseTotem(Lnet/minecraft/entity/damage/DamageSource;)Z"))
+    private void cacheDamageAmount(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        this.cachedDamageAmount = amount;
+    }
+
+    @Inject(method = "tryUseTotem", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Hand;values()[Lnet/minecraft/util/Hand;"), cancellable = true)
+    private void preventDeath(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
+        Optional<PreventDeathPower> preventDeathPower = OriginComponent.getPowers(this, PreventDeathPower.class).stream().filter(p -> p.doesApply(source, cachedDamageAmount)).findFirst();
+        if(preventDeathPower.isPresent()) {
+            this.setHealth(1.0F);
+            preventDeathPower.get().executeAction();
+            cir.setReturnValue(true);
+        }
     }
 }

@@ -32,6 +32,7 @@ public class RestrictArmorPower extends Power {
     }
 
     public boolean canEquip(ItemStack itemStack, EquipmentSlot slot) {
+        if (armorConditions.get(slot) == null) return false;
         return !armorConditions.get(slot).test(itemStack);
     }
 }

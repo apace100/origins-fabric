@@ -56,12 +56,16 @@ public class ChooseOriginScreen extends Screen {
 		this.currentLayerIndex = currentLayerIndex;
 		this.originSelection = new ArrayList<>(10);
 		PlayerEntity player = MinecraftClient.getInstance().player;
-		List<Identifier> originIdentifiers = layerList.get(currentLayerIndex).getOrigins(player);
+		OriginLayer currentLayer = layerList.get(currentLayerIndex);
+		List<Identifier> originIdentifiers = currentLayer.getOrigins(player);
 		originIdentifiers.forEach(originId -> {
 			Origin origin = OriginRegistry.get(originId);
 			if(origin.isChoosable()) {
-				if(origin.getDisplayItem().getItem() == Items.PLAYER_HEAD) {
-					origin.getDisplayItem().getOrCreateTag().putString("SkullOwner", player.getDisplayName().getString());
+				ItemStack displayItem = origin.getDisplayItem();
+				if(displayItem.getItem() == Items.PLAYER_HEAD) {
+					if(!displayItem.hasTag() || !displayItem.getTag().contains("SkullOwner")) {
+						displayItem.getOrCreateTag().putString("SkullOwner", player.getDisplayName().getString());
+					}
 				}
 				this.originSelection.add(origin);
 			}
@@ -71,7 +75,7 @@ public class ChooseOriginScreen extends Screen {
 			return impDelta == 0 ? a.getOrder() - b.getOrder() : impDelta;
 		});
 		int maxSelection = originSelection.size();
-		if(layerList.get(currentLayerIndex).isRandomAllowed()) {
+		if(currentLayer.isRandomAllowed() && currentLayer.getRandomOrigins(player).size() > 0) {
 			maxSelection += 1;
 		}
 		this.maxSelection = maxSelection;
@@ -84,18 +88,6 @@ public class ChooseOriginScreen extends Screen {
 
 	private void openNextLayerScreen() {
 		MinecraftClient.getInstance().openScreen(new WaitForNextLayerScreen(layerList, currentLayerIndex, showDirtBackground));
-		/*
-		int index = currentLayerIndex + 1;
-		PlayerEntity player = MinecraftClient.getInstance().player;
-		while(index < layerList.size()) {
-			if(layerList.get(index).getOrigins(player).size() > 0) {
-				MinecraftClient.getInstance().openScreen(new ChooseOriginScreen(layerList, index, showDirtBackground));
-				return;
-			}
-			index++;
-		}
-		MinecraftClient.getInstance().openScreen(null);
-		*/
 	}
 
 	@Override
@@ -141,7 +133,7 @@ public class ChooseOriginScreen extends Screen {
 	}
 
 	private void initRandomOrigin() {
-		this.randomOrigin = new Origin(Origins.identifier("random"), ModItems.ORB_OF_ORIGIN, Impact.NONE, -1, Integer.MAX_VALUE);
+		this.randomOrigin = new Origin(Origins.identifier("random"), new ItemStack(ModItems.ORB_OF_ORIGIN), Impact.NONE, -1, Integer.MAX_VALUE);
 		this.randomOriginText = new LiteralText("");
 		List<Identifier> randoms = layerList.get(currentLayerIndex).getRandomOrigins(MinecraftClient.getInstance().player);
 		randoms.sort((ia, ib) -> {
@@ -167,8 +159,10 @@ public class ChooseOriginScreen extends Screen {
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		if(originSelection.size() == 0)
+		if(maxSelection == 0) {
+			openNextLayerScreen();
 			return;
+		}
 		this.renderBackground(matrices);
 		this.renderOriginWindow(matrices, mouseX, mouseY);
 		super.render(matrices, mouseX, mouseY, delta);

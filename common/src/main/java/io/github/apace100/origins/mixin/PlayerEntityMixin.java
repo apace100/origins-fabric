@@ -22,6 +22,7 @@ import net.minecraft.tag.FluidTags;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Nameable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
@@ -63,6 +64,23 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
         }
     }
 
+    @Inject(method = "wakeUp(ZZ)V", at = @At("HEAD"))
+    private void invokeWakeUpAction(boolean bl, boolean updateSleepingPlayers, CallbackInfo ci) {
+        if(!bl && !updateSleepingPlayers && getSleepingPosition().isPresent()) {
+            BlockPos sleepingPos = getSleepingPosition().get();
+            OriginComponent.getPowers(this, ActionOnWakeUp.class).stream().filter(p -> p.doesApply(sleepingPos)).forEach(p -> p.executeActions(sleepingPos, Direction.DOWN));
+        }
+    }
+
+    // Prevent healing if DisableRegenPower
+    // Note that this function was called "shouldHeal" instead of "canFoodHeal" at some point in time.
+    @Inject(method = "canFoodHeal", at = @At("HEAD"), cancellable = true)
+    private void disableHeal(CallbackInfoReturnable<Boolean> info) {
+        if(OriginComponent.hasPower(this, DisableRegenPower.class)) {
+            info.setReturnValue(false);
+        }
+    }
+
     // ModifyExhaustion
     @ModifyVariable(at = @At("HEAD"), method = "addExhaustion", ordinal = 0, name = "exhaustion")
     private float modifyExhaustion(float exhaustionIn) {
@@ -72,7 +90,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
     // NO_COBWEB_SLOWDOWN
     @Inject(at = @At("HEAD"), method = "slowMovement", cancellable = true)
     public void slowMovement(BlockState state, Vec3d multiplier, CallbackInfo info) {
-        if (PowerTypes.NO_COBWEB_SLOWDOWN.isActive(this)) {
+        if (PowerTypes.NO_COBWEB_SLOWDOWN.isActive(this) || PowerTypes.MASTER_OF_WEBS_NO_SLOWDOWN.isActive(this)) {
             info.cancel();
         }
     }

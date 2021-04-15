@@ -7,7 +7,9 @@
 		"origins:no_shield",
 		"origins:more_exhaustion"
 	],
-	"icon": "minecraft:shulker_shell",
+	"icon": {
+		"item": "minecraft:shulker_shell"
+	},
 	"order": 4,
 	"impact": 1
 }

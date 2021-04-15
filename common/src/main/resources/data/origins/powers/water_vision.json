@@ -6,5 +6,8 @@
     "fluid": "minecraft:water"
   },
   "active_by_default": true,
-  "key": "primary"
+  "key": {
+    "key": "key.origins.primary_active",
+    "continuous": false
+  }
 }
