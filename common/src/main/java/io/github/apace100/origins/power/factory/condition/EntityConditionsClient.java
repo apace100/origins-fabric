@@ -1,9 +1,6 @@
 package io.github.apace100.origins.power.factory.condition;
 
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.mixin.ClientAdvancementManagerAccessor;
-import io.github.apace100.origins.mixin.ClientPlayerInteractionManagerAccessor;
-import io.github.apace100.origins.mixin.ServerPlayerInteractionManagerAccessor;
 import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
@@ -14,11 +11,12 @@ import net.minecraft.advancement.AdvancementProgress;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientAdvancementManager;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.network.ServerPlayerInteractionManager;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.Map;
 
@@ -30,15 +28,15 @@ public final class EntityConditionsClient {
         register(new ConditionFactory<>(Origins.identifier("using_effective_tool"), new SerializableData(),
             (data, entity) -> {
                 if(entity instanceof ServerPlayerEntity) {
-                    ServerPlayerInteractionManagerAccessor interactionMngr = ((ServerPlayerInteractionManagerAccessor)((ServerPlayerEntity)entity).interactionManager);
-                    if(interactionMngr.getMining()) {
-                        return ((PlayerEntity)entity).isUsingEffectiveTool(entity.world.getBlockState(interactionMngr.getMiningPos()));
+                    ServerPlayerInteractionManager interactionMngr = ((ServerPlayerEntity) entity).interactionManager;
+                    if(interactionMngr.mining) {
+                        return ((PlayerEntity)entity).isUsingEffectiveTool(entity.world.getBlockState(interactionMngr.miningPos));
                     }
                 } else
                 if(entity instanceof ClientPlayerEntity) {
-                    ClientPlayerInteractionManagerAccessor interactionMngr = (ClientPlayerInteractionManagerAccessor) MinecraftClient.getInstance().interactionManager;
-                    if(interactionMngr.getBreakingBlock()) {
-                        return ((PlayerEntity)entity).isUsingEffectiveTool(entity.world.getBlockState(interactionMngr.getCurrentBreakingPos()));
+                    ClientPlayerInteractionManager interactionMngr = MinecraftClient.getInstance().interactionManager;
+                    if(interactionMngr.isBreakingBlock()) {
+                        return ((PlayerEntity)entity).isUsingEffectiveTool(entity.world.getBlockState(interactionMngr.currentBreakingPos));
                     }
                 }
                 return false;
@@ -46,12 +44,11 @@ public final class EntityConditionsClient {
         register(new ConditionFactory<>(Origins.identifier("gamemode"), new SerializableData()
             .add("gamemode", SerializableDataType.STRING), (data, entity) -> {
             if(entity instanceof ServerPlayerEntity) {
-                ServerPlayerInteractionManagerAccessor interactionMngr = ((ServerPlayerInteractionManagerAccessor)((ServerPlayerEntity)entity).interactionManager);
+                ServerPlayerInteractionManager interactionMngr = ((ServerPlayerEntity) entity).interactionManager;
                 return interactionMngr.getGameMode().getName().equals(data.getString("gamemode"));
             } else
             if(entity instanceof ClientPlayerEntity) {
-                ClientPlayerInteractionManagerAccessor interactionMngr = (ClientPlayerInteractionManagerAccessor) MinecraftClient.getInstance().interactionManager;
-                return interactionMngr.getGameMode().getName().equals(data.getString("gamemode"));
+                return MinecraftClient.getInstance().interactionManager.getCurrentGameMode().getName().equals(data.getString("gamemode"));
             }
             return false;
         }));
@@ -70,7 +67,7 @@ public final class EntityConditionsClient {
                 ClientAdvancementManager advancementManager = MinecraftClient.getInstance().getNetworkHandler().getAdvancementHandler();
                 Advancement advancement = advancementManager.getManager().get(id);
                 if(advancement != null) {
-                    Map<Advancement, AdvancementProgress> progressMap = ((ClientAdvancementManagerAccessor)advancementManager).getAdvancementProgresses();
+                    Map<Advancement, AdvancementProgress> progressMap = advancementManager.advancementProgresses;
                     if(progressMap.containsKey(advancement)) {
                         return progressMap.get(advancement).isDone();
                     }
@@ -83,6 +80,6 @@ public final class EntityConditionsClient {
     }
 
     private static void register(ConditionFactory<LivingEntity> conditionFactory) {
-        Registry.register(ModRegistries.ENTITY_CONDITION, conditionFactory.getSerializerId(), conditionFactory);
+        ModRegistries.ENTITY_CONDITION.registerSupplied(conditionFactory.getSerializerId(), () -> conditionFactory);
     }
 }

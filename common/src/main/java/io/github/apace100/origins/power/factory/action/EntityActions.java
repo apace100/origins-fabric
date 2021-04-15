@@ -374,7 +374,7 @@ public class EntityActions {
             .add("power", SerializableDataType.POWER_TYPE),
             (data, entity) -> {
                 if(entity instanceof PlayerEntity) {
-                    OriginComponent component = ModComponents.ORIGIN.get(entity);
+                    OriginComponent component = ModComponents.getOriginComponent(entity);
                     Power p = component.getPower((PowerType<?>)data.get("power"));
                     if(p instanceof CooldownPower) {
                         CooldownPower cp = (CooldownPower)p;

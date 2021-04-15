@@ -49,7 +49,7 @@ public class ModPacketsC2S {
             powerIds[i] = packetByteBuf.readIdentifier();
         }
         context.queue(() -> {
-            OriginComponent component = ModComponents.ORIGIN.get(playerEntity);
+            OriginComponent component = ModComponents.getOriginComponent(playerEntity);
             for(Identifier id : powerIds) {
                 PowerType<?> type = PowerTypeRegistry.get(id);
                 Power power = component.getPower(type);

@@ -1,4 +1,4 @@
-package io.github.apace100.origins.mixin;
+package io.github.apace100.origins.mixin.fabric;
 
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.ModifyProjectileDamagePower;
@@ -14,6 +14,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
+/**
+ * Replaced by an event in forge.
+ */
 @Mixin(TridentEntity.class)
 public abstract class TridentEntityMixin extends PersistentProjectileEntity {
 

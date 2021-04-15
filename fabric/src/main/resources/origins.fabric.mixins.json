@@ -10,7 +10,9 @@
 		"PlayerEntityMixin",
 		"PowerTypesMixin",
 		"ServerPlayerEntityMixin",
-		"ServerPlayerInteractionManagerMixin"
+		"ServerPlayerInteractionManagerMixin",
+		"PersistentProjectileEntityMixin",
+		"TridentEntityMixin"
 	],
 	"client": [
 		"BackgroundRendererMixin",

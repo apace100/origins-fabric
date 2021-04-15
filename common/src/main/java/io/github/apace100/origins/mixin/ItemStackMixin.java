@@ -22,7 +22,7 @@ public class ItemStackMixin {
     @Inject(at = @At("HEAD"), method = "use", cancellable = true)
     public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> info) {
         if(user != null) {
-            OriginComponent component = ModComponents.ORIGIN.get(user);
+            OriginComponent component = ModComponents.getOriginComponent(user);
             ItemStack stackInHand = user.getStackInHand(hand);
             for(PreventItemUsePower piup : component.getPowers(PreventItemUsePower.class)) {
                 if(piup.doesPrevent(stackInHand)) {
@@ -45,7 +45,7 @@ public class ItemStackMixin {
     public void callActionOnUse(World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
         if(user instanceof PlayerEntity) {
             ItemStack returnStack = cir.getReturnValue();
-            OriginComponent component = ModComponents.ORIGIN.get(user);
+            OriginComponent component = ModComponents.getOriginComponent(user);
             for(ActionOnItemUsePower p : component.getPowers(ActionOnItemUsePower.class)) {
                 if(p.doesApply(usedItemStack)) {
                     p.executeActions(returnStack);

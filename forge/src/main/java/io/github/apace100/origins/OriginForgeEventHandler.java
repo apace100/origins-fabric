@@ -5,16 +5,15 @@ import io.github.apace100.origins.components.ForgePlayerOriginComponent;
 import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.forge.ModComponentsImpl;
-import me.shedaniel.architectury.event.events.EntityEvent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tag.FluidTags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -40,12 +39,19 @@ public class OriginForgeEventHandler {
 	@SubscribeEvent
 	public static void modifyDamageTaken(LivingDamageEvent event) {
 		LivingEntity entityLiving = event.getEntityLiving();
-		event.setAmount(OriginComponent.modify(entityLiving, ModifyDamageTakenPower.class, event.getAmount(), p -> p.doesApply(event.getSource(), event.getAmount())));
+		event.setAmount(OriginComponent.modify(entityLiving, ModifyDamageTakenPower.class, event.getAmount(), p -> p.doesApply(event.getSource(), event.getAmount()), p -> p.executeActions(event.getSource().getAttacker())));
 	}
 
 	@SubscribeEvent
-	public static void modifyDamageDealth(LivingHurtEvent event) {
-		event.setAmount(OriginComponent.modify(event.getSource().getAttacker(), ModifyDamageDealtPower.class, event.getAmount(), p -> p.doesApply(event.getSource(), event.getAmount())));
+	public static void modifyDamageDealt(LivingHurtEvent event) {
+		//Forge only fires on LivingEntity. So we're using that.
+		LivingEntity target = event.getEntityLiving();
+		DamageSource source = event.getSource();
+		if (event.getSource().isProjectile()) {
+			event.setAmount(OriginComponent.modify(source.getAttacker(), ModifyProjectileDamagePower.class, event.getAmount(), p -> p.doesApply(source, event.getAmount(), target), p -> p.executeActions(target)));
+		} else {
+			event.setAmount(OriginComponent.modify(source.getAttacker(), ModifyDamageDealtPower.class, event.getAmount(), p -> p.doesApply(source, event.getAmount(), target), p -> p.executeActions(target)));
+		}
 	}
 
 	@SubscribeEvent

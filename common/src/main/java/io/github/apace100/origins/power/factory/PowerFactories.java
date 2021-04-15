@@ -259,10 +259,10 @@ public class PowerFactories {
                         ((List<EntityAttributeModifier>)data.get("modifiers")).forEach(power::addModifier);
                     }
                     if(data.isPresent("self_action")) {
-                        power.setSelfAction((ActionFactory<LivingEntity>.Instance)data.get("self_action"));
+                        power.setSelfAction(data.get("self_action"));
                     }
                     if(data.isPresent("target_action")) {
-                        power.setTargetAction((ActionFactory<LivingEntity>.Instance)data.get("target_action"));
+                        power.setTargetAction(data.get("target_action"));
                     }
                     return power;
                 })
@@ -285,10 +285,10 @@ public class PowerFactories {
                         ((List<EntityAttributeModifier>)data.get("modifiers")).forEach(power::addModifier);
                     }
                     if(data.isPresent("self_action")) {
-                        power.setSelfAction((ActionFactory<LivingEntity>.Instance)data.get("self_action"));
+                        power.setSelfAction(data.get("self_action"));
                     }
                     if(data.isPresent("attacker_action")) {
-                        power.setAttackerAction((ActionFactory<LivingEntity>.Instance)data.get("attacker_action"));
+                        power.setAttackerAction(data.get("attacker_action"));
                     }
                     return power;
                 })
@@ -326,7 +326,7 @@ public class PowerFactories {
                 .add("entity_action", SerializableDataType.ENTITY_ACTION, null),
             data ->
                 (type, player) -> {
-                    ModifyJumpPower power = new ModifyJumpPower(type, player, (ActionFactory<Entity>.Instance)data.get("entity_action"));
+                    ModifyJumpPower power = new ModifyJumpPower(type, player, data.get("entity_action"));
                     if(data.isPresent("modifier")) {
                         power.addModifier(data.get("modifier"));
                     }
@@ -349,9 +349,9 @@ public class PowerFactories {
                                 new ModifyPlayerSpawnPower(type, player,
                                         data.get("dimension"),
                                         (int)data.getFloat("dimension_distance_multiplier"),
-                                        data.getId("biome"),
-                                        data.getString("spawn_strategy"),
-                                        data.isPresent("structure") ? (StructureFeature<?>)data.get("structure") : null,
+                                        data.get("biome"),
+                                        data.get("spawn_strategy"),
+                                        data.isPresent("structure") ? data.get("structure") : null,
                                         data.get("respawn_sound")))
                 .allowCondition());
         register(new PowerFactory<>(Origins.identifier("night_vision"),
@@ -398,7 +398,7 @@ public class PowerFactories {
                 (type, player) ->
                     new PreventSleepPower(type, player,
                         data.isPresent("block_condition") ? data.get("block_condition") : cbp -> true,
-                        data.getString("message"), data.getBoolean("set_spawn_point")))
+                        data.get("message"), data.getBoolean("set_spawn_point")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("restrict_armor"),
             new SerializableData()
@@ -585,7 +585,7 @@ public class PowerFactories {
                 .add("interval", SerializableDataType.INT),
             data ->
                 (type, player) -> new ActionOverTimePower(type, player, data.getInt("interval"),
-                    (ActionFactory<Entity>.Instance)data.get("entity_action"), (ActionFactory<Entity>.Instance)data.get("rising_action"), (ActionFactory<Entity>.Instance)data.get("falling_action")))
+                    data.get("entity_action"), data.get("rising_action"), data.get("falling_action")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("self_action_when_hit"),
             new SerializableData()
@@ -618,9 +618,9 @@ public class PowerFactories {
                 .add("target_condition", SerializableDataType.ENTITY_CONDITION, null),
             data ->
                 (type, player) -> new SelfActionOnHitPower(type, player, data.getInt("cooldown"),
-                    (HudRender)data.get("hud_render"), (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition"),
-                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
-                    (ConditionFactory<LivingEntity>.Instance)data.get("target_condition")))
+                    data.get("hud_render"), data.get("damage_condition"),
+                    data.get("entity_action"),
+                    data.get("target_condition")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("target_action_on_hit"),
             new SerializableData()
@@ -631,9 +631,9 @@ public class PowerFactories {
                 .add("target_condition", SerializableDataType.ENTITY_CONDITION, null),
             data ->
                 (type, player) -> new TargetActionOnHitPower(type, player, data.getInt("cooldown"),
-                    (HudRender)data.get("hud_render"), (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition"),
-                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
-                    (ConditionFactory<LivingEntity>.Instance)data.get("target_condition")))
+                    data.get("hud_render"), data.get("damage_condition"),
+                    data.get("entity_action"),
+                    data.get("target_condition")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("starting_equipment"),
             new SerializableData()
@@ -711,12 +711,12 @@ public class PowerFactories {
             data ->
                 (type, player) ->
                     new ResourcePower(type, player,
-                        (HudRender)data.get("hud_render"),
+                        data.get("hud_render"),
                         data.getInt("start_value"),
                         data.getInt("min"),
                         data.getInt("max"),
-                        (ActionFactory<Entity>.Instance)data.get("min_action"),
-                        (ActionFactory<Entity>.Instance)data.get("max_action")))
+                        data.get("min_action"),
+                        data.get("max_action")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("modify_food"),
             new SerializableData()
@@ -771,9 +771,9 @@ public class PowerFactories {
                 .add("only_when_harvested", SerializableDataType.BOOLEAN, true),
             data ->
                 (type, player) -> new ActionOnBlockBreakPower(type, player,
-                    (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition"),
-                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
-                    (ActionFactory<Triple<World, BlockPos, Direction>>.Instance)data.get("block_action"),
+                    data.get("block_condition"),
+                    data.get("entity_action"),
+                    data.get("block_action"),
                     data.getBoolean("only_when_harvested")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("action_on_land"),
@@ -781,19 +781,19 @@ public class PowerFactories {
                 .add("entity_action", SerializableDataType.ENTITY_ACTION, null),
             data ->
                 (type, player) -> new ActionOnLandPower(type, player,
-                    (ActionFactory<Entity>.Instance)data.get("entity_action")))
+                    data.get("entity_action")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("prevent_entity_render"),
             new SerializableData()
                 .add("entity_condition", SerializableDataType.ENTITY_CONDITION, null),
             data ->
-                (type, player) -> new PreventEntityRenderPower(type, player, (ConditionFactory<LivingEntity>.Instance)data.get("entity_condition")))
+                (type, player) -> new PreventEntityRenderPower(type, player, data.get("entity_condition")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("entity_glow"),
             new SerializableData()
                 .add("entity_condition", SerializableDataType.ENTITY_CONDITION, null),
             data ->
-                (type, player) -> new EntityGlowPower(type, player, (ConditionFactory<LivingEntity>.Instance)data.get("entity_condition")))
+                (type, player) -> new EntityGlowPower(type, player, data.get("entity_condition")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("climbing"),
             new SerializableData()
@@ -801,7 +801,7 @@ public class PowerFactories {
                 .add("hold_condition", SerializableDataType.ENTITY_CONDITION, null),
             data ->
                 (type, player) -> {
-                    Predicate<LivingEntity> holdCondition = (ConditionFactory<LivingEntity>.Instance)data.get("hold_condition");
+                    Predicate<LivingEntity> holdCondition = data.get("hold_condition");
                     return new ClimbingPower(type, player, data.getBoolean("allow_holding"), holdCondition);
                 })
             .allowCondition());
@@ -810,7 +810,7 @@ public class PowerFactories {
                 .add("block_condition", SerializableDataType.BLOCK_CONDITION, null),
             data ->
                 (type, player) -> new PreventBlockSelectionPower(type, player,
-                    (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition")))
+                    data.get("block_condition")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("self_action_on_kill"),
             new SerializableData()
@@ -821,25 +821,22 @@ public class PowerFactories {
                 .add("target_condition", SerializableDataType.ENTITY_CONDITION, null),
             data ->
                 (type, player) -> new SelfActionOnKillPower(type, player, data.getInt("cooldown"),
-                    (HudRender)data.get("hud_render"), (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition"),
-                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
-                    (ConditionFactory<LivingEntity>.Instance)data.get("target_condition")))
+                    data.get("hud_render"), data.get("damage_condition"),
+                    data.get("entity_action"),
+                    data.get("target_condition")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("recipe"),
             new SerializableData()
                 .add("recipe", SerializableDataType.RECIPE),
             data ->
                 (type, player) -> {
-                    Recipe<CraftingInventory> recipe = (Recipe<CraftingInventory>)data.get("recipe");
+                    Recipe<CraftingInventory> recipe = data.get("recipe");
                     return new RecipePower(type, player, recipe);
                 })
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("ignore_water"),
             new SerializableData(),
-            data ->
-                (type, player) -> {
-                    return new IgnoreWaterPower(type, player);
-                })
+            data -> IgnoreWaterPower::new)
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("modify_projectile_damage"),
             new SerializableData()
@@ -852,19 +849,19 @@ public class PowerFactories {
             data ->
                 (type, player) -> {
                     ModifyProjectileDamagePower power = new ModifyProjectileDamagePower(type, player,
-                        data.isPresent("damage_condition") ? (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition") : dmg -> true,
-                        (ConditionFactory<LivingEntity>.Instance)data.get("target_condition"));
+                        data.isPresent("damage_condition") ? data.get("damage_condition") : dmg -> true,
+                            data.get("target_condition"));
                     if(data.isPresent("modifier")) {
-                        power.addModifier(data.getModifier("modifier"));
+                        power.addModifier(data.get("modifier"));
                     }
                     if(data.isPresent("modifiers")) {
                         ((List<EntityAttributeModifier>)data.get("modifiers")).forEach(power::addModifier);
                     }
                     if(data.isPresent("self_action")) {
-                        power.setSelfAction((ActionFactory<LivingEntity>.Instance)data.get("self_action"));
+                        power.setSelfAction(data.get("self_action"));
                     }
                     if(data.isPresent("target_action")) {
-                        power.setTargetAction((ActionFactory<LivingEntity>.Instance)data.get("target_action"));
+                        power.setTargetAction(data.get("target_action"));
                     }
                     return power;
                 })
@@ -876,16 +873,16 @@ public class PowerFactories {
                 .add("block_condition", SerializableDataType.BLOCK_CONDITION, null),
             data ->
                 (type, player) -> new ActionOnWakeUp(type, player,
-                    (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition"),
-                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
-                    (ActionFactory<Triple<World, BlockPos, Direction>>.Instance)data.get("block_action")))
+                    data.get("block_condition"),
+                    data.get("entity_action"),
+                    data.get("block_action")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("prevent_block_use"),
             new SerializableData()
                 .add("block_condition", SerializableDataType.BLOCK_CONDITION, null),
             data ->
                 (type, player) -> new PreventBlockUsePower(type, player,
-                    (ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition")))
+                    data.get("block_condition")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("prevent_death"),
             new SerializableData()
@@ -893,8 +890,8 @@ public class PowerFactories {
                 .add("damage_condition", SerializableDataType.DAMAGE_CONDITION, null),
             data ->
                 (type, player) -> new PreventDeathPower(type, player,
-                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
-                    (ConditionFactory<Pair<DamageSource, Float>>.Instance)data.get("damage_condition")))
+                    data.get("entity_action"),
+                    data.get("damage_condition")))
             .allowCondition());
         register(new PowerFactory<>(Origins.identifier("action_on_item_use"),
             new SerializableData()
@@ -903,9 +900,9 @@ public class PowerFactories {
                 .add("item_condition", SerializableDataType.ITEM_CONDITION, null),
             data ->
                 (type, player) -> new ActionOnItemUsePower(type, player,
-                    (ConditionFactory<ItemStack>.Instance)data.get("item_condition"),
-                    (ActionFactory<Entity>.Instance)data.get("entity_action"),
-                    (ActionFactory<ItemStack>.Instance)data.get("item_action")))
+                    data.get("item_condition"),
+                    data.get("entity_action"),
+                    data.get("item_action")))
             .allowCondition());
     }
 

@@ -2,9 +2,6 @@ package io.github.apace100.origins.util;
 
 import com.google.common.collect.Lists;
 import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.mixin.CraftingInventoryAccessor;
-import io.github.apace100.origins.mixin.CraftingScreenHandlerAccessor;
-import io.github.apace100.origins.mixin.PlayerScreenHandlerAccessor;
 import io.github.apace100.origins.power.RecipePower;
 import io.github.apace100.origins.registry.ModRecipes;
 import net.minecraft.entity.player.PlayerEntity;
@@ -58,13 +55,11 @@ public class OriginRestrictedCraftingRecipe extends SpecialCraftingRecipe {
     }
 
     private PlayerEntity getPlayerFromInventory(CraftingInventory inv) {
-        ScreenHandler handler = ((CraftingInventoryAccessor)inv).getHandler();
-        return getPlayerFromHandler(handler);
+        return getPlayerFromHandler(inv.handler);
     }
 
     private List<Recipe<CraftingInventory>> getRecipes(CraftingInventory inv) {
-        ScreenHandler handler = ((CraftingInventoryAccessor)inv).getHandler();
-        PlayerEntity player = getPlayerFromHandler(handler);
+        PlayerEntity player = getPlayerFromHandler(inv.handler);
         if(player != null) {
             return OriginComponent.getPowers(player, RecipePower.class).stream().map(RecipePower::getRecipe).collect(Collectors.toList());
         }
@@ -73,10 +68,10 @@ public class OriginRestrictedCraftingRecipe extends SpecialCraftingRecipe {
 
     private PlayerEntity getPlayerFromHandler(ScreenHandler screenHandler) {
         if(screenHandler instanceof CraftingScreenHandler) {
-            return ((CraftingScreenHandlerAccessor)screenHandler).getPlayer();
+            return ((CraftingScreenHandler) screenHandler).player;
         }
         if(screenHandler instanceof PlayerScreenHandler) {
-            return ((PlayerScreenHandlerAccessor)screenHandler).getOwner();
+            return ((PlayerScreenHandler) screenHandler).owner;
         }
         return null;
     }

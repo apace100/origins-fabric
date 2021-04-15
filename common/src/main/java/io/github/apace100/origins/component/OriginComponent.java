@@ -94,7 +94,6 @@ public interface OriginComponent {
 		if(entity instanceof PlayerEntity) {
 			List<T> powers = ModComponents.getOriginComponent(entity).getPowers(powerClass);
 			List<EntityAttributeModifier> mps = powers.stream()
-			List<EntityAttributeModifier> mps = ModComponents.getOriginComponent(entity).getPowers(powerClass).stream()
 				.filter(p -> powerFilter == null || powerFilter.test(p))
 				.flatMap(p -> p.getModifiers().stream()).collect(Collectors.toList());
 			if(powerAction != null) {

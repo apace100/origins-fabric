@@ -126,7 +126,7 @@ public abstract class LivingEntityMixin extends Entity {
     public void doSpiderClimbing(CallbackInfoReturnable<Boolean> info) {
         if(!info.getReturnValue()) {
             if((Entity)this instanceof PlayerEntity) {
-                List<ClimbingPower> climbingPowers = ModComponents.ORIGIN.get((Entity)this).getPowers(ClimbingPower.class, true);
+                List<ClimbingPower> climbingPowers = ModComponents.getOriginComponent((Entity)this).getPowers(ClimbingPower.class, true);
                 if(climbingPowers.size() > 0) {
                     if(climbingPowers.stream().anyMatch(ClimbingPower::isActive)) {
                         BlockPos pos = getBlockPos();

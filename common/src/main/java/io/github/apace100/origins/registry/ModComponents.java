@@ -5,6 +5,8 @@ import me.shedaniel.architectury.annotations.ExpectPlatform;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 
+import java.util.Optional;
+
 public class ModComponents {
     @ExpectPlatform
     public static OriginComponent getOriginComponent(Entity entity) {
@@ -17,6 +19,11 @@ public class ModComponents {
     }
     @ExpectPlatform
     public static void syncWith(ServerPlayerEntity player, Entity provider) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static Optional<OriginComponent> maybeGetOriginComponent(Entity player) {
         throw new AssertionError();
     }
 }

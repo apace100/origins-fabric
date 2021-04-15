@@ -54,7 +54,6 @@ public class OriginsClient {
         idToKeyBindingMap.put(keyId, keyBinding);
     }
 
-    @Override
     @Environment(EnvType.CLIENT)
     public static void register() {
         RenderTypes.register(RenderLayer.getCutout(), ModBlocks.TEMPORARY_COBWEB);
@@ -85,7 +84,7 @@ public class OriginsClient {
 
         ClientTickEvent.CLIENT_PRE.register(tick -> {
             if(tick.player != null) {
-                List<Power> powers = ModComponents.ORIGIN.get(tick.player).getPowers();
+                List<Power> powers = ModComponents.getOriginComponent(tick.player).getPowers();
                 List<Power> pressedPowers = new LinkedList<>();
                 HashMap<String, Boolean> currentKeyBindingStates = new HashMap<>();
                 for(Power power : powers) {
@@ -118,18 +117,18 @@ public class OriginsClient {
     }
 
     @Environment(EnvType.CLIENT)
-    private void performActivePowers(List<Power> powers) {
+    private static void performActivePowers(List<Power> powers) {
         PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
         buffer.writeInt(powers.size());
         for(Power power : powers) {
             buffer.writeIdentifier(power.getType().getIdentifier());
             ((Active)power).onUse();
         }
-        ClientPlayNetworking.send(ModPackets.USE_ACTIVE_POWERS, buffer);
+        NetworkManager.sendToServer(ModPackets.USE_ACTIVE_POWERS, buffer);
     }
 
     @Environment(EnvType.CLIENT)
-    private KeyBinding getKeyBinding(String key) {
+    private static KeyBinding getKeyBinding(String key) {
         if(!idToKeyBindingMap.containsKey(key)) {
             if(!initializedKeyBindingMap) {
                 initializedKeyBindingMap = true;

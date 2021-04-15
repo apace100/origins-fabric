@@ -3,6 +3,7 @@ package io.github.apace100.origins;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.registry.forge.ModComponentsImpl;
 import me.shedaniel.architectury.platform.forge.EventBuses;
+import net.minecraft.util.registry.Registry;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.DistExecutor;

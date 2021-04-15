@@ -10,7 +10,6 @@ import com.google.gson.JsonSyntaxException;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.mixin.WeightedListEntryAccessor;
 import io.github.apace100.origins.origin.Impact;
 import io.github.apace100.origins.origin.OriginUpgrade;
 import io.github.apace100.origins.power.Active;
@@ -24,6 +23,7 @@ import io.github.apace100.origins.power.factory.condition.ConditionFactory;
 import io.github.apace100.origins.power.factory.condition.ConditionType;
 import io.github.apace100.origins.power.factory.condition.ConditionTypes;
 import me.shedaniel.architectury.Architectury;
+import me.shedaniel.architectury.hooks.TagHooks;
 import me.shedaniel.architectury.platform.Platform;
 import net.minecraft.block.Block;
 import net.minecraft.block.pattern.CachedBlockPosition;
@@ -455,7 +455,7 @@ public class SerializableDataType<T> {
 
     public static final SerializableDataType<Tag<EntityType<?>>> ENTITY_TAG = SerializableDataType.wrap(ClassUtil.castClass(Tag.class), IDENTIFIER,
         tag -> ServerTagManagerHolder.getTagManager().getEntityTypes().getTagId(tag),
-        TagRegistry::entityType);
+        TagHooks::getEntityTypeOptional);
 
     public static final SerializableDataType<Recipe> RECIPE = new SerializableDataType<>(Recipe.class,
         (buffer, recipe) -> {
@@ -676,7 +676,7 @@ public class SerializableDataType<T> {
             buf.writeInt(list.size());
             list.entryStream().forEach((entry) -> {
                 base.send(buf, entry.getElement());
-                buf.writeInt(((WeightedListEntryAccessor)entry).getWeight());
+                buf.writeInt(entry.weight);
             });
         }, (buf) -> {
             int count = buf.readInt();

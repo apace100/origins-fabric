@@ -12,6 +12,12 @@ public class OriginsFabric implements ModInitializer {
 	public void onInitialize() {
 		FabricLoader.getInstance().getModContainer(MODID).ifPresent(modContainer -> {
 			VERSION = modContainer.getMetadata().getVersion().getFriendlyString();
+			if(VERSION.contains("+")) {
+				VERSION = VERSION.split("\\+")[0];
+			}
+			if(VERSION.contains("-")) {
+				VERSION = VERSION.split("-")[0];
+			}
 			String[] splitVersion = VERSION.split("\\.");
 			SEMVER = new int[splitVersion.length];
 			for (int i = 0; i < SEMVER.length; i++) {

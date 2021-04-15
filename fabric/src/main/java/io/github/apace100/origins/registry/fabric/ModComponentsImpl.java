@@ -12,6 +12,8 @@ import nerdhub.cardinal.components.api.util.RespawnCopyStrategy;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 
+import java.util.Optional;
+
 public class ModComponentsImpl implements EntityComponentInitializer {
 
 	public static final ComponentKey<FabricPlayerOriginComponent> ORIGIN;
@@ -27,6 +29,10 @@ public class ModComponentsImpl implements EntityComponentInitializer {
 
 	public static OriginComponent getOriginComponent(Entity player) {
 		return ORIGIN.get(player);
+	}
+
+	public static Optional<OriginComponent> maybeGetOriginComponent(Entity player) {
+		return ORIGIN.maybeGet(player).map(x -> x);
 	}
 
 	public static void syncOriginComponent(Entity player) {

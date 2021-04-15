@@ -106,11 +106,11 @@ public class OriginCommand {
 	}
 
 	private static boolean hasOrigin(PlayerEntity player, OriginLayer layer, Origin origin) {
-		OriginComponent component = ModComponents.ORIGIN.get(player);
+		OriginComponent component = ModComponents.getOriginComponent(player);
 		return component.hasOrigin(layer) && component.getOrigin(layer).equals(origin);
 	}
 
 	private static boolean hasPower(PlayerEntity player, PowerType<?> powerType) {
-		return ModComponents.ORIGIN.get(player).hasPower(powerType);
+		return ModComponents.getOriginComponent(player).hasPower(powerType);
 	}
 }

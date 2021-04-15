@@ -19,7 +19,7 @@ This mod adds several origins with passive abilities to the game, which you can 
 [[dependencies.origins]] #optional
 modId="forge" #mandatory
 mandatory=true #mandatory
-versionRange="[36,)" #mandatory
+versionRange="[36.1,)" #mandatory
 ordering="NONE"
 side="BOTH"
 
@@ -33,7 +33,7 @@ side="BOTH"
 [[dependencies.origins]]
 modId="architectury"
 mandatory=true
-versionRange="[1.8.128,)"
+versionRange="[1.10.140,)"
 ordering="NONE"
 side="BOTH"
 

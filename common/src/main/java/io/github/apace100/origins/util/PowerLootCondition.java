@@ -34,7 +34,7 @@ public class PowerLootCondition implements LootCondition {
     }
 
     public boolean test(LootContext lootContext) {
-        Optional<OriginComponent> optional = ModComponents.ORIGIN.maybeGet(lootContext.get(LootContextParameters.THIS_ENTITY));
+        Optional<OriginComponent> optional = ModComponents.maybeGetOriginComponent(lootContext.get(LootContextParameters.THIS_ENTITY));
         if(optional.isPresent()){
             OriginComponent component = optional.get();
             return component.hasPower(powerType);
@@ -51,9 +51,7 @@ public class PowerLootCondition implements LootCondition {
     }
 
     public static Builder builder(PowerType<?> powerType) {
-        return () -> {
-            return new PowerLootCondition(powerType);
-        };
+        return () -> new PowerLootCondition(powerType);
     }
 
     public static class Serializer implements JsonSerializer<PowerLootCondition> {

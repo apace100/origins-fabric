@@ -5,10 +5,7 @@ import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
-import io.github.apace100.origins.power.Power;
-import io.github.apace100.origins.power.PowerType;
-import io.github.apace100.origins.power.PowerTypeRegistry;
-import io.github.apace100.origins.power.PreventItemUsePower;
+import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.power.factory.PowerFactory;
 import io.github.apace100.origins.registry.ModComponents;
 import io.netty.buffer.Unpooled;
@@ -32,12 +29,21 @@ public class OriginEventHandler {
 	public static void register() {
 		//Replaces BlockItemMixin
 		InteractionEvent.RIGHT_CLICK_BLOCK.register(OriginEventHandler::preventItemUse);
+		//Replaces ClientPlayerInteractionManagerMixin
+		InteractionEvent.RIGHT_CLICK_BLOCK.register(OriginEventHandler::preventBlockUse);
 		//Replaces ItemStackMixin
 		InteractionEvent.RIGHT_CLICK_ITEM.register(OriginEventHandler::preventItemUse);
 		//Replaces LoginMixin#openOriginsGui
 		PlayerEvent.PLAYER_JOIN.register(OriginEventHandler::playerJoin);
 		//Replaces LoginMixin#invokePowerRespawnCallback
 		PlayerEvent.PLAYER_RESPAWN.register(OriginEventHandler::respawn);
+	}
+
+	private static ActionResult preventBlockUse(PlayerEntity player, Hand hand, BlockPos blockPos, Direction direction) {
+		if(OriginComponent.getPowers(player, PreventBlockUsePower.class).stream().anyMatch(p -> p.doesPrevent(player.getEntityWorld(), blockPos))) {
+			return ActionResult.FAIL;
+		}
+		return ActionResult.PASS;
 	}
 
 	private static ActionResult preventItemUse(PlayerEntity user, Hand hand, BlockPos pos, Direction face) {
@@ -115,9 +121,18 @@ public class OriginEventHandler {
 		playerList.forEach(spe -> ModComponents.syncWith(spe, player));
 		OriginComponent.sync(player);
 		if (!component.hasAllOrigins()) {
-			PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
-			data.writeBoolean(true);
-			NetworkManager.sendToPlayer(player, ModPackets.OPEN_ORIGIN_SCREEN, data);
+			if(component.checkAutoChoosingLayers(player, true)) {
+				component.sync();
+			}
+			if(component.hasAllOrigins()) {
+				component.getOrigins().values().forEach(o -> {
+					o.getPowerTypes().forEach(powerType -> component.getPower(powerType).onChosen(false));
+				});
+			} else {
+				PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
+				data.writeBoolean(true);
+				NetworkManager.sendToPlayer(player, ModPackets.OPEN_ORIGIN_SCREEN, data);
+			}
 		}
 	}
 

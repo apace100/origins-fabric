@@ -43,6 +43,6 @@ public class BiomeConditions {
     }
 
     private static void register(ConditionFactory<Biome> conditionFactory) {
-        Registry.register(ModRegistries.BIOME_CONDITION, conditionFactory.getSerializerId(), conditionFactory);
+        ModRegistries.BIOME_CONDITION.registerSupplied(conditionFactory.getSerializerId(), () -> conditionFactory);
     }
 }

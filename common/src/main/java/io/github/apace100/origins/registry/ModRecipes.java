@@ -16,6 +16,7 @@ public class ModRecipes {
     }
 
     static <S extends RecipeSerializer<T>, T extends Recipe<?>> S register(String id, S serializer) {
-        return Registry.register(Registry.RECIPE_SERIALIZER, Origins.identifier(id), serializer);
+        ModRegistries.RECIPE_SERIALIZERS.registerSupplied(Origins.identifier(id), () -> serializer);
+        return serializer;
     }
 }

@@ -17,6 +17,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class ModComponentsImpl {
 	public static final Identifier SYNC_PACKET_SELF = Origins.identifier("forge/sync_origin_self");
@@ -53,6 +54,12 @@ public class ModComponentsImpl {
 			buffer.writeCompoundTag(tag);
 			NetworkManager.sendToPlayer(player, SYNC_PACKET_OTHER, buffer);
 		}
+	}
+
+	public static Optional<OriginComponent> maybeGetOriginComponent(Entity player) {
+		if (player instanceof PlayerEntity)
+			return player.getCapability(ORIGIN_COMPONENT_CAPABILITY).resolve();
+		return Optional.empty();
 	}
 
 	public static class OriginStorage implements Capability.IStorage<OriginComponent> {

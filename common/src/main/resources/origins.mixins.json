@@ -1,48 +1,37 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "package": "io.github.apace100.origins.mixin",
-  "compatibilityLevel": "JAVA_8",
-  "injectors": {
-    "defaultRequire": 1
-  },
-  "mixins": [
-    "AbstractBlockStateMixin",
-    "ArmorItemMixin",
-    "ConduitBlockEntityMixin",
-    "CraftingInventoryAccessor",
-    "CraftingScreenHandlerAccessor",
-    "CreeperEntityMixin",
-    "EntityMixin",
-    "EntityShapeContextMixin",
-    "ExperienceOrbEntityMixin",
-    "HungerManagerMixin",
-    "LivingEntityMixin",
-    "LoginMixin",
-    "PersistentProjectileEntityMixin",
-    "PlayerAdvancementTrackerMixin",
-    "PlayerEntityMixin",
-    "PlayerScreenHandlerAccessor",
-    "PlayerScreenHandlerMixin",
-    "ServerPlayerEntityMixin",
-    "ServerPlayNetworkHandlerMixin",
-    "TridentEntityMixin",
-    "WeightedListEntryAccessor"
-  ],
-  "client": [
-    "BackgroundRendererMixin",
-    "ClientAdvancementManagerAccessor",
-    "ClientPlayerEntityMixin",
-    "ClientPlayerInteractionManagerMixin",
-    "ClientPlayerInteractionManagerAccessor",
-    "ClientPlayNetworkHandlerMixin",
-    "ConnectScreenMixin",
-    "ElytraFeatureRendererMixin",
-    "EntityRenderDispatcherMixin",
-    "GameRendererMixin",
-    "InGameOverlayRendererMixin",
-    "LightmapTextureManagerMixin",
-    "LivingEntityRendererMixin",
-    "PlayerEntityRendererMixin"
-  ]
+	"required": true,
+	"minVersion": "0.8",
+	"package": "io.github.apace100.origins.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"mixins": [
+		"AbstractBlockStateMixin",
+		"ArmorItemMixin",
+		"ConduitBlockEntityMixin",
+		"CreeperEntityMixin",
+		"EntityMixin",
+		"EntityShapeContextMixin",
+		"ExperienceOrbEntityMixin",
+		"HungerManagerMixin",
+		"ItemStackMixin",
+		"LivingEntityMixin",
+		"LoginMixin",
+		"PlayerAdvancementTrackerMixin",
+		"PlayerEntityMixin",
+		"PlayerScreenHandlerMixin",
+		"ServerPlayerEntityMixin",
+		"ServerPlayNetworkHandlerMixin"
+	],
+	"client": [
+		"BackgroundRendererMixin",
+		"ClientPlayerEntityMixin",
+		"EntityRenderDispatcherMixin",
+		"GameRendererMixin",
+		"InGameOverlayRendererMixin",
+		"LightmapTextureManagerMixin",
+		"LivingEntityRendererMixin",
+		"PlayerEntityRendererMixin"
+	]
 }

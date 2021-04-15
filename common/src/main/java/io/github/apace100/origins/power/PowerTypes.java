@@ -118,7 +118,7 @@ public class PowerTypes extends MultiJsonDataLoader {
                     + "another \"" + MULTIPLE.toString() + "\" power.");
             }
         }
-        Optional<PowerFactory> optionalFactory = ModRegistries.POWER_FACTORY.getOrEmpty(factoryId);
+        Optional<PowerFactory> optionalFactory = Optional.ofNullable(ModRegistries.POWER_FACTORY.get(factoryId));
         if(!optionalFactory.isPresent()) {
             throw new JsonSyntaxException("Power type \"" + factoryId.toString() + "\" is not defined.");
         }

@@ -68,7 +68,7 @@ public class ResourceCommand {
 
         ServerPlayerEntity player = EntityArgumentType.getPlayer(command, "target");
         PowerType powerType = command.getArgument("power", PowerType.class);
-        Power power = ModComponents.ORIGIN.get(player).getPower(powerType);
+        Power power = ModComponents.getOriginComponent(player).getPower(powerType);
 
         if (power instanceof VariableIntPower) {
             VariableIntPower vIntPower = ((VariableIntPower) power);

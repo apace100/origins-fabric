@@ -32,7 +32,7 @@ public class OriginLootCondition implements LootCondition {
     }
 
     public boolean test(LootContext lootContext) {
-        Optional<OriginComponent> optional = ModComponents.ORIGIN.maybeGet(lootContext.get(LootContextParameters.THIS_ENTITY));
+        Optional<OriginComponent> optional = ModComponents.maybeGetOriginComponent(lootContext.get(LootContextParameters.THIS_ENTITY));
         if(optional.isPresent()){
             OriginComponent component = optional.get();
             HashMap<OriginLayer, Origin> map = component.getOrigins();
@@ -53,9 +53,7 @@ public class OriginLootCondition implements LootCondition {
     }
 
     public static LootCondition.Builder builder(Identifier origin) {
-        return () -> {
-            return new OriginLootCondition(origin);
-        };
+        return () -> new OriginLootCondition(origin);
     }
 
     public static class Serializer implements JsonSerializer<OriginLootCondition> {

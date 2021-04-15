@@ -35,6 +35,7 @@ public class Origins {
 	public static String VERSION = "";
 	public static int[] SEMVER;
 	public static final Logger LOGGER = LogManager.getLogger(Origins.class);
+	public static ServerConfig config;
 
 	public static void register() {
 		LOGGER.info("Origins " + VERSION + " is initializing. Have fun!");
@@ -80,9 +81,9 @@ public class Origins {
 		return new Identifier(Origins.MODID, path);
 	}
 
+
 	@Config(name = Origins.MODID + "_server")
 	public static class ServerConfig implements ConfigData {
-
 		public boolean performVersionCheck = true;
 	}
 }

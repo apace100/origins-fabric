@@ -3,7 +3,6 @@ package io.github.apace100.origins.power.factory.condition;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.access.MovingEntity;
 import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.mixin.EntityAccessor;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
@@ -90,14 +89,14 @@ public class EntityConditions {
             ((Comparison)data.get("comparison")).compare(entity.world.getTimeOfDay() % 24000L, data.getInt("compare_to"))));
         register(new ConditionFactory<>(Origins.identifier("fall_flying"), new SerializableData(), (data, entity) -> entity.isFallFlying()));
         register(new ConditionFactory<>(Origins.identifier("exposed_to_sun"), new SerializableData(), (data, entity) -> {
-            if (entity.world.isDay() && !((EntityAccessor) entity).callIsBeingRainedOn()) {
+            if (entity.world.isDay() && !entity.isBeingRainedOn()) {
                 float f = entity.getBrightnessAtEyes();
                 BlockPos blockPos = entity.getVehicle() instanceof BoatEntity ? (new BlockPos(entity.getX(), (double) Math.round(entity.getY()), entity.getZ())).up() : new BlockPos(entity.getX(), (double) Math.round(entity.getY()), entity.getZ());
                 return f > 0.5F && entity.world.isSkyVisible(blockPos);
             }
             return false;
         }));
-        register(new ConditionFactory<>(Origins.identifier("in_rain"), new SerializableData(), (data, entity) -> ((EntityAccessor) entity).callIsBeingRainedOn()));
+        register(new ConditionFactory<>(Origins.identifier("in_rain"), new SerializableData(), (data, entity) -> entity.isBeingRainedOn()));
         register(new ConditionFactory<>(Origins.identifier("invisible"), new SerializableData(), (data, entity) -> entity.isInvisible()));
         register(new ConditionFactory<>(Origins.identifier("on_fire"), new SerializableData(), (data, entity) -> entity.isOnFire()));
         register(new ConditionFactory<>(Origins.identifier("exposed_to_sky"), new SerializableData(), (data, entity) -> {
@@ -115,7 +114,7 @@ public class EntityConditions {
             .add("min_duration", SerializableDataType.INT, 0)
             .add("max_duration", SerializableDataType.INT, Integer.MAX_VALUE),
             (data, entity) -> {
-                StatusEffect effect = (StatusEffect)data.get("effect");
+                StatusEffect effect = data.get("effect");
                 if(effect == null) {
                     return false;
                 }
@@ -127,7 +126,7 @@ public class EntityConditions {
                 return false;
             }));
         register(new ConditionFactory<>(Origins.identifier("submerged_in"), new SerializableData().add("fluid", SerializableDataType.FLUID_TAG),
-            (data, entity) -> entity.isSubmergedIn((Tag<Fluid>)data.get("fluid"))));
+            (data, entity) -> entity.isSubmergedIn(data.get("fluid"))));
         register(new ConditionFactory<>(Origins.identifier("fluid_height"), new SerializableData()
             .add("fluid", SerializableDataType.FLUID_TAG)
             .add("comparison", SerializableDataType.COMPARISON)
@@ -137,7 +136,7 @@ public class EntityConditions {
             .add("origin", SerializableDataType.IDENTIFIER)
             .add("layer", SerializableDataType.IDENTIFIER, null),
             (data, entity) -> {
-                OriginComponent component = ModComponents.ORIGIN.get(entity);
+                OriginComponent component = ModComponents.getOriginComponent(entity);
                 Identifier originId = data.getId("origin");
                 if(data.isPresent("layer")) {
                     Identifier layerId = data.getId("layer");
@@ -160,7 +159,7 @@ public class EntityConditions {
             (data, entity) -> {
                 try {
                     PowerType<?> powerType = PowerTypeRegistry.get(data.getId("power"));
-                    return ModComponents.ORIGIN.get(entity).hasPower(powerType);
+                    return ModComponents.getOriginComponent(entity).hasPower(powerType);
                 } catch(IllegalArgumentException e) {
                     return false;
                 }
@@ -212,7 +211,7 @@ public class EntityConditions {
             .add("compare_to", SerializableDataType.INT),
             (data, entity) -> {
                 int resourceValue = 0;
-                OriginComponent component = ModComponents.ORIGIN.get(entity);
+                OriginComponent component = ModComponents.getOriginComponent(entity);
                 Power p = component.getPower((PowerType<?>)data.get("resource"));
                 if(p instanceof VariableIntPower) {
                     resourceValue = ((VariableIntPower)p).getValue();
@@ -236,9 +235,9 @@ public class EntityConditions {
             .add("compare_to", SerializableDataType.INT, 1)
             .add("comparison", SerializableDataType.COMPARISON, Comparison.GREATER_THAN_OR_EQUAL),
             (data, entity) -> {
-                Predicate<CachedBlockPosition> blockCondition = ((ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition"));
+                Predicate<CachedBlockPosition> blockCondition = data.get("block_condition");
                 int stopAt = -1;
-                Comparison comparison = ((Comparison)data.get("comparison"));
+                Comparison comparison = data.get("comparison");
                 int compareTo = data.getInt("compare_to");
                 switch(comparison) {
                     case EQUAL: case LESS_THAN_OR_EQUAL: case GREATER_THAN:
@@ -249,7 +248,7 @@ public class EntityConditions {
                         break;
                 }
                 int count = 0;
-                for(BlockPos pos : Shape.getPositions(entity.getBlockPos(), (Shape) data.get("shape"), data.getInt("radius"))) {
+                for(BlockPos pos : Shape.getPositions(entity.getBlockPos(), data.get("shape"), data.getInt("radius"))) {
                     if(blockCondition.test(new CachedBlockPosition(entity.world, pos, true))) {
                         count++;
                         if(count == stopAt) {
@@ -356,7 +355,7 @@ public class EntityConditions {
             (data, entity) -> {
                 MinecraftServer server = entity.world.getServer();
                 if (server != null) {
-                    LootCondition lootCondition = server.getPredicateManager().get((Identifier) data.get("predicate"));
+                    LootCondition lootCondition = server.getPredicateManager().get(data.get("predicate"));
                     if (lootCondition != null) {
                         LootContext.Builder lootBuilder = (new LootContext.Builder((ServerWorld) entity.world))
                             .parameter(LootContextParameters.ORIGIN, entity.getPos())
@@ -378,9 +377,9 @@ public class EntityConditions {
             .add("comparison", SerializableDataType.COMPARISON, Comparison.GREATER_THAN_OR_EQUAL)
             .add("compare_to", SerializableDataType.INT, 1),
             (data, entity) -> {
-                Predicate<CachedBlockPosition> blockCondition = ((ConditionFactory<CachedBlockPosition>.Instance)data.get("block_condition"));
+                Predicate<CachedBlockPosition> blockCondition = data.get("block_condition");
                 int stopAt = -1;
-                Comparison comparison = ((Comparison)data.get("comparison"));
+                Comparison comparison = data.get("comparison");
                 int compareTo = data.getInt("compare_to");
                 switch(comparison) {
                     case EQUAL: case LESS_THAN_OR_EQUAL: case GREATER_THAN:
@@ -408,7 +407,7 @@ public class EntityConditions {
                 return comparison.compare(count, compareTo);}));
         register(new ConditionFactory<>(Origins.identifier("entity_group"), new SerializableData()
             .add("group", SerializableDataType.ENTITY_GROUP),
-            (data, entity) -> entity.getGroup() == (EntityGroup)data.get("group")));
+            (data, entity) -> entity.getGroup() == data.get("group")));
         register(new ConditionFactory<>(Origins.identifier("in_tag"), new SerializableData()
             .add("tag", SerializableDataType.ENTITY_TAG),
             (data, entity) -> ((Tag<EntityType<?>>)data.get("tag")).contains(entity.getType())));
@@ -422,7 +421,7 @@ public class EntityConditions {
         register(new ConditionFactory<>(Origins.identifier("using_item"), new SerializableData()
             .add("item_condition", SerializableDataType.ITEM_CONDITION, null), (data, entity) -> {
             if(entity.isUsingItem()) {
-                ConditionFactory<ItemStack>.Instance condition = (ConditionFactory<ItemStack>.Instance)data.get("item_condition");
+                ConditionFactory<ItemStack>.Instance condition = data.get("item_condition");
                 if(condition != null) {
                     Hand activeHand = entity.getActiveHand();
                     ItemStack handStack = entity.getStackInHand(activeHand);
@@ -462,6 +461,6 @@ public class EntityConditions {
     }
 
     private static void register(ConditionFactory<LivingEntity> conditionFactory) {
-        Registry.register(ModRegistries.ENTITY_CONDITION, conditionFactory.getSerializerId(), conditionFactory);
+        ModRegistries.ENTITY_CONDITION.registerSupplied(conditionFactory.getSerializerId(), () -> conditionFactory);
     }
 }

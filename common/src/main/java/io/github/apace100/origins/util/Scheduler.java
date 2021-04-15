@@ -2,7 +2,7 @@ package io.github.apace100.origins.util;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import me.shedaniel.architectury.event.events.TickEvent;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class Scheduler {
     private int currentTick = 0;
 
     public Scheduler() {
-        ServerTickEvents.END_SERVER_TICK.register(m -> {
+        TickEvent.SERVER_POST.register(m -> {
             this.currentTick = m.getTicks();
             List<Consumer<MinecraftServer>> runnables = this.taskQueue.remove(this.currentTick);
             if (runnables != null) for (int i = 0; i < runnables.size(); i++) {

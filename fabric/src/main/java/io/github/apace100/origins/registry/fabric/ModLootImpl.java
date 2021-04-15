@@ -28,13 +28,6 @@ public class ModLootImpl {
     private static final Identifier MINESHAFT = new Identifier("minecraft", "chests/abandoned_mineshaft");
     private static final Identifier WATER_RUIN = new Identifier("minecraft", "chests/underwater_ruin_small");
 
-    public static final LootConditionType ORIGIN_LOOT_CONDITION = registerLootCondition("origin", new OriginLootCondition.Serializer());
-    public static final LootConditionType POWER_LOOT_CONDITION = registerLootCondition("power", new PowerLootCondition.Serializer());
-
-    private static LootConditionType registerLootCondition(String path, JsonSerializer<? extends LootCondition> serializer) {
-        return Registry.register(Registry.LOOT_CONDITION_TYPE, Origins.identifier(path), new LootConditionType(serializer));
-    }
-
     public static void registerLootTables() {
         CompoundTag waterProtectionLevel1 = createEnchantmentTag(ModEnchantments.WATER_PROTECTION, 1);
         CompoundTag waterProtectionLevel2 = createEnchantmentTag(ModEnchantments.WATER_PROTECTION, 2);

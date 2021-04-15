@@ -11,3 +11,7 @@ accessible	method	net/minecraft/entity/damage/DamageSource	setFire	()Lnet/minecr
 accessible	method	net/minecraft/entity/damage/DamageSource	setUsesMagic	()Lnet/minecraft/entity/damage/DamageSource;
 accessible	method	net/minecraft/entity/LivingEntity	getEyeHeight	(Lnet/minecraft/entity/EntityPose;Lnet/minecraft/entity/EntityDimensions;)F
 accessible	field	net/minecraft/util/collection/WeightedList$Entry	weight	I
+accessible	field	net/minecraft/client/network/ClientAdvancementManager	advancementProgresses	Ljava/util/Map;
+accessible	field	net/minecraft/inventory/CraftingInventory	handler	Lnet/minecraft/screen/ScreenHandler;
+accessible	field	net/minecraft/screen/CraftingScreenHandler	player	Lnet/minecraft/entity/player/PlayerEntity;
+accessible	field	net/minecraft/screen/PlayerScreenHandler	owner	Lnet/minecraft/entity/player/PlayerEntity;

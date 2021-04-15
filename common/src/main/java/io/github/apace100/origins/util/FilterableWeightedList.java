@@ -1,6 +1,5 @@
 package io.github.apace100.origins.util;
 
-import io.github.apace100.origins.mixin.WeightedListEntryAccessor;
 import net.minecraft.util.collection.WeightedList;
 
 import java.util.function.Predicate;
@@ -46,7 +45,7 @@ public class FilterableWeightedList<U> extends WeightedList<U> {
     }
 
     public void addAll(FilterableWeightedList<U> other) {
-        other.entryStream().forEach((entry) -> this.add(entry.getElement(), ((WeightedListEntryAccessor)entry).getWeight()));
+        other.entryStream().forEach((entry) -> this.add(entry.getElement(), entry.weight));
     }
 
     public FilterableWeightedList<U> copy() {
