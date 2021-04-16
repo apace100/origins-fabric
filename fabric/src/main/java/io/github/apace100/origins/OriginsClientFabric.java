@@ -6,5 +6,6 @@ public class OriginsClientFabric implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		OriginsClient.register();
+		OriginsClient.setup();
 	}
 }

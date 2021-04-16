@@ -11,7 +11,6 @@ import io.github.apace100.origins.registry.ModComponents;
 import io.netty.buffer.Unpooled;
 import me.shedaniel.architectury.event.events.InteractionEvent;
 import me.shedaniel.architectury.event.events.PlayerEvent;
-import me.shedaniel.architectury.event.events.TickEvent;
 import me.shedaniel.architectury.networking.NetworkManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -29,7 +28,7 @@ public class OriginEventHandler {
 	public static void register() {
 		//Replaces BlockItemMixin
 		InteractionEvent.RIGHT_CLICK_BLOCK.register(OriginEventHandler::preventItemUse);
-		//Replaces ClientPlayerInteractionManagerMixin
+		//Replaces ClientPlayerInteractionManagerMixin & ServerPlayerInteractionManagerMixin#preventBlockInteraction
 		InteractionEvent.RIGHT_CLICK_BLOCK.register(OriginEventHandler::preventBlockUse);
 		//Replaces ItemStackMixin
 		InteractionEvent.RIGHT_CLICK_ITEM.register(OriginEventHandler::preventItemUse);

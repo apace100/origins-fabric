@@ -21,7 +21,6 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -56,8 +55,6 @@ public class OriginsClient {
 
     @Environment(EnvType.CLIENT)
     public static void register() {
-        RenderTypes.register(RenderLayer.getCutout(), ModBlocks.TEMPORARY_COBWEB);
-
         EntityRenderers.register(ModEntities.ENDERIAN_PEARL,
             (dispatcher) -> new FlyingItemEntityRenderer<>(dispatcher, MinecraftClient.getInstance().getItemRenderer()));
 
@@ -114,6 +111,14 @@ public class OriginsClient {
             }
         });
         new PowerHudRenderer().register();
+    }
+
+    /**
+     * Forge uses a delegate for RenderType assignment, which means
+     * it needs to be called after the registries have initialized.
+     */
+    public static void setup() {
+        RenderTypes.register(RenderLayer.getCutout(), ModBlocks.TEMPORARY_COBWEB);
     }
 
     @Environment(EnvType.CLIENT)
