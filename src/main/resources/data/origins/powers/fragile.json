@@ -3,7 +3,7 @@
   "modifier": {
     "name": "Fragile health reduction",
     "attribute": "minecraft:generic.max_health",
-    "value": -6.0,
+    "value": -3.0,
     "operation": "addition"
   }
 }
