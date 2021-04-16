@@ -4,6 +4,7 @@
 	"package": "io.github.apace100.origins.mixin.forge",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
+		"AbstractBlockStateMixin",
 		"EnderianPearlEntityMixin",
 		"ForgeHooksMixin",
 		"ServerPlayerInteractionManagerMixin"

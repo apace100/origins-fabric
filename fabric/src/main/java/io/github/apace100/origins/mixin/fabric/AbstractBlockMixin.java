@@ -29,6 +29,8 @@ public abstract class AbstractBlockMixin {
         info.setReturnValue(modified);
     }
 
+    //getOutlineShape is overridden so often that this does basically nothing.
+    //Forge: AbstractBlockStateMixin#modifyBlockOutline
     @Inject(at = @At("RETURN"), method = "getOutlineShape", cancellable = true)
     private void modifyBlockOutline(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
         Entity entity = ((EntityShapeContextAccess)context).getEntity();
