@@ -2,7 +2,7 @@ package io.github.apace100.origins.screen;
 
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.origin.OriginLayer;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -31,7 +31,7 @@ public class WaitForNextLayerScreen extends Screen {
     public void openSelection() {
         int index = currentLayerIndex + 1;
         PlayerEntity player = MinecraftClient.getInstance().player;
-        OriginComponent component = ModComponents.getOriginComponent(player);
+        OriginComponent component = ModComponentsArchitectury.getOriginComponent(player);
         while(index < layerList.size()) {
             if(!component.hasOrigin(layerList.get(index)) && layerList.get(index).getOrigins(player).size() > 0) {
                 MinecraftClient.getInstance().openScreen(new ChooseOriginScreen(layerList, index, showDirtBackground));

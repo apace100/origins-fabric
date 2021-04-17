@@ -6,7 +6,7 @@ import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.NightVisionPower;
 import io.github.apace100.origins.power.PhasingPower;
 import io.github.apace100.origins.power.ShaderPower;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -116,7 +116,7 @@ public abstract class GameRendererMixin {
     @Inject(at = @At("HEAD"), method = "getNightVisionStrength", cancellable = true)
     private static void getNightVisionStrength(LivingEntity livingEntity, float f, CallbackInfoReturnable<Float> info) {
         if (livingEntity instanceof PlayerEntity && !livingEntity.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
-            List<NightVisionPower> nvs = ModComponents.getOriginComponent(livingEntity).getPowers(NightVisionPower.class);
+            List<NightVisionPower> nvs = ModComponentsArchitectury.getOriginComponent(livingEntity).getPowers(NightVisionPower.class);
             Optional<Float> strength = nvs.stream().filter(NightVisionPower::isActive).map(NightVisionPower::getStrength).max(Float::compareTo);
             strength.ifPresent(info::setReturnValue);
         }

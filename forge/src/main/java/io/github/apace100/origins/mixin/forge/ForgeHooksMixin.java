@@ -3,7 +3,7 @@ package io.github.apace100.origins.mixin.forge;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.ClimbingPower;
 import io.github.apace100.origins.power.ModifyHarvestPower;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -36,7 +36,7 @@ public class ForgeHooksMixin {
 	private static void ladder(BlockState state, World world, BlockPos pos, LivingEntity entity, CallbackInfoReturnable<Boolean> info) {
 		if(!info.getReturnValue()) {
 			if(entity instanceof PlayerEntity) {
-				List<ClimbingPower> climbingPowers = ModComponents.getOriginComponent(entity).getPowers(ClimbingPower.class, true);
+				List<ClimbingPower> climbingPowers = ModComponentsArchitectury.getOriginComponent(entity).getPowers(ClimbingPower.class, true);
 				if(climbingPowers.size() > 0) {
 					if(climbingPowers.stream().anyMatch(ClimbingPower::isActive)) {
 						info.setReturnValue(true);

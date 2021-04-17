@@ -7,13 +7,11 @@ import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.VariableIntPower;
 import io.github.apace100.origins.power.factory.condition.ConditionFactory;
-import io.github.apace100.origins.registry.ModComponents;
-import io.github.apace100.origins.registry.ModRegistries;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
+import io.github.apace100.origins.registry.ModRegistriesArchitectury;
 import io.github.apace100.origins.util.*;
 import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.entity.*;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -29,7 +27,6 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.logging.log4j.util.TriConsumer;
@@ -298,7 +295,7 @@ public class EntityActions {
             .add("change", SerializableDataType.INT),
             (data, entity) -> {
                 if(entity instanceof PlayerEntity) {
-                    OriginComponent component = ModComponents.getOriginComponent(entity);
+                    OriginComponent component = ModComponentsArchitectury.getOriginComponent(entity);
                     Power p = component.getPower((PowerType<?>)data.get("resource"));
                     if(p instanceof VariableIntPower) {
                         VariableIntPower vip = (VariableIntPower)p;
@@ -374,7 +371,7 @@ public class EntityActions {
             .add("power", SerializableDataType.POWER_TYPE),
             (data, entity) -> {
                 if(entity instanceof PlayerEntity) {
-                    OriginComponent component = ModComponents.getOriginComponent(entity);
+                    OriginComponent component = ModComponentsArchitectury.getOriginComponent(entity);
                     Power p = component.getPower((PowerType<?>)data.get("power"));
                     if(p instanceof CooldownPower) {
                         CooldownPower cp = (CooldownPower)p;
@@ -385,6 +382,6 @@ public class EntityActions {
     }
 
     private static void register(ActionFactory<Entity> actionFactory) {
-        ModRegistries.ENTITY_ACTION.register(actionFactory.getSerializerId(), () -> actionFactory);
+        ModRegistriesArchitectury.ENTITY_ACTION.register(actionFactory.getSerializerId(), () -> actionFactory);
     }
 }

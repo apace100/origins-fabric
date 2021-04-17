@@ -21,7 +21,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.Optional;
 
-public class ModComponentsImpl {
+public class ModComponentsArchitecturyImpl {
 	public static final Identifier SYNC_PACKET_SELF = Origins.identifier("forge/sync_origin_self");
 	public static final Identifier SYNC_PACKET_OTHER = Origins.identifier("forge/sync_origin_other");
 

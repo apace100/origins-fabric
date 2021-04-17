@@ -26,7 +26,7 @@ public class ModItems {
         @Override
         public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
             if(!world.isClient && user instanceof ServerPlayerEntity) { //Avoid fake players (Mainly a forge check)
-                OriginComponent component = ModComponents.getOriginComponent(user);
+                OriginComponent component = ModComponentsArchitectury.getOriginComponent(user);
                 for (OriginLayer layer : OriginLayers.getLayers()) {
                     if(layer.isEnabled()) {
                         component.setOrigin(layer, Origin.EMPTY);
@@ -47,6 +47,6 @@ public class ModItems {
     };
 
     public static void register() {
-        ModRegistries.ITEMS.register(new Identifier(Origins.MODID, "orb_of_origin"), () -> ORB_OF_ORIGIN);
+        ModRegistriesArchitectury.ITEMS.register(new Identifier(Origins.MODID, "orb_of_origin"), () -> ORB_OF_ORIGIN);
     }
 }

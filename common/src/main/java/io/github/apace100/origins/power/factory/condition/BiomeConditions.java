@@ -1,11 +1,10 @@
 package io.github.apace100.origins.power.factory.condition;
 
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.registry.ModRegistries;
+import io.github.apace100.origins.registry.ModRegistriesArchitectury;
 import io.github.apace100.origins.util.Comparison;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 
 import java.util.List;
@@ -43,6 +42,6 @@ public class BiomeConditions {
     }
 
     private static void register(ConditionFactory<Biome> conditionFactory) {
-        ModRegistries.BIOME_CONDITION.registerSupplied(conditionFactory.getSerializerId(), () -> conditionFactory);
+        ModRegistriesArchitectury.BIOME_CONDITION.registerSupplied(conditionFactory.getSerializerId(), () -> conditionFactory);
     }
 }

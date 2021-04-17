@@ -1,7 +1,7 @@
 package io.github.apace100.origins.power.factory.condition;
 
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.registry.ModRegistries;
+import io.github.apace100.origins.registry.ModRegistriesArchitectury;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import net.minecraft.advancement.Advancement;
@@ -10,7 +10,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public final class EntityConditionsServer {
 
@@ -50,6 +49,6 @@ public final class EntityConditionsServer {
     }
 
     private static void register(ConditionFactory<LivingEntity> conditionFactory) {
-        ModRegistries.ENTITY_CONDITION.registerSupplied(conditionFactory.getSerializerId(), () -> conditionFactory);
+        ModRegistriesArchitectury.ENTITY_CONDITION.registerSupplied(conditionFactory.getSerializerId(), () -> conditionFactory);
     }
 }

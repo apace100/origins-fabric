@@ -2,7 +2,7 @@ package io.github.apace100.origins.power;
 
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.factory.PowerFactory;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.TranslatableText;
@@ -50,7 +50,7 @@ public class PowerType<T extends Power> {
 
     public boolean isActive(Entity entity) {
         if(entity instanceof PlayerEntity && identifier != null) {
-            OriginComponent component = ModComponents.getOriginComponent(entity);
+            OriginComponent component = ModComponentsArchitectury.getOriginComponent(entity);
             if(component.hasPower(this)) {
                 return component.getPower(this).isActive();
             }
@@ -60,7 +60,7 @@ public class PowerType<T extends Power> {
 
     public T get(Entity entity) {
         if(entity instanceof PlayerEntity) {
-            OriginComponent component = ModComponents.getOriginComponent(entity);
+            OriginComponent component = ModComponentsArchitectury.getOriginComponent(entity);
             return component.getPower(this);
         }
         return null;

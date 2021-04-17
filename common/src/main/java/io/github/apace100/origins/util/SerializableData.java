@@ -68,7 +68,7 @@ public class SerializableData {
                 }
             });
         } catch(JsonParseException | ClassCastException e) {
-            throw new JsonSyntaxException(e.getClass().getSimpleName() + ": " + e.getMessage());
+            throw new JsonSyntaxException(e.getClass().getSimpleName() + ": " + e.getMessage(), e);
         }
         return instance;
     }

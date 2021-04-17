@@ -5,7 +5,7 @@ import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.origin.OriginUpgrade;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import net.minecraft.advancement.Advancement;
 import net.minecraft.advancement.AdvancementProgress;
 import net.minecraft.advancement.PlayerAdvancementTracker;
@@ -35,7 +35,7 @@ public class PlayerAdvancementTrackerMixin {
                     try {
                         Origin upgradeTo = OriginRegistry.get(upgrade.get().getUpgradeToOrigin());
                         if(upgradeTo != null) {
-                            OriginComponent component = ModComponents.getOriginComponent(owner);
+                            OriginComponent component = ModComponentsArchitectury.getOriginComponent(owner);
                             component.setOrigin(layer, upgradeTo);
                             component.sync();
                             String announcement = upgrade.get().getAnnouncement();

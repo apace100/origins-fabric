@@ -8,7 +8,7 @@ import io.github.apace100.origins.origin.Impact;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.power.PowerType;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -45,7 +45,7 @@ public class ViewOriginScreen extends Screen {
 
 	public ViewOriginScreen() {
 		super(new TranslatableText(Origins.MODID + ".screen.view_origin"));
-		HashMap<OriginLayer, Origin> origins = ModComponents.getOriginComponent(MinecraftClient.getInstance().player).getOrigins();
+		HashMap<OriginLayer, Origin> origins = ModComponentsArchitectury.getOriginComponent(MinecraftClient.getInstance().player).getOrigins();
 		originLayers = new ArrayList<>(origins.size());
 		PlayerEntity player = MinecraftClient.getInstance().player;
 		origins.forEach((layer, origin) -> {

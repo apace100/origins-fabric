@@ -1,13 +1,10 @@
 package io.github.apace100.origins.power.factory.condition;
 
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.registry.ModRegistries;
+import io.github.apace100.origins.registry.ModRegistriesArchitectury;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
-import net.minecraft.tag.Tag;
-import net.minecraft.util.registry.Registry;
 
 import java.util.List;
 
@@ -39,6 +36,6 @@ public class FluidConditions {
     }
 
     private static void register(ConditionFactory<FluidState> conditionFactory) {
-        ModRegistries.FLUID_CONDITION.register(conditionFactory.getSerializerId(), () -> conditionFactory);
+        ModRegistriesArchitectury.FLUID_CONDITION.register(conditionFactory.getSerializerId(), () -> conditionFactory);
     }
 }

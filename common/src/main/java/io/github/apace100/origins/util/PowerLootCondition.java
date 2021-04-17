@@ -6,7 +6,7 @@ import com.google.gson.JsonSerializationContext;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.PowerTypeReference;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import io.github.apace100.origins.registry.ModLoot;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.condition.LootConditionType;
@@ -34,7 +34,7 @@ public class PowerLootCondition implements LootCondition {
     }
 
     public boolean test(LootContext lootContext) {
-        Optional<OriginComponent> optional = ModComponents.maybeGetOriginComponent(lootContext.get(LootContextParameters.THIS_ENTITY));
+        Optional<OriginComponent> optional = ModComponentsArchitectury.maybeGetOriginComponent(lootContext.get(LootContextParameters.THIS_ENTITY));
         if(optional.isPresent()){
             OriginComponent component = optional.get();
             return component.hasPower(powerType);

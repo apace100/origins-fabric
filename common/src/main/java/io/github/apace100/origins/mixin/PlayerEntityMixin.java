@@ -3,7 +3,7 @@ package io.github.apace100.origins.mixin;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModBlocks;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import io.github.apace100.origins.registry.ModDamageSources;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -117,7 +117,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
     @Inject(method = "canEquip", at = @At("HEAD"), cancellable = true)
     private void preventArmorDispensing(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
         EquipmentSlot slot = MobEntity.getPreferredEquipmentSlot(stack);
-        OriginComponent component = ModComponents.getOriginComponent(this);
+        OriginComponent component = ModComponentsArchitectury.getOriginComponent(this);
         if(component.getPowers(RestrictArmorPower.class).stream().anyMatch(rap -> !rap.canEquip(stack, slot))) {
             info.setReturnValue(false);
         }

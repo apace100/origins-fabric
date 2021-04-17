@@ -1,7 +1,7 @@
 package io.github.apace100.origins.power.factory.condition;
 
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.registry.ModRegistries;
+import io.github.apace100.origins.registry.ModRegistriesArchitectury;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import net.fabricmc.api.EnvType;
@@ -80,6 +80,6 @@ public final class EntityConditionsClient {
     }
 
     private static void register(ConditionFactory<LivingEntity> conditionFactory) {
-        ModRegistries.ENTITY_CONDITION.registerSupplied(conditionFactory.getSerializerId(), () -> conditionFactory);
+        ModRegistriesArchitectury.ENTITY_CONDITION.registerSupplied(conditionFactory.getSerializerId(), () -> conditionFactory);
     }
 }

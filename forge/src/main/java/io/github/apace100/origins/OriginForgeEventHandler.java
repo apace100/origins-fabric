@@ -3,8 +3,8 @@ package io.github.apace100.origins;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.components.ForgePlayerOriginComponent;
 import io.github.apace100.origins.power.*;
-import io.github.apace100.origins.registry.ModComponents;
-import io.github.apace100.origins.registry.forge.ModComponentsImpl;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
+import io.github.apace100.origins.registry.forge.ModComponentsArchitecturyImpl;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -92,27 +92,27 @@ public class OriginForgeEventHandler {
 	@SubscribeEvent
 	public static void playerTick(TickEvent.PlayerTickEvent event) {
 		if (event.phase == TickEvent.Phase.START && event.side == LogicalSide.SERVER) {
-			ModComponents.getOriginComponent(event.player).serverTick();
+			ModComponentsArchitectury.getOriginComponent(event.player).serverTick();
 		}
 	}
 
 	@SubscribeEvent
 	public static void playerClone(PlayerEvent.Clone event) {
 		if (event.isWasDeath()) {
-			copy(ModComponentsImpl.ORIGIN_COMPONENT_CAPABILITY, event);
+			copy(ModComponentsArchitecturyImpl.ORIGIN_COMPONENT_CAPABILITY, event);
 		}
 	}
 
 	@SubscribeEvent
 	public static void playerRespawn(PlayerEvent.PlayerRespawnEvent event) {
 		if (event.getPlayer() instanceof ServerPlayerEntity)
-			ModComponents.syncWith((ServerPlayerEntity) event.getPlayer(), event.getPlayer());
+			ModComponentsArchitectury.syncWith((ServerPlayerEntity) event.getPlayer(), event.getPlayer());
 	}
 
 	@SubscribeEvent
 	public static void playerRespawn(PlayerEvent.PlayerChangedDimensionEvent event) {
 		if (event.getPlayer() instanceof ServerPlayerEntity)
-			ModComponents.syncWith((ServerPlayerEntity) event.getPlayer(), event.getPlayer());
+			ModComponentsArchitectury.syncWith((ServerPlayerEntity) event.getPlayer(), event.getPlayer());
 	}
 
 	@SubscribeEvent
@@ -120,7 +120,7 @@ public class OriginForgeEventHandler {
 		if (event.getWorld().isClient())
 			return;
 		Entity entity = event.getEntity();
-		Packet<?> packet = ModComponentsImpl.buildOtherPacket(entity);
+		Packet<?> packet = ModComponentsArchitecturyImpl.buildOtherPacket(entity);
 		if (packet != null)
 			PacketDistributor.TRACKING_ENTITY_AND_SELF.with(event::getEntity).send(packet);
 	}
@@ -128,7 +128,7 @@ public class OriginForgeEventHandler {
 	@SubscribeEvent
 	public static void trackEntity(PlayerEvent.StartTracking event) {
 		if (event.getPlayer() instanceof ServerPlayerEntity && event.getTarget() instanceof PlayerEntity) {
-			ModComponents.syncWith((ServerPlayerEntity) event.getPlayer(), event.getTarget());
+			ModComponentsArchitectury.syncWith((ServerPlayerEntity) event.getPlayer(), event.getTarget());
 		}
 	}
 

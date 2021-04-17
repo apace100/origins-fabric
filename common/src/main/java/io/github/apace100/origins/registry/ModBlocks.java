@@ -23,9 +23,9 @@ public class ModBlocks {
     }
 
     private static void register(String blockName, Block block, boolean withBlockItem) {
-        ModRegistries.BLOCKS.register(new Identifier(Origins.MODID, blockName), () -> block);
+        ModRegistriesArchitectury.BLOCKS.register(new Identifier(Origins.MODID, blockName), () -> block);
         if(withBlockItem) {
-            ModRegistries.ITEMS.register(new Identifier(Origins.MODID, blockName), () -> new BlockItem(block, new Item.Settings().group(ItemGroup.MISC)));
+            ModRegistriesArchitectury.ITEMS.register(new Identifier(Origins.MODID, blockName), () -> new BlockItem(block, new Item.Settings().group(ItemGroup.MISC)));
         }
     }
 }

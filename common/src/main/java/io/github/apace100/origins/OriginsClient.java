@@ -6,7 +6,7 @@ import io.github.apace100.origins.power.Active;
 import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.power.factory.condition.EntityConditionsClient;
 import io.github.apace100.origins.registry.ModBlocks;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import io.github.apace100.origins.registry.ModEntities;
 import io.github.apace100.origins.screen.PowerHudRenderer;
 import io.github.apace100.origins.screen.ViewOriginScreen;
@@ -81,7 +81,7 @@ public class OriginsClient {
 
         ClientTickEvent.CLIENT_PRE.register(tick -> {
             if(tick.player != null) {
-                List<Power> powers = ModComponents.getOriginComponent(tick.player).getPowers();
+                List<Power> powers = ModComponentsArchitectury.getOriginComponent(tick.player).getPowers();
                 List<Power> pressedPowers = new LinkedList<>();
                 HashMap<String, Boolean> currentKeyBindingStates = new HashMap<>();
                 for(Power power : powers) {

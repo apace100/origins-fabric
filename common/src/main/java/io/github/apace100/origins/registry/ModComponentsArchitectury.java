@@ -7,7 +7,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.Optional;
 
-public class ModComponents {
+public class ModComponentsArchitectury {
     @ExpectPlatform
     public static OriginComponent getOriginComponent(Entity entity) {
         throw new AssertionError();

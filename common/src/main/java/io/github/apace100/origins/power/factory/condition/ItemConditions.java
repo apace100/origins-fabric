@@ -1,17 +1,15 @@
 package io.github.apace100.origins.power.factory.condition;
 
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.registry.ModRegistries;
+import io.github.apace100.origins.registry.ModRegistriesArchitectury;
 import io.github.apace100.origins.util.Comparison;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.util.registry.Registry;
 
 import java.util.List;
 
@@ -72,6 +70,6 @@ public class ItemConditions {
     }
 
     private static void register(ConditionFactory<ItemStack> conditionFactory) {
-        ModRegistries.ITEM_CONDITION.register(conditionFactory.getSerializerId(), () -> conditionFactory);
+        ModRegistriesArchitectury.ITEM_CONDITION.register(conditionFactory.getSerializerId(), () -> conditionFactory);
     }
 }

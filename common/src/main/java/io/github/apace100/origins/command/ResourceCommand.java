@@ -9,7 +9,7 @@ import io.github.apace100.origins.power.CooldownPower;
 import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.VariableIntPower;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.ObjectiveArgumentType;
 import net.minecraft.command.argument.ScoreHolderArgumentType;
@@ -68,7 +68,7 @@ public class ResourceCommand {
 
         ServerPlayerEntity player = EntityArgumentType.getPlayer(command, "target");
         PowerType powerType = command.getArgument("power", PowerType.class);
-        Power power = ModComponents.getOriginComponent(player).getPower(powerType);
+        Power power = ModComponentsArchitectury.getOriginComponent(player).getPower(powerType);
 
         if (power instanceof VariableIntPower) {
             VariableIntPower vIntPower = ((VariableIntPower) power);

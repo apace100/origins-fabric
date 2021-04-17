@@ -31,7 +31,7 @@
       "io.github.apace100.origins.integration.ModMenuIntegration"
     ],
     "cardinal-components-entity": [
-      "io.github.apace100.origins.registry.fabric.ModComponentsImpl"
+		"io.github.apace100.origins.registry.fabric.ModComponentsArchitecturyImpl"
     ]
   },
   "accessWidener": "origins.accessWidener",

@@ -4,7 +4,7 @@ import io.github.apace100.origins.access.EndRespawningEntity;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.ModifyPlayerSpawnPower;
 import io.github.apace100.origins.power.Power;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import net.minecraft.entity.Dismounting;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,7 +39,7 @@ public abstract class LoginMixin {
 
 	@Inject(method = "remove", at = @At("HEAD"))
 	private void invokeOnRemovedCallback(ServerPlayerEntity player, CallbackInfo ci) {
-		OriginComponent component = ModComponents.getOriginComponent(player);
+		OriginComponent component = ModComponentsArchitectury.getOriginComponent(player);
 		component.getPowers().forEach(Power::onRemoved);
 	}
 
@@ -56,7 +56,7 @@ public abstract class LoginMixin {
 
 	@Inject(method = "respawnPlayer", at = @At("HEAD"))
 	private void invokePowerRemovedCallback(ServerPlayerEntity player, boolean alive, CallbackInfoReturnable<ServerPlayerEntity> cir) {
-		List<Power> powers = ModComponents.getOriginComponent(player).getPowers();
+		List<Power> powers = ModComponentsArchitectury.getOriginComponent(player).getPowers();
 		powers.forEach(Power::onRemoved);
 	}
 }

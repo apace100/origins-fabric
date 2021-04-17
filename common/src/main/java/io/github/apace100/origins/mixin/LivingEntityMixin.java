@@ -3,7 +3,7 @@ package io.github.apace100.origins.mixin;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.*;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
@@ -88,7 +88,7 @@ public abstract class LivingEntityMixin extends Entity {
     @Inject(at = @At("HEAD"), method = "getGroup", cancellable = true)
     public void getGroup(CallbackInfoReturnable<EntityGroup> info) {
         if((Object)this instanceof PlayerEntity) {
-            OriginComponent component = ModComponents.getOriginComponent(this);
+            OriginComponent component = ModComponentsArchitectury.getOriginComponent(this);
             List<SetEntityGroupPower> groups = component.getPowers(SetEntityGroupPower.class);
             if(groups.size() > 0) {
                 if(groups.size() > 1) {
@@ -126,7 +126,7 @@ public abstract class LivingEntityMixin extends Entity {
     public void doSpiderClimbing(CallbackInfoReturnable<Boolean> info) {
         if(!info.getReturnValue()) {
             if((Entity)this instanceof PlayerEntity) {
-                List<ClimbingPower> climbingPowers = ModComponents.getOriginComponent((Entity)this).getPowers(ClimbingPower.class, true);
+                List<ClimbingPower> climbingPowers = ModComponentsArchitectury.getOriginComponent((Entity)this).getPowers(ClimbingPower.class, true);
                 if(climbingPowers.size() > 0) {
                     if(climbingPowers.stream().anyMatch(ClimbingPower::isActive)) {
                         BlockPos pos = getBlockPos();

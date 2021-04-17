@@ -1,7 +1,7 @@
 package io.github.apace100.origins;
 
 import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.registry.forge.ModComponentsImpl;
+import io.github.apace100.origins.registry.forge.ModComponentsArchitecturyImpl;
 import me.shedaniel.architectury.platform.forge.EventBuses;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -30,7 +30,7 @@ public class OriginsForge {
 		Origins.register();
 		DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> OriginsForgeClient::initialize);
 		DistExecutor.safeRunWhenOn(Dist.DEDICATED_SERVER, () -> OriginsServer::register);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener((FMLCommonSetupEvent event) -> CapabilityManager.INSTANCE.register(OriginComponent.class, new ModComponentsImpl.OriginStorage(), () -> null));
+		FMLJavaModLoadingContext.get().getModEventBus().addListener((FMLCommonSetupEvent event) -> CapabilityManager.INSTANCE.register(OriginComponent.class, new ModComponentsArchitecturyImpl.OriginStorage(), () -> null));
 		MinecraftForge.EVENT_BUS.addListener((FMLServerAboutToStartEvent event) -> OriginsClient.isServerRunningOrigins = true);
 		MinecraftForge.EVENT_BUS.addListener((FMLServerStoppedEvent event) -> OriginsClient.isServerRunningOrigins = false);
 	}

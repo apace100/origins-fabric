@@ -1,7 +1,7 @@
 package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.power.ModelColorPower;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.ModelPart;
@@ -23,7 +23,7 @@ public class PlayerEntityRendererMixin {
     @Environment(EnvType.CLIENT)
     @Redirect(method = "renderArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelPart;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;II)V", ordinal = 0))
     private void makeArmTranslucent(ModelPart modelPart, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, MatrixStack matrices2, VertexConsumerProvider vertexConsumers, int light2, AbstractClientPlayerEntity player) {
-        List<ModelColorPower> modelColorPowers = ModComponents.getOriginComponent(player).getPowers(ModelColorPower.class);
+        List<ModelColorPower> modelColorPowers = ModComponentsArchitectury.getOriginComponent(player).getPowers(ModelColorPower.class);
         if (modelColorPowers.size() > 0) {
             float red = modelColorPowers.stream().map(ModelColorPower::getRed).reduce((a, b) -> a * b).get();
             float green = modelColorPowers.stream().map(ModelColorPower::getGreen).reduce((a, b) -> a * b).get();
@@ -38,7 +38,7 @@ public class PlayerEntityRendererMixin {
     @Environment(EnvType.CLIENT)
     @Redirect(method = "renderArm", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelPart;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;II)V", ordinal = 1))
     private void makeSleeveTranslucent(ModelPart modelPart, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, MatrixStack matrices2, VertexConsumerProvider vertexConsumers, int light2, AbstractClientPlayerEntity player) {
-        List<ModelColorPower> modelColorPowers = ModComponents.getOriginComponent(player).getPowers(ModelColorPower.class);
+        List<ModelColorPower> modelColorPowers = ModComponentsArchitectury.getOriginComponent(player).getPowers(ModelColorPower.class);
         if (modelColorPowers.size() > 0) {
             float red = modelColorPowers.stream().map(ModelColorPower::getRed).reduce((a, b) -> a * b).get();
             float green = modelColorPowers.stream().map(ModelColorPower::getGreen).reduce((a, b) -> a * b).get();

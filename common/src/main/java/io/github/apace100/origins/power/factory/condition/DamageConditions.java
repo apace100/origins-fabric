@@ -1,17 +1,15 @@
 package io.github.apace100.origins.power.factory.condition;
 
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.registry.ModRegistries;
+import io.github.apace100.origins.registry.ModRegistriesArchitectury;
 import io.github.apace100.origins.util.Comparison;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.ProjectileDamageSource;
 import net.minecraft.util.Pair;
-import net.minecraft.util.registry.Registry;
 
 import java.util.List;
 
@@ -64,6 +62,6 @@ public class DamageConditions {
     }
 
     private static void register(ConditionFactory<Pair<DamageSource, Float>> conditionFactory) {
-        ModRegistries.DAMAGE_CONDITION.register(conditionFactory.getSerializerId(), () -> conditionFactory);
+        ModRegistriesArchitectury.DAMAGE_CONDITION.register(conditionFactory.getSerializerId(), () -> conditionFactory);
     }
 }

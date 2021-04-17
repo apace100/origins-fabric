@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.apace100.origins.OriginsClient;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.HudRendered;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import io.github.apace100.origins.util.HudRender;
 import me.shedaniel.architectury.event.events.GuiEvent;
 import net.fabricmc.api.EnvType;
@@ -26,7 +26,7 @@ public class PowerHudRenderer extends DrawableHelper {
     public void register() {
         GuiEvent.RENDER_HUD.register(((matrices, delta) -> {
             MinecraftClient client = MinecraftClient.getInstance();
-            OriginComponent component = ModComponents.getOriginComponent(client.player);
+            OriginComponent component = ModComponentsArchitectury.getOriginComponent(client.player);
             if(component.hasAllOrigins()) {
                 int x = client.getWindow().getScaledWidth() / 2 + 20 + OriginsClient.config.xOffset;
                 int y = client.getWindow().getScaledHeight() - 47 + OriginsClient.config.yOffset;

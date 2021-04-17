@@ -1,7 +1,7 @@
 package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.power.NightVisionPower;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -19,7 +19,7 @@ public abstract class LightmapTextureManagerMixin implements AutoCloseable {
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"), method = "update(F)V")
     public boolean hasStatusEffectProxy(ClientPlayerEntity player, StatusEffect effect) {
         if(effect == StatusEffects.NIGHT_VISION && !player.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
-            return ModComponents.getOriginComponent(player).getPowers(NightVisionPower.class).stream().anyMatch(NightVisionPower::isActive);
+            return ModComponentsArchitectury.getOriginComponent(player).getPowers(NightVisionPower.class).stream().anyMatch(NightVisionPower::isActive);
         } else {
             return player.hasStatusEffect(effect);
         }

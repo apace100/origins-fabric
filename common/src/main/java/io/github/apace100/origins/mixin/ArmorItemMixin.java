@@ -2,7 +2,7 @@ package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.RestrictArmorPower;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
@@ -21,7 +21,7 @@ public class ArmorItemMixin {
 
     @Inject(method = "use", locals = LocalCapture.CAPTURE_FAILHARD, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"), cancellable = true)
     private void preventArmorEquipping(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> info, ItemStack itemStack, EquipmentSlot equipmentSlot) {
-        OriginComponent component = ModComponents.getOriginComponent(user);
+        OriginComponent component = ModComponentsArchitectury.getOriginComponent(user);
         if(component.getPowers(RestrictArmorPower.class).stream().anyMatch(rap -> !rap.canEquip(itemStack, equipmentSlot))) {
             info.setReturnValue(TypedActionResult.fail(itemStack));
         }

@@ -7,7 +7,7 @@ import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.*;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import io.netty.buffer.Unpooled;
 import me.shedaniel.architectury.annotations.ExpectPlatform;
 import me.shedaniel.architectury.networking.NetworkManager;
@@ -49,7 +49,7 @@ public class ModPacketsC2S {
             powerIds[i] = packetByteBuf.readIdentifier();
         }
         context.queue(() -> {
-            OriginComponent component = ModComponents.getOriginComponent(playerEntity);
+            OriginComponent component = ModComponentsArchitectury.getOriginComponent(playerEntity);
             for(Identifier id : powerIds) {
                 PowerType<?> type = PowerTypeRegistry.get(id);
                 Power power = component.getPower(type);
@@ -65,7 +65,7 @@ public class ModPacketsC2S {
         String originId = packetByteBuf.readString(32767);
         String layerId = packetByteBuf.readString(32767);
         context.queue(() -> {
-            OriginComponent component = ModComponents.getOriginComponent(playerEntity);
+            OriginComponent component = ModComponentsArchitectury.getOriginComponent(playerEntity);
             OriginLayer layer = OriginLayers.getLayer(Identifier.tryParse(layerId));
             if(!component.hasAllOrigins() && !component.hasOrigin(layer)) {
                 Identifier id = Identifier.tryParse(originId);
@@ -100,7 +100,7 @@ public class ModPacketsC2S {
         PlayerEntity playerEntity = context.getPlayer();
         String layerId = packetByteBuf.readString(32767);
         context.queue(() -> {
-            OriginComponent component = ModComponents.getOriginComponent(playerEntity);
+            OriginComponent component = ModComponentsArchitectury.getOriginComponent(playerEntity);
             OriginLayer layer = OriginLayers.getLayer(Identifier.tryParse(layerId));
             if(!component.hasAllOrigins() && !component.hasOrigin(layer)) {
                 List<Identifier> randomOrigins = layer.getRandomOrigins(playerEntity);

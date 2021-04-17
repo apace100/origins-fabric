@@ -9,8 +9,8 @@ import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.PowerTypeRegistry;
 import io.github.apace100.origins.power.factory.PowerFactory;
-import io.github.apace100.origins.registry.ModComponents;
-import io.github.apace100.origins.registry.ModRegistries;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
+import io.github.apace100.origins.registry.ModRegistriesArchitectury;
 import io.github.apace100.origins.screen.ChooseOriginScreen;
 import io.github.apace100.origins.screen.WaitForNextLayerScreen;
 import io.github.apace100.origins.util.SerializableData;
@@ -49,7 +49,7 @@ public class ModPacketsS2C {
         Origin origin = OriginRegistry.get(packetByteBuf.readIdentifier());
         context.queue(() -> {
             MinecraftClient minecraftClient = MinecraftClient.getInstance();
-            OriginComponent component = ModComponents.getOriginComponent(minecraftClient.player);
+            OriginComponent component = ModComponentsArchitectury.getOriginComponent(minecraftClient.player);
             component.setOrigin(layer, origin);
             if(minecraftClient.currentScreen instanceof WaitForNextLayerScreen) {
                 ((WaitForNextLayerScreen)minecraftClient.currentScreen).openSelection();
@@ -63,7 +63,7 @@ public class ModPacketsS2C {
         context.queue(() -> {
             MinecraftClient minecraftClient = MinecraftClient.getInstance();
             ArrayList<OriginLayer> layers = new ArrayList<>();
-            OriginComponent component = ModComponents.getOriginComponent(minecraftClient.player);
+            OriginComponent component = ModComponentsArchitectury.getOriginComponent(minecraftClient.player);
             OriginLayers.getLayers().forEach(layer -> {
                 if(layer.isEnabled() && !component.hasOrigin(layer)) {
                     layers.add(layer);
@@ -113,7 +113,7 @@ public class ModPacketsS2C {
         for(int i = 0; i < powerCount; i++) {
             Identifier powerId = packetByteBuf.readIdentifier();
             Identifier factoryId = packetByteBuf.readIdentifier();
-            PowerFactory<?> factory = ModRegistries.POWER_FACTORY.get(factoryId);
+            PowerFactory<?> factory = ModRegistriesArchitectury.POWER_FACTORY.get(factoryId);
             PowerFactory<?>.Instance factoryInstance = factory.read(packetByteBuf);
             PowerType<?> type = new PowerType<>(powerId, factoryInstance);
             type.setTranslationKeys(packetByteBuf.readString(), packetByteBuf.readString());

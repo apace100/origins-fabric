@@ -3,7 +3,7 @@ package io.github.apace100.origins.power;
 import com.google.gson.*;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.power.factory.PowerFactory;
-import io.github.apace100.origins.registry.ModRegistries;
+import io.github.apace100.origins.registry.ModRegistriesArchitectury;
 import io.github.apace100.origins.util.MultiJsonDataLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -118,7 +118,7 @@ public class PowerTypes extends MultiJsonDataLoader {
                     + "another \"" + MULTIPLE.toString() + "\" power.");
             }
         }
-        Optional<PowerFactory> optionalFactory = Optional.ofNullable(ModRegistries.POWER_FACTORY.get(factoryId));
+        Optional<PowerFactory> optionalFactory = Optional.ofNullable(ModRegistriesArchitectury.POWER_FACTORY.get(factoryId));
         if(!optionalFactory.isPresent()) {
             throw new JsonSyntaxException("Power type \"" + factoryId.toString() + "\" is not defined.");
         }

@@ -14,7 +14,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.Optional;
 
-public class ModComponentsImpl implements EntityComponentInitializer {
+public class ModComponentsArchitecturyImpl implements EntityComponentInitializer {
 
 	public static final ComponentKey<FabricPlayerOriginComponent> ORIGIN;
 

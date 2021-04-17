@@ -2,7 +2,7 @@ package io.github.apace100.origins.components;
 
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.component.PlayerOriginComponent;
-import io.github.apace100.origins.registry.forge.ModComponentsImpl;
+import io.github.apace100.origins.registry.forge.ModComponentsArchitecturyImpl;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.Tag;
 import net.minecraft.util.math.Direction;
@@ -24,16 +24,16 @@ public class ForgePlayerOriginComponent extends PlayerOriginComponent implements
 	@NotNull
 	@Override
 	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction arg) {
-		return ModComponentsImpl.ORIGIN_COMPONENT_CAPABILITY.orEmpty(capability, this.thisOptional);
+		return ModComponentsArchitecturyImpl.ORIGIN_COMPONENT_CAPABILITY.orEmpty(capability, this.thisOptional);
 	}
 
 	@Override
 	public Tag serializeNBT() {
-		return ModComponentsImpl.ORIGIN_COMPONENT_CAPABILITY.writeNBT(this, null);
+		return ModComponentsArchitecturyImpl.ORIGIN_COMPONENT_CAPABILITY.writeNBT(this, null);
 	}
 
 	@Override
 	public void deserializeNBT(Tag arg) {
-		ModComponentsImpl.ORIGIN_COMPONENT_CAPABILITY.readNBT(this, null, arg);
+		ModComponentsArchitecturyImpl.ORIGIN_COMPONENT_CAPABILITY.readNBT(this, null, arg);
 	}
 }

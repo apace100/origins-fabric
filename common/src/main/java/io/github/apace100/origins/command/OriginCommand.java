@@ -6,7 +6,7 @@ import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.power.PowerType;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.ServerCommandSource;
@@ -101,16 +101,16 @@ public class OriginCommand {
 	}
 
 	private static void setOrigin(PlayerEntity player, OriginLayer layer, Origin origin) {
-		ModComponents.getOriginComponent(player).setOrigin(layer, origin);
+		ModComponentsArchitectury.getOriginComponent(player).setOrigin(layer, origin);
 		OriginComponent.sync(player);
 	}
 
 	private static boolean hasOrigin(PlayerEntity player, OriginLayer layer, Origin origin) {
-		OriginComponent component = ModComponents.getOriginComponent(player);
+		OriginComponent component = ModComponentsArchitectury.getOriginComponent(player);
 		return component.hasOrigin(layer) && component.getOrigin(layer).equals(origin);
 	}
 
 	private static boolean hasPower(PlayerEntity player, PowerType<?> powerType) {
-		return ModComponents.getOriginComponent(player).hasPower(powerType);
+		return ModComponentsArchitectury.getOriginComponent(player).hasPower(powerType);
 	}
 }

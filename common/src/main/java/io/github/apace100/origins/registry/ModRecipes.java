@@ -5,7 +5,6 @@ import io.github.apace100.origins.util.OriginRestrictedCraftingRecipe;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialRecipeSerializer;
-import net.minecraft.util.registry.Registry;
 
 public class ModRecipes {
 
@@ -16,7 +15,7 @@ public class ModRecipes {
     }
 
     static <S extends RecipeSerializer<T>, T extends Recipe<?>> S register(String id, S serializer) {
-        ModRegistries.RECIPE_SERIALIZERS.registerSupplied(Origins.identifier(id), () -> serializer);
+        ModRegistriesArchitectury.RECIPE_SERIALIZERS.registerSupplied(Origins.identifier(id), () -> serializer);
         return serializer;
     }
 }

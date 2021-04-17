@@ -4,7 +4,7 @@ import io.github.apace100.origins.access.MovingEntity;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.power.*;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import io.netty.buffer.Unpooled;
 import me.shedaniel.architectury.networking.NetworkManager;
 import net.fabricmc.api.EnvType;
@@ -95,7 +95,7 @@ public abstract class EntityMixin implements MovingEntity {
     @Inject(at = @At("HEAD"), method = "isInvulnerableTo", cancellable = true)
     private void makeOriginInvulnerable(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
         if((Object)this instanceof PlayerEntity) {
-            OriginComponent component = ModComponents.getOriginComponent((Entity)(Object)this);
+            OriginComponent component = ModComponentsArchitectury.getOriginComponent((Entity)(Object)this);
             if(!component.hasAllOrigins()) {
                 cir.setReturnValue(true);
             }

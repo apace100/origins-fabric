@@ -7,8 +7,8 @@ import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.power.*;
-import io.github.apace100.origins.registry.ModComponents;
-import io.github.apace100.origins.registry.ModRegistries;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
+import io.github.apace100.origins.registry.ModRegistriesArchitectury;
 import io.github.apace100.origins.util.Comparison;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
@@ -16,7 +16,6 @@ import io.github.apace100.origins.util.Shape;
 import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -136,7 +135,7 @@ public class EntityConditions {
             .add("origin", SerializableDataType.IDENTIFIER)
             .add("layer", SerializableDataType.IDENTIFIER, null),
             (data, entity) -> {
-                OriginComponent component = ModComponents.getOriginComponent(entity);
+                OriginComponent component = ModComponentsArchitectury.getOriginComponent(entity);
                 Identifier originId = data.getId("origin");
                 if(data.isPresent("layer")) {
                     Identifier layerId = data.getId("layer");
@@ -159,7 +158,7 @@ public class EntityConditions {
             (data, entity) -> {
                 try {
                     PowerType<?> powerType = PowerTypeRegistry.get(data.getId("power"));
-                    return ModComponents.getOriginComponent(entity).hasPower(powerType);
+                    return ModComponentsArchitectury.getOriginComponent(entity).hasPower(powerType);
                 } catch(IllegalArgumentException e) {
                     return false;
                 }
@@ -211,7 +210,7 @@ public class EntityConditions {
             .add("compare_to", SerializableDataType.INT),
             (data, entity) -> {
                 int resourceValue = 0;
-                OriginComponent component = ModComponents.getOriginComponent(entity);
+                OriginComponent component = ModComponentsArchitectury.getOriginComponent(entity);
                 Power p = component.getPower((PowerType<?>)data.get("resource"));
                 if(p instanceof VariableIntPower) {
                     resourceValue = ((VariableIntPower)p).getValue();
@@ -461,6 +460,6 @@ public class EntityConditions {
     }
 
     private static void register(ConditionFactory<LivingEntity> conditionFactory) {
-        ModRegistries.ENTITY_CONDITION.registerSupplied(conditionFactory.getSerializerId(), () -> conditionFactory);
+        ModRegistriesArchitectury.ENTITY_CONDITION.registerSupplied(conditionFactory.getSerializerId(), () -> conditionFactory);
     }
 }

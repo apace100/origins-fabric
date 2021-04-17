@@ -1,11 +1,10 @@
 package io.github.apace100.origins.power.factory.action;
 
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.registry.ModRegistries;
+import io.github.apace100.origins.registry.ModRegistriesArchitectury;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.registry.Registry;
 
 public class ItemActions {
 
@@ -16,6 +15,6 @@ public class ItemActions {
     }
 
     private static void register(ActionFactory<ItemStack> actionFactory) {
-        ModRegistries.ITEM_ACTION.register(actionFactory.getSerializerId(), () -> actionFactory);
+        ModRegistriesArchitectury.ITEM_ACTION.register(actionFactory.getSerializerId(), () -> actionFactory);
     }
 }

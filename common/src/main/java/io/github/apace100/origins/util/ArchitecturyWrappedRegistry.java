@@ -20,13 +20,13 @@ import java.util.stream.Collectors;
  * @param <T> The type of the wrapped registry.
  * @param <S> The underlying type of the source registry.
  */
-public class WrappedRegistry<T, S> implements Registry<T> {
+public class ArchitecturyWrappedRegistry<T, S> implements Registry<T> {
 
 	private final Registry<S> sourceRegistry;
 	private final Function<T, S> to;
 	private final Function<S, T> from;
 
-	public WrappedRegistry(Registry<S> sourceRegistry, Function<T, S> to, Function<S, T> from) {
+	public ArchitecturyWrappedRegistry(Registry<S> sourceRegistry, Function<T, S> to, Function<S, T> from) {
 		this.sourceRegistry = sourceRegistry;
 		this.to = to;
 		this.from = from;
@@ -168,7 +168,7 @@ public class WrappedRegistry<T, S> implements Registry<T> {
 
 		@Override
 		public String toString() {
-			return value.toString();
+			return "W:" + this.getClass().getSimpleName() + ":{" + value.toString() + "}";
 		}
 	}
 

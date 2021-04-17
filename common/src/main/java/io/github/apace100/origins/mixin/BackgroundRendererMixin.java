@@ -1,27 +1,20 @@
 package io.github.apace100.origins.mixin;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.power.LavaVisionPower;
 import io.github.apace100.origins.power.NightVisionPower;
 import io.github.apace100.origins.power.PhasingPower;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import io.github.apace100.origins.util.ClientHooks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
-
-import java.util.List;
 
 @Mixin(BackgroundRenderer.class)
 @Environment(EnvType.CLIENT)
@@ -30,7 +23,7 @@ public abstract class BackgroundRendererMixin {
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z", ordinal = 1), method = "render")
     private static boolean hasStatusEffectProxy(LivingEntity player, StatusEffect effect) {
         if(player instanceof PlayerEntity && effect == StatusEffects.NIGHT_VISION && !player.hasStatusEffect(StatusEffects.NIGHT_VISION)) {
-            return ModComponents.getOriginComponent(player).getPowers(NightVisionPower.class).stream().anyMatch(NightVisionPower::isActive);
+            return ModComponentsArchitectury.getOriginComponent(player).getPowers(NightVisionPower.class).stream().anyMatch(NightVisionPower::isActive);
         }
         return player.hasStatusEffect(effect);
     }

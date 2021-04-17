@@ -3,7 +3,7 @@ package io.github.apace100.origins.mixin;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.ElytraFlightPower;
 import io.github.apace100.origins.power.RestrictArmorPower;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,7 +27,7 @@ public abstract class PlayerScreenHandlerMixin extends Slot {
     @Inject(method = "Lnet/minecraft/screen/PlayerScreenHandler$1;canInsert(Lnet/minecraft/item/ItemStack;)Z", at = @At("HEAD"), cancellable = true)
     private void preventArmorInsertion(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
         PlayerEntity player = ((PlayerInventory)inventory).player;
-        OriginComponent component = ModComponents.getOriginComponent(player);
+        OriginComponent component = ModComponentsArchitectury.getOriginComponent(player);
         EquipmentSlot slot = MobEntity.getPreferredEquipmentSlot(stack);
         if(component.getPowers(RestrictArmorPower.class).stream().anyMatch(rap -> !rap.canEquip(stack, slot))) {
             info.setReturnValue(false);

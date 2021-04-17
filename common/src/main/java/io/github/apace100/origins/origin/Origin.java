@@ -7,7 +7,7 @@ import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.power.MultiplePowerType;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.PowerTypeRegistry;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import io.github.apace100.origins.util.SerializableData;
 import io.github.apace100.origins.util.SerializableDataType;
 import net.fabricmc.api.EnvType;
@@ -62,7 +62,7 @@ public class Origin {
     }
 
     public static HashMap<OriginLayer, Origin> get(PlayerEntity player) {
-        return ModComponents.getOriginComponent(player).getOrigins();
+        return ModComponentsArchitectury.getOriginComponent(player).getOrigins();
     }
 
     private Identifier identifier;

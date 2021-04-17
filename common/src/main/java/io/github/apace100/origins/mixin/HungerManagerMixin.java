@@ -1,7 +1,7 @@
 package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.power.ModifyFoodPower;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import io.github.apace100.origins.util.AttributeUtil;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.player.HungerManager;
@@ -29,7 +29,7 @@ public class HungerManagerMixin {
     private int modifyHunger(FoodComponent foodComponent, Item item, ItemStack stack) {
         if(player != null) {
             double baseValue = foodComponent.getHunger();
-        List<EntityAttributeModifier> modifiers = ModComponents.getOriginComponent(player).getPowers(ModifyFoodPower.class).stream()
+        List<EntityAttributeModifier> modifiers = ModComponentsArchitectury.getOriginComponent(player).getPowers(ModifyFoodPower.class).stream()
             .filter(p -> p.doesApply(stack))
             .flatMap(p -> p.getFoodModifiers().stream()).collect(Collectors.toList());
             return (int)AttributeUtil.sortAndApplyModifiers(modifiers, baseValue);
@@ -41,7 +41,7 @@ public class HungerManagerMixin {
     private float modifySaturation(FoodComponent foodComponent, Item item, ItemStack stack) {
         if(player != null) {
             double baseValue = foodComponent.getSaturationModifier();
-            List<EntityAttributeModifier> modifiers = ModComponents.getOriginComponent(player).getPowers(ModifyFoodPower.class).stream()
+            List<EntityAttributeModifier> modifiers = ModComponentsArchitectury.getOriginComponent(player).getPowers(ModifyFoodPower.class).stream()
                 .filter(p -> p.doesApply(stack))
                 .flatMap(p -> p.getSaturationModifiers().stream()).collect(Collectors.toList());
             return (float) AttributeUtil.sortAndApplyModifiers(modifiers, baseValue);
@@ -52,7 +52,7 @@ public class HungerManagerMixin {
     @Inject(method = "eat", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;add(IF)V", shift = At.Shift.AFTER))
     private void executeAdditionalEatAction(Item item, ItemStack stack, CallbackInfo ci) {
         if(player != null) {
-            ModComponents.getOriginComponent(player).getPowers(ModifyFoodPower.class).stream().filter(p -> p.doesApply(stack)).forEach(ModifyFoodPower::eat);
+            ModComponentsArchitectury.getOriginComponent(player).getPowers(ModifyFoodPower.class).stream().filter(p -> p.doesApply(stack)).forEach(ModifyFoodPower::eat);
         }
     }
 

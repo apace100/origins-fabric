@@ -2,8 +2,6 @@ package io.github.apace100.origins.registry;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.entity.EnderianPearlEntity;
-import me.shedaniel.architectury.annotations.ExpectPlatform;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.util.Identifier;
@@ -17,6 +15,6 @@ public class ModEntities {
     }
 
     public static void register() {
-        ModRegistries.ENTITY_TYPES.register(new Identifier(Origins.MODID, "enderian_pearl"), () -> ENDERIAN_PEARL);
+        ModRegistriesArchitectury.ENTITY_TYPES.register(new Identifier(Origins.MODID, "enderian_pearl"), () -> ENDERIAN_PEARL);
     }
 }

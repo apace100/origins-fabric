@@ -7,7 +7,7 @@ import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.power.factory.PowerFactory;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import io.netty.buffer.Unpooled;
 import me.shedaniel.architectury.event.events.InteractionEvent;
 import me.shedaniel.architectury.event.events.PlayerEvent;
@@ -47,7 +47,7 @@ public class OriginEventHandler {
 
 	private static ActionResult preventItemUse(PlayerEntity user, Hand hand, BlockPos pos, Direction face) {
 		if (user != null) {
-			OriginComponent component = ModComponents.getOriginComponent(user);
+			OriginComponent component = ModComponentsArchitectury.getOriginComponent(user);
 			ItemStack stackInHand = user.getStackInHand(hand);
 			for (PreventItemUsePower piup : component.getPowers(PreventItemUsePower.class)) {
 				if (piup.doesPrevent(stackInHand)) {
@@ -60,7 +60,7 @@ public class OriginEventHandler {
 
 	private static TypedActionResult<ItemStack> preventItemUse(PlayerEntity user, Hand hand) {
 		if (user != null) {
-			OriginComponent component = ModComponents.getOriginComponent(user);
+			OriginComponent component = ModComponentsArchitectury.getOriginComponent(user);
 			ItemStack stackInHand = user.getStackInHand(hand);
 			for (PreventItemUsePower piup : component.getPowers(PreventItemUsePower.class)) {
 				if (piup.doesPrevent(stackInHand)) {
@@ -76,7 +76,7 @@ public class OriginEventHandler {
 	 * Replaces {@code LoginMixin.openOriginsGui(ClientConnection, ServerPlayerEntity, CallbackInfo)}
 	 */
 	private static void playerJoin(ServerPlayerEntity player) {
-		OriginComponent component = ModComponents.getOriginComponent(player);
+		OriginComponent component = ModComponentsArchitectury.getOriginComponent(player);
 
 		PacketByteBuf powerListData = new PacketByteBuf(Unpooled.buffer());
 		powerListData.writeInt(PowerTypeRegistry.size());
@@ -117,7 +117,7 @@ public class OriginEventHandler {
 		NetworkManager.sendToPlayer(player, ModPackets.LAYER_LIST, originLayerData);
 
 		List<ServerPlayerEntity> playerList = player.getServer().getPlayerManager().getPlayerList();
-		playerList.forEach(spe -> ModComponents.syncWith(spe, player));
+		playerList.forEach(spe -> ModComponentsArchitectury.syncWith(spe, player));
 		OriginComponent.sync(player);
 		if (!component.hasAllOrigins()) {
 			if(component.checkAutoChoosingLayers(player, true)) {
@@ -137,7 +137,7 @@ public class OriginEventHandler {
 
 	private static void respawn(ServerPlayerEntity serverPlayerEntity, boolean alive) {
 		if (!alive) {
-			List<Power> powers = ModComponents.getOriginComponent(serverPlayerEntity).getPowers();
+			List<Power> powers = ModComponentsArchitectury.getOriginComponent(serverPlayerEntity).getPowers();
 			powers.forEach(Power::onRespawn);
 		}
 	}

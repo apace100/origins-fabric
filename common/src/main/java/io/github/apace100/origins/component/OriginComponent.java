@@ -8,7 +8,7 @@ import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.power.Power;
 import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.power.ValueModifyingPower;
-import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import io.github.apace100.origins.util.AttributeUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
@@ -50,26 +50,26 @@ public interface OriginComponent {
 	void sync();
 
 	static void sync(PlayerEntity player) {
-		ModComponents.syncOriginComponent(player);
+		ModComponentsArchitectury.syncOriginComponent(player);
 	}
 
 	static <T extends Power> void withPower(Entity entity, Class<T> powerClass, Predicate<T> power, Consumer<T> with) {
 		if(entity instanceof PlayerEntity) {
-			Optional<T> optional = ModComponents.getOriginComponent(entity).getPowers(powerClass).stream().filter(p -> power == null || power.test(p)).findAny();
+			Optional<T> optional = ModComponentsArchitectury.getOriginComponent(entity).getPowers(powerClass).stream().filter(p -> power == null || power.test(p)).findAny();
 			optional.ifPresent(with);
 		}
 	}
 
 	static <T extends Power> List<T> getPowers(Entity entity, Class<T> powerClass) {
 		if(entity instanceof PlayerEntity) {
-			return ModComponents.getOriginComponent(entity).getPowers(powerClass);
+			return ModComponentsArchitectury.getOriginComponent(entity).getPowers(powerClass);
 		}
 		return Lists.newArrayList();
 	}
 
 	static <T extends Power> boolean hasPower(Entity entity, Class<T> powerClass) {
 		if(entity instanceof PlayerEntity) {
-			return ModComponents.getOriginComponent(entity).getPowers().stream().anyMatch(p -> powerClass.isAssignableFrom(p.getClass()) && p.isActive());
+			return ModComponentsArchitectury.getOriginComponent(entity).getPowers().stream().anyMatch(p -> powerClass.isAssignableFrom(p.getClass()) && p.isActive());
 		}
 		return false;
 	}
@@ -92,7 +92,7 @@ public interface OriginComponent {
 
 	static <T extends ValueModifyingPower> double modify(Entity entity, Class<T> powerClass, double baseValue, Predicate<T> powerFilter, Consumer<T> powerAction) {
 		if(entity instanceof PlayerEntity) {
-			List<T> powers = ModComponents.getOriginComponent(entity).getPowers(powerClass);
+			List<T> powers = ModComponentsArchitectury.getOriginComponent(entity).getPowers(powerClass);
 			List<EntityAttributeModifier> mps = powers.stream()
 				.filter(p -> powerFilter == null || powerFilter.test(p))
 				.flatMap(p -> p.getModifiers().stream()).collect(Collectors.toList());
