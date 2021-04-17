@@ -49,7 +49,7 @@
     "fabricloader": ">=0.7.4",
     "fabric": ">=0.29.4",
     "minecraft": "1.16.x",
-    "architectury": ">=1.8.128"
+    "architectury": ">=1.10.142"
   },
   "suggests": {
     "flamingo": "*"
