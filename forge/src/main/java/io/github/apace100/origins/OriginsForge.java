@@ -20,6 +20,8 @@ import org.apache.maven.artifact.versioning.ArtifactVersion;
 @Mod(Origins.MODID)
 public class OriginsForge {
 
+	//This channel is used for version checking.
+	//It won't allow connection if the channels mismatch.
 	public static final SimpleChannel channel = NetworkRegistry.newSimpleChannel(Origins.identifier("handshake"), () -> Origins.VERSION, NetworkRegistry.acceptMissingOr(Origins.VERSION), NetworkRegistry.acceptMissingOr(Origins.VERSION));
 
 	public OriginsForge() {

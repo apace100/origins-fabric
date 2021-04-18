@@ -15,7 +15,6 @@ public class ModPacketsS2CImpl {
 	 * The content of this function is replaced by {@link ExtensionPoint#DISPLAYTEST}
 	 */
 	public static void registerPlatformSpecificPackets() {
-		NetworkManager.registerReceiver(NetworkManager.s2c(), ModComponentsArchitecturyImpl.SYNC_PACKET_SELF, (packetByteBuf, packetContext) -> packetContext.queue(() -> ModComponentsArchitectury.getOriginComponent(packetContext.getPlayer()).applySyncPacket(packetByteBuf)));
 		NetworkManager.registerReceiver(NetworkManager.s2c(), ModComponentsArchitecturyImpl.SYNC_PACKET_OTHER, ModPacketsS2CImpl::receiveOther);
 	}
 

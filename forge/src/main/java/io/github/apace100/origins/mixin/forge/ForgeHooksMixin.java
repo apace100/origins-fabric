@@ -5,11 +5,13 @@ import io.github.apace100.origins.power.ClimbingPower;
 import io.github.apace100.origins.power.ModifyHarvestPower;
 import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,8 +26,9 @@ public class ForgeHooksMixin {
 
 	@Inject(method = "canHarvestBlock", remap = false, at = @At("HEAD"), cancellable = true)
 	private static void canHarvestBlockHook(BlockState state, PlayerEntity player, BlockView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+		CachedBlockPosition cbp = new CachedBlockPosition(world instanceof WorldView ? (WorldView) world : player.world, pos, true);
 		for (ModifyHarvestPower mhp : OriginComponent.getPowers(player, ModifyHarvestPower.class)) {
-			if (mhp.doesApply(pos)) {
+			if (mhp.doesApply(cbp)) {
 				cir.setReturnValue(ForgeEventFactory.doPlayerHarvestCheck(player, state, mhp.isHarvestAllowed()));
 				cir.cancel();
 			}
@@ -41,11 +44,9 @@ public class ForgeHooksMixin {
 					if(climbingPowers.stream().anyMatch(ClimbingPower::isActive)) {
 						info.setReturnValue(true);
 					} else if(entity.isHoldingOntoLadder()) {
-						//if(origins_lastClimbingPos != null && isHoldingOntoLadder()) {
 						if(climbingPowers.stream().anyMatch(ClimbingPower::canHold)) {
 							info.setReturnValue(true);
 						}
-						//}
 					}
 				}
 			}

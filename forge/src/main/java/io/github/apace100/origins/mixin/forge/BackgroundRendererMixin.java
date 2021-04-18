@@ -8,7 +8,6 @@ import io.github.apace100.origins.util.ClientHooks;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -17,10 +16,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
 
-/**
- * TODO I'm 90% sure all this can be replaced with a combination of {@link EntityViewRenderEvent.FogDensity} and {@link EntityViewRenderEvent.RenderFogEvent},
- *  I'll look into it.
- */
 @Mixin(BackgroundRenderer.class)
 public class BackgroundRendererMixin {
 

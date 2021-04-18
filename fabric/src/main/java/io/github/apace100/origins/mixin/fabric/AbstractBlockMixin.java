@@ -29,7 +29,7 @@ public abstract class AbstractBlockMixin {
         info.setReturnValue(modified);
     }
 
-    //getOutlineShape is overridden so often that this does basically nothing.
+    //Any non full-cube shape is excluded by hooking into AbstractBlock.
     //Forge: AbstractBlockStateMixin#modifyBlockOutline
     @Inject(at = @At("RETURN"), method = "getOutlineShape", cancellable = true)
     private void modifyBlockOutline(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir) {
