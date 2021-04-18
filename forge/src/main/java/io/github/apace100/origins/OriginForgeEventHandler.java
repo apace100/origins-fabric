@@ -5,18 +5,15 @@ import io.github.apace100.origins.components.ForgePlayerOriginComponent;
 import io.github.apace100.origins.power.*;
 import io.github.apace100.origins.registry.ModComponentsArchitectury;
 import io.github.apace100.origins.registry.forge.ModComponentsArchitecturyImpl;
-import net.minecraft.block.BlockState;
+import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributeModifier.Operation;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.Packet;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.tag.FluidTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockView;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -25,6 +22,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
@@ -32,25 +30,12 @@ import net.minecraftforge.fml.network.PacketDistributor;
 
 @Mod.EventBusSubscriber(modid = Origins.MODID)
 public class OriginForgeEventHandler {
-
-	/**
-	 * This event makes some assumptions:
-	 * <ol>
-	 *     <li>The tool used is the right one:<BR>
-	 *     If this assumption is broken, {@link Operation#ADDITION} will be about 3.3x less powerful
-	 *     than they should be.<BR>
-	 *     The correct way to do this would be to call {@link ForgeHooks#canHarvestBlock(BlockState, PlayerEntity, BlockView, BlockPos)}
-	 *     unfortunately this would both slow down the game AND may cause unwanted behaviour in other mods.
-	 *     </li>
-	 *     <li>The break speed scales with the previously modified values:
-	 *     If this assumption is broken, {@link Operation#MULTIPLY_BASE} will be more powerful than
-	 *     it should, but this seems to be the assumption made by the fabric version.
-	 *     </li>
-	 * </ol>
-	 */
 	@SubscribeEvent
 	public static void modifyBreakSpeed(PlayerEvent.BreakSpeed event) {
 		PlayerEntity player = event.getPlayer();
+		float hardness = event.getState().getHardness(player.world, event.getPos());
+		if (hardness <= 0)
+			return;
 		float speed = event.getNewSpeed();
 		if (PowerTypes.AQUA_AFFINITY.isActive(player)) {
 			if (player.isSubmergedIn(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(player))
@@ -59,10 +44,19 @@ public class OriginForgeEventHandler {
 				speed *= 5;
 		}
 
-		int toolFactor = 30; //30 for effective tool, 100 for ineffective tool.
-		float factor = event.getState().getHardness(player.world, event.getPos()) * toolFactor;
+		int toolFactor = ForgeHooks.canHarvestBlock(event.getState(), event.getPlayer(), event.getPlayer().world, event.getPos()) ? 30 : 100;
+		float factor = hardness * toolFactor;
 		speed = OriginComponent.modify(player, ModifyBreakSpeedPower.class, speed * factor, p -> p.doesApply(player.world, event.getPos())) / factor;
 		event.setNewSpeed(speed);
+	}
+
+	@SubscribeEvent
+	public static void breakBlock(BlockEvent.BreakEvent event) {
+		if (event.getPlayer() instanceof ServerPlayerEntity) {
+			CachedBlockPosition cachedBlockPosition = new CachedBlockPosition(event.getWorld(), event.getPos(), true);
+			OriginComponent.getPowers(event.getPlayer(), ActionOnBlockBreakPower.class).stream().filter(p -> p.doesApply(cachedBlockPosition))
+					.forEach(aobbp -> aobbp.executeActions(!event.isCanceled(), event.getPos(), null));
+		}
 	}
 
 	@SubscribeEvent
