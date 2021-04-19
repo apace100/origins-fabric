@@ -13,6 +13,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerChunkManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -35,6 +36,8 @@ public class ModComponentsArchitecturyImpl {
 	}
 
 	public static void syncOriginComponent(Entity player) {
+		if (!(player.getEntityWorld().getChunkManager() instanceof ServerChunkManager))
+			return; //Skip client side calls.
 		Packet<?> packet = buildOtherPacket(player);
 		if (packet != null)
 			PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player).send(packet);
@@ -48,7 +51,7 @@ public class ModComponentsArchitecturyImpl {
 			originComponent.get().writeToNbt(tag);
 			buffer.writeVarInt(entity.getEntityId());
 			buffer.writeCompoundTag(tag);
-			return NetworkManagerImpl.toPacket(NetworkManager.Side.S2C, SYNC_PACKET_OTHER, buffer);
+			return NetworkManager.toPacket(NetworkManager.Side.S2C, SYNC_PACKET_OTHER, buffer);
 		}
 		return null;
 	}
