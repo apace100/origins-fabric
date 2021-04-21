@@ -31,6 +31,13 @@ ordering="NONE"
 side="BOTH"
 
 [[dependencies.origins]]
+modId="cloth-config"
+mandatory=true
+versionRange="[4.11.14,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.origins]]
 modId="architectury"
 mandatory=true
 versionRange="[1.10.140,)"
