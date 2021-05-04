@@ -20,6 +20,7 @@
     "ExperienceOrbEntityMixin",
     "EyeHeightAccess",
     "HungerManagerMixin",
+    "InGameHudMixin",
     "ItemStackMixin",
     "LivingEntityMixin",
     "LoginMixin",
