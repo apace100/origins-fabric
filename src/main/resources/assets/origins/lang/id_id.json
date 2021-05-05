@@ -1,0 +1,219 @@
+{
+  "origin.origins.human.name": "Manusia",
+  "origin.origins.human.description": "Hanya manusia biasa. Petualanganmu di Minecraft biasa aja.",
+
+  "origin.origins.merling.name": "Duyung",
+  "origin.origins.merling.description": "Penghuni laut alami ini tidak akan tahan lama berada di atas air.",
+
+  "origin.origins.arachnid.name": "Lelaba",
+  "origin.origins.arachnid.description": "Kekuatan memanjat dan menangkap dengan jaring membuat mereka menjadi pemburu yang sempurna.",
+
+  "origin.origins.blazeborn.name": "Merapi",
+  "origin.origins.blazeborn.description": "Keturunan lama dari Blaze, Merapi kebal dari rintangan-rintangan di Nether.",
+
+  "origin.origins.avian.name": "Unggas",
+  "origin.origins.avian.description": "Para Unggas sudah kehilangan kekuatan terbang mereka dahulu kala. Sekarang mahluk sentosa ini bisa dilihat berlayang dari tinggi ke rendah.",
+
+  "origin.origins.phantom.name": "Hantu",
+  "origin.origins.phantom.description": "Sebagai keturunan setengah manusia dan setengah phantom, mahluk ini bisa berubah dari hantu menjadi manusia normal.",
+
+  "origin.origins.feline.name": "Kucing",
+  "origin.origins.feline.description": "Dengan bentuk merupai kucing, mereka bisa membuat Creeper takut dari mereka. Dengan kelincahan kucing, mereka selalu mendarat dengan aman.",
+
+  "origin.origins.elytrian.name": "Elytria",
+  "origin.origins.elytrian.description": "Keseringan terlihat terbang dengan angin-angin, Elytria tidak nyaman ketika mereka berada dengan atap yang rendah.",
+
+  "origin.origins.enderian.name": "Enderia",
+  "origin.origins.enderian.description": "Lahir sebagai anak-anaknya Ender Dragon, Enderia bisa berpindah tempat cepat. Tetapi rentan dari air.",
+
+  "origin.origins.shulk.name": "Shulk",
+  "origin.origins.shulk.description": "Terkait dengan Shulkers, tubuh para Shulk mempunyai kulit seperti tempurung.",
+
+  "power.origins.water_breathing.name": "Insang",
+  "power.origins.water_breathing.description": "Kamu bisa nafas dalam air, tidak di darat.",
+
+  "power.origins.aqua_affinity.name": "Daya Air",
+  "power.origins.aqua_affinity.description": "Kamu menghancurkan blok dalam air secepat yang lain di darat.",
+
+  "power.origins.water_vision.name": "Mata Basah",
+  "power.origins.water_vision.description": "Kamu bisa melihat dalam air dengan sempurna.",
+
+  "power.origins.swim_speed.name": "Sirip",
+  "power.origins.swim_speed.description": "Kamu berenang lebih cepat.",
+
+  "power.origins.like_water.name": "Seperti Air",
+  "power.origins.like_water.description": "Saat dalam air, kamu tidak tenggelam.",
+
+  "power.origins.fragile.name": "Rapuh",
+  "power.origins.fragile.description": "Darahmu 3 nyawa lebih sedikit dari manusia.",
+
+  "power.origins.webbing.name": "Jaring",
+  "power.origins.webbing.description": "Ketika kamu menyerang musuh, mereka akan nyangkut dalam jaring.",
+
+  "power.origins.climbing.name": "Memanjat",
+  "power.origins.climbing.description": "Kamu bisa memanjat dinding apapun, tidak hanya tangga.",
+
+  "power.origins.carnivore.name": "Karnivora",
+  "power.origins.carnivore.description": "Kamu hanya bisa makan daging, gak bisa makan sayur-sayuran.",
+
+  "power.origins.fire_immunity.name": "Kebal Api",
+  "power.origins.fire_immunity.description": "Kamu kebal dari segala kebakaran.",
+
+  "power.origins.nether_spawn.name": "Penghuni Nether",
+  "power.origins.nether_spawn.description": "Kamu muncul secara alami di Nether.",
+
+  "power.origins.burning_wrath.name": "Kebakaran Murka",
+  "power.origins.burning_wrath.description": "Saat terbakar, kamu mendpatkan tambahan pada seranganmu.",
+
+  "power.origins.hotblooded.name": "Berdarah Panas",
+  "power.origins.hotblooded.description": "Karena tubuh panasmu, racun-racun terbakar, membuatmu kebal dari racun dan efek makan.",
+
+  "power.origins.water_vulnerability.name": "Hydrophobia",
+  "power.origins.water_vulnerability.description": "Kamu bisa sakit ketika bersentuhan dengan air.",
+
+  "power.origins.tailwind.name": "Cepatnya",
+  "power.origins.tailwind.description": "Kamu berjalan lebih cepat dari yang lain.",
+
+  "power.origins.slow_falling.name": "Ringannya",
+  "power.origins.slow_falling.description": "Kamu jatuh dengan lembut seperti bulu, kecuali kau menunduk.",
+
+  "power.origins.vegetarian.name": "Vegetarian",
+  "power.origins.vegetarian.description": "Gabisa makan daging.",
+
+  "power.origins.fresh_air.name": "Udara Segar",
+  "power.origins.fresh_air.description": "Saat tidur, kamu harus berada di ketinggian 86 blok, supaya bisa menghirup udara segar.",
+
+  "power.origins.phasing.name": "Tembus",
+  "power.origins.phasing.description": "Saat menjadi hantu, kamu bisa berjalan tembus dinding kecuali obsidian.",
+
+  "power.origins.invisibility.name": "Limunan",
+  "power.origins.invisibility.description": "Saat kamu menjadi hantu, kau tak terlihat.",
+
+  "power.origins.hunger_over_time.name": "Metabolisme Tinggi",
+  "power.origins.hunger_over_time.description": "Menjadi hantu membuatmu lapar.",
+
+  "power.origins.burn_in_daylight.name": "Photoallergic",
+  "power.origins.burn_in_daylight.description": "Kamu terbakar ketika tidak limunan.",
+
+  "power.origins.fall_immunity.name": "Akrobat",
+  "power.origins.fall_immunity.description": "Kamu tidak bisa sakit saat jatuh, setinggi apapun.",
+
+  "power.origins.sprint_jump.name": "Kaki Pegas",
+  "power.origins.sprint_jump.description": "Kamu bisa lompat lebih tinggi dengan lompat sambil berlari.",
+
+  "power.origins.nine_lives.name": "Sembilan Nyawa",
+  "power.origins.nine_lives.description": "Kamu berkurang satu nyawa dari manusia.",
+
+  "power.origins.cat_vision.name": "Nokturnal",
+  "power.origins.cat_vision.description": "Kamu bisa melihat kegelapan saat tidak dalam air.",
+
+  "power.origins.weak_arms.name": "Tangan Lumpuh",
+  "power.origins.weak_arms.description": "Saat tidak dalam efek sebuah ramuan kekuatan, kamu hanya bisa tambang batu alami jika ada 2 batu alami lainnya menempelnya.",
+
+  "power.origins.scare_creepers.name": "Merupai Kucing",
+  "power.origins.scare_creepers.description": "Creepers takut darimu dan hanya meledak jika kau menyerangnya duluan.",
+
+  "power.origins.launch_into_air.name": "Hadiah dari Angin",
+  "power.origins.launch_into_air.description": "Setiap 30 detik, kau bisa meluncur 20 block ke atas langit.",
+
+  "power.origins.elytra.name": "Bersayap",
+  "power.origins.elytra.description": "Kamu mempunyai sayap Elytra tanpa perlu memakainya.",
+
+  "power.origins.light_armor.name": "Keperluan Bergerak",
+  "power.origins.light_armor.description": "Kamu tidak bisa memakai armor berat (armor yang lebih kuat dari chainmail).",
+
+  "power.origins.claustrophobia.name": "Claustrophobia",
+  "power.origins.claustrophobia.description": "Berada dibawah atap rendah bisa membuat mu lemah dan pelan.",
+
+  "power.origins.more_kinetic_damage.name": "Osteoporosis",
+  "power.origins.more_kinetic_damage.description": "Kamu lebih sakit saat jatuh dan terbang menabrak permukaan.",
+
+  "power.origins.aerial_combatant.name": "Pangeran Udara",
+  "power.origins.aerial_combatant.description": "Kamu menyerang lebih sakit saat terbang.",
+
+  "power.origins.throw_ender_pearl.name": "Teleportasi",
+  "power.origins.throw_ender_pearl.description": "Kapanpun saja, kau bisa melempar sebuah ender pearl yang tidak membuatmu sakit, dan membuatmu berpindah dengan cepat.",
+
+  "power.origins.pumpkin_hate.name": "Ketakutan Labu",
+  "power.origins.pumpkin_hate.description": "Kamu takut sama labu. Waspadalah.",
+
+  "power.origins.extra_reach.name": "Tubuh Ramping",
+  "power.origins.extra_reach.description": "Tanganmu panjang, jadi bisa menyampai lebih jauh.",
+
+  "power.origins.shulker_inventory.name": "Pengangkut",
+  "power.origins.shulker_inventory.description": "Kamu mempunyai 9 slot penyimpanan tambahan, yang tetap ada walaupun mati.",
+
+  "power.origins.natural_armor.name": "Kulit Kekar",
+  "power.origins.natural_armor.description": "Walaupun tanpa armor, kulitmu memberi pelindung alami.",
+
+  "power.origins.more_exhaustion.name": "Lapar Cepat",
+  "power.origins.more_exhaustion.description": "Kamu lebih cepat capek dari yang lain, membuatmu makan lebih banyak.",
+
+  "power.origins.no_shield.name": "Tak Berpakai",
+  "power.origins.no_shield.description": "Tangan mu tidak bisa memegang peresai dengan benar.",
+
+  "power.origins.strong_arms.name": "Tangan Kekar",
+  "power.origins.strong_arms.description": "Kamu kuat untuk menghancurkan batu alami tanpa beliung.",
+
+  "power.origins.translucent.name": "Translusi",
+  "power.origins.translucent.description": "Tubuhmu translusif.",
+
+  "power.origins.end_spawn.name": "Penghuni The End",
+  "power.origins.end_spawn.description": "Kamu berawal dari The End.",
+
+  "power.origins.master_of_webs.name": "Master Jaring",
+  "power.origins.master_of_webs.description": "Kamu berjalan dalam jaring biasa saja, dan bisa memanjatnya. Ketika kamu menyerang musuh, mereka akan nyangkut dalam jaring. Yang bukan spesies laba-laba bisa dirasakan kamu. Kamu bisa membuat jaring dari benang.",
+
+  "power.origins.lay_eggs.name": "Bertelur",
+  "power.origins.lay_eggs.description": "Saat bangun dari tidur, kamu bertelur.",
+
+  "category.origins": "Origins",
+  "key.origins.primary_active": "Kekuatan Aktif (Utama)",
+  "key.origins.secondary_active": "Kekuatan Aktif (Kedua)",
+  "key.origins.view_origin": "Lihat Origin",
+
+  "text.autoconfig.origins.title": "Konfigurasi Origins",
+  "text.autoconfig.origins.option.xOffset": "Bar Cooldown Offset X",
+  "text.autoconfig.origins.option.yOffset": "Bar Cooldown Offset Y",
+  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Kekuatan Overlay Menjadi Hantu ",
+
+  "item.origins.orb_of_origin": "Bola Origin",
+
+  "enchantment.origins.water_protection": "Pelindung Air",
+
+  "container.shulker_inventory_power": "Simpanan Shulker",
+
+  "origins.gui.select": "Pilih",
+  "origins.gui.close": "Tutup",
+  "origins.gui.choose": "Memilih",
+  "origins.gui.choose_origin.title": "Pilih %s mu.",
+  "origins.gui.view_origin.title": "Ini adalah %s mu.",
+  "origins.gui.view_origin.empty": "Kamu tidak bisa mempunyai Origin apapun.",
+  "origins.gui.view_origin.not_installed": "Server ini tidak mempunyai Origin terinstall.",
+  "origins.gui.impact.impact": "Pengaruh",
+  "origins.gui.impact.none": "Tak ada",
+  "origins.gui.impact.low": "Rendah",
+  "origins.gui.impact.medium": "Sedang",
+  "origins.gui.impact.high": "Tinggi",
+  "origins.gui.version_mismatch": "Server ini berjalan dengan versi Origin berbeda (v%1$s) yaitu bertentangan dengan yang kau telah install (v%2$s).",
+
+  "origin.origins.random.name": "Random",
+  "origin.origins.random.description": "Kamu telah ditetapkan sebagai salah satu ini:",
+
+  "layer.origins.origin.name": "Origin",
+  "layer.origins.origin.missing_origin.name": "Tidak berada",
+  "layer.origins.origin.missing_origin.description": "Kamu tidak mempunyai origin apapun.",
+
+  "death.attack.no_water_for_gills": "%1$s tidak bisa bertahan basah.",
+  "death.attack.no_water_for_gills.player": "%1$s tidak bisa bertahan basah karena dia berantem dengan  %2$s.",
+  "death.attack.hurt_by_water": "%1$s mandi terlalu lama.",
+  "death.attack.hurt_by_water.player": "%1$s ditaruh dalam air oleh %2$s.",
+  "death.attack.genericDamageOverTime": "%1$s mati pada efek waktu ke waktu.",
+  "death.attack.genericDamageOverTime.player": "%1$s mati pada efek waktu ke waktu sambil berantem dengan %2$s.",
+
+  "commands.origin.origin_not_found": "origin tak ketahui: %s",
+  "commands.origin.set.success.single": "Set origin %s dalam layer %s ke %s.",
+  "commands.origin.set.success.multiple": "Set origin %s menargetkan dalam layer %s ke %s.",
+
+  "origins.avian_sleep_fail": "Kamu butuh udara segar untuk tidur"
+}

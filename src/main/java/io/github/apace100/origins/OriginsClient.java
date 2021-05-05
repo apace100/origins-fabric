@@ -8,6 +8,7 @@ import io.github.apace100.origins.power.factory.condition.EntityConditionsClient
 import io.github.apace100.origins.registry.ModBlocks;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.registry.ModEntities;
+import io.github.apace100.origins.screen.GameHudRender;
 import io.github.apace100.origins.screen.PowerHudRenderer;
 import io.github.apace100.origins.screen.ViewOriginScreen;
 import io.github.apace100.origins.util.OriginsConfigSerializer;
@@ -113,7 +114,8 @@ public class OriginsClient implements ClientModInitializer {
                 }
             }
         });
-        new PowerHudRenderer().register();
+
+        GameHudRender.HUD_RENDERS.add(new PowerHudRenderer());
     }
 
     @Environment(EnvType.CLIENT)
