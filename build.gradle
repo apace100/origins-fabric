@@ -16,7 +16,7 @@ repositories {
 		url = 'https://ladysnake.jfrog.io/artifactory/mods'
 	}
 	maven {
-		url 'https://jitpack.io'
+		url "https://jitpack.io"
 	}
 	maven {
 		url "https://maven.jamieswhiteshirt.com/libs-release/"
