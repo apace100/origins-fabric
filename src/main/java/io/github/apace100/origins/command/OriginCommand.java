@@ -101,8 +101,11 @@ public class OriginCommand {
 	}
 
 	private static void setOrigin(PlayerEntity player, OriginLayer layer, Origin origin) {
-		ModComponents.ORIGIN.get(player).setOrigin(layer, origin);
+		OriginComponent component = ModComponents.ORIGIN.get(player);
+		component.setOrigin(layer, origin);
 		OriginComponent.sync(player);
+		boolean hadOriginBefore = component.hadOriginBefore();
+		origin.getPowerTypes().forEach(powerType -> component.getPower(powerType).onChosen(hadOriginBefore));
 	}
 
 	private static boolean hasOrigin(PlayerEntity player, OriginLayer layer, Origin origin) {
