@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class DamageOverTimePower extends VariableIntPower {
 
-    private final int damageTickInterval = 20;
+    private final int damageTickInterval;
     private final int beginDamageIn;
     private final float damageAmountEasy;
     private final float damageAmount;
@@ -30,6 +30,7 @@ public class DamageOverTimePower extends VariableIntPower {
         this.damageAmountEasy = damageAmountEasy;
         this.protectingEnchantment = protectingEnchantment;
         this.protectionEffectiveness = protectionEffectiveness;
+        this.damageTickInterval = damageInterval;
         this.setTicking(true);
     }
 
