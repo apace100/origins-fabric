@@ -18,6 +18,6 @@ public class PreventBlockSelectionPower extends Power {
 
     public boolean doesPrevent(WorldView world, BlockPos pos) {
         CachedBlockPosition cbp = new CachedBlockPosition(world, pos, true);
-        return predicate.test(cbp);
+        return predicate == null || predicate.test(cbp);
     }
 }
