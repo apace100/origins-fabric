@@ -33,7 +33,7 @@ public class ModifyPlayerSpawnPower extends Power {
     public final SoundEvent spawnSound;
 
 
-    public ModifyPlayerSpawnPower(PowerType<?> type, PlayerEntity player, RegistryKey<World> dimension, int dimensionDistanceMultiplier, Identifier biomeId, String spawnStrategy, StructureFeature<?> structure, SoundEvent spawnSound) {
+    public ModifyPlayerSpawnPower(PowerType<?> type, PlayerEntity player, RegistryKey<World> dimension, float dimensionDistanceMultiplier, Identifier biomeId, String spawnStrategy, StructureFeature<?> structure, SoundEvent spawnSound) {
         super(type, player);
         this.dimension = dimension;
         this.dimensionDistanceMultiplier = dimensionDistanceMultiplier;
