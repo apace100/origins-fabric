@@ -1,5 +1,6 @@
 {
-  "type": "origins:inventory",
+  "type": "origins:interface",
+  "interface_type": "minecraft:dropper",
   "name": "container.shulker_inventory_power",
   "drop_on_death": false,
   "key": {
