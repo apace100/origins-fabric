@@ -150,22 +150,24 @@ public class PowerFactories {
                     return power;
                 })
             .allowCondition());
-        register(new PowerFactory<>(Origins.identifier("inventory"),
-            new SerializableData()
-                .add("name", SerializableDataType.STRING, "container.inventory")
-                .add("drop_on_death", SerializableDataType.BOOLEAN, false)
-                .add("drop_on_death_filter", SerializableDataType.ITEM_CONDITION, null)
-                .add("key", SerializableDataType.BACKWARDS_COMPATIBLE_KEY, new Active.Key()),
-            data ->
-                (type, player) -> {
-                    InventoryPower power = new InventoryPower(type, player, data.getString("name"), 9,
-                        data.getBoolean("drop_on_death"),
-                        data.isPresent("drop_on_death_filter") ? (ConditionFactory<ItemStack>.Instance) data.get("drop_on_death_filter") :
-                            itemStack -> true);
-                    power.setKey((Active.Key)data.get("key"));
-                    return power;
-                })
-            .allowCondition());
+        register(new PowerFactory<>(Origins.identifier("interface"),
+                new SerializableData()
+                        .add("interface_type", SerializableDataType.STRING, "minecraft:dropper")
+                        .add("rows", SerializableDataType.INT, 1)
+                        .add("name", SerializableDataType.STRING, "container.inventory")
+                        .add("drop_on_death", SerializableDataType.BOOLEAN, false)
+                        .add("drop_on_death_filter", SerializableDataType.ITEM_CONDITION, null)
+                        .add("key", SerializableDataType.BACKWARDS_COMPATIBLE_KEY, new Active.Key()),
+                data ->
+                        (type, player) -> {
+                            InterfacePower power = new InterfacePower(type, player, data.getString("name"),data.getString("interface_type"), 9, data.getInt("rows"),
+                                    data.getBoolean("drop_on_death"),
+                                    data.isPresent("drop_on_death_filter") ? (ConditionFactory<ItemStack>.Instance) data.get("drop_on_death_filter") :
+                                            itemStack -> true);
+                            power.setKey((Active.Key)data.get("key"));
+                            return power;
+                        })
+                .allowCondition());
         register(new PowerFactory<>(Origins.identifier("invisibility"),
             new SerializableData()
                 .add("render_armor", SerializableDataType.BOOLEAN),

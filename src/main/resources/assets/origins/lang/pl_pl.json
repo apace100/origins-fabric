@@ -1,0 +1,219 @@
+{
+  "origin.origins.human.name": "Człowiek",
+  "origin.origins.human.description": "Normalny człowiek. Twoje zwyczajne doświadczenie Minecrafta czeka.",
+
+  "origin.origins.merling.name": "Człowiek-Ryba",
+  "origin.origins.merling.description": "Ci naturalni mieszkańcy oceanu nie są przyzwyczajeni do przebywania poza wodą przez zbyt długi czas.",
+
+  "origin.origins.arachnid.name": "Pajęczak",
+  "origin.origins.arachnid.description": "Ich zdolność wspinaczki oraz umiejętność uwięzienia przeciwników w pajęczynie robią z Pajęczaków idealnych łowców.",
+
+  "origin.origins.blazeborn.name": "Blazeborn",
+  "origin.origins.blazeborn.description": "Późni potomkowie Blaze'ów, Blazeborni są naturalnie odporni na niebezpieczeństwa Nether'u.",
+
+  "origin.origins.avian.name": "Uskrzydlony",
+  "origin.origins.avian.description": "Rasa ptakoludzi utraciła swoją zdolność do lotu szmat czasu temu. Obecnie, można zauważyć, jak te pokojowe stworzenia szybują z jednego miejsca do drugiego.",
+
+  "origin.origins.phantom.name": "Fantom",
+  "origin.origins.phantom.description": "Jako potomek pół-człowieka i pół-fantoma, jesteś stworzeniem mogącym zmieniać swoją formę z ludzkiej na fantoma.",
+
+  "origin.origins.feline.name": "Człowiek-Kot",
+  "origin.origins.feline.description": "Z twoim kocim wyglądem, Creepery uciekają od ciebie z daleka. Dzięki kociej zręczności zawsze bezpiecznie lądujesz na nogach",
+
+  "origin.origins.elytrian.name": "Elytrian",
+  "origin.origins.elytrian.description": "Elytrianie, często latający w powietrzu, czują się niekomfortowo, gdy nie mają wystarczająco dużo przestrzeni nad głową.",
+
+  "origin.origins.enderian.name": "Enderian",
+  "origin.origins.enderian.description": "Urodzeni jako synowie i córki Smoka Kresu, Enderianie potrafią się teleportować, ale rani ich woda.",
+
+  "origin.origins.shulk.name": "Shulk",
+  "origin.origins.shulk.description": "Podobnie jak Shulkery, ciała Shulków są stworzone z ochronnej skóry podobnej do muszli.",
+
+  "power.origins.water_breathing.name": "Skrzela",
+  "power.origins.water_breathing.description": "Możesz oddychać pod wodą, ale nie na lądzie.",
+
+  "power.origins.aqua_affinity.name": "Podwodne Pochodzenie",
+  "power.origins.aqua_affinity.description": "Możesz niszczyć bloki pod wodą, tak szybko, jak inni na lądzie.",
+
+  "power.origins.water_vision.name": "Mokre Oczy",
+  "power.origins.water_vision.description": "Doskonale widzisz pod wodą.",
+
+  "power.origins.swim_speed.name": "Płetwy",
+  "power.origins.swim_speed.description": "Twoja prędkość poruszania się w wodzie jest wyższa niż u ludzi.",
+
+  "power.origins.like_water.name": "Jak Woda",
+  "power.origins.like_water.description": "Pod wodą nie opadasz na dno, chyba że chcesz.",
+
+  "power.origins.fragile.name": "Delikatny",
+  "power.origins.fragile.description": "Masz 3 serca mniej niż ludzie.",
+
+  "power.origins.webbing.name": "Pajęczy Atak",
+  "power.origins.webbing.description": "Gdy udeżysz przeciwnika w walce wręcz, uwięzisz go w pajęczynie.",
+
+  "power.origins.climbing.name": "Wspinaczka",
+  "power.origins.climbing.description": "Możesz wspinać się po każdej powierzchni, nie tylko po drabinie.",
+
+  "power.origins.carnivore.name": "Mięzożerca",
+  "power.origins.carnivore.description": "Nie trawisz warzyw i owoców.",
+
+  "power.origins.fire_immunity.name": "Ognioodpornosć",
+  "power.origins.fire_immunity.description": "Jesteś odporny na wszystkie rodzaje obrażeń od ognia.",
+
+  "power.origins.nether_spawn.name": "Mieszkaniec Nether'u",
+  "power.origins.nether_spawn.description": "Twój naturalny spawn będzie w Netherze.",
+
+  "power.origins.burning_wrath.name": "Płonący Gniew",
+  "power.origins.burning_wrath.description": "Gdy płoniesz, twoje ataki zadają dodatkowe obrażenia.",
+
+  "power.origins.hotblooded.name": "Gorącokrwisty",
+  "power.origins.hotblooded.description": "Przez twoje gorące ciało, trucizny spalają się, czyniąc cię odpornym na efekt głodu od nieumarłych oraz trujące mikstury.",
+
+  "power.origins.water_vulnerability.name": "Wodowstręt",
+  "power.origins.water_vulnerability.description": "Z czasem otrzymujesz obrażenia przy kontakcie z wodą.",
+
+  "power.origins.tailwind.name": "Wietrzny Ogon",
+  "power.origins.tailwind.description": "Jesteś trochę szybszy na piechotę niż inni.",
+
+  "power.origins.slow_falling.name": "Waga Piórkowa",
+  "power.origins.slow_falling.description": "Upadasz na ziemię delikatnie jak piórko, chyba że przytrzymasz Shift.",
+
+  "power.origins.vegetarian.name": "Wegetarianin",
+  "power.origins.vegetarian.description": "Nie trawisz mięsa.",
+
+  "power.origins.fresh_air.name": "Świeże Powietrze",
+  "power.origins.fresh_air.description": "Podczas snu łóżko musi znajdować się na wysokości co najmniej 86 bloków, abyś mógł oddychać świeżym powietrzem.",
+
+  "power.origins.phasing.name": "Fazowanie",
+  "power.origins.phasing.description": "Gdy jesteś Fantomem, możesz przejść przez stały materiał, z wyjątkiem Obsidianu.",
+
+  "power.origins.invisibility.name": "Niewidzialność",
+  "power.origins.invisibility.description": "Gdy jesteś Fantomem, jesteś niewidzialny.",
+
+  "power.origins.hunger_over_time.name": "Szybki Metabolizm",
+  "power.origins.hunger_over_time.description": "Bycie Fantomem powoduje, że stajesz się głodny.",
+
+  "power.origins.burn_in_daylight.name": "Światłowstręt",
+  "power.origins.burn_in_daylight.description": "Zaczynasz płonąć w świetle dziennym, jeśli nie jesteś niewidzialny.",
+
+  "power.origins.fall_immunity.name": "Akrobatyka",
+  "power.origins.fall_immunity.description": "Nigdy nie odniesiesz obrażeń od upadku, bez względu na to, z jakiej wysokości spadniesz.",
+
+  "power.origins.sprint_jump.name": "Mocne kostki",
+  "power.origins.sprint_jump.description": "Możesz skakać wyżej skacząc podczas sprintu.",
+
+  "power.origins.nine_lives.name": "Dziewięć Żyć",
+  "power.origins.nine_lives.description": "Masz o 1 serce mniej niż ludzie.",
+
+  "power.origins.cat_vision.name": "Nocny Wzrok",
+  "power.origins.cat_vision.description": "Możesz lepiej widzieć w ciemności, gdy nie jesteś w wodzie.",
+
+  "power.origins.weak_arms.name": "Słabe Ramiona",
+  "power.origins.weak_arms.description": "Kiedy nie jesteś pod wpływem mikstury siły, możesz wydobywać kamień naturalny* tylko wtedy, gdy sąsiadują obok niego co najwyżej 2 inne bloki kamienia naturalnego*. * - nie postawionego przez graczy.",
+
+  "power.origins.scare_creepers.name": "Koci Wygląd",
+  "power.origins.scare_creepers.description": "Creepery się ciebie boją, wybuchną jedynie jeśli je zaatakujesz.",
+
+  "power.origins.launch_into_air.name": "Dar Wiatrów",
+  "power.origins.launch_into_air.description": "Co 30 sekund jesteś w stanie wystrzelić w powietrze na wysokość około 20 bloków.",
+
+  "power.origins.elytra.name": "Uskrzydlony",
+  "power.origins.elytra.description": "Masz skrzydła Elytra bez konieczności ich zakładania.",
+
+  "power.origins.light_armor.name": "Potrzeba Ruchu",
+  "power.origins.light_armor.description": "Nie możesz nosić ciężkiej zbroi (o wartości ochrony większej niż kolczuga).",
+
+  "power.origins.claustrophobia.name": "Klaustrofobia",
+  "power.origins.claustrophobia.description": "Przebywanie w miejscu z niskim sufitem przez zbyt długi czas osłabi cię i spowolni.",
+
+  "power.origins.more_kinetic_damage.name": "Kruche Kości",
+  "power.origins.more_kinetic_damage.description": "Otrzymujesz więcej obrażeń od upadku i wlatywania w bloki.",
+
+  "power.origins.aerial_combatant.name": "Powietrzny Kombatant",
+  "power.origins.aerial_combatant.description": "Podczas lotu Elytrą zadajesz znacznie więcej obrażeń.",
+
+  "power.origins.throw_ender_pearl.name": "Teleportacja",
+  "power.origins.throw_ender_pearl.description": "Kiedy tylko zechcesz, możesz rzucić perłą enderu, która teleportuje cię bez zadawania obrażeń.",
+
+  "power.origins.pumpkin_hate.name": "Tylko Nie Tykwy",
+  "power.origins.pumpkin_hate.description": "Boisz się dyń. Nie bez powodu.",
+
+  "power.origins.extra_reach.name": "Smukłe Ciało",
+  "power.origins.extra_reach.description": "Możesz dosięgnąć bloków i mobów z większej odległości.",
+
+  "power.origins.shulker_inventory.name": "Zbieracz",
+  "power.origins.shulker_inventory.description": "Masz dostęp do dodatkowych 9 miejsc w ekwipunku, które zatrzymują przedmioty po śmierci.",
+
+  "power.origins.natural_armor.name": "Solidna Skóra",
+  "power.origins.natural_armor.description": "Nawet bez zbroi twoja skóra zapewnia naturalną ochronę.",
+
+  "power.origins.more_exhaustion.name": "Obżartuch",
+  "power.origins.more_exhaustion.description": "Wyczerpujesz się znacznie szybciej niż inni, przez co musisz jeść więcej.",
+
+  "power.origins.no_shield.name": "Niezręczny",
+  "power.origins.no_shield.description": "Sposób, w jaki uformowane są twoje ręce, nie pozwala na trzymanie tarczy w pozycji pionowej.",
+
+  "power.origins.strong_arms.name": "Silne Ramiona",
+  "power.origins.strong_arms.description": "Jesteś wystarczająco silny, aby wykopywać kamień naturalny* bez użycia kilofa. * - nie postawiony przez graczy.",
+
+  "power.origins.translucent.name": "Przeświecający",
+  "power.origins.translucent.description": "Twoja skóra jest przezroczysta.",
+
+  "power.origins.end_spawn.name": "Mieszkaniec End'u",
+  "power.origins.end_spawn.description": "Twoja przygoda zaczyna się w Endzie.",
+
+  "power.origins.master_of_webs.name": "Mistrz Pajęczyn",
+  "power.origins.master_of_webs.description": "Doskonale poruszasz się po pajęczynie i potrafisz się po niej wspinać. Kiedy uderzysz wroga w walce wręcz, utknie on na chwilę w pajęczynie. Nie-stawonogi, które utknęły w pajęczynie, zostaną przez Ciebie wykryte. Jesteś w stanie stworzyć pajęczynę z nici.",
+
+  "power.origins.lay_eggs.name": "Jajorodny",
+  "power.origins.lay_eggs.description": "Za każdym razem, gdy się budzisz, składasz jajko.",
+
+  "category.origins": "Origins",
+  "key.origins.primary_active": "Użyj umiejętności głównej",
+  "key.origins.secondary_active": "Użyj umiejętności dodatkowej",
+  "key.origins.view_origin": "Wyświetl Pochodzenie",
+
+  "text.autoconfig.origins.title": "Konfiguracja Origins",
+  "text.autoconfig.origins.option.xOffset": "Położenie Paska Ładowania Umiejętności na osi X",
+  "text.autoconfig.origins.option.yOffset": "Położenie Paska Ładowania Umiejętności na osi Y",
+  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Phantomized Overlay Strength",
+
+  "item.origins.orb_of_origin": "Kula Pochodzenia",
+
+  "enchantment.origins.water_protection": "Water Protection",
+
+  "container.shulker_inventory_power": "Ekwipunek Shulkerowy",
+
+  "origins.gui.select": "Wybierz",
+  "origins.gui.close": "Zamknij",
+  "origins.gui.choose": "Wybierz",
+  "origins.gui.choose_origin.title": "Wybierz swoje %s.",
+  "origins.gui.view_origin.title": "Wybierz swoje %s.",
+  "origins.gui.view_origin.empty": "Nie możesz mieć żadnych Pochodzeń.",
+  "origins.gui.view_origin.not_installed": "Ten serwer nie ma zainstalowanego Origins.",
+  "origins.gui.impact.impact": "Wpływ",
+  "origins.gui.impact.none": "Żaden",
+  "origins.gui.impact.low": "Słaby",
+  "origins.gui.impact.medium": "Średni",
+  "origins.gui.impact.high": "Wysoki",
+  "origins.gui.version_mismatch": "Ten serwer działa pod inną wersją Origins (v%1$s), która jest niekompatybilna z tą, zainstalowaną u ciebie (v%2$s).",
+
+  "origin.origins.random.name": "Losowe",
+  "origin.origins.random.description": "Zostaniesz przydzielony do jednego z poniższych:",
+
+  "layer.origins.origin.name": "Pochodzenie ",
+  "layer.origins.origin.missing_origin.name": "Missing",
+  "layer.origins.origin.missing_origin.description": "Nie masz Pochodzenia.",
+
+  "death.attack.no_water_for_gills": "%1$s nie udało się pozostać mokrym.",
+  "death.attack.no_water_for_gills.player": "%1$s nie udało się pozostać mokrym, ponieważ walczył z %2$s.",
+  "death.attack.hurt_by_water": "%1$s brał kąpiel zbyt długo.",
+  "death.attack.hurt_by_water.player": "%1$s was put underwater by %2$s.",
+  "death.attack.genericDamageOverTime": "%1$s died to a damage over time effect.",
+  "death.attack.genericDamageOverTime.player": "%1$s died to a damage over time effect whilst fighting %2$s.",
+
+  "commands.origin.origin_not_found": "Nieznane pochodzenie: %s",
+  "commands.origin.set.success.single": "Set origin of %s in layer %s to %s.",
+  "commands.origin.set.success.multiple": "Set origin of %s targets in layer %s to %s.",
+
+  "origins.avian_sleep_fail": "Potrzebujesz świeżego powietrza, aby spać"
+}

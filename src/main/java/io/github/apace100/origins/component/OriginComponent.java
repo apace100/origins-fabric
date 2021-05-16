@@ -90,7 +90,7 @@ public interface OriginComponent extends AutoSyncedComponent, ServerTickingCompo
 				.filter(p -> powerFilter == null || powerFilter.test(p))
 				.flatMap(p -> p.getModifiers().stream()).collect(Collectors.toList());
 			if(powerAction != null) {
-				powers.forEach(powerAction);
+				powers.stream().filter(p -> powerFilter == null || powerFilter.test(p)).forEach(powerAction);
 			}
 			return AttributeUtil.sortAndApplyModifiers(mps, baseValue);
 		}
@@ -122,6 +122,8 @@ public interface OriginComponent extends AutoSyncedComponent, ServerTickingCompo
 						setOrigin(layer, origins.get(0));
 					}
 					choseOneAutomatically = true;
+					shouldContinue = true;
+				} else if(layer.getOriginOptionCount(player) == 0) {
 					shouldContinue = true;
 				}
 			} else {

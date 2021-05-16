@@ -47,6 +47,7 @@
     "EntityRenderDispatcherMixin",
     "GameRendererMixin",
     "InGameOverlayRendererMixin",
+    "InGameHudMixin",
     "LightmapTextureManagerMixin",
     "LivingEntityRendererMixin",
     "OtherClientPlayerEntityMixin",
