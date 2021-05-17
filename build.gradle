@@ -16,8 +16,7 @@ repositories {
 		url = 'https://ladysnake.jfrog.io/artifactory/mods'
 	}
 	maven {
-		name = "AdrianTodt's Maven"
-		url = "https://dl.bintray.com/adriantodt/maven"
+		url "https://jitpack.io"
 	}
 	maven {
 		url "https://maven.jamieswhiteshirt.com/libs-release/"
@@ -48,8 +47,8 @@ dependencies {
 	modImplementation "com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}"
 	include "com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}"
 
-	modImplementation "net.adriantodt.fabricmc:fallflyinglib:${project.ffl_version}"
-	include "net.adriantodt.fabricmc:fallflyinglib:${project.ffl_version}"
+	modImplementation "com.github.adriantodt:FallFlyingLib:${project.ffl_version}"
+	include "com.github.adriantodt:FallFlyingLib:${project.ffl_version}"
 
 	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
