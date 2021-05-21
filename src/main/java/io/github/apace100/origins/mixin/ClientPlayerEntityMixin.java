@@ -1,6 +1,7 @@
 package io.github.apace100.origins.mixin;
 
 import com.mojang.authlib.GameProfile;
+import io.github.apace100.origins.access.WaterMovingEntity;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.power.IgnoreWaterPower;
 import io.github.apace100.origins.power.PowerTypes;
@@ -14,10 +15,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientPlayerEntity.class)
-public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity {
+public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity implements WaterMovingEntity {
+
+    private boolean isMoving = false;
 
     @Shadow @Final public ClientPlayNetworkHandler networkHandler;
 
@@ -39,5 +43,19 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
         } else if(OriginComponent.hasPower(this, IgnoreWaterPower.class)) {
             cir.setReturnValue(false);
         }
+    }
+
+    @Inject(at = @At("HEAD"), method = "tickMovement")
+    private void beginMovementPhase(CallbackInfo ci) {
+        isMoving = true;
+    }
+
+    @Inject(at = @At("TAIL"), method = "tickMovement")
+    private void endMovementPhase(CallbackInfo ci) {
+        isMoving = false;
+    }
+
+    public boolean isInMovementPhase() {
+        return isMoving;
     }
 }

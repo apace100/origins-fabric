@@ -61,6 +61,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Nameable
                 Vec3d look = this.getRotationVector();
                 move(MovementType.SELF, new Vec3d(look.x/4, look.y/4, look.z/4));
             }
+        } else if(OriginComponent.hasPower(this, IgnoreWaterPower.class)) {
+            this.setSwimming(false);
         }
     }
 

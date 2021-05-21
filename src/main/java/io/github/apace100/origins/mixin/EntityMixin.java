@@ -1,6 +1,7 @@
 package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.access.MovingEntity;
+import io.github.apace100.origins.access.WaterMovingEntity;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.power.*;
@@ -58,7 +59,11 @@ public abstract class EntityMixin implements MovingEntity {
     @Inject(method = "isTouchingWater", at = @At("HEAD"), cancellable = true)
     private void makeEntitiesIgnoreWater(CallbackInfoReturnable<Boolean> cir) {
         if(OriginComponent.hasPower((Entity)(Object)this, IgnoreWaterPower.class)) {
-            cir.setReturnValue(false);
+            if(this instanceof WaterMovingEntity) {
+                if(((WaterMovingEntity)this).isInMovementPhase()) {
+                    cir.setReturnValue(false);
+                }
+            }
         }
     }
 
