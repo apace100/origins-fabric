@@ -37,6 +37,7 @@
   ],
   "client": [
     "BackgroundRendererMixin",
+    "CapeFeatureRendererMixin",
     "ClientAdvancementManagerAccessor",
     "ClientPlayerEntityMixin",
     "ClientPlayerInteractionManagerAccessor",
