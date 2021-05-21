@@ -15,7 +15,7 @@ public class ExperienceOrbEntityMixin {
 
     @Shadow private int amount;
 
-    @Inject(method = "onPlayerCollision", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerEntity;experiencePickUpDelay:I"))
+    @Inject(method = "onPlayerCollision", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerEntity;experiencePickUpDelay:I", ordinal = 1))
     private void modifyXpAmount(PlayerEntity player, CallbackInfo ci) {
         this.amount = (int)OriginComponent.modify(player, ModifyExperiencePower.class, this.amount);
     }
