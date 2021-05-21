@@ -169,7 +169,7 @@
 
   "category.origins": "Origens",
   "key.origins.primary_active": "Poder Ativo(Primario)",
-  "key.origins.secondary_active": "Poder Ativo(Secundario)"
+  "key.origins.secondary_active": "Poder Ativo(Secundario)",
   "key.origins.view_origin": "Ver origem",
 
   "text.autoconfig.origins.title": "Configuração do Origins",
@@ -213,7 +213,7 @@
 
   "commands.origin.origin_not_found": "Origem desconhecida: %s",
   "commands.origin.set.success.single": "Origem de %s definida para %s.",
-  "commands.origin.set.success.multiple": "Origens de %s alvos para %s."
+  "commands.origin.set.success.multiple": "Origens de %s alvos para %s.",
 
   "origins.avian_sleep_fail": "Você precisa de ar fresco para dormir"
 }
