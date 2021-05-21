@@ -10,7 +10,8 @@
   ],
   "contact": {
     "homepage": "https://apace100.github.io/origins-fabric",
-    "sources": "https://github.com/apace100/origins-fabric"
+    "sources": "https://github.com/apace100/origins-fabric",
+    "issues": "https://github.com/apace100/origins-fabric/issues"
   },
 
   "license": "MIT",
