@@ -97,6 +97,20 @@ public class OriginCommand {
 						})))
 					)
 				)
+			.then(literal("get")
+				.then(argument("target", EntityArgumentType.player())
+					.then(argument("layer", LayerArgument.layer())
+						.executes((command) -> {
+							ServerPlayerEntity target = EntityArgumentType.getPlayer(command, "target");
+							OriginLayer layer = command.getArgument("layer", OriginLayer.class);
+							OriginComponent component = ModComponents.ORIGIN.get(target);
+							Origin origin = component.getOrigin(layer);
+							command.getSource().sendFeedback(new TranslatableText("commands.origin.get.result", target.getDisplayName(), new TranslatableText(layer.getTranslationKey()), origin.getName(), origin.getIdentifier()), false);
+							return 1;
+						})
+					)
+				)
+			)
 		);
 	}
 
