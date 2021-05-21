@@ -129,7 +129,7 @@ public class EntityActions {
             .add("effect", SerializableDataType.STATUS_EFFECT_INSTANCE, null)
             .add("effects", SerializableDataType.STATUS_EFFECT_INSTANCES, null),
             (data, entity) -> {
-                if(entity instanceof LivingEntity) {
+                if(entity instanceof LivingEntity && !entity.world.isClient) {
                     LivingEntity le = (LivingEntity) entity;
                     if(data.isPresent("effect")) {
                         StatusEffectInstance effect = (StatusEffectInstance)data.get("effect");
