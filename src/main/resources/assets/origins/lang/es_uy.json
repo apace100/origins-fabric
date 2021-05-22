@@ -209,6 +209,7 @@
   "commands.origin.origin_not_found": "Origen Desconocido: %s",
   "commands.origin.set.success.single": "Origen de %s en la capa %s cambiado a %s.",
   "commands.origin.set.success.multiple": "Orígenes de %s objetivos en la capa %s cambiados a %s.",
+  "commands.origin.get.result": "%s tiene el siguiente %s: &s (%s)",
 
   "origins.avian_sleep_fail": "Necesitas aire fresco para dormir."
 }
