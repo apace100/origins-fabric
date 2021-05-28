@@ -1,12 +1,7 @@
 {
   "replace": false,
   "values": [
-    "minecraft:stone",
-    "minecraft:diorite",
-    "minecraft:andesite",
-    "minecraft:granite",
-    "minecraft:netherrack",
-    "minecraft:blackstone",
-    "minecraft:basalt"
+    "#minecraft:base_stone_overworld",
+    "#minecraft:base_stone_nether"
   ]
 }
