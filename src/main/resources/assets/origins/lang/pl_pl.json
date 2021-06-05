@@ -23,8 +23,8 @@
   "origin.origins.elytrian.name": "Elytrian",
   "origin.origins.elytrian.description": "Elytrianie, często szybujący w powietrzu, czują się niekomfortowo, gdy nie mają wystarczająco dużo przestrzeni nad głową.",
 
-  "origin.origins.enderian.name": "Enderian",
-  "origin.origins.enderian.description": "Urodzeni jako dzieci Smoka Kresu, Enderianie posiadają niezwykle przydatną zdolność do teleportacji która jest bardzo przydatna przy omijaniu wody która ich rani.",
+  "origin.origins.enderian.name": "Kreslud",
+  "origin.origins.enderian.description": "Urodzeni jako dzieci Smoka Kresu, Kresludzie posiadają niezwykłą zdolność do teleportacji która jest bardzo przydatna przy omijaniu wody która ich rani.",
 
   "origin.origins.shulk.name": "Shulkownik",
   "origin.origins.shulk.description": "Podobnie jak shulkery, ciała Shulkowników są pokryte idealnie dopasowaną naturalną zbroją-muszlą.",
@@ -159,7 +159,7 @@
   "power.origins.translucent.description": "Twoja skóra jest przezroczysta.",
 
   "power.origins.end_spawn.name": "Mieszkaniec End'u",
-  "power.origins.end_spawn.description": "Twoja przygoda zaczyna się w Endzie.",
+  "power.origins.end_spawn.description": "Twoja przygoda zaczyna się w Kresie.",
 
   "power.origins.master_of_webs.name": "Mistrz Pajęczyn",
   "power.origins.master_of_webs.description": "Doskonale poruszasz się po pajęczynie i potrafisz się po niej wspinać. Kiedy uderzysz wroga w walce wręcz, utknie on na chwilę w pajęczynie. Nie-stawonogi, które utknęły w pajęczynie, zostaną przez Ciebie wykryte. Jesteś w stanie stworzyć pajęczynę z nici.",
@@ -175,7 +175,7 @@
   "text.autoconfig.origins.title": "Konfiguracja Origins",
   "text.autoconfig.origins.option.xOffset": "Położenie Paska Ładowania Umiejętności na osi X",
   "text.autoconfig.origins.option.yOffset": "Położenie Paska Ładowania Umiejętności na osi Y",
-  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Phantomized Overlay Strength",
+  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Widoczność nakładki przy byciu poł-materialnym",
 
   "item.origins.orb_of_origin": "Kula Pochodzenia",
 
