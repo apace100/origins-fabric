@@ -8,11 +8,12 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.function.Function;
 
 public class SerializableData {
 
-    private HashMap<String, Entry<?>> dataFields = new HashMap<>();
+    private LinkedHashMap<String, Entry<?>> dataFields = new LinkedHashMap<>();
 
     public SerializableData add(String name, SerializableDataType<?> type) {
         dataFields.put(name, new Entry<>(type));
