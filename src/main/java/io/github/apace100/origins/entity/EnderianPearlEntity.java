@@ -42,7 +42,7 @@ public class EnderianPearlEntity extends ThrownItemEntity {
          this.world.addParticle(ParticleTypes.PORTAL, this.getX(), this.getY() + this.random.nextDouble() * 2.0D, this.getZ(), this.random.nextGaussian(), 0.0D, this.random.nextGaussian());
       }
 
-      if (!this.world.isClient && !this.removed) {
+      if (!this.world.isClient && !this.isRemoved()) {
          if (entity instanceof ServerPlayerEntity) {
             ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity)entity;
             if (serverPlayerEntity.networkHandler.getConnection().isOpen() && serverPlayerEntity.world == this.world && !serverPlayerEntity.isSleeping()) {
@@ -59,7 +59,7 @@ public class EnderianPearlEntity extends ThrownItemEntity {
             entity.fallDistance = 0.0F;
          }
 
-         this.remove();
+         this.discard();
       }
 
    }
@@ -67,7 +67,7 @@ public class EnderianPearlEntity extends ThrownItemEntity {
    public void tick() {
       Entity entity = this.getOwner();
       if (entity instanceof PlayerEntity && !entity.isAlive()) {
-         this.remove();
+         this.discard();
       } else {
          super.tick();
       }

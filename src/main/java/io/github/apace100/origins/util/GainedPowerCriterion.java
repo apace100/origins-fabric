@@ -2,8 +2,8 @@ package io.github.apace100.origins.util;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.power.PowerType;
 import net.minecraft.advancement.criterion.AbstractCriterion;
 import net.minecraft.advancement.criterion.AbstractCriterionConditions;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;

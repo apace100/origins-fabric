@@ -1,9 +1,9 @@
 package io.github.apace100.origins.util;
 
+import io.github.apace100.apoli.power.PowerTypeRegistry;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
-import io.github.apace100.origins.power.PowerTypeRegistry;
 
 public class DebugInfo {
 

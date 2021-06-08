@@ -1,6 +1,5 @@
 package io.github.apace100.origins.block;
 
-import io.github.apace100.origins.power.PowerTypes;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.world.ServerWorld;
@@ -43,9 +42,9 @@ public class TemporaryCobwebBlock extends CobwebBlock {
 
 	@Override
 	public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-		if (PowerTypes.WEBBING.isActive(entityIn)) {
-			return;
-		}
+		//if (PowerTypes.WEBBING.isActive(entityIn)) {
+		//	return;
+		//}
 		super.onEntityCollision(state, worldIn, pos, entityIn);
 	}
 }

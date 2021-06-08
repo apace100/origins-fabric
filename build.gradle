@@ -1,10 +1,10 @@
 plugins {
-	id 'fabric-loom' version '0.4-SNAPSHOT'
+	id 'fabric-loom' version '0.8-SNAPSHOT'
 	id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -16,10 +16,19 @@ repositories {
 		url = 'https://ladysnake.jfrog.io/artifactory/mods'
 	}
 	maven {
-		url "https://jitpack.io"
+		url = 'https://maven.cafeteria.dev'
+		content {
+			includeGroup 'net.adriantodt.fabricmc'
+		}
 	}
 	maven {
-		url "https://maven.jamieswhiteshirt.com/libs-release/"
+		url "https://maven.jamieswhiteshirt.com/libs-release"
+		content {
+			includeGroup "com.jamieswhiteshirt"
+		}
+	}
+	maven {
+		url "https://jitpack.io"
 	}
 	maven {
 		url "https://maven.shedaniel.me/"
@@ -38,17 +47,8 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
-	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${project.cca_version}"
-
-	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cca_version}"
-	include "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${project.cca_version}"
-
-	modImplementation "com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}"
-	include "com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}"
-
-	modImplementation "com.github.adriantodt:FallFlyingLib:${project.ffl_version}"
-	include "com.github.adriantodt:FallFlyingLib:${project.ffl_version}"
+	modImplementation "com.github.apace100:apoli:${project.apoli_version}"
+	include "com.github.apace100:apoli:${project.apoli_version}"
 
 	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
@@ -56,26 +56,24 @@ dependencies {
 	include "me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}"
 
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+	include modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}")
 }
 
 processResources {
 	inputs.property "version", project.version
 
-	from(sourceSets.main.resources.srcDirs) {
-		include "fabric.mod.json"
+	filesMatching("fabric.mod.json") {
 		expand "version": project.version
-	}
-
-	from(sourceSets.main.resources.srcDirs) {
-		exclude "fabric.mod.json"
 	}
 }
 
 // ensure that the encoding is set to UTF-8, no matter what the system default is
 // this fixes some edge cases with special characters not displaying correctly
 // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-tasks.withType(JavaCompile) {
-	options.encoding = "UTF-8"
+tasks.withType(JavaCompile).configureEach {
+	it.options.encoding = "UTF-8"
+	it.options.release = 16
 }
 
 // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task

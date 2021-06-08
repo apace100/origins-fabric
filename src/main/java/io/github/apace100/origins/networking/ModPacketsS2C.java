@@ -1,5 +1,6 @@
 package io.github.apace100.origins.networking;
 
+import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.OriginsClient;
 import io.github.apace100.origins.component.OriginComponent;
@@ -8,14 +9,9 @@ import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
-import io.github.apace100.origins.power.PowerType;
-import io.github.apace100.origins.power.PowerTypeRegistry;
-import io.github.apace100.origins.power.factory.PowerFactory;
 import io.github.apace100.origins.registry.ModComponents;
-import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.screen.ChooseOriginScreen;
 import io.github.apace100.origins.screen.WaitForNextLayerScreen;
-import io.github.apace100.origins.util.SerializableData;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.fabricmc.api.EnvType;
@@ -33,7 +29,6 @@ import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
@@ -46,7 +41,6 @@ public class ModPacketsS2C {
             ClientPlayNetworking.registerReceiver(ModPackets.OPEN_ORIGIN_SCREEN, ModPacketsS2C::openOriginScreen);
             ClientPlayNetworking.registerReceiver(ModPackets.ORIGIN_LIST, ModPacketsS2C::receiveOriginList);
             ClientPlayNetworking.registerReceiver(ModPackets.LAYER_LIST, ModPacketsS2C::receiveLayerList);
-            ClientPlayNetworking.registerReceiver(ModPackets.POWER_LIST, ModPacketsS2C::receivePowerList);
             ClientPlayNetworking.registerReceiver(ModPackets.CONFIRM_ORIGIN, ModPacketsS2C::receiveOriginConfirmation);
         }));
     }
@@ -93,55 +87,41 @@ public class ModPacketsS2C {
 
     @Environment(EnvType.CLIENT)
     private static void receiveOriginList(MinecraftClient minecraftClient, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
-        Identifier[] ids = new Identifier[packetByteBuf.readInt()];
-        SerializableData.Instance[] origins = new SerializableData.Instance[ids.length];
-        for(int i = 0; i < origins.length; i++) {
-            ids[i] = Identifier.tryParse(packetByteBuf.readString());
-            origins[i] = Origin.DATA.read(packetByteBuf);
-        }
-        minecraftClient.execute(() -> {
-            OriginRegistry.reset();
-            for(int i = 0; i < ids.length; i++) {
-                OriginRegistry.register(ids[i], Origin.createFromData(ids[i], origins[i]));
+        try {
+            Identifier[] ids = new Identifier[packetByteBuf.readInt()];
+            SerializableData.Instance[] origins = new SerializableData.Instance[ids.length];
+            for(int i = 0; i < origins.length; i++) {
+                ids[i] = Identifier.tryParse(packetByteBuf.readString());
+                origins[i] = Origin.DATA.read(packetByteBuf);
             }
-        });
+            minecraftClient.execute(() -> {
+                OriginRegistry.reset();
+                for(int i = 0; i < ids.length; i++) {
+                    OriginRegistry.register(ids[i], Origin.createFromData(ids[i], origins[i]));
+                }
+            });
+        } catch (Exception e) {
+            Origins.LOGGER.error(e);
+        }
     }
 
     @Environment(EnvType.CLIENT)
     private static void receiveLayerList(MinecraftClient minecraftClient, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
-        int layerCount = packetByteBuf.readInt();
-        OriginLayer[] layers = new OriginLayer[layerCount];
-        for(int i = 0; i < layerCount; i++) {
-            layers[i] = OriginLayer.read(packetByteBuf);
-        }
-        minecraftClient.execute(() -> {
-            OriginLayers.clear();
+        try {
+            int layerCount = packetByteBuf.readInt();
+            OriginLayer[] layers = new OriginLayer[layerCount];
             for(int i = 0; i < layerCount; i++) {
-                OriginLayers.add(layers[i]);
+                layers[i] = OriginLayer.read(packetByteBuf);
             }
-            OriginDataLoadedCallback.EVENT.invoker().onDataLoaded(true);
-        });
-    }
-
-    @Environment(EnvType.CLIENT)
-    private static void receivePowerList(MinecraftClient minecraftClient, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
-        int powerCount = packetByteBuf.readInt();
-        HashMap<Identifier, PowerType> factories = new HashMap<>();
-        for(int i = 0; i < powerCount; i++) {
-            Identifier powerId = packetByteBuf.readIdentifier();
-            Identifier factoryId = packetByteBuf.readIdentifier();
-            PowerFactory factory = ModRegistries.POWER_FACTORY.get(factoryId);
-            PowerFactory.Instance factoryInstance = factory.read(packetByteBuf);
-            PowerType type = new PowerType(powerId, factoryInstance);
-            type.setTranslationKeys(packetByteBuf.readString(), packetByteBuf.readString());
-            if(packetByteBuf.readBoolean()) {
-                type.setHidden();
-            }
-            factories.put(powerId, type);
+            minecraftClient.execute(() -> {
+                OriginLayers.clear();
+                for(int i = 0; i < layerCount; i++) {
+                    OriginLayers.add(layers[i]);
+                }
+                OriginDataLoadedCallback.EVENT.invoker().onDataLoaded(true);
+            });
+        } catch (Exception e) {
+            Origins.LOGGER.error(e);
         }
-        minecraftClient.execute(() -> {
-            PowerTypeRegistry.clear();
-            factories.forEach(PowerTypeRegistry::register);
-        });
     }
 }

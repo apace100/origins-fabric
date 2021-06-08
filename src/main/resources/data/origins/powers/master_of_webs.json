@@ -4,6 +4,7 @@
     "type": "origins:target_action_on_hit",
     "cooldown": 120,
     "hud_render": {
+      "sprite_location": "origins:textures/gui/resource_bar.png",
       "bar_index": 5
     },
     "entity_action": {

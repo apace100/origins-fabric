@@ -1,13 +1,13 @@
 package io.github.apace100.origins.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.origin.Impact;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginRegistry;
-import io.github.apace100.origins.power.PowerType;
 import io.github.apace100.origins.registry.ModItems;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -98,15 +98,15 @@ public class ChooseOriginScreen extends Screen {
 		super.init();
 		guiLeft = (this.width - windowWidth) / 2;
         guiTop = (this.height - windowHeight) / 2;
-        addButton(new ButtonWidget(guiLeft - 40,this.height / 2 - 10, 20, 20, new LiteralText("<"), b -> {
+		addDrawableChild(new ButtonWidget(guiLeft - 40,this.height / 2 - 10, 20, 20, new LiteralText("<"), b -> {
         	currentOrigin = (currentOrigin - 1 + maxSelection) % maxSelection;
         	scrollPos = 0;
         }));
-        addButton(new ButtonWidget(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20, new LiteralText(">"), b -> {
+		addDrawableChild(new ButtonWidget(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20, new LiteralText(">"), b -> {
         	currentOrigin = (currentOrigin + 1) % maxSelection;
         	scrollPos = 0;
         }));
-        addButton(new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20, new TranslatableText(Origins.MODID + ".gui.select"), b -> {
+		addDrawableChild(new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20, new TranslatableText(Origins.MODID + ".gui.select"), b -> {
 			PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 			if(currentOrigin == originSelection.size()) {
 				buf.writeString(layerList.get(currentLayerIndex).getIdentifier().toString());
@@ -170,13 +170,13 @@ public class ChooseOriginScreen extends Screen {
 		RenderSystem.enableBlend();
 		renderWindowBackground(matrices, 16, 0);
 		this.renderOriginContent(matrices, mouseX, mouseY);
-		this.client.getTextureManager().bindTexture(WINDOW);
+		RenderSystem.setShaderTexture(0, WINDOW);
 		this.drawTexture(matrices, guiLeft, guiTop, 0, 0, windowWidth, windowHeight);
 		renderOriginName(matrices);
-		this.client.getTextureManager().bindTexture(WINDOW);
+		RenderSystem.setShaderTexture(0, WINDOW);
 		this.renderOriginImpact(matrices, mouseX, mouseY);
 		Text title = new TranslatableText(Origins.MODID + ".gui.choose_origin.title", new TranslatableText(layerList.get(currentLayerIndex).getTranslationKey()));
-		this.drawCenteredString(matrices, this.textRenderer, title.getString(), width / 2, guiTop - 15, 0xFFFFFF);
+		this.drawCenteredText(matrices, this.textRenderer, title.getString(), width / 2, guiTop - 15, 0xFFFFFF);
 		RenderSystem.disableBlend();
 	}
 	
@@ -208,7 +208,7 @@ public class ChooseOriginScreen extends Screen {
 	private void renderWindowBackground(MatrixStack matrices, int offsetYStart, int offsetYEnd) {
 		int endX = guiLeft + windowWidth - border;
 		int endY = guiTop + windowHeight - border;
-		this.client.getTextureManager().bindTexture(WINDOW);
+		RenderSystem.setShaderTexture(0, WINDOW);
 		for(int x = guiLeft; x < endX; x += 16) {
 			for(int y = guiTop + offsetYStart; y < endY + offsetYEnd; y += 16) {
 				this.drawTexture(matrices, x, y, windowWidth, 0, Math.max(16, endX - x), Math.max(16, endY + offsetYEnd - y));

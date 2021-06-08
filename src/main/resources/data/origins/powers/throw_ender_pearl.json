@@ -2,6 +2,7 @@
   "type": "origins:fire_projectile",
   "cooldown": 30,
   "hud_render": {
+    "sprite_location": "origins:textures/gui/resource_bar.png",
     "bar_index": 6
   },
   "entity_type": "origins:enderian_pearl",

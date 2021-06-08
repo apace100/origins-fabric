@@ -3,13 +3,15 @@ package io.github.apace100.origins.origin;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
+import io.github.apace100.apoli.power.MultiplePowerType;
+import io.github.apace100.apoli.power.PowerType;
+import io.github.apace100.apoli.power.PowerTypeRegistry;
+import io.github.apace100.calio.data.SerializableData;
+import io.github.apace100.calio.data.SerializableDataTypes;
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.power.MultiplePowerType;
-import io.github.apace100.origins.power.PowerType;
-import io.github.apace100.origins.power.PowerTypeRegistry;
+import io.github.apace100.origins.data.CompatibilityDataTypes;
+import io.github.apace100.origins.data.OriginsDataTypes;
 import io.github.apace100.origins.registry.ModComponents;
-import io.github.apace100.origins.util.SerializableData;
-import io.github.apace100.origins.util.SerializableDataType;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.advancement.Advancement;
@@ -30,15 +32,15 @@ import java.util.stream.Collectors;
 public class Origin {
 
     public static final SerializableData DATA = new SerializableData()
-        .add("powers", SerializableDataType.IDENTIFIERS, Lists.newArrayList())
-        .add("icon", SerializableDataType.ITEM_OR_ITEM_STACK, new ItemStack(Items.AIR))
-        .add("unchoosable", SerializableDataType.BOOLEAN, false)
-        .add("order", SerializableDataType.INT, Integer.MAX_VALUE)
-        .add("impact", SerializableDataType.IMPACT, Impact.NONE)
-        .add("loading_priority", SerializableDataType.INT, 0)
-        .add("upgrades", SerializableDataType.UPGRADES, null)
-        .add("name", SerializableDataType.STRING, "")
-        .add("description", SerializableDataType.STRING, "");
+        .add("powers", SerializableDataTypes.IDENTIFIERS, Lists.newArrayList())
+        .add("icon", CompatibilityDataTypes.ITEM_OR_ITEM_STACK, new ItemStack(Items.AIR))
+        .add("unchoosable", SerializableDataTypes.BOOLEAN, false)
+        .add("order", SerializableDataTypes.INT, Integer.MAX_VALUE)
+        .add("impact", OriginsDataTypes.IMPACT, Impact.NONE)
+        .add("loading_priority", SerializableDataTypes.INT, 0)
+        .add("upgrades", OriginsDataTypes.UPGRADES, null)
+        .add("name", SerializableDataTypes.STRING, "")
+        .add("description", SerializableDataTypes.STRING, "");
 
     public static final Origin EMPTY;
 
