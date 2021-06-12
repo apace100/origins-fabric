@@ -1,0 +1,219 @@
+{
+  "origin.origins.human.name": "Om",
+  "origin.origins.human.description": "Un om obișnuit. Experiența obișnuită de Minecraft vă așteaptă.",
+
+  "origin.origins.merling.name": "Merling",
+  "origin.origins.merling.description": "Acești locuitori naturali ai oceanului nu sunt obișnuiți să stea prea mult timp din apă.",
+
+  "origin.origins.arachnid.name": "Arachnid",
+  "origin.origins.arachnid.description": "Abilitățile lor de cățărat și abilitatea de a-și prinde dușmanii în pânză de păianjen îi fac pe Arachnid vânători perfecți.",
+
+  "origin.origins.blazeborn.name": "Blazeborn",
+  "origin.origins.blazeborn.description": "Descendenţii ai Blazeului, Blazeborn sunt în mod natural imuni la pericolele Netherului.",
+
+  "origin.origins.avian.name": "Avian",
+  "origin.origins.avian.description": "Rasa Avian și-a pierdut abilitatea de a zbura cu mult timp în urmă. Acum aceste creaturi pașnice pot fi văzute alunecând dintr-un loc în altul.",
+
+  "origin.origins.phantom.name": "Phantom",
+  "origin.origins.phantom.description": "Ca descendenți pe jumătate umani și pe jumătate fantomă, aceste creaturi pot comuta între o formă fantomă și o formă normală.",
+
+  "origin.origins.feline.name": "Feline",
+  "origin.origins.feline.description": "Cu aspectul lor asemănător unei pisici, felinii îi sperie pe Creeperi. Cu dexteritatea pisicilor, acestea aterizează întotdeauna în siguranță pe picioare.",
+
+  "origin.origins.elytrian.name": "Elytrian",
+  "origin.origins.elytrian.description": "De multe ori zboară în vânt, Elytriani sunt inconfortabili atunci când nu au suficient spațiu deasupra capului.",
+
+  "origin.origins.enderian.name": "Enderian",
+  "origin.origins.enderian.description": "Născuți ca fii și fiice ale Ender Dragonului, Enderianii sunt capabili să se teleporteze, dar sunt vulnerabili la apă.",
+
+  "origin.origins.shulk.name": "Shulk",
+  "origin.origins.shulk.description": "În legătură cu Shulkers, corpurile Shulk sunt echipate cu o piele de protecție asemănătoare coajei.",
+
+  "power.origins.water_breathing.name": "Branhii",
+  "power.origins.water_breathing.description": "Puteți respira sub apă, dar nu pe uscat.",
+
+  "power.origins.aqua_affinity.name": "Aqua Affinity",
+  "power.origins.aqua_affinity.description": "Puteți sparge blocuri sub apă, așa cum fac alții pe uscat.",
+
+  "power.origins.water_vision.name": "Ochii umezi",
+  "power.origins.water_vision.description": "Viziunea ta sub apă este perfectă.",
+
+  "power.origins.swim_speed.name": "Aripioare",
+  "power.origins.swim_speed.description": "Viteza ta subacvatică este crescută.",
+
+  "power.origins.like_water.name": "Ca apa",
+  "power.origins.like_water.description": "Când vă aflați sub apă, nu vă scufundați la pământ decât dacă doriți.",
+
+  "power.origins.fragile.name": "Fragil",
+  "power.origins.fragile.description": "Aveți 3 inimi mai puține decât oamenii.",
+
+  "power.origins.webbing.name": "Webbing",
+  "power.origins.webbing.description": "Când lovești un inamic în corp la corp, acesta se blochează în pânză de păianjen.",
+
+  "power.origins.climbing.name": "Alpinism",
+  "power.origins.climbing.description": "Ești capabil să urci pe orice fel de zid, nu doar pe scări.",
+
+  "power.origins.carnivore.name": "Carnivor",
+  "power.origins.carnivore.description": "Dieta ta este limitată la carne, nu poți mânca legume.",
+
+  "power.origins.fire_immunity.name": "Imunitatea la foc",
+  "power.origins.fire_immunity.description": "Sunteți imuni la toate tipurile de daune provocate de foc.",
+
+  "power.origins.nether_spawn.name": "Locuitor Nether",
+  "power.origins.nether_spawn.description": "Spawnul tău natural va fi în Nether.",
+
+  "power.origins.burning_wrath.name": "Mânie arzătoare",
+  "power.origins.burning_wrath.description": "Când sunteți în foc, provocați daune suplimentare cu atacurile.",
+
+  "power.origins.hotblooded.name": "înflăcărat",
+  "power.origins.hotblooded.description": "Datorită corpului tău fierbinte, veninurile se ard, făcându-te imun la otrăvire și la efectele stării de foame.",
+
+  "power.origins.water_vulnerability.name": "Hidrofobie",
+  "power.origins.water_vulnerability.description": "Veți primi daune cat sunteți în contact cu apa.",
+
+  "power.origins.tailwind.name": "Tailwind",
+  "power.origins.tailwind.description": "Ești puțin mai rapid pe jos decât alții.",
+
+  "power.origins.slow_falling.name": "Greutate de penă",
+  "power.origins.slow_falling.description": "Cazi la pământ la fel de blând ca o pană, dacă nu te strecori.",
+
+  "power.origins.vegetarian.name": "Vegetarian",
+  "power.origins.vegetarian.description": "Nu poți digera nicio carne.",
+
+  "power.origins.fresh_air.name": "Aer proaspat",
+  "power.origins.fresh_air.description": "Când dormiți, patul dvs. trebuie să fie la o altitudine de cel puțin 86 de blocuri, astfel încât să puteți respira aer curat.",
+
+  "power.origins.phasing.name": "Phasing",
+  "power.origins.phasing.description": "În timp ce sunteți fantomat, puteți merge prin material solid, cu excepția Obsidianului.",
+
+  "power.origins.invisibility.name": "Invizibilitate",
+  "power.origins.invisibility.description": "În timp ce sunteți fantomat, sunteți invizibil.",
+
+  "power.origins.hunger_over_time.name": "Metabolism rapid",
+  "power.origins.hunger_over_time.description": "A fi fantomat te face să îți fie foame.",
+
+  "power.origins.burn_in_daylight.name": "Photoallergic",
+  "power.origins.burn_in_daylight.description": "Începi să arzi în lumina zilei dacă nu ești invizibil.",
+
+  "power.origins.fall_immunity.name": "Acrobaţie",
+  "power.origins.fall_immunity.description": "Nu suferiți niciodată daune cauzate de cădere, indiferent de la ce înălțime cădeți.",
+
+  "power.origins.sprint_jump.name": "Glezne puternice",
+  "power.origins.sprint_jump.description": "Poți sări mai sus sărind în timp ce sprintezi.",
+
+  "power.origins.nine_lives.name": "Nouă vieți",
+  "power.origins.nine_lives.description": "Aveți 1 inimă mai puțin decât oamenii.",
+
+  "power.origins.cat_vision.name": "Nocturn",
+  "power.origins.cat_vision.description": "Puteți vedea ușor în întuneric atunci când nu vă aflați în apă.",
+
+  "power.origins.weak_arms.name": "Arme slabe",
+  "power.origins.weak_arms.description": "Când nu sunteți sub efectul unei poțiuni de rezistență, puteți mina piatra naturală numai dacă există cel mult alte 2 blocuri de piatră naturală adiacente acesteia.",
+
+  "power.origins.scare_creepers.name": "Aspect Catlike",
+  "power.origins.scare_creepers.description": "Creeperi sunt speriați de tine și vor exploda numai dacă îi vei ataca mai întâi.",
+
+  "power.origins.launch_into_air.name": "Darul Vânturilor",
+  "power.origins.launch_into_air.description": "La fiecare 30 de secunde, puteți sa va lansați în aer aproximativ 20 de blocuri.",
+
+  "power.origins.elytra.name": "Winged",
+  "power.origins.elytra.description": "Aveți aripi Elytra fără a fi nevoie să le echipați.",
+
+  "power.origins.light_armor.name": "Nevoia de mobilitate",
+  "power.origins.light_armor.description": "Nu puteți purta nicio armură grea (armură cu valori de protecție mai mari decât chainmail).",
+
+  "power.origins.claustrophobia.name": "Claustrofobie",
+  "power.origins.claustrophobia.description": "A fi undeva cu plafonul scăzut prea mult timp te va slăbi și te va face mai lent.",
+
+  "power.origins.more_kinetic_damage.name": "Oase fragile",
+  "power.origins.more_kinetic_damage.description": "Primiți mai multe daune din cădere și zborul în blocuri.",
+
+  "power.origins.aerial_combatant.name": "Combatent aerian",
+  "power.origins.aerial_combatant.description": "Provocați mult mai multe daune în timpul zborului Elytra.",
+
+  "power.origins.throw_ender_pearl.name": "Teleportarea",
+  "power.origins.throw_ender_pearl.description": "Ori de câte ori doriți, puteți arunca un ender pearl care nu provoacă daune, permițându-vă să vă teleportați.",
+
+  "power.origins.pumpkin_hate.name": "Speriat de Tărtăcuțe",
+  "power.origins.pumpkin_hate.description": "Ți-e frică de dovleci. Pentru un motiv întemeiat.",
+
+  "power.origins.extra_reach.name": "Corp subțire",
+  "power.origins.extra_reach.description": "Puteți ajunge la blocuri și entități mai departe.",
+
+  "power.origins.shulker_inventory.name": "Hoarder",
+  "power.origins.shulker_inventory.description": "Aveți acces la încă 9 spații de inventar, care păstrează obiectele la moarte.",
+
+  "power.origins.natural_armor.name": "Piele robustă",
+  "power.origins.natural_armor.description": "Chiar și fără a purta armuri, pielea ta oferă protecție naturală.",
+
+  "power.origins.more_exhaustion.name": "Apetit mare",
+  "power.origins.more_exhaustion.description": "Te epuizezi mult mai repede decât alții, necesitându-te astfel să mănânci mai mult.",
+
+  "power.origins.no_shield.name": "Unwieldy",
+  "power.origins.no_shield.description": "Modul în care sunt formate mâinile nu oferă nicio modalitate de a ține un scut în poziție verticală.",
+
+  "power.origins.strong_arms.name": "Brate puternice",
+  "power.origins.strong_arms.description": "Ești suficient de puternic pentru a sparge pietre naturale fără a folosi un târnăcop.",
+
+  "power.origins.translucent.name": "Translucid",
+  "power.origins.translucent.description": "Pielea ta este translucidă.",
+
+  "power.origins.end_spawn.name": "Locuitor End",
+  "power.origins.end_spawn.description": "Călătoria ta începe in The End.",
+
+  "power.origins.master_of_webs.name": "Master of Webs",
+  "power.origins.master_of_webs.description": "Navigați perfect pe pânză de păianjen și puteți urca în ele. Când lovești un inamic în corp la corp, aceștia rămân blocați în pânză de păianjen pentru o vreme. Non-artropodele înfipte în pânză de păianjen vor fi resimțite de tine. Ești capabil să creezi pânză de păianjen din șir.",
+
+  "power.origins.lay_eggs.name": "Ovipar",
+  "power.origins.lay_eggs.description": "Ori de câte ori te trezești dimineața, vei depune un ou.",
+
+  "category.origins": "Origini",
+  "key.origins.primary_active": "Puterea activă (primară)",
+  "key.origins.secondary_active": "Puterea activă (secundară)",
+  "key.origins.view_origin": "Vizualizați originea",
+
+  "text.autoconfig.origins.title": "Configurarea originilor",
+  "text.autoconfig.origins.option.xOffset": "Bara de reîncărcare Offset X",
+  "text.autoconfig.origins.option.yOffset": "Bara de reîncărcare Offset Y",
+  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Puterea de suprapunere fantomată",
+
+  "item.origins.orb_of_origin": "Globul de origine",
+
+  "enchantment.origins.water_protection": "Protecția apei",
+
+  "container.shulker_inventory_power": "Inventarul Shulker",
+
+  "origins.gui.select": "Selectați",
+  "origins.gui.close": "Închide",
+  "origins.gui.choose": "Alege",
+  "origins.gui.choose_origin.title": "Alegeti %s.",
+  "origins.gui.view_origin.title": "Acesta este al tau %s.",
+  "origins.gui.view_origin.empty": "Nu puteți avea origini.",
+  "origins.gui.view_origin.not_installed": "Serverul nu are instalat modul Origins.",
+  "origins.gui.impact.impact": "Impact",
+  "origins.gui.impact.none": "Nimic",
+  "origins.gui.impact.low": "Mic",
+  "origins.gui.impact.medium": "Medium",
+  "origins.gui.impact.high": "Mare",
+  "origins.gui.version_mismatch": "Acest server rulează o versiune diferită de Origins (v%1$s) care este incompatibil cu cel pe care l-ați instalat (v%2$s).",
+
+  "origin.origins.random.name": "Random",
+  "origin.origins.random.description": "Vi se va atribui una dintre următoarele:",
+
+  "layer.origins.origin.name": "Origine",
+  "layer.origins.origin.missing_origin.name": "Absent",
+  "layer.origins.origin.missing_origin.description": "Nu aveți o origine.",
+
+  "death.attack.no_water_for_gills": "%1$s nu a reușit să se ude",
+  "death.attack.no_water_for_gills.player": "%1$s nu a reușit să se ude pentru că se luptau cu %2$s",
+  "death.attack.hurt_by_water": "%1$s a făcut o baie prea mult timp",
+  "death.attack.hurt_by_water.player": "%1$s a fost pus sub apă de %2$s",
+  "death.attack.genericDamageOverTime": "%1$s a murit în urma unui effect",
+  "death.attack.genericDamageOverTime.player": "%1$s a murit în urma unui effect în timp ce lupta %2$s",
+
+  "commands.origin.origin_not_found": "Origine necunoscută: %s",
+  "commands.origin.set.success.single": "Setați originea %s în stratul %s la %s.",
+  "commands.origin.set.success.multiple": "Setați originea țintelor %s din stratul %s la %s.",
+
+  "origins.avian_sleep_fail": "Ai nevoie de aer proaspăt pentru a dormi"
+}
