@@ -158,9 +158,24 @@
   "power.origins.translucent.name": "Translucidez",
   "power.origins.translucent.description": "Sua pele é translúcida.",
 
+  "power.origins.end_spawn.name": "Nascido no Fim",
+  "power.origins.end_spawn.description": "Sua aventura começa no fim.",
+
+  "power.origins.master_of_webs.name": "Mestre das Teias",
+  "power.origins.master_of_webs.description": "Você anda perfeitamente entre as teias, e é capaz de escalar elas. Em um combate corpo a corpo contra um inimigo, ele fica preso em uma teia por um tempo. Os que não são artrópodes e ficam presos em suas teias, você é capaz de detecta-los. Você é capaz de criar uma teia de aranha a partir de uma linha.",
+
+  "power.origins.lay_eggs.name": "Ovíparo",
+  "power.origins.lay_eggs.description": "Sempre que você acorda de manhã, você botara um ovo.",
+
   "category.origins": "Origens",
-  "key.origins.primary_active": "Poder Ativo",
+  "key.origins.primary_active": "Poder Ativo(Primario)",
+  "key.origins.secondary_active": "Poder Ativo(Secundario)",
   "key.origins.view_origin": "Ver origem",
+
+  "text.autoconfig.origins.title": "Configuração do Origins",
+  "text.autoconfig.origins.option.xOffset": "Cooldown Bar Offset X",
+  "text.autoconfig.origins.option.yOffset": "Cooldown Bar Offset Y",
+  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Phantomized Overlay Strength",
 
   "item.origins.orb_of_origin": "Orbe de Origem",
 
@@ -170,20 +185,35 @@
 
   "origins.gui.select": "Selecionar",
   "origins.gui.close": "Fechar",
+  "origins.gui.choose": "Escolher",
   "origins.gui.choose_origin.title": "Escolha sua %s.",
   "origins.gui.view_origin.title": "Esta é sua %s.",
+  "origins.gui.view_origin.empty": "Você não pode ter nenhuma origem.",
+  "origins.gui.view_origin.not_installed": "O servidor não possui o mod Origins instalado.",
   "origins.gui.impact.impact": "Impacto",
   "origins.gui.impact.none": "Nenhum",
   "origins.gui.impact.low": "Baixo",
   "origins.gui.impact.medium": "Médio",
   "origins.gui.impact.high": "Alto",
+  "origins.gui.version_mismatch": "Este servidor esta rodando uma versão diferente de Origins (v%1$s) que é incompativel com o que você tem instalado (v%2$s).",
+
+  "origin.origins.random.name": "Aleatório",
+  "origin.origins.random.description": "Aleatóriamente, pode cair uma das seguintes origens:",
 
   "layer.origins.origin": "Origem",
+  "layer.origins.origin.missing_origin.name": "Faltando",
+  "layer.origins.origin.missing_origin.description": "Você não tem uma origem",
 
-  "death.attack.no_water_for_gills": "%s se esqueceu de tomar água.",
-  "death.attack.hurt_by_water": "%s demorou demais no banho.",
+  "death.attack.no_water_for_gills": "%1$s não conseguiu se manter molhado",
+  "death.attack.no_water_for_gills.player": "%1$s não conseguiu se manter molhado porque estava lutando com %2$s",
+  "death.attack.hurt_by_water": "%1$s demorou demais no banho",
+  "death.attack.hurt_by_water.player": "%1$s foi jogado na agua por %2$s",
+  "death.attack.genericDamageOverTime": "%1$s morreu por dano continuo",
+  "death.attack.genericDamageOverTime.player": "%1$s morreu por dano continuo enquanto lutava com %2$s",
 
   "commands.origin.origin_not_found": "Origem desconhecida: %s",
   "commands.origin.set.success.single": "Origem de %s definida para %s.",
-  "commands.origin.set.success.multiple": "Origens de %s alvos para %s."
+  "commands.origin.set.success.multiple": "Origens de %s alvos para %s.",
+
+  "origins.avian_sleep_fail": "Você precisa de ar fresco para dormir"
 }
