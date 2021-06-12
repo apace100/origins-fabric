@@ -1,9 +1,7 @@
 package io.github.apace100.origins.origin;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
-import io.github.apace100.apoli.power.MultiplePowerType;
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypeRegistry;
 import io.github.apace100.calio.data.SerializableData;
@@ -226,12 +224,6 @@ public class Origin {
             try {
                 PowerType powerType = PowerTypeRegistry.get(powerId);
                 origin.add(powerType);
-                if(powerType instanceof MultiplePowerType) {
-                    ImmutableList<Identifier> subPowers = ((MultiplePowerType)powerType).getSubPowers();
-                    for(Identifier subPowerId : subPowers) {
-                        origin.add(PowerTypeRegistry.get(subPowerId));
-                    }
-                }
             } catch(IllegalArgumentException e) {
                 Origins.LOGGER.error("Origin \"" + id + "\" contained unregistered power: \"" + powerId + "\"");
             }
