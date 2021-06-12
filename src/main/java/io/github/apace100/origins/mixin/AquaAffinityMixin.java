@@ -1,6 +1,6 @@
 package io.github.apace100.origins.mixin;
 
-import io.github.apace100.origins.power.OriginPowerTypes;
+import io.github.apace100.origins.power.OriginsPowerTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,7 +21,7 @@ public abstract class AquaAffinityMixin extends LivingEntity implements Nameable
     // AQUA_AFFINITY
     @ModifyConstant(method = "getBlockBreakingSpeed", constant = @Constant(ordinal = 0, floatValue = 5.0F))
     private float modifyWaterBlockBreakingSpeed(float in) {
-        if(OriginPowerTypes.AQUA_AFFINITY.isActive(this)) {
+        if(OriginsPowerTypes.AQUA_AFFINITY.isActive(this)) {
             return 1F;
         }
         return in;
@@ -30,7 +30,7 @@ public abstract class AquaAffinityMixin extends LivingEntity implements Nameable
     // AQUA_AFFINITY
     @ModifyConstant(method = "getBlockBreakingSpeed", constant = @Constant(ordinal = 1, floatValue = 5.0F))
     private float modifyUngroundedBlockBreakingSpeed(float in) {
-        if(this.isInsideWaterOrBubbleColumn() && OriginPowerTypes.AQUA_AFFINITY.isActive(this)) {
+        if(this.isInsideWaterOrBubbleColumn() && OriginsPowerTypes.AQUA_AFFINITY.isActive(this)) {
             return 1F;
         }
         return in;

@@ -2,6 +2,7 @@ package io.github.apace100.origins.component;
 
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.power.PowerType;
+import io.github.apace100.apoli.power.PowerTypeRegistry;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
@@ -9,6 +10,7 @@ import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -65,14 +67,21 @@ public class PlayerOriginComponent implements OriginComponent {
         }
         this.origins.put(layer, origin);
         PowerHolderComponent powerComponent = PowerHolderComponent.KEY.get(player);
-        for(PowerType<?> powerType : origin.getPowerTypes()) {
-            powerComponent.addPower(powerType, origin.getIdentifier());
-        }
+        grantPowersFromOrigin(origin, powerComponent);
         if(oldOrigin != null) {
             powerComponent.removeAllPowersFromSource(oldOrigin.getIdentifier());
         }
         if(this.hasAllOrigins()) {
             this.hadOriginBefore = true;
+        }
+    }
+
+    private void grantPowersFromOrigin(Origin origin, PowerHolderComponent powerComponent) {
+        Identifier source = origin.getIdentifier();
+        for(PowerType<?> powerType : origin.getPowerTypes()) {
+            if(!powerComponent.hasPower(powerType, source)) {
+                powerComponent.addPower(powerType, source);
+            }
         }
     }
 
@@ -85,15 +94,6 @@ public class PlayerOriginComponent implements OriginComponent {
 
         if(player == null) {
             Origins.LOGGER.error("Player was null in `fromTag`! This is a bug!");
-        }
-        if(this.origins != null) {
-            /*if(callPowerOnAdd) {
-                for (Power power: powers.values()) {
-                    power.onRemoved();
-                    power.onLost();
-                }
-            }
-            powers.clear();*/
         }
 
         this.origins.clear();
@@ -137,39 +137,39 @@ public class PlayerOriginComponent implements OriginComponent {
             }
         }
         this.hadOriginBefore = compoundTag.getBoolean("HadOriginBefore");
-        /*
-        NbtList powerList = (NbtList)compoundTag.get("Powers");
-        for(int i = 0; i < powerList.size(); i++) {
-            NbtCompound powerTag = powerList.getCompound(i);
-            Identifier powerTypeId = Identifier.tryParse(powerTag.getString("Type"));
-            try {
-                PowerType<?> type = PowerTypeRegistry.get(powerTypeId);
-                if(hasPowerType(type)) {
-                    NbtElement data = powerTag.get("Data");
-                    Power power = type.create(player);
-                    try {
-                        power.fromTag(data);
-                    } catch(ClassCastException e) {
-                        // Occurs when power was overriden by data pack since last world load
-                        // to be a power type which uses different data class.
-                        Origins.LOGGER.warn("Data type of \"" + powerTypeId + "\" changed, skipping data for that power on player " + player.getName().asString());
+
+        PowerHolderComponent powerComponent = PowerHolderComponent.KEY.get(player);
+        for(Origin origin : origins.values()) {
+            // Grants powers only if the player doesn't have them yet from the specific Origin source.
+            // Needed in case the origin was set before the update to Apoli happened.
+            grantPowersFromOrigin(origin, powerComponent);
+        }
+
+        // Compatibility with old worlds:
+        // Loads power data from Origins tag, whereas new versions
+        // store the data in the Apoli tag.
+        if(compoundTag.contains("Powers")) {
+            NbtList powerList = (NbtList)compoundTag.get("Powers");
+            for(int i = 0; i < powerList.size(); i++) {
+                NbtCompound powerTag = powerList.getCompound(i);
+                Identifier powerTypeId = Identifier.tryParse(powerTag.getString("Type"));
+                try {
+                    PowerType<?> type = PowerTypeRegistry.get(powerTypeId);
+                    if(powerComponent.hasPower(type)) {
+                        NbtElement data = powerTag.get("Data");
+                        try {
+                            powerComponent.getPower(type).fromTag(data);
+                        } catch(ClassCastException e) {
+                            // Occurs when power was overriden by data pack since last world load
+                            // to be a power type which uses different data class.
+                            Origins.LOGGER.warn("Data type of \"" + powerTypeId + "\" changed, skipping data for that power on player " + player.getName().asString());
+                        }
                     }
-                    this.powers.put(type, power);
-                    if(callPowerOnAdd) {
-                        power.onAdded();
-                    }
+                } catch(IllegalArgumentException e) {
+                    Origins.LOGGER.warn("Power data of unregistered power \"" + powerTypeId + "\" found on player, skipping...");
                 }
-            } catch(IllegalArgumentException e) {
-                Origins.LOGGER.warn("Power data of unregistered power \"" + powerTypeId + "\" found on player, skipping...");
             }
-        }*/
-        /*
-        this.getPowerTypes().forEach(pt -> {
-            if(!this.powers.containsKey(pt)) {
-                Power power = pt.create(player);
-                this.powers.put(pt, power);
-            }
-        });*/
+        }
     }
 
     @Override
@@ -183,14 +183,6 @@ public class PlayerOriginComponent implements OriginComponent {
         }
         compoundTag.put("OriginLayers", originLayerList);
         compoundTag.putBoolean("HadOriginBefore", this.hadOriginBefore);
-        /*NbtList powerList = new NbtList();
-        for(Map.Entry<PowerType<?>, Power> powerEntry : powers.entrySet()) {
-            NbtCompound powerTag = new NbtCompound();
-            powerTag.putString("Type", PowerTypeRegistry.getId(powerEntry.getKey()).toString());
-            powerTag.put("Data", powerEntry.getValue().toTag());
-            powerList.add(powerTag);
-        }
-        compoundTag.put("Powers", powerList);*/
     }
 
     @Override

@@ -56,6 +56,9 @@ public class OriginsClient implements ClientModInitializer {
         ApoliClient.registerPowerKeybinding("primary", usePrimaryActivePowerKeybind);
         ApoliClient.registerPowerKeybinding("secondary", useSecondaryActivePowerKeybind);
 
+        // "none" is the default key used when none is specified.
+        ApoliClient.registerPowerKeybinding("none", usePrimaryActivePowerKeybind);
+
         KeyBindingHelper.registerKeyBinding(usePrimaryActivePowerKeybind);
         KeyBindingHelper.registerKeyBinding(useSecondaryActivePowerKeybind);
         KeyBindingHelper.registerKeyBinding(viewCurrentOriginKeybind);

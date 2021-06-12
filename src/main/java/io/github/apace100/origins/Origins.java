@@ -2,13 +2,15 @@ package io.github.apace100.origins;
 
 import io.github.apace100.apoli.util.NamespaceAlias;
 import io.github.apace100.calio.mixin.CriteriaRegistryInvoker;
-import io.github.apace100.origins.command.LayerArgument;
-import io.github.apace100.origins.command.OriginArgument;
+import io.github.apace100.origins.command.LayerArgumentType;
+import io.github.apace100.origins.command.OriginArgumentType;
 import io.github.apace100.origins.command.OriginCommand;
 import io.github.apace100.origins.networking.ModPacketsC2S;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginManager;
+import io.github.apace100.origins.power.OriginsEntityConditions;
+import io.github.apace100.origins.power.OriginsPowerTypes;
 import io.github.apace100.origins.registry.*;
 import io.github.apace100.origins.util.ChoseOriginCriterion;
 import io.github.apace100.origins.util.GainedPowerCriterion;
@@ -58,6 +60,9 @@ public class Origins implements ModInitializer {
 
 		NamespaceAlias.addAlias(MODID);
 
+		OriginsPowerTypes.register();
+		OriginsEntityConditions.register();
+
 		ModBlocks.register();
 		ModItems.register();
 		ModTags.register();
@@ -72,8 +77,8 @@ public class Origins implements ModInitializer {
 		});
 		CriteriaRegistryInvoker.callRegister(ChoseOriginCriterion.INSTANCE);
 		CriteriaRegistryInvoker.callRegister(GainedPowerCriterion.INSTANCE);
-		ArgumentTypes.register("origins:origin", OriginArgument.class, new ConstantArgumentSerializer<>(OriginArgument::origin));
-		ArgumentTypes.register("origins:layer", LayerArgument.class, new ConstantArgumentSerializer<>(LayerArgument::layer));
+		ArgumentTypes.register("origins:origin", OriginArgumentType.class, new ConstantArgumentSerializer<>(OriginArgumentType::origin));
+		ArgumentTypes.register("origins:layer", LayerArgumentType.class, new ConstantArgumentSerializer<>(LayerArgumentType::layer));
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginManager());
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginLayers());
 	}

@@ -10,26 +10,31 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import net.minecraft.command.CommandSource;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 import java.util.concurrent.CompletableFuture;
 
-public class LayerArgument implements ArgumentType<OriginLayer> {
+public class LayerArgumentType implements ArgumentType<Identifier> {
    public static final DynamicCommandExceptionType LAYER_NOT_FOUND = new DynamicCommandExceptionType((p_208663_0_) -> {
       return new TranslatableText("commands.origin.layer_not_found", p_208663_0_);
    });
 
-   public static LayerArgument layer() {
-      return new LayerArgument();
+   public static LayerArgumentType layer() {
+      return new LayerArgumentType();
    }
 
-   public OriginLayer parse(StringReader p_parse_1_) throws CommandSyntaxException {
-      Identifier id = Identifier.fromCommandInput(p_parse_1_);
+   public Identifier parse(StringReader p_parse_1_) throws CommandSyntaxException {
+      return Identifier.fromCommandInput(p_parse_1_);
+   }
+
+   public static OriginLayer getLayer(CommandContext<ServerCommandSource> context, String argumentName) throws CommandSyntaxException {
+      Identifier id = context.getArgument(argumentName, Identifier.class);
       try {
-    	  return OriginLayers.getLayer(id);
+         return OriginLayers.getLayer(id);
       } catch(IllegalArgumentException e) {
-    	  throw LAYER_NOT_FOUND.create(id);
+         throw LAYER_NOT_FOUND.create(id);
       }
    }
 

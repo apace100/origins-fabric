@@ -1,6 +1,6 @@
 package io.github.apace100.origins.mixin;
 
-import io.github.apace100.origins.power.OriginPowerTypes;
+import io.github.apace100.origins.power.OriginsPowerTypes;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -22,7 +22,7 @@ public abstract class NoCobwebSlowdownMixin extends LivingEntity implements Name
 
     @Inject(at = @At("HEAD"), method = "slowMovement", cancellable = true)
     public void slowMovement(BlockState state, Vec3d multiplier, CallbackInfo info) {
-        if (OriginPowerTypes.NO_COBWEB_SLOWDOWN.isActive(this) || OriginPowerTypes.MASTER_OF_WEBS_NO_SLOWDOWN.isActive(this)) {
+        if (OriginsPowerTypes.NO_COBWEB_SLOWDOWN.isActive(this) || OriginsPowerTypes.MASTER_OF_WEBS_NO_SLOWDOWN.isActive(this)) {
             info.cancel();
         }
     }

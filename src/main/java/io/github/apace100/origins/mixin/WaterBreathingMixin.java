@@ -1,7 +1,7 @@
 package io.github.apace100.origins.mixin;
 
 import io.github.apace100.apoli.mixin.EntityAccessor;
-import io.github.apace100.origins.power.OriginPowerTypes;
+import io.github.apace100.origins.power.OriginsPowerTypes;
 import io.github.apace100.origins.registry.ModDamageSources;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -31,7 +31,7 @@ public final class WaterBreathingMixin {
 
         @Inject(at = @At("HEAD"), method = "canBreatheInWater", cancellable = true)
         public void doWaterBreathing(CallbackInfoReturnable<Boolean> info) {
-            if(OriginPowerTypes.WATER_BREATHING.isActive(this)) {
+            if(OriginsPowerTypes.WATER_BREATHING.isActive(this)) {
                 info.setReturnValue(true);
             }
         }
@@ -46,7 +46,7 @@ public final class WaterBreathingMixin {
 
         @Inject(at = @At("TAIL"), method = "tick")
         private void tick(CallbackInfo info) {
-            if(OriginPowerTypes.WATER_BREATHING.isActive(this)) {
+            if(OriginsPowerTypes.WATER_BREATHING.isActive(this)) {
                 if(!this.isSubmergedIn(FluidTags.WATER) && !this.hasStatusEffect(StatusEffects.WATER_BREATHING) && !this.hasStatusEffect(StatusEffects.CONDUIT_POWER)) {
                     if(!((EntityAccessor) this).callIsBeingRainedOn()) {
                         int landGain = this.getNextAirOnLand(0);
@@ -76,7 +76,7 @@ public final class WaterBreathingMixin {
         @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isSubmergedIn(Lnet/minecraft/tag/Tag;)Z"), method = "updateTurtleHelmet")
         public boolean isSubmergedInProxy(PlayerEntity player, Tag<Fluid> fluidTag) {
             boolean submerged = this.isSubmergedIn(fluidTag);
-            if(OriginPowerTypes.WATER_BREATHING.isActive(this)) {
+            if(OriginsPowerTypes.WATER_BREATHING.isActive(this)) {
                 return !submerged;
             }
             return submerged;

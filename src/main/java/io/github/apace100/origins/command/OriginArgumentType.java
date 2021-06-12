@@ -11,6 +11,7 @@ import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginRegistry;
 import net.minecraft.command.CommandSource;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
@@ -18,21 +19,25 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class OriginArgument implements ArgumentType<Origin> {
+public class OriginArgumentType implements ArgumentType<Identifier> {
    public static final DynamicCommandExceptionType ORIGIN_NOT_FOUND = new DynamicCommandExceptionType((p_208663_0_) -> {
       return new TranslatableText("commands.origin.origin_not_found", p_208663_0_);
    });
 
-   public static OriginArgument origin() {
-      return new OriginArgument();
+   public static OriginArgumentType origin() {
+      return new OriginArgumentType();
    }
 
-   public Origin parse(StringReader p_parse_1_) throws CommandSyntaxException {
-      Identifier id = Identifier.fromCommandInput(p_parse_1_);
+   public Identifier parse(StringReader p_parse_1_) throws CommandSyntaxException {
+      return Identifier.fromCommandInput(p_parse_1_);
+   }
+
+   public static Origin getOrigin(CommandContext<ServerCommandSource> context, String argumentName) throws CommandSyntaxException {
+      Identifier id = context.getArgument(argumentName, Identifier.class);
       try {
-    	  return OriginRegistry.get(id);
+         return OriginRegistry.get(id);
       } catch(IllegalArgumentException e) {
-    	  throw ORIGIN_NOT_FOUND.create(id);
+         throw ORIGIN_NOT_FOUND.create(id);
       }
    }
 

@@ -1,7 +1,7 @@
 package io.github.apace100.origins.mixin;
 
 
-import io.github.apace100.origins.power.OriginPowerTypes;
+import io.github.apace100.origins.power.OriginsPowerTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.FleeEntityGoal;
 import net.minecraft.entity.ai.goal.FollowTargetGoal;
@@ -26,13 +26,13 @@ public abstract class ScareCreepersMixin extends HostileEntity {
 
     @Inject(at = @At("TAIL"), method = "initGoals")
     private void addGoals(CallbackInfo info) {
-        Goal goal = new FleeEntityGoal<>(this, PlayerEntity.class, OriginPowerTypes.SCARE_CREEPERS::isActive, 6.0F, 1.0D, 1.2D, EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR::test);
+        Goal goal = new FleeEntityGoal<>(this, PlayerEntity.class, OriginsPowerTypes.SCARE_CREEPERS::isActive, 6.0F, 1.0D, 1.2D, EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR::test);
         this.goalSelector.add(3, goal);
     }
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/goal/GoalSelector;add(ILnet/minecraft/entity/ai/goal/Goal;)V", ordinal = 8), method = "initGoals")
     private void redirectTargetGoal(GoalSelector goalSelector, int priority, Goal goal) {
-        Goal newGoal = new FollowTargetGoal<PlayerEntity>(this, PlayerEntity.class, 10, true, false, e -> !OriginPowerTypes.SCARE_CREEPERS.isActive(e));
+        Goal newGoal = new FollowTargetGoal<PlayerEntity>(this, PlayerEntity.class, 10, true, false, e -> !OriginsPowerTypes.SCARE_CREEPERS.isActive(e));
         goalSelector.add(priority, newGoal);
     }
 }

@@ -7,6 +7,7 @@ import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
+import io.github.apace100.origins.power.OriginsCallbackPower;
 import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
@@ -40,6 +41,7 @@ public interface OriginComponent extends AutoSyncedComponent {
 		if(!hadOriginBefore) {
 			PowerHolderComponent.getPowers(player, ModifyPlayerSpawnPower.class).forEach(ModifyPlayerSpawnPower::teleportToModifiedSpawn);
 		}
+		PowerHolderComponent.getPowers(player, OriginsCallbackPower.class).forEach(p -> p.onChosen(hadOriginBefore));
 	}
 
 	default boolean checkAutoChoosingLayers(PlayerEntity player, boolean includeDefaults) {
