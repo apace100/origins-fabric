@@ -58,7 +58,7 @@ public class Origins implements ModInitializer {
 		AutoConfig.register(ServerConfig.class, OriginsConfigSerializer::new);
 		config = AutoConfig.getConfigHolder(ServerConfig.class).getConfig();
 
-		NamespaceAlias.addAlias(MODID);
+		NamespaceAlias.addAlias(MODID, "apoli");
 
 		OriginsPowerTypes.register();
 		OriginsEntityConditions.register();

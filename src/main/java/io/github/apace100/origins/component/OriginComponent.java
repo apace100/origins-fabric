@@ -32,6 +32,8 @@ public interface OriginComponent extends AutoSyncedComponent {
 
 	void sync();
 
+	void onPowersRead();
+
 	static void sync(PlayerEntity player) {
 		ModComponents.ORIGIN.sync(player);
 		PowerHolderComponent.KEY.sync(player);

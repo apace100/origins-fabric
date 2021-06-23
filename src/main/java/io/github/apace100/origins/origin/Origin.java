@@ -2,6 +2,7 @@ package io.github.apace100.origins.origin;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
+import io.github.apace100.apoli.power.MultiplePowerType;
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypeRegistry;
 import io.github.apace100.calio.data.SerializableData;
@@ -139,7 +140,17 @@ public class Origin {
         if(powerType.getIdentifier() == null) {
             return false;
         }
-        return this.powerTypes.contains(powerType);
+        if(this.powerTypes.contains(powerType)) {
+            return true;
+        }
+        for (PowerType<?> pt : this.powerTypes) {
+            if (pt instanceof MultiplePowerType) {
+                if(((MultiplePowerType<?>)pt).getSubPowers().contains(powerType.getIdentifier())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public int getLoadingPriority() {

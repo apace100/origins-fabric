@@ -4,15 +4,21 @@
   "package": "io.github.apace100.origins.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "AquaAffinityMixin",
+    "ConduitOnLandMixin",
     "LikeWaterMixin",
     "LoginMixin",
     "NoCobwebSlowdownMixin",
+    "OriginDeserializationMixin",
+    "OriginUpgradeMixin",
     "ScareCreepersMixin",
+    "SelectionInvulnerabilityMixin",
     "WaterBreathingMixin$CanBreatheInWater",
     "WaterBreathingMixin$UpdateAir"
   ],
   "client": [
+    "PhasingOverlayMixin",
+    "ServerCheckMixin",
+    "WaterVisibilityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

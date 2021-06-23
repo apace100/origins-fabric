@@ -69,7 +69,7 @@ public class ViewOriginScreen extends Screen {
 		super.init();
 		guiLeft = (this.width - windowWidth) / 2;
         guiTop = (this.height - windowHeight) / 2;
-        if(originLayers.size() > 0) {
+        if(originLayers.size() > 0 && OriginsClient.isServerRunningOrigins) {
 			addDrawableChild(chooseOriginButton = new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight - 40, 100, 20, new TranslatableText(Origins.MODID + ".gui.choose"), b -> {
 				MinecraftClient.getInstance().openScreen(new ChooseOriginScreen(Lists.newArrayList(originLayers.get(currentLayer).getLeft()), 0, false));
 			}));

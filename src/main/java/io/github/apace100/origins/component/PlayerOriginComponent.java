@@ -16,6 +16,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PlayerOriginComponent implements OriginComponent {
@@ -24,6 +25,8 @@ public class PlayerOriginComponent implements OriginComponent {
     private HashMap<OriginLayer, Origin> origins = new HashMap<>();
 
     private boolean hadOriginBefore = false;
+
+    private NbtCompound cachedData;
 
     public PlayerOriginComponent(PlayerEntity player) {
         this.player = player;
@@ -85,12 +88,28 @@ public class PlayerOriginComponent implements OriginComponent {
         }
     }
 
-    @Override
-    public void readFromNbt(NbtCompound compoundTag) {
-        this.fromTag(compoundTag, true);
+    private void revokeRemovedPowers(Origin origin, PowerHolderComponent powerComponent) {
+        Identifier source = origin.getIdentifier();
+        List<PowerType<?>> powersByOrigin = powerComponent.getPowersFromSource(source);
+        powersByOrigin.stream().filter(p -> !origin.hasPowerType(p)).forEach(p -> powerComponent.removePower(p, source));
     }
 
-    private void fromTag(NbtCompound compoundTag, boolean callPowerOnAdd) {
+    @Override
+    public void readFromNbt(NbtCompound compoundTag) {
+        this.cachedData = compoundTag;
+    }
+
+    @Override
+    public void onPowersRead() {
+        if(cachedData == null) {
+            Origins.LOGGER.error("Power read callback was invoked on OriginComponent without data being cached.");
+        } else {
+            fromTag(cachedData);
+            cachedData = null;
+        }
+    }
+
+    private void fromTag(NbtCompound compoundTag) {
 
         if(player == null) {
             Origins.LOGGER.error("Player was null in `fromTag`! This is a bug!");
@@ -144,6 +163,9 @@ public class PlayerOriginComponent implements OriginComponent {
             // Needed in case the origin was set before the update to Apoli happened.
             grantPowersFromOrigin(origin, powerComponent);
         }
+        for(Origin origin : origins.values()) {
+            revokeRemovedPowers(origin, powerComponent);
+        }
 
         // Compatibility with old worlds:
         // Loads power data from Origins tag, whereas new versions
@@ -189,7 +211,7 @@ public class PlayerOriginComponent implements OriginComponent {
     public void applySyncPacket(PacketByteBuf buf) {
         NbtCompound compoundTag = buf.readNbt();
         if(compoundTag != null) {
-            this.fromTag(compoundTag, false);
+            this.fromTag(compoundTag);
         }
     }
 

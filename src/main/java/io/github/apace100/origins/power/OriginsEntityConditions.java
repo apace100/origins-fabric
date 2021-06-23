@@ -11,6 +11,7 @@ import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -22,22 +23,25 @@ public class OriginsEntityConditions {
             .add("origin", SerializableDataTypes.IDENTIFIER)
             .add("layer", SerializableDataTypes.IDENTIFIER, null),
             (data, entity) -> {
-                OriginComponent component = ModComponents.ORIGIN.get(entity);
-                Identifier originId = data.getId("origin");
-                if(data.isPresent("layer")) {
-                    Identifier layerId = data.getId("layer");
-                    OriginLayer layer = OriginLayers.getLayer(layerId);
-                    if(layer == null) {
-                        return false;
-                    } else {
-                        Origin origin = component.getOrigin(layer);
-                        if(origin != null) {
-                            return origin.getIdentifier().equals(originId);
+                if(entity instanceof PlayerEntity) {OriginComponent component = ModComponents.ORIGIN.get(entity);
+                    Identifier originId = data.getId("origin");
+                    if(data.isPresent("layer")) {
+                        Identifier layerId = data.getId("layer");
+                        OriginLayer layer = OriginLayers.getLayer(layerId);
+                        if(layer == null) {
+                            return false;
+                        } else {
+                            Origin origin = component.getOrigin(layer);
+                            if(origin != null) {
+                                return origin.getIdentifier().equals(originId);
+                            }
+                            return false;
                         }
-                        return false;
+                    } else {
+                        return component.getOrigins().values().stream().anyMatch(o -> o.getIdentifier().equals(originId));
                     }
                 } else {
-                    return component.getOrigins().values().stream().anyMatch(o -> o.getIdentifier().equals(originId));
+                    return false;
                 }
             }));
     }

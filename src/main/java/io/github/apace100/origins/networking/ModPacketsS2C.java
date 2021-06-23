@@ -95,6 +95,7 @@ public class ModPacketsS2C {
                 origins[i] = Origin.DATA.read(packetByteBuf);
             }
             minecraftClient.execute(() -> {
+                OriginsClient.isServerRunningOrigins = true;
                 OriginRegistry.reset();
                 for(int i = 0; i < ids.length; i++) {
                     OriginRegistry.register(ids[i], Origin.createFromData(ids[i], origins[i]));
