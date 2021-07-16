@@ -62,8 +62,8 @@ public class ChooseOriginScreen extends Screen {
 			if(origin.isChoosable()) {
 				ItemStack displayItem = origin.getDisplayItem();
 				if(displayItem.getItem() == Items.PLAYER_HEAD) {
-					if(!displayItem.hasTag() || !displayItem.getTag().contains("SkullOwner")) {
-						displayItem.getOrCreateTag().putString("SkullOwner", player.getDisplayName().getString());
+					if(!displayItem.hasNbt() || !displayItem.getNbt().contains("SkullOwner")) {
+						displayItem.getOrCreateNbt().putString("SkullOwner", player.getDisplayName().getString());
 					}
 				}
 				this.originSelection.add(origin);
@@ -85,7 +85,7 @@ public class ChooseOriginScreen extends Screen {
 	}
 
 	private void openNextLayerScreen() {
-		MinecraftClient.getInstance().openScreen(new WaitForNextLayerScreen(layerList, currentLayerIndex, showDirtBackground));
+		MinecraftClient.getInstance().setScreen(new WaitForNextLayerScreen(layerList, currentLayerIndex, showDirtBackground));
 	}
 
 	@Override

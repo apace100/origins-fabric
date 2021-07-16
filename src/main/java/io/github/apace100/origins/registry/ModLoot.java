@@ -87,6 +87,6 @@ public class ModLoot {
 
     private static NbtCompound createEnchantmentTag(Enchantment enchantment, int level) {
         EnchantmentLevelEntry entry = new EnchantmentLevelEntry(enchantment, level);
-        return EnchantedBookItem.forEnchantment(entry).getTag();
+        return EnchantedBookItem.forEnchantment(entry).getNbt();
     }
 }

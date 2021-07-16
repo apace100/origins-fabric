@@ -50,7 +50,7 @@ public class ViewOriginScreen extends Screen {
 		PlayerEntity player = MinecraftClient.getInstance().player;
 		origins.forEach((layer, origin) -> {
 			if(origin.getDisplayItem().getItem() == Items.PLAYER_HEAD) {
-				origin.getDisplayItem().getOrCreateTag().putString("SkullOwner", player.getDisplayName().getString());
+				origin.getDisplayItem().getOrCreateNbt().putString("SkullOwner", player.getDisplayName().getString());
 			}
 			if(origin != Origin.EMPTY || layer.getOriginOptionCount(player) > 0) {
 				originLayers.add(new Pair<>(layer, origin));
@@ -71,7 +71,7 @@ public class ViewOriginScreen extends Screen {
         guiTop = (this.height - windowHeight) / 2;
         if(originLayers.size() > 0 && OriginsClient.isServerRunningOrigins) {
 			addDrawableChild(chooseOriginButton = new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight - 40, 100, 20, new TranslatableText(Origins.MODID + ".gui.choose"), b -> {
-				MinecraftClient.getInstance().openScreen(new ChooseOriginScreen(Lists.newArrayList(originLayers.get(currentLayer).getLeft()), 0, false));
+				MinecraftClient.getInstance().setScreen(new ChooseOriginScreen(Lists.newArrayList(originLayers.get(currentLayer).getLeft()), 0, false));
 			}));
 			PlayerEntity player = MinecraftClient.getInstance().player;
 			chooseOriginButton.active = chooseOriginButton.visible = originLayers.get(currentLayer).getRight() == Origin.EMPTY && originLayers.get(currentLayer).getLeft().getOriginOptionCount(player) > 0;
@@ -87,7 +87,7 @@ public class ViewOriginScreen extends Screen {
 			}));
 		}
 		addDrawableChild(new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20, new TranslatableText(Origins.MODID + ".gui.close"), b -> {
-			MinecraftClient.getInstance().openScreen(null);
+			MinecraftClient.getInstance().setScreen(null);
         }));
 	}
 	

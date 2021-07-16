@@ -34,12 +34,12 @@ public class WaitForNextLayerScreen extends Screen {
         OriginComponent component = ModComponents.ORIGIN.get(player);
         while(index < layerList.size()) {
             if(!component.hasOrigin(layerList.get(index)) && layerList.get(index).getOrigins(player).size() > 0) {
-                MinecraftClient.getInstance().openScreen(new ChooseOriginScreen(layerList, index, showDirtBackground));
+                MinecraftClient.getInstance().setScreen(new ChooseOriginScreen(layerList, index, showDirtBackground));
                 return;
             }
             index++;
         }
-        MinecraftClient.getInstance().openScreen(null);
+        MinecraftClient.getInstance().setScreen(null);
     }
 
     @Override

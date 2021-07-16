@@ -157,38 +157,40 @@ public class PlayerOriginComponent implements OriginComponent {
         }
         this.hadOriginBefore = compoundTag.getBoolean("HadOriginBefore");
 
-        PowerHolderComponent powerComponent = PowerHolderComponent.KEY.get(player);
-        for(Origin origin : origins.values()) {
-            // Grants powers only if the player doesn't have them yet from the specific Origin source.
-            // Needed in case the origin was set before the update to Apoli happened.
-            grantPowersFromOrigin(origin, powerComponent);
-        }
-        for(Origin origin : origins.values()) {
-            revokeRemovedPowers(origin, powerComponent);
-        }
+        if(!player.world.isClient) {
+            PowerHolderComponent powerComponent = PowerHolderComponent.KEY.get(player);
+            for(Origin origin : origins.values()) {
+                // Grants powers only if the player doesn't have them yet from the specific Origin source.
+                // Needed in case the origin was set before the update to Apoli happened.
+                grantPowersFromOrigin(origin, powerComponent);
+            }
+            for(Origin origin : origins.values()) {
+                revokeRemovedPowers(origin, powerComponent);
+            }
 
-        // Compatibility with old worlds:
-        // Loads power data from Origins tag, whereas new versions
-        // store the data in the Apoli tag.
-        if(compoundTag.contains("Powers")) {
-            NbtList powerList = (NbtList)compoundTag.get("Powers");
-            for(int i = 0; i < powerList.size(); i++) {
-                NbtCompound powerTag = powerList.getCompound(i);
-                Identifier powerTypeId = Identifier.tryParse(powerTag.getString("Type"));
-                try {
-                    PowerType<?> type = PowerTypeRegistry.get(powerTypeId);
-                    if(powerComponent.hasPower(type)) {
-                        NbtElement data = powerTag.get("Data");
-                        try {
-                            powerComponent.getPower(type).fromTag(data);
-                        } catch(ClassCastException e) {
-                            // Occurs when power was overriden by data pack since last world load
-                            // to be a power type which uses different data class.
-                            Origins.LOGGER.warn("Data type of \"" + powerTypeId + "\" changed, skipping data for that power on player " + player.getName().asString());
+            // Compatibility with old worlds:
+            // Loads power data from Origins tag, whereas new versions
+            // store the data in the Apoli tag.
+            if(compoundTag.contains("Powers")) {
+                NbtList powerList = (NbtList)compoundTag.get("Powers");
+                for(int i = 0; i < powerList.size(); i++) {
+                    NbtCompound powerTag = powerList.getCompound(i);
+                    Identifier powerTypeId = Identifier.tryParse(powerTag.getString("Type"));
+                    try {
+                        PowerType<?> type = PowerTypeRegistry.get(powerTypeId);
+                        if(powerComponent.hasPower(type)) {
+                            NbtElement data = powerTag.get("Data");
+                            try {
+                                powerComponent.getPower(type).fromTag(data);
+                            } catch(ClassCastException e) {
+                                // Occurs when power was overriden by data pack since last world load
+                                // to be a power type which uses different data class.
+                                Origins.LOGGER.warn("Data type of \"" + powerTypeId + "\" changed, skipping data for that power on player " + player.getName().asString());
+                            }
                         }
+                    } catch(IllegalArgumentException e) {
+                        Origins.LOGGER.warn("Power data of unregistered power \"" + powerTypeId + "\" found on player, skipping...");
                     }
-                } catch(IllegalArgumentException e) {
-                    Origins.LOGGER.warn("Power data of unregistered power \"" + powerTypeId + "\" found on player, skipping...");
                 }
             }
         }
