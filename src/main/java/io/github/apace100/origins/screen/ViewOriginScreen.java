@@ -49,8 +49,11 @@ public class ViewOriginScreen extends Screen {
 		originLayers = new ArrayList<>(origins.size());
 		PlayerEntity player = MinecraftClient.getInstance().player;
 		origins.forEach((layer, origin) -> {
-			if(origin.getDisplayItem().getItem() == Items.PLAYER_HEAD) {
-				origin.getDisplayItem().getOrCreateNbt().putString("SkullOwner", player.getDisplayName().getString());
+			ItemStack displayItem = origin.getDisplayItem();
+			if(displayItem.getItem() == Items.PLAYER_HEAD) {
+				if(!displayItem.hasNbt() || !displayItem.getNbt().contains("SkullOwner")) {
+					displayItem.getOrCreateNbt().putString("SkullOwner", player.getDisplayName().getString());
+				}
 			}
 			if(origin != Origin.EMPTY || layer.getOriginOptionCount(player) > 0) {
 				originLayers.add(new Pair<>(layer, origin));
