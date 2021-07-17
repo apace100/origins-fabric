@@ -91,7 +91,7 @@ public class OriginCommand {
 		component.setOrigin(layer, origin);
 		OriginComponent.sync(player);
 		boolean hadOriginBefore = component.hadOriginBefore();
-		OriginComponent.onChosen(player, hadOriginBefore);
+		OriginComponent.partialOnChosen(player, hadOriginBefore, origin);
 	}
 
 	private static boolean hasOrigin(PlayerEntity player, OriginLayer layer, Origin origin) {
