@@ -56,7 +56,8 @@
     "cloth-config2": ">=5.0.0"
   },
   "breaks": {
-    "optifabric": "<1.11.17"
+    "optifabric": "<=1.11.18",
+    "identity": "<1.14.2-beta"
   },
   "suggests": {
     "modmenu": "*"
