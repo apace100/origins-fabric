@@ -1,0 +1,220 @@
+{
+  "origin.origins.human.name": "人間",
+  "origin.origins.human.description": "特別な力を持たない普通の人間です。普通の人間として普通のMinecraftが遊べます。",
+
+  "origin.origins.merling.name": "マーメイド",
+  "origin.origins.merling.description": "昔から水中で暮らしてきたその種族は、エラ呼吸しか出来ないけれど、水中でなら誰にも負けません。",
+
+  "origin.origins.arachnid.name": "クモ人間",
+  "origin.origins.arachnid.description": "コッソリ壁を登って獲物をクモの巣に捕らえれば、後は…いただきます。",
+
+  "origin.origins.blazeborn.name": "ブレイズマン",
+  "origin.origins.blazeborn.description": "ブレイズの血族であるブレイズマンは、危険なネザーでは楽々暮らせます。でも水を飲むのはやめた方が良いかも…？",
+
+  "origin.origins.avian.name": "鳥人間",
+  "origin.origins.avian.description": "空は飛べないけれど、滑空なら出来ます。チキンだなんて呼ばないで！",
+
+  "origin.origins.phantom.name": "ファントム",
+  "origin.origins.phantom.description": "半人半霊を交互に切り替えて夜を賢く生きる…日焼け止めはちゃんと塗った？",
+
+  "origin.origins.feline.name": "ネコ娘",
+  "origin.origins.feline.description": "猫耳生やしてクリーパーを遠ざける可愛い仔。崖から飛び降りてもへっちゃら！",
+
+  "origin.origins.elytrian.name": "エリトリアン",
+  "origin.origins.elytrian.description": "風に乗って空をスイスイ。でも狭い所はお断り！太陽に向かって全速前進だ！",
+
+  "origin.origins.enderian.name": "エンダー",
+  "origin.origins.enderian.description": "エンダードラゴンの子供として生まれた彼らは、テレポーテーションの使い手。おっと、海にワープしない様に気を付けて！",
+
+  "origin.origins.shulk.name": "シュルク",
+  "origin.origins.shulk.description": "シュルカーの様な外殻で、相手の攻撃も痛くも痒くもありません。やっぱり痒みは少しあるかも…",
+
+  "power.origins.water_breathing.name": "エラ",
+  "power.origins.water_breathing.description": "水中での呼吸が可能になります。でも地上での呼吸は出来ません。",
+
+  "power.origins.aqua_affinity.name": "水中採掘",
+  "power.origins.aqua_affinity.description": "水中でも地上の速さでブロックを壊せます。",
+
+  "power.origins.water_vision.name": "海の目",
+  "power.origins.water_vision.description": "水中での視界がクリアになります。",
+
+  "power.origins.swim_speed.name": "ヒレ",
+  "power.origins.swim_speed.description": "水中での水泳速度が通常より速くなります。",
+
+  "power.origins.like_water.name": "泳ぎの達人",
+  "power.origins.like_water.description": "水中にいる間、勝手に底に沈みません。",
+
+  "power.origins.fragile.name": "脆弱",
+  "power.origins.fragile.description": "普通の人間に比べて体力がハート3つ分少ないです。",
+
+  "power.origins.webbing.name": "クモの糸",
+  "power.origins.webbing.description": "近距離攻撃をした場合、相手を少しの間クモの巣に閉じ込めます。",
+
+  "power.origins.climbing.name": "壁登り",
+  "power.origins.climbing.description": "ハシゴ以外のブロックも登ることが出来るようになります。",
+
+  "power.origins.carnivore.name": "肉食",
+  "power.origins.carnivore.description": "野菜は食べれず、肉しか食べることが出来なくなります。",
+
+  "power.origins.fire_immunity.name": "火炎耐性",
+  "power.origins.fire_immunity.description": "全ての火属性攻撃を無効化します。",
+
+  "power.origins.nether_spawn.name": "ネザー生まれ",
+  "power.origins.nether_spawn.description": "初期スポーン地点がネザーになります。",
+
+  "power.origins.burning_wrath.name": "火の力",
+  "power.origins.burning_wrath.description": "燃えている間、自分の与えるダメージが少し増えます。",
+
+  "power.origins.hotblooded.name": "アツアツな体",
+  "power.origins.hotblooded.description": "体内で毒が殺菌される為、毒と空腹になりません。",
+
+  "power.origins.water_vulnerability.name": "水恐怖症",
+  "power.origins.water_vulnerability.description": "水に触れている間ダメージを受けます。",
+
+  "power.origins.tailwind.name": "追い風",
+  "power.origins.tailwind.description": "地上での移動速度が通常より速くなります。",
+
+  "power.origins.slow_falling.name": "滞空",
+  "power.origins.slow_falling.description": "空中での落下速度が通常より遅くなります。(スニークをすると通常速度での落下が出来ます)",
+
+  "power.origins.vegetarian.name": "草食",
+  "power.origins.vegetarian.description": "肉は食べれず、野菜しか食べることが出来なくなります。",
+
+  "power.origins.fresh_air.name": "新鮮な空気",
+  "power.origins.fresh_air.description": "ベッドで眠る際、高度86ブロック以上の高さで眠る必要があります。",
+
+  "power.origins.phasing.name": "壁抜け",
+  "power.origins.phasing.description": "ファントム状態の間、黒曜石以外のブロックを通り抜けることが出来ます。",
+
+  "power.origins.invisibility.name": "透明化",
+  "power.origins.invisibility.description": "ファントム状態の間、姿が透明になります。",
+
+  "power.origins.hunger_over_time.name": "エネルギー消費",
+  "power.origins.hunger_over_time.description": "ファントム状態の間、満腹度の減りが早くなります。",
+
+  "power.origins.burn_in_daylight.name": "アンデッド",
+  "power.origins.burn_in_daylight.description": "透明でない間、日光に当たると燃えます。",
+
+  "power.origins.fall_immunity.name": "アクロバティック",
+  "power.origins.fall_immunity.description": "どんな高さから落ちても落下ダメージを食らいません。",
+
+  "power.origins.sprint_jump.name": "跳躍",
+  "power.origins.sprint_jump.description": "ダッシュしている間、ジャンプ力が通常より高くなります。",
+
+  "power.origins.nine_lives.name": "9つの命",
+  "power.origins.nine_lives.description": "普通の人間に比べて体力がハート1つ分少ないです。",
+
+  "power.origins.cat_vision.name": "夜行性",
+  "power.origins.cat_vision.description": "水中に居ない限り、暗闇が見やすくなります。",
+
+  "power.origins.weak_arms.name": "弱い腕",
+  "power.origins.weak_arms.description": "攻撃力上昇のポーション効果が付いていない場合、2つ以上の石と隣接している石が壊せなくなります。",
+
+  "power.origins.scare_creepers.name": "猫姿",
+  "power.origins.scare_creepers.description": "クリーパーは貴方に怯えるようになり、攻撃しない限り爆発しなくなります。",
+
+  "power.origins.launch_into_air.name": "翼のギフト",
+  "power.origins.launch_into_air.description": "30秒毎に、20ブロック高く飛ぶことが出来ます。",
+
+  "power.origins.elytra.name": "翼",
+  "power.origins.elytra.description": "装備しなくてもエリトラが使えます。",
+
+  "power.origins.light_armor.name": "軽量化",
+  "power.origins.light_armor.description": "重い防具は着る事が出来ません (チェーン防具と同等かそれ以下の防御力の防具のみ着ることが出来ます).",
+
+  "power.origins.claustrophobia.name": "閉所恐怖症",
+  "power.origins.claustrophobia.description": "天井の低い場所に長く滞在すると攻撃力が低くなり足が遅くなります。",
+
+  "power.origins.more_kinetic_damage.name": "脆い骨",
+  "power.origins.more_kinetic_damage.description": "落下ダメージや壁への衝突ダメージが増えます。",
+
+  "power.origins.aerial_combatant.name": "空中特化",
+  "power.origins.aerial_combatant.description": "エリトラで滑空している間、自分の与えるダメージが増加します。",
+
+  "power.origins.throw_ender_pearl.name": "テレポーテーション",
+  "power.origins.throw_ender_pearl.description": "いつでもダメージのないエンダーパールを投げることが出来ます。",
+
+  "power.origins.pumpkin_hate.name": "カボチャへの恐怖",
+  "power.origins.pumpkin_hate.description": "カボチャを恐れるようになります。いい意味で。",
+
+  "power.origins.extra_reach.name": "長い腕",
+  "power.origins.extra_reach.description": "通常より長いリーチで、遠くのエンティティやブロックにも手が届くようになります。",
+
+  "power.origins.shulker_inventory.name": "シュルカーインベントリ",
+  "power.origins.shulker_inventory.description": "死亡時にもロストしない9つの追加インベントリを使えます。",
+
+  "power.origins.natural_armor.name": "硬い皮膚",
+  "power.origins.natural_armor.description": "防具を着ていなくても、ある程度の防御力を持っています。",
+
+  "power.origins.more_exhaustion.name": "膨大な食糧",
+  "power.origins.more_exhaustion.description": "通常のプレイヤーより早く空腹になります。",
+
+  "power.origins.no_shield.name": "不器用",
+  "power.origins.no_shield.description": "盾が使用できなくなります。",
+
+  "power.origins.strong_arms.name": "強靭な腕",
+  "power.origins.strong_arms.description": "ピッケルなしで石を破壊することが出来ます。",
+
+  "power.origins.translucent.name": "半透明",
+  "power.origins.translucent.description": "体が半透明になります。",
+
+  "power.origins.end_spawn.name": "エンドの住民",
+  "power.origins.end_spawn.description": "開始地点がエンドになります。",
+
+  "power.origins.master_of_webs.name": "クモの巣の達人",
+  "power.origins.master_of_webs.description": "クモの巣の中を自由に動くことが出来、登ることも出来ます。近接攻撃をした場合、少しの間敵をクモの巣に閉じ込めます。クモの巣に引っ掛かったモブを認識することが出来ます。糸からクモの巣をクラフトできるようになります。",
+
+  "power.origins.lay_eggs.name": "産卵",
+  "power.origins.lay_eggs.description": "朝起きた時、新鮮な卵を産みます。",
+
+  "category.origins": "オリジンズ",
+  "key.origins.primary_active": "能力起動 (一つ目)",
+  "key.origins.secondary_active": "能力起動 (二つ目)",
+  "key.origins.view_origin": "オリジンの説明を見る",
+
+  "text.autoconfig.origins.title": "オリジンズの設定",
+  "text.autoconfig.origins.option.xOffset": "クールダウンバーの位置　X",
+  "text.autoconfig.origins.option.yOffset": "クールダウンバーの位置 Y",
+  "text.autoconfig.origins.option.phantomizedOverlayStrength": "ファントム化中の視覚効果の強度",
+
+  "item.origins.orb_of_origin": "オリジンの宝玉",
+
+  "enchantment.origins.water_protection": "水耐性",
+
+  "container.shulker_inventory_power": "シュルカーインベントリ",
+
+  "origins.gui.select": "選択",
+  "origins.gui.close": "閉じる",
+  "origins.gui.choose": "決定",
+  "origins.gui.choose_origin.title": "あなたの %sを決めてください。",
+  "origins.gui.view_origin.title": "これがあなたの %sです。",
+  "origins.gui.view_origin.empty": "オリジンを持つことが出来ません。",
+  "origins.gui.view_origin.not_installed": "サーバーにOriginsがインストールされていません。",
+  "origins.gui.impact.impact": "変化率",
+  "origins.gui.impact.none": "なし",
+  "origins.gui.impact.low": "弱",
+  "origins.gui.impact.medium": "中",
+  "origins.gui.impact.high": "強",
+  "origins.gui.version_mismatch": "このサーバーは、インストールしたもの (v%1$s)　と互換性のない異なるバージョンのOrigins (v%2$s)を使用しています。",
+
+  "origin.origins.random.name": "ランダム",
+  "origin.origins.random.description": "次のいずれかが割り当てられます：",
+
+  "layer.origins.origin.name": "オリジン",
+  "layer.origins.origin.missing_origin.name": "存在しません",
+  "layer.origins.origin.missing_origin.description": "あなたはオリジンを所持していません。",
+
+  "death.attack.no_water_for_gills": "%1$s は地上でも呼吸が出来ると思った",
+  "death.attack.no_water_for_gills.player": "%1$s は %2$s　と戦うのに夢中で水に入るのを忘れてしまった",
+  "death.attack.hurt_by_water": "%1$s お風呂に入りすぎた",
+  "death.attack.hurt_by_water.player": "%1$s は %2$s　に沈められた",
+  "death.attack.genericDamageOverTime": "%1$s 自分の能力のダメージで死んだ",
+  "death.attack.genericDamageOverTime.player": "%1$s は %2$sと戦いながら自分の能力のダメージで死んだ",
+
+  "commands.origin.origin_not_found": "不明なオリジン: %s",
+  "commands.origin.set.success.single": "%s のオリジンを %s にセットしました。 %s.",
+  "commands.origin.set.success.multiple": "%s のターゲットのオリジンを　%s にセットしました。 %s.",
+  "commands.origin.get.result": "%s は以下の %s　を所持しています: %s (%s)",
+
+  "origins.avian_sleep_fail": "寝るには新鮮な空気が必要です"
+}
