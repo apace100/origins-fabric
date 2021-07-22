@@ -12,7 +12,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -25,8 +24,6 @@ public class PlayerOriginComponent implements OriginComponent {
     private HashMap<OriginLayer, Origin> origins = new HashMap<>();
 
     private boolean hadOriginBefore = false;
-
-    private NbtCompound cachedData;
 
     public PlayerOriginComponent(PlayerEntity player) {
         this.player = player;
@@ -96,21 +93,6 @@ public class PlayerOriginComponent implements OriginComponent {
 
     @Override
     public void readFromNbt(NbtCompound compoundTag) {
-        this.cachedData = compoundTag;
-    }
-
-    @Override
-    public void onPowersRead() {
-        if(cachedData == null) {
-            Origins.LOGGER.error("Power read callback was invoked on OriginComponent without data being cached.");
-        } else {
-            fromTag(cachedData);
-            cachedData = null;
-        }
-    }
-
-    private void fromTag(NbtCompound compoundTag) {
-
         if(player == null) {
             Origins.LOGGER.error("Player was null in `fromTag`! This is a bug!");
         }
@@ -125,7 +107,7 @@ public class PlayerOriginComponent implements OriginComponent {
                 Origins.LOGGER.warn("Player " + player.getDisplayName().asString() + " had old origin which could not be migrated: " + compoundTag.getString("Origin"));
             }
         } else {
-            NbtList originLayerList = (NbtList)compoundTag.get("OriginLayers");
+            NbtList originLayerList = (NbtList) compoundTag.get("OriginLayers");
             if(originLayerList != null) {
                 for(int i = 0; i < originLayerList.size(); i++) {
                     NbtCompound layerTag = originLayerList.getCompound(i);
@@ -172,7 +154,7 @@ public class PlayerOriginComponent implements OriginComponent {
             // Loads power data from Origins tag, whereas new versions
             // store the data in the Apoli tag.
             if(compoundTag.contains("Powers")) {
-                NbtList powerList = (NbtList)compoundTag.get("Powers");
+                NbtList powerList = (NbtList) compoundTag.get("Powers");
                 for(int i = 0; i < powerList.size(); i++) {
                     NbtCompound powerTag = powerList.getCompound(i);
                     Identifier powerTypeId = Identifier.tryParse(powerTag.getString("Type"));
@@ -197,6 +179,11 @@ public class PlayerOriginComponent implements OriginComponent {
     }
 
     @Override
+    public void onPowersRead() {
+        // NO-OP
+    }
+
+    @Override
     public void writeToNbt(NbtCompound compoundTag) {
         NbtList originLayerList = new NbtList();
         for(Map.Entry<OriginLayer, Origin> entry : origins.entrySet()) {
@@ -207,14 +194,6 @@ public class PlayerOriginComponent implements OriginComponent {
         }
         compoundTag.put("OriginLayers", originLayerList);
         compoundTag.putBoolean("HadOriginBefore", this.hadOriginBefore);
-    }
-
-    @Override
-    public void applySyncPacket(PacketByteBuf buf) {
-        NbtCompound compoundTag = buf.readNbt();
-        if(compoundTag != null) {
-            this.fromTag(compoundTag);
-        }
     }
 
     @Override
