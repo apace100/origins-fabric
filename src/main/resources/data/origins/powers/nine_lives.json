@@ -3,7 +3,7 @@
   "modifier": {
     "name": "Nine lives health reduction",
     "attribute": "minecraft:generic.max_health",
-    "value": -2.0,
+    "value": -0.1,
     "operation": "addition"
   }
 }
