@@ -9,7 +9,7 @@
     "Apace"
   ],
   "contact": {
-    "homepage": "https://apace100.github.io/origins-fabric",
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/origins",
     "sources": "https://github.com/apace100/origins-fabric",
     "issues": "https://github.com/apace100/origins-fabric/issues"
   },
@@ -58,8 +58,5 @@
   "breaks": {
     "optifabric": "<=1.11.18",
     "identity": "<1.14.2-beta"
-  },
-  "suggests": {
-    "modmenu": "*"
   }
 }
