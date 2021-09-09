@@ -1,5 +1,7 @@
 # Origins Mod for Minecraft
 
+https://www.curseforge.com/minecraft/mc-mods/origins
+
 This is the GitHub repository for the Origins mod, created for Fabric.
 
 If you need help with **creating data packs** for the mod, visit [the official wiki](https://origins.readthedocs.io/). At some point in the future, this wiki will also contain information on how to create an add-on for the mod.
