@@ -40,6 +40,7 @@ public class OriginLayers extends MultiJsonDataLoader implements IdentifiableRes
                     JsonObject jo = je.getAsJsonObject();
                     boolean replace = JsonHelper.getBoolean(jo, "replace", false);
                     int priority = JsonHelper.getInt(jo, "loading_priority", 0);
+                    if(priority >= minLayerPriority) {
                         HashMap<Integer, List<JsonObject>> inner = layers.computeIfAbsent(id, ident -> new HashMap<>());
                         List<JsonObject> layerList = inner.computeIfAbsent(priority, prio -> new LinkedList<>());
                         if(replace) {
@@ -47,6 +48,7 @@ public class OriginLayers extends MultiJsonDataLoader implements IdentifiableRes
                             minLayerPriority = priority + 1;
                         }
                         layerList.add(jo);
+                    }
                 } catch (Exception e) {
                     Origins.LOGGER.error("There was a problem reading Origin layer file " + id.toString() + " (skipping): " + e.getMessage());
                 }
