@@ -143,11 +143,15 @@ public class PlayerOriginComponent implements OriginComponent {
                             origin = OriginRegistry.get(originId);
                         } catch(IllegalArgumentException e) {
                             Origins.LOGGER.warn("Could not find origin with id " + originId.toString() + ", which existed on the data of player " + player.getDisplayName().asString() + ".");
+                            PowerHolderComponent powerComponent = PowerHolderComponent.KEY.get(player);
+                            powerComponent.removeAllPowersFromSource(originId);
                         }
                         if(origin != null) {
                             if(!layer.contains(origin) && !origin.isSpecial()) {
                                 Origins.LOGGER.warn("Origin with id " + origin.getIdentifier().toString() + " is not in layer " + layer.getIdentifier().toString() + " and is not special, but was found on " + player.getDisplayName().asString() + ", setting to EMPTY.");
                                 origin = Origin.EMPTY;
+                                PowerHolderComponent powerComponent = PowerHolderComponent.KEY.get(player);
+                                powerComponent.removeAllPowersFromSource(originId);
                             }
                             this.origins.put(layer, origin);
                         }
