@@ -12,6 +12,7 @@ import io.github.apace100.origins.origin.OriginManager;
 import io.github.apace100.origins.power.OriginsEntityConditions;
 import io.github.apace100.origins.power.OriginsPowerTypes;
 import io.github.apace100.origins.registry.*;
+import io.github.apace100.origins.screen.BadgeManager;
 import io.github.apace100.origins.util.ChoseOriginCriterion;
 import io.github.apace100.origins.util.GainedPowerCriterion;
 import io.github.apace100.origins.util.OriginsConfigSerializer;
@@ -37,6 +38,8 @@ public class Origins implements ModInitializer {
 	public static final Logger LOGGER = LogManager.getLogger(Origins.class);
 
 	public static ServerConfig config;
+
+	public static BadgeManager badgeManager;
 
 	@Override
 	public void onInitialize() {
@@ -81,6 +84,8 @@ public class Origins implements ModInitializer {
 		ArgumentTypes.register("origins:layer", LayerArgumentType.class, new ConstantArgumentSerializer<>(LayerArgumentType::layer));
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginManager());
 		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginLayers());
+
+		badgeManager = new BadgeManager();
 	}
 
 	public static Identifier identifier(String path) {

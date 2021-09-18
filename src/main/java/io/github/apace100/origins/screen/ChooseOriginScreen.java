@@ -9,11 +9,13 @@ import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.registry.ModItems;
+import io.github.apace100.origins.util.PowerKeyManager;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -25,6 +27,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Language;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ChooseOriginScreen extends Screen {
@@ -48,6 +51,8 @@ public class ChooseOriginScreen extends Screen {
 
 	private Origin randomOrigin;
 	private MutableText randomOriginText;
+
+	private final List<RenderedBadge> renderedBadges = new LinkedList<>();
 	
 	public ChooseOriginScreen(ArrayList<OriginLayer> layerList, int currentLayerIndex, boolean showDirtBackground) {
 		super(new TranslatableText(Origins.MODID + ".screen.choose_origin"));
@@ -157,6 +162,7 @@ public class ChooseOriginScreen extends Screen {
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		renderedBadges.clear();
 		if(maxSelection == 0) {
 			openNextLayerScreen();
 			return;
@@ -164,6 +170,36 @@ public class ChooseOriginScreen extends Screen {
 		this.renderBackground(matrices);
 		this.renderOriginWindow(matrices, mouseX, mouseY);
 		super.render(matrices, mouseX, mouseY, delta);
+		renderBadgeTooltip(matrices, mouseX, mouseY);
+	}
+
+	private void renderBadgeTooltip(MatrixStack matrices, int mouseX, int mouseY) {
+		for(RenderedBadge badge : renderedBadges) {
+			if(mouseX >= badge.x && mouseX < badge.x + 9) {
+				if(mouseY >= badge.y && mouseY < badge.y + 9) {
+					String hoverText = badge.badge.getHoverText();
+					Text keyText = new LiteralText("[")
+						.append(KeyBinding.getLocalizedName(PowerKeyManager.getKeyIdentifier(badge.power)).get())
+						.append("]");
+					if(hoverText.contains("\n")) {
+						List<Text> lines = new LinkedList<>();
+						String[] texts = hoverText.split("\n");
+						for (String text : texts) {
+							lines.add(new TranslatableText(text, keyText));
+						}
+						renderTooltip(matrices, lines, mouseX, mouseY);
+					} else {
+						Text text = new TranslatableText(
+							hoverText,
+							keyText
+						);
+
+						renderTooltip(matrices, text, mouseX, mouseY);
+					}
+					break;
+				}
+			}
+		}
 	}
 
 	private void renderOriginWindow(MatrixStack matrices, int mouseX, int mouseY) {
@@ -260,6 +296,21 @@ public class ChooseOriginScreen extends Screen {
 				List<OrderedText> drawLines = textRenderer.wrapLines(desc, windowWidth - 36);
 				if(y >= startY - 24 && y <= endY + 12) {
 					textRenderer.draw(matrices, name, x, y, 0xFFFFFF);
+					int tw = textRenderer.getWidth(name);
+					List<Badge> badges = Origins.badgeManager.getBadges(p.getIdentifier());
+					int xStart = x + tw + 4;
+					int bi = 0;
+					for(Badge badge : badges) {
+						RenderSystem.setShaderTexture(0, badge.getSpriteLocation());
+						drawTexture(matrices, xStart + 10 * bi, y - 1, 0, 0, 9, 9, 9, 9);
+						RenderedBadge rb = new RenderedBadge();
+						rb.badge = badge;
+						rb.power = p.getIdentifier();
+						rb.x = xStart + 10 * bi;
+						rb.y = y - 1;
+						renderedBadges.add(rb);
+						bi++;
+					}
 				}
 				for(OrderedText line : drawLines) {
 					y += 12;
@@ -277,5 +328,12 @@ public class ChooseOriginScreen extends Screen {
 		if(currentMaxScroll < 0) {
 			currentMaxScroll = 0;
 		}
+	}
+
+	private static class RenderedBadge {
+		Identifier power;
+		Badge badge;
+		int x;
+		int y;
 	}
 }
