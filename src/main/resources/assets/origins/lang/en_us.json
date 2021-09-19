@@ -167,6 +167,9 @@
   "power.origins.lay_eggs.name": "Oviparous",
   "power.origins.lay_eggs.description": "Whenever you wake up in the morning, you will lay an egg.",
 
+  "power.origins.phantomize.name": "Phantom Form",
+  "power.origins.phantomize.description": "You can switch between human and phantom form at will.",
+
   "category.origins": "Origins",
   "key.origins.primary_active": "Active Power (Primary)",
   "key.origins.secondary_active": "Active Power (Secondary)",
@@ -199,6 +202,8 @@
 
   "origins.gui.badge.active": "Active ability, use with %s.",
   "origins.gui.badge.toggle": "Toggle with %s.",
+
+  "origins.gui.unbound_key": "§ounbound§r",
 
   "origin.origins.random.name": "Random",
   "origin.origins.random.description": "You'll be assigned one of the following:",

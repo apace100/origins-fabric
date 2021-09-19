@@ -38,6 +38,8 @@ public class OriginLayer implements Comparable<OriginLayer> {
     private Identifier defaultOrigin = null;
     private boolean autoChooseIfNoChoice = false;
 
+    private boolean hidden = false;
+
     public String getOrCreateTranslationKey() {
         if(nameTranslationKey == null || nameTranslationKey.isEmpty()) {
             this.nameTranslationKey = "layer." + identifier.getNamespace() + "." + identifier.getPath() + ".name";
@@ -111,6 +113,10 @@ public class OriginLayer implements Comparable<OriginLayer> {
         return isRandomAllowed;
     }
 
+    public boolean isHidden() {
+        return hidden;
+    }
+
     public List<Identifier> getRandomOrigins(PlayerEntity playerEntity) {
         return conditionedOrigins.stream().filter(co -> co.isConditionFulfilled(playerEntity)).flatMap(co -> co.getOrigins().stream()).filter(OriginRegistry::contains).filter(o -> !originsExcludedFromRandom.contains(o)).filter(id -> doesRandomAllowUnchoosable || OriginRegistry.get(id).isChoosable()).collect(Collectors.toList());
     }
@@ -155,6 +161,9 @@ public class OriginLayer implements Comparable<OriginLayer> {
         if(json.has("auto_choose")) {
             this.autoChooseIfNoChoice = JsonHelper.getBoolean(json, "auto_choose");
         }
+        if(json.has("hidden")) {
+            this.hidden = JsonHelper.getBoolean(json, "hidden");
+        }
     }
 
     @Override
@@ -198,6 +207,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
             buffer.writeIdentifier(defaultOrigin);
         }
         buffer.writeBoolean(autoChooseIfNoChoice);
+        buffer.writeBoolean(hidden);
     }
 
     @Environment(EnvType.CLIENT)
@@ -227,6 +237,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
             layer.defaultOrigin = buffer.readIdentifier();
         }
         layer.autoChooseIfNoChoice = buffer.readBoolean();
+        layer.hidden = buffer.readBoolean();
         return layer;
     }
 
@@ -259,6 +270,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
             layer.defaultOrigin = new Identifier(JsonHelper.getString(json, "default_origin"));
         }
         layer.autoChooseIfNoChoice = JsonHelper.getBoolean(json, "auto_choose", false);
+        layer.hidden = JsonHelper.getBoolean(json, "hidden", false);
         return layer;
     }
 
