@@ -178,6 +178,8 @@
   "text.autoconfig.origins.option.phantomizedOverlayStrength": "Phantomized Overlay Strength",
 
   "item.origins.orb_of_origin": "Orb of Origin",
+  "item.origins.orb_of_origin.layer_generic": "Lets you choose a new %s.",
+  "item.origins.orb_of_origin.layer_specific": "Sets your %1$s to \"%2$s\".",
 
   "enchantment.origins.water_protection": "Water Protection",
 
