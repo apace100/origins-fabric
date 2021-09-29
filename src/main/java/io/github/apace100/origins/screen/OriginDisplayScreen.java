@@ -160,7 +160,7 @@ public class OriginDisplayScreen extends Screen {
                     String hoverText = badge.badge.getHoverText();
                     String keyId = PowerKeyManager.getKeyIdentifier(badge.power);
                     Text keybindText = KeyBinding.getLocalizedName(keyId).get();
-                    if(keybindText.asString().isEmpty()) {
+                    if(keybindText.getString().isEmpty()) {
                         keybindText = new TranslatableText("origins.gui.unbound_key");
                     }
                     Text keyText = new LiteralText("[")
