@@ -81,16 +81,18 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 	@Override
 	protected void init() {
 		super.init();
-		addDrawableChild(new ButtonWidget(guiLeft - 40,this.height / 2 - 10, 20, 20, new LiteralText("<"), b -> {
-        	currentOrigin = (currentOrigin - 1 + maxSelection) % maxSelection;
-			Origin newOrigin = getCurrentOriginInternal();
-			showOrigin(newOrigin, layerList.get(currentLayerIndex), newOrigin == randomOrigin);
-        }));
-		addDrawableChild(new ButtonWidget(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20, new LiteralText(">"), b -> {
-        	currentOrigin = (currentOrigin + 1) % maxSelection;
-			Origin newOrigin = getCurrentOriginInternal();
-			showOrigin(newOrigin, layerList.get(currentLayerIndex), newOrigin == randomOrigin);
-        }));
+		if(maxSelection > 1) {
+			addDrawableChild(new ButtonWidget(guiLeft - 40,this.height / 2 - 10, 20, 20, new LiteralText("<"), b -> {
+				currentOrigin = (currentOrigin - 1 + maxSelection) % maxSelection;
+				Origin newOrigin = getCurrentOriginInternal();
+				showOrigin(newOrigin, layerList.get(currentLayerIndex), newOrigin == randomOrigin);
+			}));
+			addDrawableChild(new ButtonWidget(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20, new LiteralText(">"), b -> {
+				currentOrigin = (currentOrigin + 1) % maxSelection;
+				Origin newOrigin = getCurrentOriginInternal();
+				showOrigin(newOrigin, layerList.get(currentLayerIndex), newOrigin == randomOrigin);
+			}));
+		}
 		addDrawableChild(new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20, new TranslatableText(Origins.MODID + ".gui.select"), b -> {
 			PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 			if(currentOrigin == originSelection.size()) {
