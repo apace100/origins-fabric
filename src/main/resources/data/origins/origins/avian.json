@@ -2,6 +2,7 @@
 	"powers": [
 		"origins:slow_falling",
 		"origins:fresh_air",
+		"origins:like_air",
 		"origins:tailwind",
 		"origins:lay_eggs",
 		"origins:vegetarian"

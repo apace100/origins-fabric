@@ -1,6 +1,6 @@
 {
   "type": "origins:inventory",
-  "name": "container.shulker_inventory_power",
+  "title": "container.shulker_inventory_power",
   "drop_on_death": false,
   "key": {
     "key": "key.origins.primary_active",

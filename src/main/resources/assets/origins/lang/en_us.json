@@ -170,6 +170,12 @@
   "power.origins.phantomize.name": "Phantom Form",
   "power.origins.phantomize.description": "You can switch between human and phantom form at will.",
 
+  "power.origins.like_air.name": "Like Air",
+  "power.origins.like_air.description": "Modifiers to your walking speed also apply while you're airborne.",
+
+  "power.origins.velvet_paws.name": "Velvet Paws",
+  "power.origins.velvet_paws.description": "Your footsteps don't cause any vibrations which could otherwise be picked up by nearby lifeforms.",
+
   "category.origins": "Origins",
   "key.origins.primary_active": "Active Power (Primary)",
   "key.origins.secondary_active": "Active Power (Secondary)",
