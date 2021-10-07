@@ -36,6 +36,7 @@ repositories {
 	maven {
 		url "https://maven.terraformersmc.com/"
 	}
+	mavenLocal()
 }
 
 dependencies {
@@ -55,7 +56,6 @@ dependencies {
 	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	include "me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}"
 
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 
