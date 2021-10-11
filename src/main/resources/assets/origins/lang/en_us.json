@@ -167,6 +167,15 @@
   "power.origins.lay_eggs.name": "Oviparous",
   "power.origins.lay_eggs.description": "Whenever you wake up in the morning, you will lay an egg.",
 
+  "power.origins.phantomize.name": "Phantom Form",
+  "power.origins.phantomize.description": "You can switch between human and phantom form at will.",
+
+  "power.origins.like_air.name": "Like Air",
+  "power.origins.like_air.description": "Modifiers to your walking speed also apply while you're airborne.",
+
+  "power.origins.velvet_paws.name": "Velvet Paws",
+  "power.origins.velvet_paws.description": "Your footsteps don't cause any vibrations which could otherwise be picked up by nearby lifeforms.",
+
   "category.origins": "Origins",
   "key.origins.primary_active": "Active Power (Primary)",
   "key.origins.secondary_active": "Active Power (Secondary)",
@@ -178,6 +187,8 @@
   "text.autoconfig.origins.option.phantomizedOverlayStrength": "Phantomized Overlay Strength",
 
   "item.origins.orb_of_origin": "Orb of Origin",
+  "item.origins.orb_of_origin.layer_generic": "Lets you choose a new %s.",
+  "item.origins.orb_of_origin.layer_specific": "Sets your %1$s to \"%2$s\".",
 
   "enchantment.origins.water_protection": "Water Protection",
 
@@ -197,6 +208,11 @@
   "origins.gui.impact.high": "High",
   "origins.gui.version_mismatch": "This server is running a different version of Origins (v%1$s) which is incompatible with the one you have installed (v%2$s).",
 
+  "origins.gui.badge.active": "Active ability, use with %s.",
+  "origins.gui.badge.toggle": "Toggle with %s.",
+
+  "origins.gui.unbound_key": "§ounbound§r",
+
   "origin.origins.random.name": "Random",
   "origin.origins.random.description": "You'll be assigned one of the following:",
 
@@ -215,6 +231,8 @@
   "commands.origin.set.success.single": "Set origin of %s in layer %s to %s.",
   "commands.origin.set.success.multiple": "Set origin of %s targets in layer %s to %s.",
   "commands.origin.get.result": "%s has the following %s: %s (%s)",
+  "commands.origin.gui.all": "Opened the selection GUI for %s players.",
+  "commands.origin.gui.layer": "Opened the \"%2$s\" selection GUI for %1$s players.",
 
   "origins.avian_sleep_fail": "You need fresh air to sleep"
 }

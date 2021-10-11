@@ -34,8 +34,9 @@ repositories {
 		url "https://maven.shedaniel.me/"
 	}
 	maven {
-		url "https://api.modrinth.com/maven"
+		url "https://maven.terraformersmc.com/"
 	}
+	mavenLocal()
 }
 
 dependencies {
@@ -49,13 +50,14 @@ dependencies {
 
 	modImplementation "com.github.apace100:apoli:${project.apoli_version}"
 	include "com.github.apace100:apoli:${project.apoli_version}"
+	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${cca_version}"
+	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cca_version}"
 
 	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	include "me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}"
 
-	modImplementation "maven.modrinth:modmenu:${project.modmenu_version}"
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 
 	include modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}")
 }

@@ -8,7 +8,6 @@
     "LikeWaterMixin",
     "LoginMixin",
     "NoCobwebSlowdownMixin",
-    "OriginDeserializationMixin",
     "OriginUpgradeMixin",
     "ScareCreepersMixin",
     "SelectionInvulnerabilityMixin",
@@ -16,7 +15,6 @@
     "WaterBreathingMixin$UpdateAir"
   ],
   "client": [
-    "PhasingOverlayMixin",
     "ServerCheckMixin",
     "WaterVisibilityMixin"
   ],

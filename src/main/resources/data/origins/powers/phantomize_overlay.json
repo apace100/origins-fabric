@@ -1,0 +1,17 @@
+{
+  "type": "apoli:overlay",
+  "hidden": true,
+  "texture": "minecraft:textures/misc/nausea.png",
+  "red": 0.2,
+  "green": 0.4,
+  "blue": 0.2,
+  "strength": 0.7,
+  "draw_mode": "nausea",
+  "draw_phase": "above_hud",
+  "visible_in_third_person": true,
+  "hide_with_hud": true,
+  "condition": {
+    "type": "apoli:power_active",
+    "power": "origins:phantomize"
+  }
+}

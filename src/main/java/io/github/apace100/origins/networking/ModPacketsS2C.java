@@ -10,6 +10,7 @@ import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.screen.Badge;
 import io.github.apace100.origins.screen.ChooseOriginScreen;
 import io.github.apace100.origins.screen.WaitForNextLayerScreen;
 import io.netty.util.concurrent.Future;
@@ -27,8 +28,7 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
@@ -42,6 +42,7 @@ public class ModPacketsS2C {
             ClientPlayNetworking.registerReceiver(ModPackets.ORIGIN_LIST, ModPacketsS2C::receiveOriginList);
             ClientPlayNetworking.registerReceiver(ModPackets.LAYER_LIST, ModPacketsS2C::receiveLayerList);
             ClientPlayNetworking.registerReceiver(ModPackets.CONFIRM_ORIGIN, ModPacketsS2C::receiveOriginConfirmation);
+            ClientPlayNetworking.registerReceiver(ModPackets.BADGE_LIST, ModPacketsS2C::receiveBadgeList);
         }));
     }
 
@@ -120,6 +121,34 @@ public class ModPacketsS2C {
                     OriginLayers.add(layers[i]);
                 }
                 OriginDataLoadedCallback.EVENT.invoker().onDataLoaded(true);
+            });
+        } catch (Exception e) {
+            Origins.LOGGER.error(e);
+        }
+    }
+
+    @Environment(EnvType.CLIENT)
+    private static void receiveBadgeList(MinecraftClient minecraftClient, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
+        try {
+            HashMap<Identifier, List<Badge>> badges = new HashMap<>();
+            int count = packetByteBuf.readInt();
+            for(int i = 0; i < count; i++) {
+                Identifier powerId = packetByteBuf.readIdentifier();
+                List<Badge> badgeList = new LinkedList<>();
+                int badgeCount = packetByteBuf.readInt();
+                for(int j = 0; j < badgeCount; j++) {
+                    Badge badge = Badge.fromData(Badge.DATA.read(packetByteBuf));
+                    badgeList.add(badge);
+                }
+                badges.put(powerId, badgeList);
+            }
+            minecraftClient.execute(() -> {
+                Origins.badgeManager.clear();
+                badges.forEach((id, list) -> {
+                    list.forEach(badge -> {
+                        Origins.badgeManager.addBadge(id, badge);
+                    });
+                });
             });
         } catch (Exception e) {
             Origins.LOGGER.error(e);

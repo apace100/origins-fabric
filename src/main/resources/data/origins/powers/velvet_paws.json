@@ -1,0 +1,4 @@
+{
+  "type": "origins:prevent_game_event",
+  "event": "minecraft:step"
+}

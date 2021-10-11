@@ -1,12 +1,14 @@
 package io.github.apace100.origins.mixin;
 
 import dev.onyxstudios.cca.api.v3.component.ComponentProvider;
+import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.screen.BadgeManager;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.ClientConnection;
@@ -53,6 +55,10 @@ public abstract class LoginMixin {
 
 		ServerPlayNetworking.send(player, ModPackets.ORIGIN_LIST, originListData);
 		ServerPlayNetworking.send(player, ModPackets.LAYER_LIST, originLayerData);
+
+		PacketByteBuf badgeData = new PacketByteBuf(Unpooled.buffer());
+		Origins.badgeManager.writeSyncData(badgeData);
+		ServerPlayNetworking.send(player, ModPackets.BADGE_LIST, badgeData);
 
 		List<ServerPlayerEntity> playerList = getPlayerList();
 		playerList.forEach(spe -> ModComponents.ORIGIN.syncWith(spe, ComponentProvider.fromEntity(player)));

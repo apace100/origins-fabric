@@ -18,5 +18,6 @@
   "exclude_random": [
     "origins:human"
   ],
-  "allow_random_unchoosable": false
+  "allow_random_unchoosable": false,
+  "hidden": false
 }

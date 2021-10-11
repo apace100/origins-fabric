@@ -34,6 +34,7 @@ public interface OriginComponent extends AutoSyncedComponent {
 
 	void sync();
 
+	@Deprecated(forRemoval = true)
 	void onPowersRead();
 
 	static void sync(PlayerEntity player) {

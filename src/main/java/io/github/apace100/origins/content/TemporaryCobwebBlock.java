@@ -1,4 +1,4 @@
-package io.github.apace100.origins.block;
+package io.github.apace100.origins.content;
 
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;

@@ -167,6 +167,9 @@
   "power.origins.lay_eggs.name": "Yumurtlayan",
   "power.origins.lay_eggs.description": "Sabah uyandığında yumurtlarsın.",
 
+  "power.origins.phantomize.name": "Hayalet Formu",
+  "power.origins.phantomize.description": "İstediğin zaman hayalet formu ile insan formu arasında geçiş yapabilirsin.",
+
   "category.origins": "Originler",
   "key.origins.primary_active": "Aktif Güç (Birincil)",
   "key.origins.secondary_active": "Aktif Güç (İkincil)",
@@ -196,6 +199,11 @@
   "origins.gui.impact.medium": "Orta",
   "origins.gui.impact.high": "Yüksek",
   "origins.gui.version_mismatch": "Bu server başka bir Origins sürümü kullanıyor (v%1$s). Bu sürüm senin yüklediğin sürümle uyumlu değil. (v%2$s).",
+
+  "origins.gui.badge.active": "Aktif Özellik,  %s ile kullan.",
+  "origins.gui.badge.toggle": "Özelliği %s ile aç, kapa.",
+
+  "origins.gui.unbound_key": "§oatanmamış§r",
 
   "origin.origins.random.name": "Rastgele",
   "origin.origins.random.description": "Bu Originlerden biri olacaksınız:",

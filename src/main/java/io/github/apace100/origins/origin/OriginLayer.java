@@ -9,7 +9,7 @@ import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -37,6 +37,8 @@ public class OriginLayer implements Comparable<OriginLayer> {
 
     private Identifier defaultOrigin = null;
     private boolean autoChooseIfNoChoice = false;
+
+    private boolean hidden = false;
 
     public String getOrCreateTranslationKey() {
         if(nameTranslationKey == null || nameTranslationKey.isEmpty()) {
@@ -111,6 +113,10 @@ public class OriginLayer implements Comparable<OriginLayer> {
         return isRandomAllowed;
     }
 
+    public boolean isHidden() {
+        return hidden;
+    }
+
     public List<Identifier> getRandomOrigins(PlayerEntity playerEntity) {
         return conditionedOrigins.stream().filter(co -> co.isConditionFulfilled(playerEntity)).flatMap(co -> co.getOrigins().stream()).filter(OriginRegistry::contains).filter(o -> !originsExcludedFromRandom.contains(o)).filter(id -> doesRandomAllowUnchoosable || OriginRegistry.get(id).isChoosable()).collect(Collectors.toList());
     }
@@ -155,6 +161,9 @@ public class OriginLayer implements Comparable<OriginLayer> {
         if(json.has("auto_choose")) {
             this.autoChooseIfNoChoice = JsonHelper.getBoolean(json, "auto_choose");
         }
+        if(json.has("hidden")) {
+            this.hidden = JsonHelper.getBoolean(json, "hidden");
+        }
     }
 
     @Override
@@ -198,6 +207,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
             buffer.writeIdentifier(defaultOrigin);
         }
         buffer.writeBoolean(autoChooseIfNoChoice);
+        buffer.writeBoolean(hidden);
     }
 
     @Environment(EnvType.CLIENT)
@@ -227,6 +237,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
             layer.defaultOrigin = buffer.readIdentifier();
         }
         layer.autoChooseIfNoChoice = buffer.readBoolean();
+        layer.hidden = buffer.readBoolean();
         return layer;
     }
 
@@ -259,14 +270,15 @@ public class OriginLayer implements Comparable<OriginLayer> {
             layer.defaultOrigin = new Identifier(JsonHelper.getString(json, "default_origin"));
         }
         layer.autoChooseIfNoChoice = JsonHelper.getBoolean(json, "auto_choose", false);
+        layer.hidden = JsonHelper.getBoolean(json, "hidden", false);
         return layer;
     }
 
     public static class ConditionedOrigin {
-        private final ConditionFactory<LivingEntity>.Instance condition;
+        private final ConditionFactory<Entity>.Instance condition;
         private final List<Identifier> origins;
 
-        public ConditionedOrigin(ConditionFactory<LivingEntity>.Instance condition, List<Identifier> origins) {
+        public ConditionedOrigin(ConditionFactory<Entity>.Instance condition, List<Identifier> origins) {
             this.condition = condition;
             this.origins = origins;
         }
@@ -292,7 +304,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
 
         @Environment(EnvType.CLIENT)
         public static ConditionedOrigin read(PacketByteBuf buffer) {
-            ConditionFactory<LivingEntity>.Instance condition = null;
+            ConditionFactory<Entity>.Instance condition = null;
             if(buffer.readBoolean()) {
                 condition = ConditionTypes.ENTITY.read(buffer);
             }
@@ -314,7 +326,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
                 throw new JsonParseException("Expected origin in layer to be either a string or an object.");
             } else if(element.isJsonObject()) {
                 SerializableData.Instance data = conditionedOriginObjectData.read(element.getAsJsonObject());
-                return new ConditionedOrigin((ConditionFactory<LivingEntity>.Instance)data.get("condition"), (List<Identifier>)data.get("origins"));
+                return new ConditionedOrigin((ConditionFactory<Entity>.Instance)data.get("condition"), (List<Identifier>)data.get("origins"));
             }
             throw new JsonParseException("Expected origin in layer to be either a string or an object.");
         }

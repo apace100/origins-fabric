@@ -13,14 +13,13 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.profiler.Profiler;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class OriginLayers extends MultiJsonDataLoader implements IdentifiableResourceReloadListener {
 
-    private static HashMap<Identifier, OriginLayer> layers = new HashMap<>();
+    private static final HashMap<Identifier, OriginLayer> layers = new HashMap<>();
+    private static int minLayerPriority = Integer.MIN_VALUE;
 
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
 
@@ -31,29 +30,46 @@ public class OriginLayers extends MultiJsonDataLoader implements IdentifiableRes
     @Override
     protected void apply(Map<Identifier, List<JsonElement>> loader, ResourceManager manager, Profiler profiler) {
         clear();
+        HashMap<Identifier, HashMap<Integer, List<JsonObject>>> layers = new HashMap<>();
+        // Load phase
         loader.forEach((id, jel) -> {
+            minLayerPriority = Integer.MIN_VALUE;
             jel.forEach(je -> {
                 try {
                     Origins.LOGGER.info("Trying to read layer file: " + id);
                     JsonObject jo = je.getAsJsonObject();
                     boolean replace = JsonHelper.getBoolean(jo, "replace", false);
-                    if (layers.containsKey(id)) {
-                        if (replace) {
-                            OriginLayer layer = OriginLayer.fromJson(id, jo);
-                            layers.put(id, layer);
-                        } else {
-                            Origins.LOGGER.info("Merging origin layer " + id.toString());
-                            layers.get(id).merge(jo);
+                    int priority = JsonHelper.getInt(jo, "loading_priority", 0);
+                    if(priority >= minLayerPriority) {
+                        HashMap<Integer, List<JsonObject>> inner = layers.computeIfAbsent(id, ident -> new HashMap<>());
+                        List<JsonObject> layerList = inner.computeIfAbsent(priority, prio -> new LinkedList<>());
+                        if(replace) {
+                            layerList.clear();
+                            minLayerPriority = priority + 1;
                         }
-                    } else {
-                        OriginLayer layer = OriginLayer.fromJson(id, jo);
-                        layers.put(id, layer);
+                        layerList.add(jo);
                     }
                 } catch (Exception e) {
                     Origins.LOGGER.error("There was a problem reading Origin layer file " + id.toString() + " (skipping): " + e.getMessage());
                 }
             });
         });
+        // Merge phase
+        for (Map.Entry<Identifier, HashMap<Integer, List<JsonObject>>> layerToLoad : layers.entrySet()) {
+            Identifier layerId = layerToLoad.getKey();
+            List<Integer> keys = layerToLoad.getValue().keySet().stream().sorted().collect(Collectors.toList());
+            OriginLayer layer = null;
+            for(Integer key : keys) {
+                for(JsonObject jo : layerToLoad.getValue().get(key)) {
+                    if(layer == null) {
+                        layer = OriginLayer.fromJson(layerId, jo);
+                    } else {
+                        layer.merge(jo);
+                    }
+                }
+            }
+            OriginLayers.layers.put(layerId, layer);
+        }
         Origins.LOGGER.info("Finished loading origin layers from data files. Read " + layers.size() + " layers.");
         OriginDataLoadedCallback.EVENT.invoker().onDataLoaded(false);
     }
