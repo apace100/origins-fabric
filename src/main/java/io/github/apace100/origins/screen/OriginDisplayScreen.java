@@ -66,6 +66,10 @@ public class OriginDisplayScreen extends Screen {
         return origin;
     }
 
+    public OriginLayer getCurrentLayer() {
+        return layer;
+    }
+
     @Override
     public void renderBackground(MatrixStack matrices, int vOffset) {
         if(showDirtBackground) {
@@ -187,6 +191,10 @@ public class OriginDisplayScreen extends Screen {
         }
     }
 
+    protected Text getTitleText() {
+        return new LiteralText("Origins");
+    }
+
     private void renderOriginWindow(MatrixStack matrices, int mouseX, int mouseY) {
         RenderSystem.enableBlend();
         renderWindowBackground(matrices, 16, 0);
@@ -199,7 +207,7 @@ public class OriginDisplayScreen extends Screen {
             renderOriginName(matrices);
             RenderSystem.setShaderTexture(0, WINDOW);
             this.renderOriginImpact(matrices, mouseX, mouseY);
-            Text title = new TranslatableText(Origins.MODID + ".gui.choose_origin.title", new TranslatableText(layer.getTranslationKey()));
+            Text title = getTitleText();
             this.drawCenteredText(matrices, this.textRenderer, title.getString(), width / 2, guiTop - 15, 0xFFFFFF);
         }
         RenderSystem.disableBlend();

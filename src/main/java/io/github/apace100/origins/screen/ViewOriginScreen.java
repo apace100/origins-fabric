@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Pair;
 
@@ -96,6 +97,11 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 				drawCenteredText(matrices, this.textRenderer, new TranslatableText(Origins.MODID + ".gui.view_origin.not_installed").getString(), width / 2, guiTop + 48, 0xFFFFFF);
 			}
 		}
+	}
+
+	@Override
+	protected Text getTitleText() {
+		return new TranslatableText(Origins.MODID + ".gui.view_origin.title", new TranslatableText(getCurrentLayer().getTranslationKey()));
 	}
 
 }

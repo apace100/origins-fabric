@@ -18,6 +18,7 @@ import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
@@ -105,6 +106,11 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 			}
 			openNextLayerScreen();
         }));
+	}
+
+	@Override
+	protected Text getTitleText() {
+		return new TranslatableText(Origins.MODID + ".gui.choose_origin.title", new TranslatableText(getCurrentLayer().getTranslationKey()));
 	}
 
 	private Origin getCurrentOriginInternal() {

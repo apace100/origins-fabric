@@ -10,6 +10,10 @@ public class PowerKeyManager {
 
     private static final HashMap<Identifier, String> KEY_CACHE = new HashMap<>();
 
+    public static void clearCache() {
+        KEY_CACHE.clear();
+    }
+
     public static String getKeyIdentifier(Identifier powerId) {
         if(KEY_CACHE.containsKey(powerId)) {
             return KEY_CACHE.get(powerId);
