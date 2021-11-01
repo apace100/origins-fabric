@@ -39,7 +39,7 @@ public class PowerKeyManager {
                     }
                 }
             }
-            return key;
+            return key.equals("none") ? "key.origins.primary_active" : key;
         }
         return "";
     }
