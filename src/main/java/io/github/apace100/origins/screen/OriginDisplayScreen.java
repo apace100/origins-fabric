@@ -165,7 +165,7 @@ public class OriginDisplayScreen extends Screen {
                     String keyId = PowerKeyManager.getKeyIdentifier(badge.power);
                     Text keybindText = KeyBinding.getLocalizedName(keyId).get();
                     if(keybindText.getString().isEmpty()) {
-                        keybindText = new TranslatableText(keyId);
+                        keybindText = new TranslatableText(keyId).formatted(Formatting.ITALIC);
                     }
                     Text keyText = new LiteralText("[")
                         .append(keybindText)

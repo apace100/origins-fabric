@@ -2,6 +2,7 @@ package io.github.apace100.origins;
 
 import io.github.apace100.apoli.util.NamespaceAlias;
 import io.github.apace100.calio.mixin.CriteriaRegistryInvoker;
+import io.github.apace100.calio.util.OrderedResourceListeners;
 import io.github.apace100.origins.command.LayerArgumentType;
 import io.github.apace100.origins.command.OriginArgumentType;
 import io.github.apace100.origins.command.OriginCommand;
@@ -20,11 +21,9 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.argument.ArgumentTypes;
 import net.minecraft.command.argument.serialize.ConstantArgumentSerializer;
-import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -80,8 +79,9 @@ public class Origins implements ModInitializer {
 		CriteriaRegistryInvoker.callRegister(ChoseOriginCriterion.INSTANCE);
 		ArgumentTypes.register("origins:origin", OriginArgumentType.class, new ConstantArgumentSerializer<>(OriginArgumentType::origin));
 		ArgumentTypes.register("origins:layer", LayerArgumentType.class, new ConstantArgumentSerializer<>(LayerArgumentType::layer));
-		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginManager());
-		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new OriginLayers());
+
+		OrderedResourceListeners.register(new OriginManager()).after(new Identifier("apoli", "powers")).complete();
+		OrderedResourceListeners.register(new OriginLayers()).after(new Identifier(Origins.MODID, "origins")).complete();
 
 		badgeManager = new BadgeManager();
 	}
