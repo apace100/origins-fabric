@@ -170,20 +170,36 @@ public class OriginDisplayScreen extends Screen {
                     Text keyText = new LiteralText("[")
                         .append(keybindText)
                         .append("]");
+                    int maxWidth = width - mouseX - 24;
+                    if(mouseX > width / 2) {
+                        maxWidth = mouseX - 24;
+                    }
                     if(hoverText.contains("\n")) {
-                        List<Text> lines = new LinkedList<>();
+                        List<OrderedText> lines = new LinkedList<>();
                         String[] texts = hoverText.split("\n");
                         for (String text : texts) {
-                            lines.add(new TranslatableText(text, keyText));
+                            Text t = new TranslatableText(text, keyText);
+                            if(textRenderer.getWidth(t) > maxWidth) {
+                                List<OrderedText> wrapped = textRenderer.wrapLines(t, maxWidth);
+                                lines.addAll(wrapped);
+                            } else {
+                                lines.add(t.asOrderedText());
+                            }
                         }
-                        renderTooltip(matrices, lines, mouseX, mouseY);
+                        renderOrderedTooltip(matrices, lines, mouseX, mouseY);
                     } else {
                         Text text = new TranslatableText(
                             hoverText,
                             keyText
                         );
 
-                        renderTooltip(matrices, text, mouseX, mouseY);
+                        if(textRenderer.getWidth(text) > maxWidth) {
+                            List<OrderedText> wrapped = textRenderer.wrapLines(text, maxWidth);
+                            renderOrderedTooltip(matrices, wrapped, mouseX, mouseY);
+                        } else {
+                            renderTooltip(matrices, text, mouseX, mouseY);
+                        }
+
                     }
                     break;
                 }
