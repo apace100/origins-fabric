@@ -26,7 +26,7 @@ public class ChoseOriginCriterion extends AbstractCriterion<ChoseOriginCriterion
     }
 
     public void trigger(ServerPlayerEntity player, Origin origin) {
-        this.test(player, (conditions -> conditions.matches(origin)));
+        this.trigger(player, (conditions -> conditions.matches(origin)));
     }
 
     @Override

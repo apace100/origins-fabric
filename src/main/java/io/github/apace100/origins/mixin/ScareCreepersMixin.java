@@ -3,8 +3,8 @@ package io.github.apace100.origins.mixin;
 
 import io.github.apace100.origins.power.OriginsPowerTypes;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.ai.goal.FleeEntityGoal;
-import net.minecraft.entity.ai.goal.FollowTargetGoal;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.entity.mob.CreeperEntity;
@@ -32,7 +32,7 @@ public abstract class ScareCreepersMixin extends HostileEntity {
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/goal/GoalSelector;add(ILnet/minecraft/entity/ai/goal/Goal;)V", ordinal = 8), method = "initGoals")
     private void redirectTargetGoal(GoalSelector goalSelector, int priority, Goal goal) {
-        Goal newGoal = new FollowTargetGoal<PlayerEntity>(this, PlayerEntity.class, 10, true, false, e -> !OriginsPowerTypes.SCARE_CREEPERS.isActive(e));
+        Goal newGoal = new ActiveTargetGoal<PlayerEntity>(this, PlayerEntity.class, 10, true, false, e -> !OriginsPowerTypes.SCARE_CREEPERS.isActive(e));
         goalSelector.add(priority, newGoal);
     }
 }
