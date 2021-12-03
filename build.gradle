@@ -50,6 +50,8 @@ dependencies {
 
 	modImplementation "com.github.apace100:apoli:${project.apoli_version}"
 	include "com.github.apace100:apoli:${project.apoli_version}"
+	modImplementation "com.github.Micalobia:BreathingLib:${project.breathinglib_version}"
+	include "com.github.Micalobia:BreathingLib:${project.breathinglib_version}"
 	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${cca_version}"
 	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cca_version}"
 

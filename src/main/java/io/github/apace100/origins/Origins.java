@@ -6,6 +6,7 @@ import io.github.apace100.calio.util.OrderedResourceListeners;
 import io.github.apace100.origins.command.LayerArgumentType;
 import io.github.apace100.origins.command.OriginArgumentType;
 import io.github.apace100.origins.command.OriginCommand;
+import io.github.apace100.origins.integration.BreathingLibIntegration;
 import io.github.apace100.origins.networking.ModPacketsC2S;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayers;
@@ -82,6 +83,8 @@ public class Origins implements ModInitializer {
 
 		OrderedResourceListeners.register(new OriginManager()).after(new Identifier("apoli", "powers")).complete();
 		OrderedResourceListeners.register(new OriginLayers()).after(new Identifier(Origins.MODID, "origins")).complete();
+
+		BreathingLibIntegration.register();
 
 		badgeManager = new BadgeManager();
 	}
