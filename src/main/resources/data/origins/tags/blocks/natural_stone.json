@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     "#minecraft:base_stone_overworld",
-    "#minecraft:base_stone_nether"
+    "#minecraft:base_stone_nether",
+    "minecraft:sandstone",
+    "minecraft:smooth_sandstone",
+    "minecraft:red_sandstone",
+    "minecraft:smooth_red_sandstone"
   ]
 }
