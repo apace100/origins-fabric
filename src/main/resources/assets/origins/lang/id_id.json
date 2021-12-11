@@ -215,5 +215,19 @@
   "commands.origin.set.success.single": "Set origin %s dalam layer %s ke %s.",
   "commands.origin.set.success.multiple": "Set origin %s menargetkan dalam layer %s ke %s.",
 
-  "origins.avian_sleep_fail": "Kamu butuh udara segar untuk tidur"
+  "origins.avian_sleep_fail": "Kamu butuh udara segar untuk tidur",
+  "power.origins.phantomize.name": "Phantom Form",
+  "power.origins.phantomize.description": "You can switch between human and phantom form at will, but only while you are saturated enough to sprint.",
+  "power.origins.like_air.name": "Like Air",
+  "power.origins.like_air.description": "Modifiers to your walking speed also apply while you're airborne.",
+  "power.origins.velvet_paws.name": "Velvet Paws",
+  "power.origins.velvet_paws.description": "Your footsteps don't cause any vibrations which could otherwise be picked up by nearby lifeforms.",
+  "item.origins.orb_of_origin.layer_generic": "Lets you choose a new %s.",
+  "item.origins.orb_of_origin.layer_specific": "Sets your %1$s to \"%2$s\".",
+  "origins.gui.badge.active": "Active ability, use with %s.",
+  "origins.gui.badge.toggle": "Toggle with %s.",
+  "origins.gui.unbound_key": "§ounbound§r",
+  "commands.origin.get.result": "%s has the following %s: %s (%s)",
+  "commands.origin.gui.all": "Opened the selection GUI for %s players.",
+  "commands.origin.gui.layer": "Opened the \"%2$s\" selection GUI for %1$s players."
 }

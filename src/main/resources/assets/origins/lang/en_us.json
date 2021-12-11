@@ -15,7 +15,7 @@
   "origin.origins.avian.description": "The Avian race has lost their ability to fly a long time ago. Now these peaceful creatures can be seen gliding from one place to another.",
 
   "origin.origins.phantom.name": "Phantom",
-  "origin.origins.phantom.description": "As half-human and half-phantom offspring, these creatures can switch between a Phantom and a normal form.",
+  "origin.origins.phantom.description": "As half-human and half-phantom beings, these creatures can switch between a Phantom and a normal form.",
 
   "origin.origins.feline.name": "Feline",
   "origin.origins.feline.description": "With their cat-like appearance, the Feline scare creepers away. With the dexterity of cats, they always land safely on their feet.",
@@ -24,7 +24,7 @@
   "origin.origins.elytrian.description": "Often flying around in the winds, Elytrians are uncomfortable when they don't have enough space above their head.",
 
   "origin.origins.enderian.name": "Enderian",
-  "origin.origins.enderian.description": "Born as sons and daughters of the Ender Dragon, Enderians are capable of teleporting but are vulnerable to water.",
+  "origin.origins.enderian.description": "Born as children of the Ender Dragon, Enderians are capable of teleporting but are vulnerable to water.",
 
   "origin.origins.shulk.name": "Shulk",
   "origin.origins.shulk.description": "Related to Shulkers, the bodies of the Shulk are outfitted with a protective shell-like skin.",
@@ -168,7 +168,7 @@
   "power.origins.lay_eggs.description": "Whenever you wake up in the morning, you will lay an egg.",
 
   "power.origins.phantomize.name": "Phantom Form",
-  "power.origins.phantomize.description": "You can switch between human and phantom form at will.",
+  "power.origins.phantomize.description": "You can switch between human and phantom form at will, but only while you are saturated enough to sprint.",
 
   "power.origins.like_air.name": "Like Air",
   "power.origins.like_air.description": "Modifiers to your walking speed also apply while you're airborne.",
