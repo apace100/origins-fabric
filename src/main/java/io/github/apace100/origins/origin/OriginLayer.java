@@ -28,8 +28,8 @@ public class OriginLayer implements Comparable<OriginLayer> {
     private boolean enabled = false;
 
     private String nameTranslationKey;
-    private String nameViewOriginTranslationKey;
-    private String nameChooseOriginTranslationKey;
+    private String titleViewOriginTranslationKey;
+    private String titleChooseOriginTranslationKey;
     private String missingOriginNameTranslationKey;
     private String missingOriginDescriptionTranslationKey;
 
@@ -41,8 +41,8 @@ public class OriginLayer implements Comparable<OriginLayer> {
     private boolean autoChooseIfNoChoice = false;
 
     private boolean hidden = false;
-    private boolean overrideViewOriginName = false;
-    private boolean overrideChooseOriginName = false;
+    private boolean overrideViewOriginTitle = false;
+    private boolean overrideChooseOriginTitle = false;
 
     public String getOrCreateTranslationKey() {
         if(nameTranslationKey == null || nameTranslationKey.isEmpty()) {
@@ -62,26 +62,26 @@ public class OriginLayer implements Comparable<OriginLayer> {
         return missingOriginNameTranslationKey;
     }
 
-    public String getNameViewOriginTranslationKey() {
-        if(nameViewOriginTranslationKey == null || nameViewOriginTranslationKey.isEmpty()) {
-            this.nameViewOriginTranslationKey = "layer." + identifier.getNamespace() + "." + identifier.getPath() + ".view_origin.name";
+    public String getTitleViewOriginTranslationKey() {
+        if(titleViewOriginTranslationKey == null || titleViewOriginTranslationKey.isEmpty()) {
+            this.titleViewOriginTranslationKey = "layer." + identifier.getNamespace() + "." + identifier.getPath() + ".view_origin.name";
         }
-        return nameViewOriginTranslationKey;
+        return titleViewOriginTranslationKey;
     }
 
-    public boolean overrideViewOriginName() {
-        return overrideViewOriginName;
+    public boolean shouldOverrideViewOriginTitle() {
+        return overrideViewOriginTitle;
     }
 
-    public String getNameChooseOriginTranslationKey() {
-        if(nameChooseOriginTranslationKey == null || nameChooseOriginTranslationKey.isEmpty()) {
-            this.nameChooseOriginTranslationKey = "layer." + identifier.getNamespace() + "." + identifier.getPath() + ".choose_origin.name";
+    public String getTitleChooseOriginTranslationKey() {
+        if(titleChooseOriginTranslationKey == null || titleChooseOriginTranslationKey.isEmpty()) {
+            this.titleChooseOriginTranslationKey = "layer." + identifier.getNamespace() + "." + identifier.getPath() + ".choose_origin.name";
         }
-        return nameChooseOriginTranslationKey;
+        return titleChooseOriginTranslationKey;
     }
 
-    public boolean overrideChooseOriginName() {
-        return overrideChooseOriginName;
+    public boolean shouldOverrideChooseOriginTitle() {
+        return overrideChooseOriginTitle;
     }
 
     public String getMissingOriginDescriptionTranslationKey() {
@@ -161,13 +161,13 @@ public class OriginLayer implements Comparable<OriginLayer> {
         if(json.has("name")) {
             this.nameTranslationKey = JsonHelper.getString(json, "name", "");
         }
-        if(json.has("name_override")) {
-            JsonObject nameOverrideObj = json.getAsJsonObject("name_override");
-            if(nameOverrideObj.has("view_origin")) {
-                this.nameViewOriginTranslationKey = JsonHelper.getString(nameOverrideObj, "view_origin", "");
+        if(json.has("gui_title")) {
+            JsonObject guiTitleObj = json.getAsJsonObject("gui_title");
+            if(guiTitleObj.has("view_origin")) {
+                this.titleViewOriginTranslationKey = JsonHelper.getString(guiTitleObj, "view_origin", "");
             }
-            if(nameOverrideObj.has("choose_origin")) {
-                this.nameChooseOriginTranslationKey = JsonHelper.getString(nameOverrideObj, "choose_origin", "");
+            if(guiTitleObj.has("choose_origin")) {
+                this.titleChooseOriginTranslationKey = JsonHelper.getString(guiTitleObj, "choose_origin", "");
             }
         }
         if(json.has("missing_name")) {
@@ -229,8 +229,8 @@ public class OriginLayer implements Comparable<OriginLayer> {
         buffer.writeInt(conditionedOrigins.size());
         conditionedOrigins.forEach(co -> co.write(buffer));
         buffer.writeString(getOrCreateTranslationKey());
-        buffer.writeString(getNameViewOriginTranslationKey());
-        buffer.writeString(getNameChooseOriginTranslationKey());
+        buffer.writeString(getTitleViewOriginTranslationKey());
+        buffer.writeString(getTitleChooseOriginTranslationKey());
         buffer.writeString(getMissingOriginNameTranslationKey());
         buffer.writeString(getMissingOriginDescriptionTranslationKey());
         buffer.writeBoolean(isRandomAllowed());
@@ -245,8 +245,8 @@ public class OriginLayer implements Comparable<OriginLayer> {
         }
         buffer.writeBoolean(autoChooseIfNoChoice);
         buffer.writeBoolean(hidden);
-        buffer.writeBoolean(overrideViewOriginName);
-        buffer.writeBoolean(overrideChooseOriginName);
+        buffer.writeBoolean(overrideViewOriginTitle);
+        buffer.writeBoolean(overrideChooseOriginTitle);
     }
 
     @Environment(EnvType.CLIENT)
@@ -261,8 +261,8 @@ public class OriginLayer implements Comparable<OriginLayer> {
             layer.conditionedOrigins.add(ConditionedOrigin.read(buffer));
         }
         layer.nameTranslationKey = buffer.readString();
-        layer.nameViewOriginTranslationKey = buffer.readString();
-        layer.nameChooseOriginTranslationKey = buffer.readString();
+        layer.titleViewOriginTranslationKey = buffer.readString();
+        layer.titleChooseOriginTranslationKey = buffer.readString();
         layer.missingOriginNameTranslationKey = buffer.readString();
         layer.missingOriginDescriptionTranslationKey = buffer.readString();
         layer.isRandomAllowed = buffer.readBoolean();
@@ -279,8 +279,8 @@ public class OriginLayer implements Comparable<OriginLayer> {
         }
         layer.autoChooseIfNoChoice = buffer.readBoolean();
         layer.hidden = buffer.readBoolean();
-        layer.overrideViewOriginName = buffer.readBoolean();
-        layer.overrideChooseOriginName = buffer.readBoolean();
+        layer.overrideViewOriginTitle = buffer.readBoolean();
+        layer.overrideChooseOriginTitle = buffer.readBoolean();
         return layer;
     }
 
@@ -299,15 +299,15 @@ public class OriginLayer implements Comparable<OriginLayer> {
         layer.enabled = enabled;
         layer.identifier = id;
         layer.nameTranslationKey = JsonHelper.getString(json, "name", "");
-        if(json.has("name_override") && json.get("name_override").isJsonObject()) {
-            JsonObject nameOverrideObj = json.getAsJsonObject("name_override");
-            if(nameOverrideObj.has("view_origin")) {
-                layer.nameViewOriginTranslationKey = JsonHelper.getString(nameOverrideObj, "view_origin", "");
-                layer.overrideViewOriginName = true;
+        if(json.has("gui_title") && json.get("gui_title").isJsonObject()) {
+            JsonObject guiTitleObj = json.getAsJsonObject("gui_title");
+            if(guiTitleObj.has("view_origin")) {
+                layer.titleViewOriginTranslationKey = JsonHelper.getString(guiTitleObj, "view_origin", "");
+                layer.overrideViewOriginTitle = true;
             }
-            if(nameOverrideObj.has("choose_origin")) {
-                layer.nameChooseOriginTranslationKey = JsonHelper.getString(nameOverrideObj, "choose_origin", "");
-                layer.overrideChooseOriginName = true;
+            if(guiTitleObj.has("choose_origin")) {
+                layer.titleChooseOriginTranslationKey = JsonHelper.getString(guiTitleObj, "choose_origin", "");
+                layer.overrideChooseOriginTitle = true;
             }
         }
         layer.missingOriginNameTranslationKey = JsonHelper.getString(json, "missing_name", "");
