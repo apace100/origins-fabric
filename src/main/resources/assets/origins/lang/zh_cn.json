@@ -15,7 +15,7 @@
     "origin.origins.avian.description":"羽人族很久以前就不会飞了。现在，他们翅膀仅能滑翔。",
 
     "origin.origins.phantom.name":"幻影族",
-    "origin.origins.phantom.description":"作为人与幻翼的混血后代的他们可以在幻翼和人形之间自如变换。",
+    "origin.origins.phantom.description":"作为人与幻翼的混血后代的他们可以自如幻化。",
 
     "origin.origins.feline.name":"猫科",
     "origin.origins.feline.description":"猫科动物的外表正是苦力怕的原始恐惧。擅长灵活机动也总能安全着陆。",
@@ -167,8 +167,8 @@
     "power.origins.lay_eggs.name":"卵生动物",
     "power.origins.lay_eggs.description":"早晨起床时会下蛋。",
 
-    "power.origins.phantomize.name":"幻翼形态",
-    "power.origins.phantomize.description":"在饱食度足以疾跑的前提下，你可以自由切换幻翼和人形。",
+    "power.origins.phantomize.name":"幻化",
+    "power.origins.phantomize.description":"在饱食度足以疾跑的前提下，你可以自由幻化。",
 
     "power.origins.like_air.name":"亲风",
     "power.origins.like_air.description":"行走速度的增减益同时适用于空速。",
@@ -184,7 +184,7 @@
     "text.autoconfig.origins.title":"起源设置",
     "text.autoconfig.origins.option.xOffset":"冷却条 X轴偏移量",
     "text.autoconfig.origins.option.yOffset":"冷却条 Y轴偏移量",
-    "text.autoconfig.origins.option.phantomizedOverlayStrength":"幻翼化时的视觉效果强度",
+    "text.autoconfig.origins.option.phantomizedOverlayStrength":"幻化时的视觉效果强度",
 
     "item.origins.orb_of_origin":"起源宝珠",
     "item.origins.orb_of_origin.layer_generic":"可以选择新的%s。",
