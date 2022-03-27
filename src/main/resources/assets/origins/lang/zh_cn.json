@@ -9,7 +9,7 @@
     "origin.origins.arachnid.description":"攀爬与用蛛网束缚敌人的能力使得蛛形族成为完美的猎手。",
     
     "origin.origins.blazeborn.name":"烈焰族",
-    "origin.origins.blazeborn.description":"作为烈焰人的后裔，烈焰族人们天生得以免疫下界的各色险境。",
+    "origin.origins.blazeborn.description":"作为烈焰人的后裔，烈焰族天生得以免疫下界的各色险境。",
     
     "origin.origins.avian.name":"羽人族",
     "origin.origins.avian.description":"羽人族在很久以前就失去了飞行的能力。现在，有时可以观察到这些温和的生物从此方滑翔到彼方。",
@@ -174,7 +174,7 @@
     "power.origins.like_air.description": "行走时的速度提升也对你的空中速度生效。",
     
     "power.origins.velvet_paws.name": "柔软脚爪",
-    "power.origins.velvet_paws.description": "你的脚步不会触发任何会被其他生物捕获的振动。",
+    "power.origins.velvet_paws.description": "你的脚步不会产生任何会被其他生物捕获的振动。",
 
     "category.origins":"起源",
     "key.origins.primary_active":"主动能力（首要按键）",
@@ -206,8 +206,8 @@
     "origins.gui.impact.low":"低",
     "origins.gui.impact.medium":"中",
     "origins.gui.impact.high":"高",
-    "origins.gui.badge.active": "主动能力，按下%s键使用。",
-    "origins.gui.badge.toggle": "使用%s键开关。",
+    "origins.gui.badge.active": "主动能力，按下%s键使用",
+    "origins.gui.badge.toggle": "使用%s键开关",
     "origins.gui.unbound_key": "§o未绑定§r",
     "origins.gui.version_mismatch":"该服务器运行的起源版本（v%1$s）与你安装的（v%2$s）不兼容。",
     
