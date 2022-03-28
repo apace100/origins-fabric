@@ -206,10 +206,12 @@
     "origins.gui.impact.low":"低",
     "origins.gui.impact.medium":"中",
     "origins.gui.impact.high":"高",
+    "origins.gui.version_mismatch":"该服务器运行的起源版本（v%1$s）与你安装的（v%2$s）不兼容。",
+    
     "origins.gui.badge.active": "主动能力，按下%s键使用",
     "origins.gui.badge.toggle": "使用%s键开关",
+    
     "origins.gui.unbound_key": "§o未绑定§r",
-    "origins.gui.version_mismatch":"该服务器运行的起源版本（v%1$s）与你安装的（v%2$s）不兼容。",
     
     "origin.origins.random.name":"随机",
     "origin.origins.random.description":"你将在以下中被随机抽选一项：",
@@ -226,8 +228,8 @@
     "death.attack.genericDamageOverTime.player":"%1$s在与%2$s战斗时被持续性伤害效果杀死了",
 
     "commands.origin.origin_not_found":"未知起源：%s",
-    "commands.origin.set.success.single":"已将%s的起源设置为：%s",
-    "commands.origin.set.success.multiple":"已将%s个目标的起源设置为：%s",
+    "commands.origin.set.success.single":"已将%s的%s层起源设置为：%s",
+    "commands.origin.set.success.multiple":"已将%s个目标的%s层起源设置为：%s",
     "commands.origin.get.result": "%s拥有以下%s：%s（%s）",
     "commands.origin.gui.all": "为%s个玩家打开了选择GUI",
     "commands.origin.gui.layer": "为%1$s个玩家打开了 %2$s 的选择GUI",
