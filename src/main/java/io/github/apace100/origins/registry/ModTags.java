@@ -1,18 +1,19 @@
 package io.github.apace100.origins.registry;
 
 import io.github.apace100.origins.Origins;
-import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tag.Tag;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class ModTags {
 
-    public static final Tag<Item> MEAT = TagRegistry.item(new Identifier(Origins.MODID, "meat"));
-    public static final Tag<Block> UNPHASABLE = TagRegistry.block(new Identifier(Origins.MODID, "unphasable"));
-    public static final Tag<Block> NATURAL_STONE = TagRegistry.block(new Identifier(Origins.MODID, "natural_stone"));
-    public static final Tag<Item> RANGED_WEAPONS = TagRegistry.item(new Identifier(Origins.MODID, "ranged_weapons"));
+    public static final TagKey<Item> MEAT = TagKey.of(Registry.ITEM_KEY, new Identifier(Origins.MODID, "meat"));
+    public static final TagKey<Block> UNPHASABLE = TagKey.of(Registry.BLOCK_KEY, new Identifier(Origins.MODID, "unphasable"));
+    public static final TagKey<Block> NATURAL_STONE = TagKey.of(Registry.BLOCK_KEY, new Identifier(Origins.MODID, "natural_stone"));
+    public static final TagKey<Item> RANGED_WEAPONS = TagKey.of(Registry.ITEM_KEY, new Identifier(Origins.MODID, "ranged_weapons"));
 
     public static void register() {
 
