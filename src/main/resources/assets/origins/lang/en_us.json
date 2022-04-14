@@ -191,7 +191,7 @@
   "item.origins.orb_of_origin.layer_specific": "Sets your %1$s to \"%2$s\".",
 
   "enchantment.origins.water_protection": "Water Protection",
-  "enchantment.origins.water_protection.desc": "Protects from damage when touching water.",
+  "enchantment.origins.water_protection.desc": "Delays damage from hydrophobia.",
 
   "container.shulker_inventory_power": "Shulker Inventory",
 
