@@ -15,6 +15,7 @@
     "WaterBreathingMixin$UpdateAir"
   ],
   "client": [
+    "NametagPrefixMixin",
     "ServerCheckMixin",
     "WaterVisibilityMixin"
   ],

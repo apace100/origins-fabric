@@ -6,7 +6,11 @@ import io.github.apace100.origins.networking.ModPacketsS2C;
 import io.github.apace100.origins.registry.ModBlocks;
 import io.github.apace100.origins.registry.ModEntities;
 import io.github.apace100.origins.screen.ViewOriginScreen;
+import io.github.apace100.origins.util.OriginsConfigSerializer;
 import io.github.apace100.origins.util.PowerKeyManager;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.annotation.Config;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -22,6 +26,7 @@ import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 
 public class OriginsClient implements ClientModInitializer {
+    public static ClientConfig config;
 
     public static KeyBinding usePrimaryActivePowerKeybind;
     public static KeyBinding useSecondaryActivePowerKeybind;
@@ -32,6 +37,9 @@ public class OriginsClient implements ClientModInitializer {
     @Override
     @Environment(EnvType.CLIENT)
     public void onInitializeClient() {
+        AutoConfig.register(ClientConfig.class, OriginsConfigSerializer::new);
+        config = AutoConfig.getConfigHolder(ClientConfig.class).getConfig();
+
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TEMPORARY_COBWEB, RenderLayer.getCutout());
 
         EntityRendererRegistry.INSTANCE.register(ModEntities.ENDERIAN_PEARL,
@@ -64,5 +72,11 @@ public class OriginsClient implements ClientModInitializer {
         });
 
         PowerClearCallback.EVENT.register(PowerKeyManager::clearCache);
+    }
+
+    @Config(name = Origins.MODID + "_client")
+    public static class ClientConfig implements ConfigData {
+
+        public boolean renderOriginNametagPrefix = true;
     }
 }
