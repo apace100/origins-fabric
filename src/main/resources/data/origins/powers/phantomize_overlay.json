@@ -1,5 +1,6 @@
 {
   "type": "apoli:multiple",
+  "hidden": true,
   "green": {
     "type": "apoli:overlay",
     "hidden": true,
