@@ -7,6 +7,7 @@
     "ConduitOnLandMixin",
     "LikeWaterMixin",
     "LoginMixin",
+    "NametagPrefixMixin",
     "NoCobwebSlowdownMixin",
     "OriginUpgradeMixin",
     "ScareCreepersMixin",
@@ -15,7 +16,6 @@
     "WaterBreathingMixin$UpdateAir"
   ],
   "client": [
-    "NametagPrefixMixin",
     "ServerCheckMixin",
     "WaterVisibilityMixin"
   ],

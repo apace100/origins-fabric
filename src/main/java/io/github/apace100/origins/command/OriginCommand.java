@@ -41,7 +41,7 @@ public class OriginCommand {
 										i++;
 									}
 									if (targets.size() == 1) {
-										command.getSource().sendFeedback(new TranslatableText("commands.origin.set.success.single", targets.iterator().next().getDisplayName(), new TranslatableText(l.getTranslationKey()), o.getName()), true);
+										command.getSource().sendFeedback(new TranslatableText("commands.origin.set.success.single", targets.iterator().next().getName(), new TranslatableText(l.getTranslationKey()), o.getName()), true);
 									} else {
 										command.getSource().sendFeedback(new TranslatableText("commands.origin.set.success.multiple", targets.size(), new TranslatableText(l.getTranslationKey()), o.getName()), true);
 									}
@@ -82,7 +82,7 @@ public class OriginCommand {
 								OriginLayer layer = LayerArgumentType.getLayer(command, "layer");
 								OriginComponent component = ModComponents.ORIGIN.get(target);
 								Origin origin = component.getOrigin(layer);
-								command.getSource().sendFeedback(new TranslatableText("commands.origin.get.result", target.getDisplayName(), new TranslatableText(layer.getTranslationKey()), origin.getName(), origin.getIdentifier()), false);
+								command.getSource().sendFeedback(new TranslatableText("commands.origin.get.result", target.getName(), new TranslatableText(layer.getTranslationKey()), origin.getName(), origin.getIdentifier()), false);
 								return 1;
 							})
 						)

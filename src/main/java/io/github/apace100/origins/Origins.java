@@ -28,6 +28,9 @@ import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Origins implements ModInitializer {
 
 	public static final String MODID = "origins";
@@ -94,5 +97,10 @@ public class Origins implements ModInitializer {
 	public static class ServerConfig implements ConfigData {
 
 		public boolean performVersionCheck = true;
+
+		public boolean enableNametagPrefix = true;
+
+		public List<String> nametagPrefixBlacklist = new ArrayList<>();
+
 	}
 }
