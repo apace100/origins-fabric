@@ -162,7 +162,7 @@
   "power.origins.end_spawn.description": "Sua aventura começa no Fim.",
 
   "power.origins.master_of_webs.name": "Mestre das Teias",
-  "power.origins.master_of_webs.description": "Você navega entre as teias com perfeição, sendo capaz de escalá-las. Quando você ataca um inimigo corpo-a-corpo, ele fica preso em uma teia por um tempo. Não-atrópodes presos em suas teias serão detectados por você. Você é capaz de criar teias de aranha usando linhas.",
+  "power.origins.master_of_webs.description": "Você navega entre as teias com perfeição, sendo capaz de escalá-las. Quando você ataca um inimigo corpo-a-corpo, ele fica preso em uma teia por um tempo. Não-atrópodes presos em suas teias serão detectados por você. Você é capaz de criar teias de aranha a partir de linhas.",
 
   "power.origins.lay_eggs.name": "Ovíparo",
   "power.origins.lay_eggs.description": "Sempre que você acordar de manhã, você botará um ovo.",
@@ -187,8 +187,8 @@
   "text.autoconfig.origins.option.phantomizedOverlayStrength": "Phantomized Overlay Strength",
 
   "item.origins.orb_of_origin": "Orbe de Origem",
-  "item.origins.orb_of_origin.layer_generic": "Lets you choose a new %s.",
-  "item.origins.orb_of_origin.layer_specific": "Sets your %1$s to \"%2$s\".",
+  "item.origins.orb_of_origin.layer_generic": "Te permite escolher um novo %s.",
+  "item.origins.orb_of_origin.layer_specific": "Define seu %1$s como \"%2$s\".",
 
   "enchantment.origins.water_protection": "Proteção contra a água",
   "enchantment.origins.water_protection.desc": "Atrasa o dano causado por hidrofobia.",
@@ -209,15 +209,15 @@
   "origins.gui.impact.high": "Alto",
   "origins.gui.version_mismatch": "Este servidor está rodando uma versão diferente de Origins (v%1$s) que é incompativel com a que você tem instalada (v%2$s).",
 
-  "origins.gui.badge.active": "Active ability, use with %s.",
-  "origins.gui.badge.toggle": "Toggle with %s.",
+  "origins.gui.badge.active": "Habilidade ativa, use-a pressionando %s.",
+  "origins.gui.badge.toggle": "Alterne pressionando %s.",
 
-  "origins.gui.unbound_key": "§ounbound§r",
+  "origins.gui.unbound_key": "§onão vinculado§r",
 
   "origin.origins.random.name": "Aleatório",
   "origin.origins.random.description": "Você receberá uma Origem entre as seguintes:",
 
-  "layer.origins.origin.name": "Origin",
+  "layer.origins.origin.name": "Origem",
   "layer.origins.origin.missing_origin.name": "Ausente",
   "layer.origins.origin.missing_origin.description": "Você não tem uma Origem.",
 
