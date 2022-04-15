@@ -167,6 +167,15 @@
   "power.origins.lay_eggs.name": "Ovíparo",
   "power.origins.lay_eggs.description": "Sempre que você acordar de manhã, você botará um ovo.",
 
+  "power.origins.phantomize.name": "Phantom Form",
+  "power.origins.phantomize.description": "You can switch between human and phantom form at will, but only while you are saturated enough to sprint.",
+
+  "power.origins.like_air.name": "Like Air",
+  "power.origins.like_air.description": "Modifiers to your walking speed also apply while you're airborne.",
+
+  "power.origins.velvet_paws.name": "Velvet Paws",
+  "power.origins.velvet_paws.description": "Your footsteps don't cause any vibrations which could otherwise be picked up by nearby lifeforms.",
+
   "category.origins": "Origens",
   "key.origins.primary_active": "Poder Ativo (Primário)",
   "key.origins.secondary_active": "Poder Ativo (Secundário)",
@@ -178,8 +187,11 @@
   "text.autoconfig.origins.option.phantomizedOverlayStrength": "Phantomized Overlay Strength",
 
   "item.origins.orb_of_origin": "Orbe de Origem",
+  "item.origins.orb_of_origin.layer_generic": "Lets you choose a new %s.",
+  "item.origins.orb_of_origin.layer_specific": "Sets your %1$s to \"%2$s\".",
 
   "enchantment.origins.water_protection": "Proteção contra a água",
+  "enchantment.origins.water_protection.desc": "Atrasa o dano causado por hidrofobia.",
 
   "container.shulker_inventory_power": "Inventário Shulker",
 
@@ -197,10 +209,15 @@
   "origins.gui.impact.high": "Alto",
   "origins.gui.version_mismatch": "Este servidor está rodando uma versão diferente de Origins (v%1$s) que é incompativel com a que você tem instalada (v%2$s).",
 
+  "origins.gui.badge.active": "Active ability, use with %s.",
+  "origins.gui.badge.toggle": "Toggle with %s.",
+
+  "origins.gui.unbound_key": "§ounbound§r",
+
   "origin.origins.random.name": "Aleatório",
   "origin.origins.random.description": "Você receberá uma Origem entre as seguintes:",
 
-  "layer.origins.origin": "Origem",
+  "layer.origins.origin.name": "Origin",
   "layer.origins.origin.missing_origin.name": "Ausente",
   "layer.origins.origin.missing_origin.description": "Você não tem uma Origem.",
 
@@ -214,21 +231,9 @@
   "commands.origin.origin_not_found": "Origem desconhecida: %s",
   "commands.origin.set.success.single": "Origem de %s definida para %s.",
   "commands.origin.set.success.multiple": "Origens de %s alvos para %s.",
-
-  "origins.avian_sleep_fail": "Você precisa de ar fresco para dormir",
-  "power.origins.phantomize.name": "Phantom Form",
-  "power.origins.phantomize.description": "You can switch between human and phantom form at will, but only while you are saturated enough to sprint.",
-  "power.origins.like_air.name": "Like Air",
-  "power.origins.like_air.description": "Modifiers to your walking speed also apply while you're airborne.",
-  "power.origins.velvet_paws.name": "Velvet Paws",
-  "power.origins.velvet_paws.description": "Your footsteps don't cause any vibrations which could otherwise be picked up by nearby lifeforms.",
-  "item.origins.orb_of_origin.layer_generic": "Lets you choose a new %s.",
-  "item.origins.orb_of_origin.layer_specific": "Sets your %1$s to \"%2$s\".",
-  "origins.gui.badge.active": "Active ability, use with %s.",
-  "origins.gui.badge.toggle": "Toggle with %s.",
-  "origins.gui.unbound_key": "§ounbound§r",
-  "layer.origins.origin.name": "Origin",
   "commands.origin.get.result": "%s has the following %s: %s (%s)",
   "commands.origin.gui.all": "Opened the selection GUI for %s players.",
-  "commands.origin.gui.layer": "Opened the \"%2$s\" selection GUI for %1$s players."
+  "commands.origin.gui.layer": "Opened the \"%2$s\" selection GUI for %1$s players.",
+
+  "origins.avian_sleep_fail": "Você precisa de ar fresco para dormir"
 }
