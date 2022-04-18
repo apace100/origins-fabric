@@ -168,7 +168,7 @@
   "power.origins.lay_eggs.description": "Sempre que você acordar de manhã, você botará um ovo.",
 
   "power.origins.phantomize.name": "Forma Fantasma",
-  "power.origins.phantomize.description": "Você pode alternar entre forma fantasma e humana à vontade, desde que você esteja alimentado o suficiente para correr.",
+  "power.origins.phantomize.description": "Você pode alternar entre forma fantasma e humana à vontade, desde que você esteja alimentado o suficiente para conseguir correr.",
 
   "power.origins.like_air.name": "Um só com o Ar",
   "power.origins.like_air.description": "Modificadores da sua velocidade no solo também se aplicam para sua velocidade no ar.",
@@ -184,13 +184,13 @@
   "text.autoconfig.origins.title": "Configuração do Origins",
   "text.autoconfig.origins.option.xOffset": "Ajuste X da Barra de Cooldown",
   "text.autoconfig.origins.option.yOffset": "Ajuste Y da Barra de Cooldown",
-  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Impacto do Overlay da Forma Fantasma",
+  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Visibilidade da Sobreposição da Forma Fantasma",
 
   "item.origins.orb_of_origin": "Orbe de Origem",
   "item.origins.orb_of_origin.layer_generic": "Te permite escolher um novo %s.",
   "item.origins.orb_of_origin.layer_specific": "Define seu %1$s como \"%2$s\".",
 
-  "enchantment.origins.water_protection": "Proteção contra a água",
+  "enchantment.origins.water_protection": "Proteção contra a Água",
   "enchantment.origins.water_protection.desc": "Atrasa o dano causado por hidrofobia.",
 
   "container.shulker_inventory_power": "Inventário Shulker",
@@ -207,7 +207,7 @@
   "origins.gui.impact.low": "Baixo",
   "origins.gui.impact.medium": "Médio",
   "origins.gui.impact.high": "Alto",
-  "origins.gui.version_mismatch": "Este servidor está rodando uma versão diferente de Origins (v%1$s) que é incompativel com a que você tem instalada (v%2$s).",
+  "origins.gui.version_mismatch": "Este servidor está rodando uma versão diferente de Origins (v%1$s) que é incompatível com a que você tem instalada (v%2$s).",
 
   "origins.gui.badge.active": "Habilidade ativa, use-a pressionando %s.",
   "origins.gui.badge.toggle": "Alterne pressionando %s.",
