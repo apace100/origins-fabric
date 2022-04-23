@@ -32,8 +32,8 @@ public enum Impact {
 		return textStyle;
 	}
 	
-	public TranslatableTextContent getTextComponent() {
-		return (TranslatableText)new TranslatableText(getTranslationKey()).formatted(getTextStyle());
+	public translatable getTextComponent() {
+		return (TranslatableText)new translatable(getTranslationKey()).formatted(getTextStyle());
 	}
 	
 	public static Impact getByValue(int impactValue) {
