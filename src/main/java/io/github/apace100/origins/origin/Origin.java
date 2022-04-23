@@ -186,8 +186,8 @@ public class Origin {
         return nameTranslationKey;
     }
 
-    public TranslatableTextContent getName() {
-        return new TranslatableTextContent(getOrCreateNameTranslationKey());
+    public translatable getName() {
+        return new translatable(getOrCreateNameTranslationKey());
     }
 
     public String getOrCreateDescriptionTranslationKey() {
@@ -198,8 +198,8 @@ public class Origin {
         return descriptionTranslationKey;
     }
 
-    public TranslatableTextContent getDescription() {
-        return new TranslatableTextContent(getOrCreateDescriptionTranslationKey());
+    public translatable getDescription() {
+        return new translatable(getOrCreateDescriptionTranslationKey());
     }
 
     public int getOrder() {
