@@ -165,9 +165,11 @@ public class OriginLayer implements Comparable<OriginLayer> {
             JsonObject guiTitleObj = json.getAsJsonObject("gui_title");
             if(guiTitleObj.has("view_origin")) {
                 this.titleViewOriginTranslationKey = JsonHelper.getString(guiTitleObj, "view_origin", "");
+                this.overrideViewOriginTitle = true;
             }
             if(guiTitleObj.has("choose_origin")) {
                 this.titleChooseOriginTranslationKey = JsonHelper.getString(guiTitleObj, "choose_origin", "");
+                this.overrideChooseOriginTitle = true;
             }
         }
         if(json.has("missing_name")) {
