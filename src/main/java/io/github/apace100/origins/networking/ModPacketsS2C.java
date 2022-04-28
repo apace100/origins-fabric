@@ -10,9 +10,10 @@ import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.registry.ModComponents;
-import io.github.apace100.origins.screen.Badge;
 import io.github.apace100.origins.screen.ChooseOriginScreen;
 import io.github.apace100.origins.screen.WaitForNextLayerScreen;
+import io.github.apace100.origins.screen.badge.BadgeFactory;
+import io.github.apace100.origins.screen.badge.BadgeManager;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.fabricmc.api.EnvType;
@@ -130,20 +131,20 @@ public class ModPacketsS2C {
     @Environment(EnvType.CLIENT)
     private static void receiveBadgeList(MinecraftClient minecraftClient, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
         try {
-            HashMap<Identifier, List<Badge>> badges = new HashMap<>();
+            HashMap<Identifier, List<BadgeFactory.Instance>> badges = new HashMap<>();
             int count = packetByteBuf.readInt();
             for(int i = 0; i < count; i++) {
                 Identifier powerId = packetByteBuf.readIdentifier();
-                List<Badge> badgeList = new LinkedList<>();
+                List<BadgeFactory.Instance> badgeList = new LinkedList<>();
                 int badgeCount = packetByteBuf.readInt();
                 for(int j = 0; j < badgeCount; j++) {
-                    Badge badge = Badge.fromData(Badge.DATA.read(packetByteBuf));
+                    BadgeFactory.Instance badge = BadgeManager.read(packetByteBuf);
                     badgeList.add(badge);
                 }
                 badges.put(powerId, badgeList);
             }
             minecraftClient.execute(() -> {
-                Origins.badgeManager.clear();
+                Origins.badgeManager.clearBadges();
                 badges.forEach((id, list) -> {
                     list.forEach(badge -> {
                         Origins.badgeManager.addBadge(id, badge);

@@ -230,7 +230,9 @@
   "power.origins.velvet_paws.name": "Kadife Patiler",
   "power.origins.velvet_paws.description": "Adımlarınız yakındaki diğer yaşam formları tarafından algılanacak titreşimler oluşturmaz.",
   "item.origins.orb_of_origin.layer_generic": "Yeni bir %s şeçmenizi sağlar.",
-  "item.origins.orb_of_origin.layer_specific": "%1$s'nızı \"%2$s\'ye ayarlar".",
+  "item.origins.orb_of_origin.layer_specific": "%1$s'nızı \"%2$s\"ye ayarlar.",
   "commands.origin.gui.all": "%s oyuncular için şeçim GUI'si açıldı.",
-  "commands.origin.gui.layer": "%1$s oyuncuları için \"%2$s\" şeçim GUI'si açıldı."
+  "commands.origin.gui.layer": "%1$s oyuncuları için \"%2$s\" şeçim GUI'si açıldı.",
+  "origins.gui.badge.recipe.crafting.shaped": "Crafting recipe (Shaped) provided by the power:",
+  "origins.gui.badge.recipe.crafting.shapeless": "Crafting recipe (Shapeless) provided by the power:"
 }

@@ -210,6 +210,8 @@
     
     "origins.gui.badge.active": "主动能力，按下%s键使用",
     "origins.gui.badge.toggle": "使用%s键开关",
+    "origins.gui.badge.recipe.crafting.shaped": "能力提供的有序合成配方：",
+    "origins.gui.badge.recipe.crafting.shapeless": "能力提供的无序合成配方：",
     
     "origins.gui.unbound_key": "§o未绑定§r",
     
@@ -228,11 +230,12 @@
     "death.attack.genericDamageOverTime.player":"%1$s在与%2$s战斗时被持续性伤害效果杀死了",
 
     "commands.origin.origin_not_found":"未知起源：%s",
-    "commands.origin.set.success.single":"已将%s的%s层起源设置为：%s",
-    "commands.origin.set.success.multiple":"已将%s个目标的%s层起源设置为：%s",
+    "commands.origin.set.success.single":"已将%s的%s设置为：%s",
+    "commands.origin.set.success.multiple":"已将%s个目标的%s设置为：%s",
     "commands.origin.get.result": "%s拥有以下%s：%s（%s）",
     "commands.origin.gui.all": "为%s个玩家打开了选择GUI",
     "commands.origin.gui.layer": "为%1$s个玩家打开了 %2$s 的选择GUI",
     
-    "origins.avian_sleep_fail":"你需要新鲜空气才能正常入睡"
+    "origins.avian_sleep_fail":"你需要新鲜空气才能正常入睡",
+    "enchantment.origins.water_protection.desc": "Delays damage from hydrophobia."
 }
