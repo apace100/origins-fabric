@@ -10,6 +10,8 @@ import io.github.apace100.apoli.power.*;
 import io.github.apace100.apoli.util.NamespaceAlias;
 import io.github.apace100.calio.ClassUtil;
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.integration.AutoBadgeCallback;
+import io.github.apace100.origins.util.Constants;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
@@ -19,10 +21,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class BadgeManager {
 
@@ -60,39 +59,24 @@ public class BadgeManager {
                 if(powerType instanceof MultiplePowerType<?> mp) {
                     for(Identifier sp : mp.getSubPowers()) {
                         if(PowerTypeRegistry.contains(sp)) {
-                            addAutoBadge(PowerTypeRegistry.get(sp), powerId);
+                            AutoBadgeCallback.EVENT.invoker().registerAutoBadge(this, PowerTypeRegistry.get(sp), powerId, true);
                         }
                     }
-                } else {
-                    this.addAutoBadge(powerType, powerId);
+                } else if(!isSubPower) {
+                    AutoBadgeCallback.EVENT.invoker().registerAutoBadge(this, powerType, powerId, false);
                 }
             }
         });
-    }
-
-    public void addAutoBadge(PowerType<?> powerType, Identifier powerId) {
-        Power power = powerType.create(null);
-        if(power instanceof Active active) {
-            addBadge(powerId, autoActiveBadge(powerType, active));
-        } else if(power instanceof RecipePower recipePower) {
-            addBadge(powerId, autoRecipeBadge(powerType, recipePower));
-        }
-    }
-
-    public static BadgeFactory.Instance autoActiveBadge(PowerType<?> powerType, Active active) {
-        String name = active instanceof TogglePower || active instanceof ToggleNightVisionPower ? "toggle" : "active";
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("sprite", Origins.identifier("textures/gui/badge/" + name + ".png").toString());
-        jsonObject.addProperty("text", "origins.gui.badge." + name);
-        return KEY_BINDING.read(powerType, jsonObject);
-    }
-
-    public static BadgeFactory.Instance autoRecipeBadge(PowerType<?> powerType, RecipePower recipePower) {
-        String name = recipePower.getRecipe() instanceof ShapedRecipe ? "shaped" : "shapeless";
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("sprite", Origins.identifier("textures/gui/badge/recipe.png").toString());
-        jsonObject.addProperty("text", "origins.gui.badge.recipe.crafting." + name);
-        return CRAFTING_RECIPE.read(powerType, jsonObject);
+        AutoBadgeCallback.EVENT.register((manager, powerType, powerId, isSubPower) -> {
+            Power power = powerType.create(null);
+            if(power instanceof Active) {
+                manager.addBadge(powerId, KEY_BINDING.read(powerType, power instanceof TogglePower || power instanceof ToggleNightVisionPower ?
+                    Constants.TOGGLE_BADGE_JSON : Constants.ACTIVE_BADGE_JSON));
+            } else if(power instanceof RecipePower recipePower) {
+                manager.addBadge(powerId, CRAFTING_RECIPE.read(powerType, recipePower.getRecipe() instanceof ShapedRecipe ?
+                    Constants.SHAPED_RECIPE_BADGE_JSON : Constants.SHAPLESS_RECIPE_BADGE_JSON));
+            }
+        });
     }
 
     public static <B extends Badge> BadgeFactory<B> registerBadgeFactory(BadgeFactory<B> factory) {
