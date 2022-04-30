@@ -3,11 +3,12 @@ package io.github.apace100.origins.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.badge.Badge;
+import io.github.apace100.origins.badge.BadgeManager;
 import io.github.apace100.origins.mixin.ScreenAccessor;
 import io.github.apace100.origins.origin.Impact;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
-import io.github.apace100.origins.screen.badge.Badge;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
@@ -169,7 +170,7 @@ public class OriginDisplayScreen extends Screen {
                mouseY < rb.y + 9 &&
                rb.hasTooltip()) {
                 int widthLimit = width - mouseX - 24;
-                ((ScreenAccessor)this).invokeRenderTooltipFromComponents(matrices, rb.getTooltipComponent(textRenderer, widthLimit), mouseX, mouseY);
+                ((ScreenAccessor)this).invokeRenderTooltipFromComponents(matrices, rb.getTooltipComponents(textRenderer, widthLimit), mouseX, mouseY);
             }
         }
     }
@@ -288,13 +289,13 @@ public class OriginDisplayScreen extends Screen {
                 if(y >= startY - 24 && y <= endY + 12) {
                     textRenderer.draw(matrices, name, x, y, 0xFFFFFF);
                     int tw = textRenderer.getWidth(name);
-                    List<Badge> badges = Origins.badgeManager.getBadges(p.getIdentifier());
+                    List<Badge> badges = BadgeManager.getPowerBadges(p.getIdentifier());
                     int xStart = x + tw + 4;
                     int bi = 0;
                     for(Badge badge : badges) {
                         RenderedBadge renderedBadge = new RenderedBadge(badge,xStart + 10 * bi, y - 1);
                         renderedBadges.add(renderedBadge);
-                        RenderSystem.setShaderTexture(0, renderedBadge.badge.getSpriteLocation());
+                        RenderSystem.setShaderTexture(0, badge.spriteId());
                         drawTexture(matrices, xStart + 10 * bi, y - 1, 0, 0, 9, 9, 9, 9);
                         bi++;
                     }
@@ -332,8 +333,8 @@ public class OriginDisplayScreen extends Screen {
             return badge.hasTooltip();
         }
 
-        public List<TooltipComponent> getTooltipComponent(TextRenderer textRenderer, int widthLimit) {
-            return badge.getTooltipComponent(textRenderer, widthLimit, OriginDisplayScreen.this.time);
+        public List<TooltipComponent> getTooltipComponents(TextRenderer textRenderer, int widthLimit) {
+            return badge.getTooltipComponents(textRenderer, widthLimit, OriginDisplayScreen.this.time);
         }
 
     }

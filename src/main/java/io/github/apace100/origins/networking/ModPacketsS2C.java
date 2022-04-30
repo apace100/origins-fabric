@@ -3,6 +3,8 @@ package io.github.apace100.origins.networking;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.OriginsClient;
+import io.github.apace100.origins.badge.Badge;
+import io.github.apace100.origins.badge.BadgeManager;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.integration.OriginDataLoadedCallback;
 import io.github.apace100.origins.origin.Origin;
@@ -12,8 +14,6 @@ import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.screen.ChooseOriginScreen;
 import io.github.apace100.origins.screen.WaitForNextLayerScreen;
-import io.github.apace100.origins.screen.badge.BadgeFactory;
-import io.github.apace100.origins.screen.badge.BadgeManager;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.fabricmc.api.EnvType;
@@ -131,25 +131,28 @@ public class ModPacketsS2C {
     @Environment(EnvType.CLIENT)
     private static void receiveBadgeList(MinecraftClient minecraftClient, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
         try {
-            HashMap<Identifier, List<BadgeFactory.Instance>> badges = new HashMap<>();
+            HashMap<Identifier, List<Badge>> badges = new HashMap<>();
             int count = packetByteBuf.readInt();
             for(int i = 0; i < count; i++) {
                 Identifier powerId = packetByteBuf.readIdentifier();
-                List<BadgeFactory.Instance> badgeList = new LinkedList<>();
+                List<Badge> badgeList = new LinkedList<>();
                 int badgeCount = packetByteBuf.readInt();
                 for(int j = 0; j < badgeCount; j++) {
-                    BadgeFactory.Instance badge = BadgeManager.read(packetByteBuf);
+                    Badge badge = BadgeManager.REGISTRY.receiveDataObject(packetByteBuf);
                     badgeList.add(badge);
                 }
                 badges.put(powerId, badgeList);
             }
             minecraftClient.execute(() -> {
-                Origins.badgeManager.clearBadges();
-                badges.forEach((id, list) -> {
-                    list.forEach(badge -> {
-                        Origins.badgeManager.addBadge(id, badge);
-                    });
-                });
+                BadgeManager.clear();
+                int badgeCount = 0;
+                for(Map.Entry<Identifier, List<Badge>> badgeEntry : badges.entrySet()) {
+                    for(Badge badge : badgeEntry.getValue()) {
+                        BadgeManager.putPowerBadge(badgeEntry.getKey(), badge);
+                        badgeCount++;
+                    }
+                }
+                Origins.LOGGER.info("Recieved {} badges from server!", badgeCount);
             });
         } catch (Exception e) {
             Origins.LOGGER.error(e);

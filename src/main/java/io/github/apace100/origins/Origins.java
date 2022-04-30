@@ -3,6 +3,7 @@ package io.github.apace100.origins;
 import io.github.apace100.apoli.util.NamespaceAlias;
 import io.github.apace100.calio.mixin.CriteriaRegistryInvoker;
 import io.github.apace100.calio.util.OrderedResourceListeners;
+import io.github.apace100.origins.badge.BadgeManager;
 import io.github.apace100.origins.command.LayerArgumentType;
 import io.github.apace100.origins.command.OriginArgumentType;
 import io.github.apace100.origins.command.OriginCommand;
@@ -13,7 +14,6 @@ import io.github.apace100.origins.origin.OriginManager;
 import io.github.apace100.origins.power.OriginsEntityConditions;
 import io.github.apace100.origins.power.OriginsPowerTypes;
 import io.github.apace100.origins.registry.*;
-import io.github.apace100.origins.screen.badge.BadgeManager;
 import io.github.apace100.origins.util.ChoseOriginCriterion;
 import io.github.apace100.origins.util.OriginsConfigSerializer;
 import me.shedaniel.autoconfig.AutoConfig;
@@ -36,8 +36,6 @@ public class Origins implements ModInitializer {
 	public static final Logger LOGGER = LogManager.getLogger(Origins.class);
 
 	public static ServerConfig config;
-
-	public static BadgeManager badgeManager;
 
 	@Override
 	public void onInitialize() {
@@ -83,7 +81,7 @@ public class Origins implements ModInitializer {
 		OrderedResourceListeners.register(new OriginManager()).after(new Identifier("apoli", "powers")).complete();
 		OrderedResourceListeners.register(new OriginLayers()).after(new Identifier(Origins.MODID, "origins")).complete();
 
-		badgeManager = new BadgeManager();
+		BadgeManager.init();
 	}
 
 	public static Identifier identifier(String path) {
