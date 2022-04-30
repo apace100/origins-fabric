@@ -82,7 +82,7 @@ public final class BadgeManager {
     }
 
     public static void readCustomBadges(Identifier powerId, Identifier factoryId, boolean isSubPower, JsonElement data, PowerType<?> powerType) {
-        if(!powerType.isHidden()) {
+        if(!powerType.isHidden() || isSubPower) {
             if(data.isJsonArray()) {
                 for(JsonElement badgeJson : data.getAsJsonArray()) {
                     if(badgeJson.isJsonPrimitive()) {
