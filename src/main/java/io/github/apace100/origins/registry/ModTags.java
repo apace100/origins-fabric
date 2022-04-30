@@ -3,7 +3,6 @@ package io.github.apace100.origins.registry;
 import io.github.apace100.origins.Origins;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.tag.Tag;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;

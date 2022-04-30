@@ -1,8 +1,6 @@
 package io.github.apace100.origins.badge;
 
 import io.github.apace100.calio.data.SerializableData;
-import io.github.apace100.calio.data.SerializableDataTypes;
-import io.github.apace100.calio.registry.DataObjectFactory;
 import io.github.apace100.origins.screen.tooltip.CraftingRecipeTooltipComponent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;

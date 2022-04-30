@@ -3,7 +3,6 @@ package io.github.apace100.origins.badge;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.registry.DataObject;
 import io.github.apace100.calio.registry.DataObjectFactory;
-import io.github.apace100.calio.registry.DataObjectRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
