@@ -118,7 +118,7 @@ public final class BadgeManager {
     public static void readAutoBadges(Identifier powerId, Identifier factoryId, boolean isSubPower, JsonObject json, PowerType<?> powerType) {
         if(powerType instanceof MultiplePowerType<?> mp) {
             MULTIPLE_POWERS.put(powerId, mp.getSubPowers());
-        } else if(!BADGES.containsKey(powerId) || BADGES.get(powerId).size() == 0) {
+        } else if((!BADGES.containsKey(powerId) || BADGES.get(powerId).size() == 0) && (powerType.isHidden() && !isSubPower)) {
             AutoBadgeCallback.EVENT.invoker().createAutoBadge(powerId, powerType);
         }
     }
