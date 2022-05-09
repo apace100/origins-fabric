@@ -14,7 +14,7 @@ public enum Impact {
 	private String translationKey;
 	private Formatting textStyle;
 
-	private Impact(int impactValue, String translationKey, Formatting textStyle) {
+	Impact(int impactValue, String translationKey, Formatting textStyle) {
 		this.translationKey = "origins.gui.impact." + translationKey;
 		this.impactValue = impactValue;
 		this.textStyle = textStyle;

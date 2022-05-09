@@ -24,22 +24,20 @@ public class OriginManager extends MultiJsonDataLoader implements IdentifiableRe
 	@Override
 	protected void apply(Map<Identifier, List<JsonElement>> loader, ResourceManager manager, Profiler profiler) {
 		OriginRegistry.reset();
-		loader.forEach((id, jel) -> {
-			jel.forEach(je -> {
-				try {
-					Origin origin = Origin.fromJson(id, je.getAsJsonObject());
-					if(!OriginRegistry.contains(id)) {
-						OriginRegistry.register(id, origin);
-					} else {
-						if(OriginRegistry.get(id).getLoadingPriority() < origin.getLoadingPriority()) {
-							OriginRegistry.update(id, origin);
-						}
+		loader.forEach((id, jel) -> jel.forEach(je -> {
+			try {
+				Origin origin = Origin.fromJson(id, je.getAsJsonObject());
+				if(!OriginRegistry.contains(id)) {
+					OriginRegistry.register(id, origin);
+				} else {
+					if(OriginRegistry.get(id).getLoadingPriority() < origin.getLoadingPriority()) {
+						OriginRegistry.update(id, origin);
 					}
-				} catch(Exception e) {
-					Origins.LOGGER.error("There was a problem reading Origin file " + id.toString() + " (skipping): " + e.getMessage());
 				}
-			});
-		});
+			} catch(Exception e) {
+				Origins.LOGGER.error("There was a problem reading Origin file " + id.toString() + " (skipping): " + e.getMessage());
+			}
+		}));
 		Origins.LOGGER.info("Finished loading origins from data files. Registry contains " + OriginRegistry.size() + " origins.");
 	}
 

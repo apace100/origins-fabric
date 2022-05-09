@@ -14,7 +14,6 @@ import net.minecraft.util.JsonHelper;
 import net.minecraft.util.profiler.Profiler;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class OriginLayers extends MultiJsonDataLoader implements IdentifiableResourceReloadListener {
 
@@ -57,7 +56,7 @@ public class OriginLayers extends MultiJsonDataLoader implements IdentifiableRes
         // Merge phase
         for (Map.Entry<Identifier, HashMap<Integer, List<JsonObject>>> layerToLoad : layers.entrySet()) {
             Identifier layerId = layerToLoad.getKey();
-            List<Integer> keys = layerToLoad.getValue().keySet().stream().sorted().collect(Collectors.toList());
+            List<Integer> keys = layerToLoad.getValue().keySet().stream().sorted().toList();
             OriginLayer layer = null;
             for(Integer key : keys) {
                 for(JsonObject jo : layerToLoad.getValue().get(key)) {

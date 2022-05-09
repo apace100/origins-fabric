@@ -6,7 +6,6 @@ import io.github.apace100.apoli.power.MultiplePowerType;
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypeRegistry;
 import io.github.apace100.calio.data.SerializableData;
-import io.github.apace100.calio.data.SerializableData.Instance;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.data.CompatibilityDataTypes;
@@ -223,8 +222,8 @@ public class Origin {
     @SuppressWarnings("unchecked")
     public static Origin createFromData(Identifier id, SerializableData.Instance data) {
         Origin origin = new Origin(id,
-            (ItemStack)data.get("icon"),
-            (Impact)data.get("impact"),
+                data.get("icon"),
+                data.get("impact"),
             data.getInt("order"),
             data.getInt("loading_priority"));
 
@@ -234,8 +233,7 @@ public class Origin {
 
         ((List<Identifier>)data.get("powers")).forEach(powerId -> {
             try {
-                PowerType powerType = PowerTypeRegistry.get(powerId);
-                origin.add(powerType);
+                origin.add(PowerTypeRegistry.get(powerId));
             } catch(IllegalArgumentException e) {
                 Origins.LOGGER.error("Origin \"" + id + "\" contained unregistered power: \"" + powerId + "\"");
             }
@@ -253,8 +251,7 @@ public class Origin {
 
     @Environment(EnvType.CLIENT)
     public static Origin read(PacketByteBuf buffer) {
-        Identifier identifier = Identifier.tryParse(buffer.readString(32767));
-        return createFromData(identifier, DATA.read(buffer));
+        return createFromData(Identifier.tryParse(buffer.readString(32767)), DATA.read(buffer));
     }
 
     public static Origin fromJson(Identifier id, JsonObject json) {

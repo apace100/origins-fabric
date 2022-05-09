@@ -17,7 +17,6 @@ import net.minecraft.util.registry.Registry;
 
 public class OriginsEntityConditions {
 
-    @SuppressWarnings("unchecked")
     public static void register() {
         register(new ConditionFactory<>(Origins.identifier("origin"), new SerializableData()
             .add("origin", SerializableDataTypes.IDENTIFIER)
@@ -26,8 +25,7 @@ public class OriginsEntityConditions {
                 if(entity instanceof PlayerEntity) {OriginComponent component = ModComponents.ORIGIN.get(entity);
                     Identifier originId = data.getId("origin");
                     if(data.isPresent("layer")) {
-                        Identifier layerId = data.getId("layer");
-                        OriginLayer layer = OriginLayers.getLayer(layerId);
+                        OriginLayer layer = OriginLayers.getLayer(data.getId("layer"));
                         if(layer == null) {
                             return false;
                         } else {

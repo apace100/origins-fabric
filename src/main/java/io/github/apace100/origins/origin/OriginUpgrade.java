@@ -37,10 +37,7 @@ public class OriginUpgrade {
     }
 
     public static OriginUpgrade read(PacketByteBuf buffer) {
-        Identifier condition = buffer.readIdentifier();
-        Identifier origin = buffer.readIdentifier();
-        String announcement = buffer.readString(32767);
-        return new OriginUpgrade(condition, origin, announcement);
+        return new OriginUpgrade(buffer.readIdentifier(), buffer.readIdentifier(), buffer.readString(32767));
     }
 
     public static OriginUpgrade fromJson(JsonElement jsonElement) {

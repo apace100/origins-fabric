@@ -11,7 +11,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.tag.FluidTags;
-import net.minecraft.tag.Tag;
 import net.minecraft.tag.TagKey;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -76,11 +75,10 @@ public final class WaterBreathingMixin {
 
         @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isSubmergedIn(Lnet/minecraft/tag/TagKey;)Z"), method = "updateTurtleHelmet")
         public boolean isSubmergedInProxy(PlayerEntity player, TagKey<Fluid> fluidTag) {
-            boolean submerged = this.isSubmergedIn(fluidTag);
             if(OriginsPowerTypes.WATER_BREATHING.isActive(this)) {
-                return !submerged;
+                return !this.isSubmergedIn(fluidTag);
             }
-            return submerged;
+            return this.isSubmergedIn(fluidTag);
         }
     }
 }

@@ -48,11 +48,9 @@ public class ModPacketsS2C {
 
     @Environment(EnvType.CLIENT)
     private static void receiveOriginConfirmation(MinecraftClient minecraftClient, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
-        OriginLayer layer = OriginLayers.getLayer(packetByteBuf.readIdentifier());
-        Origin origin = OriginRegistry.get(packetByteBuf.readIdentifier());
         minecraftClient.execute(() -> {
             OriginComponent component = ModComponents.ORIGIN.get(minecraftClient.player);
-            component.setOrigin(layer, origin);
+            component.setOrigin(OriginLayers.getLayer(packetByteBuf.readIdentifier()), OriginRegistry.get(packetByteBuf.readIdentifier()));
             if(minecraftClient.currentScreen instanceof WaitForNextLayerScreen) {
                 ((WaitForNextLayerScreen)minecraftClient.currentScreen).openSelection();
             }
@@ -131,24 +129,18 @@ public class ModPacketsS2C {
     private static void receiveBadgeList(MinecraftClient minecraftClient, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
         try {
             HashMap<Identifier, List<Badge>> badges = new HashMap<>();
-            int count = packetByteBuf.readInt();
-            for(int i = 0; i < count; i++) {
-                Identifier powerId = packetByteBuf.readIdentifier();
+            for(int i = 0; i < packetByteBuf.readInt(); i++) {
                 List<Badge> badgeList = new LinkedList<>();
                 int badgeCount = packetByteBuf.readInt();
                 for(int j = 0; j < badgeCount; j++) {
                     Badge badge = Badge.fromData(Badge.DATA.read(packetByteBuf));
                     badgeList.add(badge);
                 }
-                badges.put(powerId, badgeList);
+                badges.put(packetByteBuf.readIdentifier(), badgeList);
             }
             minecraftClient.execute(() -> {
                 Origins.badgeManager.clear();
-                badges.forEach((id, list) -> {
-                    list.forEach(badge -> {
-                        Origins.badgeManager.addBadge(id, badge);
-                    });
-                });
+                badges.forEach((id, list) -> list.forEach(badge -> Origins.badgeManager.addBadge(id, badge)));
             });
         } catch (Exception e) {
             Origins.LOGGER.error(e);

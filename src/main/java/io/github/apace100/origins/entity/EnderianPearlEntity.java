@@ -43,8 +43,7 @@ public class EnderianPearlEntity extends ThrownItemEntity {
       }
 
       if (!this.world.isClient && !this.isRemoved()) {
-         if (entity instanceof ServerPlayerEntity) {
-            ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity)entity;
+         if (entity instanceof ServerPlayerEntity serverPlayerEntity) {
             if (serverPlayerEntity.networkHandler.getConnection().isOpen() && serverPlayerEntity.world == this.world && !serverPlayerEntity.isSleeping()) {
 
                if (entity.hasVehicle()) {
@@ -77,7 +76,7 @@ public class EnderianPearlEntity extends ThrownItemEntity {
    public Entity moveToWorld(ServerWorld destination) {
       Entity entity = this.getOwner();
       if (entity != null && entity.world.getRegistryKey() != destination.getRegistryKey()) {
-         this.setOwner((Entity)null);
+         this.setOwner(null);
       }
 
       return super.moveToWorld(destination);

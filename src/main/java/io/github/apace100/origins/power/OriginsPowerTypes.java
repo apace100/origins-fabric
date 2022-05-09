@@ -35,12 +35,12 @@ public class OriginsPowerTypes {
                 .add("execute_chosen_when_orb", SerializableDataTypes.BOOLEAN, true),
             data ->
                 (type, player) -> new OriginsCallbackPower(type, player,
-                    (ActionFactory<Entity>.Instance)data.get("entity_action_respawned"),
-                    (ActionFactory<Entity>.Instance)data.get("entity_action_removed"),
-                    (ActionFactory<Entity>.Instance)data.get("entity_action_gained"),
-                    (ActionFactory<Entity>.Instance)data.get("entity_action_lost"),
-                    (ActionFactory<Entity>.Instance)data.get("entity_action_added"),
-                    (ActionFactory<Entity>.Instance)data.get("entity_action_chosen"),
+                        data.get("entity_action_respawned"),
+                        data.get("entity_action_removed"),
+                        data.get("entity_action_gained"),
+                        data.get("entity_action_lost"),
+                        data.get("entity_action_added"),
+                        data.get("entity_action_chosen"),
                     data.getBoolean("execute_chosen_when_orb")))
             .allowCondition());
     }

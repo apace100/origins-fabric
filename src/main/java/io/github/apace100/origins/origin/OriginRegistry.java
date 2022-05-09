@@ -23,10 +23,7 @@ public class OriginRegistry {
     }
 
     protected static Origin update(Identifier id, Origin origin) {
-        if(idToOrigin.containsKey(id)) {
-            Origin old = idToOrigin.get(id);
-            idToOrigin.remove(id);
-        }
+        idToOrigin.remove(id);
         return register(id, origin);
     }
 
@@ -50,8 +47,7 @@ public class OriginRegistry {
         if(!idToOrigin.containsKey(id)) {
             throw new IllegalArgumentException("Could not get origin from id '" + id.toString() + "', as it was not registered!");
         }
-        Origin origin = idToOrigin.get(id);
-        return origin;
+        return idToOrigin.get(id);
     }
 
     public static boolean contains(Identifier id) {

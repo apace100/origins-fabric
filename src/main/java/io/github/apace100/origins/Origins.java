@@ -73,9 +73,7 @@ public class Origins implements ModInitializer {
 		ModLoot.registerLootTables();
 		Origin.init();
 
-		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
-			OriginCommand.register(dispatcher);
-		});
+		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> OriginCommand.register(dispatcher));
 		CriteriaRegistryInvoker.callRegister(ChoseOriginCriterion.INSTANCE);
 		ArgumentTypes.register("origins:origin", OriginArgumentType.class, new ConstantArgumentSerializer<>(OriginArgumentType::origin));
 		ArgumentTypes.register("origins:layer", LayerArgumentType.class, new ConstantArgumentSerializer<>(LayerArgumentType::layer));
