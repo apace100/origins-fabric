@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 public class OriginRegistry {
 
-    private static HashMap<Identifier, Origin> idToOrigin = new HashMap<>();
+    private static final HashMap<Identifier, Origin> idToOrigin = new HashMap<>();
 
     public static Origin register(Origin origin) {
         return register(origin.getIdentifier(), origin);
@@ -69,5 +69,9 @@ public class OriginRegistry {
     public static void reset() {
         clear();
         register(Origin.EMPTY);
+    }
+
+    public static void remove(Identifier id) {
+        idToOrigin.remove(id);
     }
 }
