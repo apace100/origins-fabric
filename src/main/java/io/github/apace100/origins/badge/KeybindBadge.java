@@ -1,20 +1,24 @@
 package io.github.apace100.origins.badge;
 
-import io.github.apace100.apoli.power.PowerType;
+import io.github.apace100.apoli.power.*;
 import io.github.apace100.calio.data.SerializableData;
+import io.github.apace100.origins.util.PowerKeyManager;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.tooltip.OrderedTextTooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
+import net.minecraft.client.option.KeyBinding;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public record TooltipBadge(Identifier spriteId, Text text) implements Badge {
+public record KeybindBadge(Identifier spriteId, String text) implements Badge {
 
-    public TooltipBadge(SerializableData.Instance instance) {
+    public KeybindBadge(SerializableData.Instance instance) {
         this(instance.getId("sprite"), instance.get("text"));
     }
 
@@ -36,7 +40,13 @@ public record TooltipBadge(Identifier spriteId, Text text) implements Badge {
     @Override
     public List<TooltipComponent> getTooltipComponents(PowerType<?> powerType, int widthLimit, float time, TextRenderer textRenderer) {
         List<TooltipComponent> tooltips = new LinkedList<>();
-        addLines(tooltips, text, textRenderer, widthLimit);
+        Power power = powerType.create(null);
+        Text keyText;
+        boolean toggle = power instanceof TogglePower || power instanceof ToggleNightVisionPower;
+        keyText = new LiteralText("[")
+            .append(KeyBinding.getLocalizedName(PowerKeyManager.getKeyIdentifier(powerType.getIdentifier())).get())
+            .append(new LiteralText("]"));
+        addLines(tooltips, new TranslatableText(text, keyText), textRenderer, widthLimit);
         return tooltips;
     }
 
@@ -49,7 +59,7 @@ public record TooltipBadge(Identifier spriteId, Text text) implements Badge {
 
     @Override
     public BadgeFactory getBadgeFactory() {
-        return BadgeFactories.TOOLTIP;
+        return BadgeFactories.KEYBIND;
     }
 
 }

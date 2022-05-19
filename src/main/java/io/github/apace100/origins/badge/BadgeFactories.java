@@ -17,6 +17,12 @@ public final class BadgeFactories {
             .add("text", SerializableDataTypes.TEXT),
         TooltipBadge::new);
 
+    public static final BadgeFactory KEYBIND = new BadgeFactory(Origins.identifier("keybind"),
+        new SerializableData()
+            .add("sprite", SerializableDataTypes.IDENTIFIER)
+            .add("text", SerializableDataTypes.STRING),
+        KeybindBadge::new);
+
     public static final BadgeFactory CRAFTING_RECIPE = new BadgeFactory(Origins.identifier("crafting_recipe"),
         new SerializableData()
             .add("sprite", SerializableDataTypes.IDENTIFIER)

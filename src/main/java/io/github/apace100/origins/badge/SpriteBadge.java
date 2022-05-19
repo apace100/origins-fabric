@@ -1,5 +1,6 @@
 package io.github.apace100.origins.badge;
 
+import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
@@ -20,7 +21,7 @@ public record SpriteBadge(Identifier spriteId) implements Badge {
     }
 
     @Override
-    public List<TooltipComponent> getTooltipComponents(TextRenderer textRenderer, int widthLimit, float time) {
+    public List<TooltipComponent> getTooltipComponents(PowerType<?> powerType, int widthLimit, float time, TextRenderer textRenderer) {
         return new ArrayList<>();
     }
 

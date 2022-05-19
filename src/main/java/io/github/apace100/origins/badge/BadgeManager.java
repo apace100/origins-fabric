@@ -24,13 +24,16 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public final class BadgeManager {
     public static final DataObjectRegistry<Badge> REGISTRY = new DataObjectRegistry.Builder<>(Origins.identifier("badge"), Badge.class)
         .readFromData("badges", true)
         .dataErrorHandler((id, exception) -> Origins.LOGGER.error("Failed to read badge " + ", caused by", exception))
-        .defaultFactory(BadgeFactories.TOOLTIP)
+        .defaultFactory(BadgeFactories.KEYBIND)
         .buildAndRegister();
     private static final Map<Identifier, List<Badge>> BADGES = new HashMap<>();
     private static final Map<Identifier, List<Identifier>> MULTIPLE_POWERS = new HashMap<>();
@@ -44,6 +47,7 @@ public final class BadgeManager {
         register(BadgeFactories.SPRITE);
         register(BadgeFactories.TOOLTIP);
         register(BadgeFactories.CRAFTING_RECIPE);
+        register(BadgeFactories.KEYBIND);
         //register callbacks
         PrePowerReloadCallback.EVENT.register(BadgeManager::clear);
         PowerTypes.registerAdditionalData("badges", BadgeManager::readCustomBadges);
@@ -92,7 +96,7 @@ public final class BadgeManager {
                             if(badge != null) {
                                 putPowerBadge(powerId, badge);
                             } else {
-                                Origins.LOGGER.error("\"badges\" field in power \"{}\" is referring a undefined badge \"{}\" !", powerId, badgeId);
+                                Origins.LOGGER.error("\"badges\" field in power \"{}\" is referring a undefined badge \"{}\"!", powerId, badgeId);
                             }
                         } else {
                             Origins.LOGGER.error("\"badges\" field in power \"{}\" is not a valid identifier!", powerId);

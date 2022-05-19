@@ -1,5 +1,6 @@
 package io.github.apace100.origins.badge;
 
+import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.origins.screen.tooltip.CraftingRecipeTooltipComponent;
 import net.minecraft.client.MinecraftClient;
@@ -49,7 +50,7 @@ public record CraftingRecipeBadge(Identifier spriteId,
     }
 
     @Override
-    public List<TooltipComponent> getTooltipComponents(TextRenderer textRenderer, int widthLimit, float time) {
+    public List<TooltipComponent> getTooltipComponents(PowerType<?> powerType, int widthLimit, float time, TextRenderer textRenderer) {
         List<TooltipComponent> tooltips = new LinkedList<>();
         if(MinecraftClient.getInstance().options.advancedItemTooltips) {
             Text recipeIdText = new LiteralText(recipe.getId().toString()).formatted(Formatting.DARK_GRAY);

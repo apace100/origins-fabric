@@ -293,7 +293,7 @@ public class OriginDisplayScreen extends Screen {
                     int xStart = x + tw + 4;
                     int bi = 0;
                     for(Badge badge : badges) {
-                        RenderedBadge renderedBadge = new RenderedBadge(badge,xStart + 10 * bi, y - 1);
+                        RenderedBadge renderedBadge = new RenderedBadge(p, badge,xStart + 10 * bi, y - 1);
                         renderedBadges.add(renderedBadge);
                         RenderSystem.setShaderTexture(0, badge.spriteId());
                         drawTexture(matrices, xStart + 10 * bi, y - 1, 0, 0, 9, 9, 9, 9);
@@ -319,11 +319,13 @@ public class OriginDisplayScreen extends Screen {
     }
 
     private class RenderedBadge {
+        private final PowerType<?> powerType;
         private final Badge badge;
         private final int x;
         private final int y;
 
-        public RenderedBadge(Badge badge, int x, int y) {
+        public RenderedBadge(PowerType<?> powerType, Badge badge, int x, int y) {
+            this.powerType = powerType;
             this.badge = badge;
             this.x = x;
             this.y = y;
@@ -334,7 +336,7 @@ public class OriginDisplayScreen extends Screen {
         }
 
         public List<TooltipComponent> getTooltipComponents(TextRenderer textRenderer, int widthLimit) {
-            return badge.getTooltipComponents(textRenderer, widthLimit, OriginDisplayScreen.this.time);
+            return badge.getTooltipComponents(powerType, widthLimit, OriginDisplayScreen.this.time, textRenderer);
         }
 
     }

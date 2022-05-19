@@ -1,5 +1,6 @@
 package io.github.apace100.origins.badge;
 
+import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.registry.DataObject;
 import io.github.apace100.calio.registry.DataObjectFactory;
@@ -19,7 +20,7 @@ public interface Badge extends DataObject<Badge> {
     boolean hasTooltip();
     
     @Environment(EnvType.CLIENT)
-    List<TooltipComponent> getTooltipComponents(TextRenderer textRenderer, int widthLimit, float time);
+    List<TooltipComponent> getTooltipComponents(PowerType<?> powerType, int widthLimit, float time, TextRenderer textRenderer);
 
     SerializableData.Instance toData(SerializableData.Instance instance);
 
