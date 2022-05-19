@@ -229,5 +229,8 @@
   "origins.gui.badge.toggle": "Toggle with %s.",
   "origins.gui.unbound_key": "§ounbound§r",
   "commands.origin.gui.all": "Opened the selection GUI for %s players.",
-  "commands.origin.gui.layer": "Opened the \"%2$s\" selection GUI for %1$s players."
+  "commands.origin.gui.layer": "Opened the \"%2$s\" selection GUI for %1$s players.",
+  "enchantment.origins.water_protection.desc": "Delays damage from hydrophobia.",
+  "origins.gui.badge.recipe.crafting.shaped": "Crafting recipe (Shaped) provided by the power:",
+  "origins.gui.badge.recipe.crafting.shapeless": "Crafting recipe (Shapeless) provided by the power:"
 }

@@ -160,5 +160,11 @@
 	"origins.gui.badge.toggle": "Alternar con %s.",
 	"origins.gui.unbound_key": "§ono asignado§r",
 	"commands.origin.gui.all": "Se le ha abierto la pantalla de selección a %s jugadores.",
-	"commands.origin.gui.layer": "Se le ha abierto la pantalla de selección de \"%2$s\" a %1$s jugadores."
+	"commands.origin.gui.layer": "Se le ha abierto la pantalla de selección de \"%2$s\" a %1$s jugadores.",
+	"text.autoconfig.origins.title": "Origins Configuration",
+	"text.autoconfig.origins.option.xOffset": "Cooldown Bar Offset X",
+	"text.autoconfig.origins.option.yOffset": "Cooldown Bar Offset Y",
+	"text.autoconfig.origins.option.phantomizedOverlayStrength": "Phantomized Overlay Strength",
+	"origins.gui.badge.recipe.crafting.shaped": "Crafting recipe (Shaped) provided by the power:",
+	"origins.gui.badge.recipe.crafting.shapeless": "Crafting recipe (Shapeless) provided by the power:"
 }
