@@ -211,8 +211,8 @@
 
   "origins.gui.badge.active": "Active ability, use with %s.",
   "origins.gui.badge.toggle": "Toggle with %s.",
-  "origins.gui.badge.recipe.crafting.shaped": "Crafting recipe (Shaped) provided by the power:",
-  "origins.gui.badge.recipe.crafting.shapeless": "Crafting recipe (Shapeless) provided by the power:",
+  "origins.gui.badge.recipe.crafting.shaped": "Crafting recipe (shaped):",
+  "origins.gui.badge.recipe.crafting.shapeless": "Crafting recipe (shapeless):",
 
   "origins.gui.unbound_key": "§ounbound§r",
 
