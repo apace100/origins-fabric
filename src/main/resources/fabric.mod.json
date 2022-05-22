@@ -30,6 +30,9 @@
     ],
     "cardinal-components-entity": [
       "io.github.apace100.origins.registry.ModComponents"
+    ],
+    "calio:ordered-resource-listener": [
+      "io.github.apace100.origins.Origins"
     ]
   },
   "mixins": [

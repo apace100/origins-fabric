@@ -40,9 +40,7 @@ public record KeybindBadge(Identifier spriteId, String text) implements Badge {
     @Override
     public List<TooltipComponent> getTooltipComponents(PowerType<?> powerType, int widthLimit, float time, TextRenderer textRenderer) {
         List<TooltipComponent> tooltips = new LinkedList<>();
-        Power power = powerType.create(null);
         Text keyText;
-        boolean toggle = power instanceof TogglePower || power instanceof ToggleNightVisionPower;
         keyText = new LiteralText("[")
             .append(KeyBinding.getLocalizedName(PowerKeyManager.getKeyIdentifier(powerType.getIdentifier())).get())
             .append(new LiteralText("]"));

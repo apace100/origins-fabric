@@ -3,10 +3,12 @@ package io.github.apace100.origins;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import io.github.apace100.apoli.Apoli;
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.util.NamespaceAlias;
 import io.github.apace100.calio.mixin.CriteriaRegistryInvoker;
-import io.github.apace100.calio.util.OrderedResourceListeners;
+import io.github.apace100.calio.resource.OrderedResourceListenerInitializer;
+import io.github.apace100.calio.resource.OrderedResourceListenerManager;
 import io.github.apace100.origins.badge.BadgeManager;
 import io.github.apace100.origins.command.LayerArgumentType;
 import io.github.apace100.origins.command.OriginArgumentType;
@@ -30,12 +32,13 @@ import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.argument.ArgumentTypes;
 import net.minecraft.command.argument.serialize.ConstantArgumentSerializer;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Origins implements ModInitializer {
+public class Origins implements ModInitializer, OrderedResourceListenerInitializer {
 
 	public static final String MODID = "origins";
 	public static String VERSION = "";
@@ -91,11 +94,6 @@ public class Origins implements ModInitializer {
 		CriteriaRegistryInvoker.callRegister(ChoseOriginCriterion.INSTANCE);
 		ArgumentTypes.register("origins:origin", OriginArgumentType.class, new ConstantArgumentSerializer<>(OriginArgumentType::origin));
 		ArgumentTypes.register("origins:layer", LayerArgumentType.class, new ConstantArgumentSerializer<>(LayerArgumentType::layer));
-
-		OrderedResourceListeners.register(new OriginManager()).after(new Identifier("apoli", "powers")).complete();
-		OrderedResourceListeners.register(new OriginLayers()).after(new Identifier(Origins.MODID, "origins")).complete();
-
-		BadgeManager.init();
 	}
 
 	public static void serializeConfig() {
@@ -108,6 +106,19 @@ public class Origins implements ModInitializer {
 
 	public static Identifier identifier(String path) {
 		return new Identifier(Origins.MODID, path);
+	}
+
+	@Override
+	public void registerResourceListeners(OrderedResourceListenerManager manager) {
+		Identifier powerData = Apoli.identifier("powers");
+		Identifier originData = Origins.identifier("origins");
+
+		manager.register(ResourceType.SERVER_DATA, new OriginManager()).after(powerData).complete();
+		manager.register(ResourceType.SERVER_DATA, new OriginLayers()).after(originData).complete();
+
+		BadgeManager.init();
+
+		manager.register(ResourceType.SERVER_DATA, BadgeManager.REGISTRY.getLoader()).before(powerData).complete();
 	}
 
 	@Config(name = Origins.MODID + "_server")

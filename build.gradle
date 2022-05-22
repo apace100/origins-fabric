@@ -49,7 +49,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	modImplementation "com.github.apace100:apoli:${project.apoli_version}"
-	include "com.github.apace100:apoli:${project.apoli_version}"
+	include "com.github.apace100:apoli-clone:${project.apoli_version}"
 	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cca_version}"
 	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${cca_version}"
 

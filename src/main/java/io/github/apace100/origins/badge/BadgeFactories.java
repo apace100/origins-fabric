@@ -17,6 +17,7 @@ public final class BadgeFactories {
             .add("text", SerializableDataTypes.TEXT),
         TooltipBadge::new);
 
+    // Added mostly for backwards-compatibility as the default factory.
     public static final BadgeFactory KEYBIND = new BadgeFactory(Origins.identifier("keybind"),
         new SerializableData()
             .add("sprite", SerializableDataTypes.IDENTIFIER)
@@ -30,5 +31,4 @@ public final class BadgeFactories {
             .add("prefix", SerializableDataTypes.TEXT, null)
             .add("suffix", SerializableDataTypes.TEXT, null),
         CraftingRecipeBadge::new);
-
 }

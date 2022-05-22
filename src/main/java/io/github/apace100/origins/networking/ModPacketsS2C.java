@@ -145,14 +145,11 @@ public class ModPacketsS2C {
             }
             minecraftClient.execute(() -> {
                 BadgeManager.clear();
-                int badgeCount = 0;
                 for(Map.Entry<Identifier, List<Badge>> badgeEntry : badges.entrySet()) {
                     for(Badge badge : badgeEntry.getValue()) {
                         BadgeManager.putPowerBadge(badgeEntry.getKey(), badge);
-                        badgeCount++;
                     }
                 }
-                Origins.LOGGER.info("Recieved {} badges from server!", badgeCount);
             });
         } catch (Exception e) {
             Origins.LOGGER.error(e);
