@@ -6,7 +6,6 @@ import io.github.apace100.apoli.power.MultiplePowerType;
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypeRegistry;
 import io.github.apace100.calio.data.SerializableData;
-import io.github.apace100.calio.data.SerializableData.Instance;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.data.CompatibilityDataTypes;
@@ -115,6 +114,10 @@ public class Origin {
     public Origin add(PowerType<?>... powerTypes) {
         this.powerTypes.addAll(Lists.newArrayList(powerTypes));
         return this;
+    }
+
+    public void removePowerType(PowerType<?> powerType) {
+        this.powerTypes.remove(powerType);
     }
 
     protected Origin setUnchoosable() {
