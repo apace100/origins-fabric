@@ -7,10 +7,9 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.tooltip.OrderedTextTooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 import java.util.LinkedList;
@@ -41,10 +40,10 @@ public record KeybindBadge(Identifier spriteId, String text) implements Badge {
     public List<TooltipComponent> getTooltipComponents(PowerType<?> powerType, int widthLimit, float time, TextRenderer textRenderer) {
         List<TooltipComponent> tooltips = new LinkedList<>();
         Text keyText;
-        keyText = new LiteralText("[")
+        keyText = ((MutableText)Text.of("["))
             .append(KeyBinding.getLocalizedName(PowerKeyManager.getKeyIdentifier(powerType.getIdentifier())).get())
-            .append(new LiteralText("]"));
-        addLines(tooltips, new TranslatableText(text, keyText), textRenderer, widthLimit);
+            .append(Text.of("]"));
+        addLines(tooltips, Text.translatable(text, keyText), textRenderer, widthLimit);
         return tooltips;
     }
 

@@ -21,7 +21,6 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -70,11 +69,11 @@ public class OrbOfOriginItem extends Item {
         Map<OriginLayer, Origin> targets = getTargets(stack);
         for(Map.Entry<OriginLayer, Origin> target : targets.entrySet()) {
             if(target.getValue() == Origin.EMPTY) {
-                tooltip.add(new TranslatableText("item.origins.orb_of_origin.layer_generic",
-                    new TranslatableText(target.getKey().getTranslationKey())).formatted(Formatting.GRAY));
+                tooltip.add(Text.translatable("item.origins.orb_of_origin.layer_generic",
+                    Text.translatable(target.getKey().getTranslationKey())).formatted(Formatting.GRAY));
             } else {
-                tooltip.add(new TranslatableText("item.origins.orb_of_origin.layer_specific",
-                    new TranslatableText(target.getKey().getTranslationKey()),
+                tooltip.add(Text.translatable("item.origins.orb_of_origin.layer_specific",
+                    Text.translatable(target.getKey().getTranslationKey()),
                     target.getValue().getName()).formatted(Formatting.GRAY));
             }
         }

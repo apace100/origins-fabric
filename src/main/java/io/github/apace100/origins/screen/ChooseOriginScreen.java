@@ -16,10 +16,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -36,7 +34,7 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 	private Origin randomOrigin;
 	
 	public ChooseOriginScreen(ArrayList<OriginLayer> layerList, int currentLayerIndex, boolean showDirtBackground) {
-		super(new TranslatableText(Origins.MODID + ".screen.choose_origin"), showDirtBackground);
+		super(Text.translatable(Origins.MODID + ".screen.choose_origin"), showDirtBackground);
 		this.layerList = layerList;
 		this.currentLayerIndex = currentLayerIndex;
 		this.originSelection = new ArrayList<>(10);
@@ -83,18 +81,18 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 	protected void init() {
 		super.init();
 		if(maxSelection > 1) {
-			addDrawableChild(new ButtonWidget(guiLeft - 40,this.height / 2 - 10, 20, 20, new LiteralText("<"), b -> {
+			addDrawableChild(new ButtonWidget(guiLeft - 40,this.height / 2 - 10, 20, 20, Text.of("<"), b -> {
 				currentOrigin = (currentOrigin - 1 + maxSelection) % maxSelection;
 				Origin newOrigin = getCurrentOriginInternal();
 				showOrigin(newOrigin, layerList.get(currentLayerIndex), newOrigin == randomOrigin);
 			}));
-			addDrawableChild(new ButtonWidget(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20, new LiteralText(">"), b -> {
+			addDrawableChild(new ButtonWidget(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20, Text.of(">"), b -> {
 				currentOrigin = (currentOrigin + 1) % maxSelection;
 				Origin newOrigin = getCurrentOriginInternal();
 				showOrigin(newOrigin, layerList.get(currentLayerIndex), newOrigin == randomOrigin);
 			}));
 		}
-		addDrawableChild(new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20, new TranslatableText(Origins.MODID + ".gui.select"), b -> {
+		addDrawableChild(new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20, Text.translatable(Origins.MODID + ".gui.select"), b -> {
 			PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 			if(currentOrigin == originSelection.size()) {
 				buf.writeString(layerList.get(currentLayerIndex).getIdentifier().toString());
@@ -111,9 +109,9 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 	@Override
 	protected Text getTitleText() {
 		if (getCurrentLayer().shouldOverrideChooseOriginTitle()) {
-			return new TranslatableText(getCurrentLayer().getTitleChooseOriginTranslationKey());
+			return Text.translatable(getCurrentLayer().getTitleChooseOriginTranslationKey());
 		}
-		return new TranslatableText(Origins.MODID + ".gui.choose_origin.title", new TranslatableText(getCurrentLayer().getTranslationKey()));
+		return Text.translatable(Origins.MODID + ".gui.choose_origin.title", Text.translatable(getCurrentLayer().getTranslationKey()));
 	}
 
 	private Origin getCurrentOriginInternal() {
@@ -128,7 +126,7 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 
 	private void initRandomOrigin() {
 		this.randomOrigin = new Origin(Origins.identifier("random"), new ItemStack(ModItems.ORB_OF_ORIGIN), Impact.NONE, -1, Integer.MAX_VALUE);
-		MutableText randomOriginText = new LiteralText("");
+		MutableText randomOriginText = (MutableText)Text.of("");
 		List<Identifier> randoms = layerList.get(currentLayerIndex).getRandomOrigins(MinecraftClient.getInstance().player);
 		randoms.sort((ia, ib) -> {
 			Origin a = OriginRegistry.get(ia);
@@ -138,7 +136,7 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 		});
 		for(Identifier id : randoms) {
 			randomOriginText.append(OriginRegistry.get(id).getName());
-			randomOriginText.append(new LiteralText("\n"));
+			randomOriginText.append(Text.of("\n"));
 		}
 		setRandomOriginText(randomOriginText);
 	}

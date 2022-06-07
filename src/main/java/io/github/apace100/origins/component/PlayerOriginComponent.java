@@ -109,7 +109,7 @@ public class PlayerOriginComponent implements OriginComponent {
                 OriginLayer defaultOriginLayer = OriginLayers.getLayer(new Identifier(Origins.MODID, "origin"));
                 this.origins.put(defaultOriginLayer, OriginRegistry.get(Identifier.tryParse(compoundTag.getString("Origin"))));
             } catch(IllegalArgumentException e) {
-                Origins.LOGGER.warn("Player " + player.getDisplayName().asString() + " had old origin which could not be migrated: " + compoundTag.getString("Origin"));
+                Origins.LOGGER.warn("Player " + player.getDisplayName().getContent() + " had old origin which could not be migrated: " + compoundTag.getString("Origin"));
             }
         } else {
             NbtList originLayerList = (NbtList) compoundTag.get("OriginLayers");
@@ -121,7 +121,7 @@ public class PlayerOriginComponent implements OriginComponent {
                     try {
                         layer = OriginLayers.getLayer(layerId);
                     } catch(IllegalArgumentException e) {
-                        Origins.LOGGER.warn("Could not find origin layer with id " + layerId.toString() + ", which existed on the data of player " + player.getDisplayName().asString() + ".");
+                        Origins.LOGGER.warn("Could not find origin layer with id " + layerId.toString() + ", which existed on the data of player " + player.getDisplayName().getContent() + ".");
                     }
                     if(layer != null) {
                         Identifier originId = Identifier.tryParse(layerTag.getString("Origin"));
@@ -129,13 +129,13 @@ public class PlayerOriginComponent implements OriginComponent {
                         try {
                             origin = OriginRegistry.get(originId);
                         } catch(IllegalArgumentException e) {
-                            Origins.LOGGER.warn("Could not find origin with id " + originId.toString() + ", which existed on the data of player " + player.getDisplayName().asString() + ".");
+                            Origins.LOGGER.warn("Could not find origin with id " + originId.toString() + ", which existed on the data of player " + player.getDisplayName().getContent() + ".");
                             PowerHolderComponent powerComponent = PowerHolderComponent.KEY.get(player);
                             powerComponent.removeAllPowersFromSource(originId);
                         }
                         if(origin != null) {
                             if(!layer.contains(origin) && !origin.isSpecial()) {
-                                Origins.LOGGER.warn("Origin with id " + origin.getIdentifier().toString() + " is not in layer " + layer.getIdentifier().toString() + " and is not special, but was found on " + player.getDisplayName().asString() + ", setting to EMPTY.");
+                                Origins.LOGGER.warn("Origin with id " + origin.getIdentifier().toString() + " is not in layer " + layer.getIdentifier().toString() + " and is not special, but was found on " + player.getDisplayName().getContent() + ", setting to EMPTY.");
                                 origin = Origin.EMPTY;
                                 PowerHolderComponent powerComponent = PowerHolderComponent.KEY.get(player);
                                 powerComponent.removeAllPowersFromSource(originId);
@@ -176,7 +176,7 @@ public class PlayerOriginComponent implements OriginComponent {
                             } catch(ClassCastException e) {
                                 // Occurs when power was overriden by data pack since last world load
                                 // to be a power type which uses different data class.
-                                Origins.LOGGER.warn("Data type of \"" + powerTypeId + "\" changed, skipping data for that power on player " + player.getName().asString());
+                                Origins.LOGGER.warn("Data type of \"" + powerTypeId + "\" changed, skipping data for that power on player " + player.getName().getContent());
                             }
                         }
                     } catch(IllegalArgumentException e) {

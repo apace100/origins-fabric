@@ -18,9 +18,8 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -144,23 +143,23 @@ public final class BadgeManager {
         Power power = powerType.create(null);
         if(power instanceof Active active) {
             boolean toggle = active instanceof TogglePower || active instanceof ToggleNightVisionPower;
-            Text keyText = new LiteralText("[")
+            Text keyText = ((MutableText)Text.of("["))
                 .append(KeyBinding.getLocalizedName(PowerKeyManager.getKeyIdentifier(powerId)).get())
-                .append(new LiteralText("]"));
+                .append(Text.of("]"));
             Identifier autoBadgeId = toggle ? TOGGLE_BADGE_ID : ACTIVE_BADGE_ID;
             if(REGISTRY.containsId(autoBadgeId)) {
                 badgeList.add(REGISTRY.get(autoBadgeId));
             } else {
                 badgeList.add(new TooltipBadge(toggle ? TOGGLE_BADGE_SPRITE : ACTIVE_BADGE_SPRITE,
-                    toggle ? new TranslatableText("origins.gui.badge.toggle", keyText)
-                        : new TranslatableText("origins.gui.badge.active", keyText)
+                    toggle ? Text.translatable("origins.gui.badge.toggle", keyText)
+                        : Text.translatable("origins.gui.badge.active", keyText)
                 ));
             }
         } else if(power instanceof RecipePower recipePower) {
             Recipe<CraftingInventory> recipe = recipePower.getRecipe();
             String type = recipe instanceof ShapedRecipe ? "shaped" : "shapeless";
             badgeList.add(new CraftingRecipeBadge(RECIPE_BADGE_SPRITE, recipe,
-                new TranslatableText("origins.gui.badge.recipe.crafting." + type), null
+                Text.translatable("origins.gui.badge.recipe.crafting." + type), null
             ));
         }
     }

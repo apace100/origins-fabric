@@ -19,7 +19,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -189,8 +190,8 @@ public class Origin {
         return nameTranslationKey;
     }
 
-    public TranslatableText getName() {
-        return new TranslatableText(getOrCreateNameTranslationKey());
+    public MutableText getName() {
+        return Text.translatable(getOrCreateNameTranslationKey());
     }
 
     public String getOrCreateDescriptionTranslationKey() {
@@ -201,8 +202,8 @@ public class Origin {
         return descriptionTranslationKey;
     }
 
-    public TranslatableText getDescription() {
-        return new TranslatableText(getOrCreateDescriptionTranslationKey());
+    public MutableText getDescription() {
+        return Text.translatable(getOrCreateDescriptionTranslationKey());
     }
 
     public int getOrder() {

@@ -13,7 +13,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.RenderLayer;
@@ -34,8 +34,7 @@ public class OriginsClient implements ClientModInitializer {
     public void onInitializeClient() {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TEMPORARY_COBWEB, RenderLayer.getCutout());
 
-        EntityRendererRegistry.INSTANCE.register(ModEntities.ENDERIAN_PEARL,
-            (context) -> new FlyingItemEntityRenderer(context));
+        EntityRendererRegistry.register(ModEntities.ENDERIAN_PEARL, FlyingItemEntityRenderer::new);
 
         ModPacketsS2C.register();
 

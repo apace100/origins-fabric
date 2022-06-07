@@ -10,8 +10,6 @@ import io.github.apace100.calio.mixin.CriteriaRegistryInvoker;
 import io.github.apace100.calio.resource.OrderedResourceListenerInitializer;
 import io.github.apace100.calio.resource.OrderedResourceListenerManager;
 import io.github.apace100.origins.badge.BadgeManager;
-import io.github.apace100.origins.command.LayerArgumentType;
-import io.github.apace100.origins.command.OriginArgumentType;
 import io.github.apace100.origins.command.OriginCommand;
 import io.github.apace100.origins.networking.ModPacketsC2S;
 import io.github.apace100.origins.origin.Origin;
@@ -28,10 +26,8 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.serializer.ConfigSerializer;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.command.argument.ArgumentTypes;
-import net.minecraft.command.argument.serialize.ConstantArgumentSerializer;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
@@ -88,12 +84,10 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 		ModLoot.registerLootTables();
 		Origin.init();
 
-		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
+		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			OriginCommand.register(dispatcher);
 		});
 		CriteriaRegistryInvoker.callRegister(ChoseOriginCriterion.INSTANCE);
-		ArgumentTypes.register("origins:origin", OriginArgumentType.class, new ConstantArgumentSerializer<>(OriginArgumentType::origin));
-		ArgumentTypes.register("origins:layer", LayerArgumentType.class, new ConstantArgumentSerializer<>(LayerArgumentType::layer));
 	}
 
 	public static void serializeConfig() {

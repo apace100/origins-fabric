@@ -11,14 +11,14 @@ import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.concurrent.CompletableFuture;
 
 public class LayerArgumentType implements ArgumentType<Identifier> {
    public static final DynamicCommandExceptionType LAYER_NOT_FOUND = new DynamicCommandExceptionType((p_208663_0_) -> {
-      return new TranslatableText("commands.origin.layer_not_found", p_208663_0_);
+      return Text.translatable("commands.origin.layer_not_found", p_208663_0_);
    });
 
    public static LayerArgumentType layer() {

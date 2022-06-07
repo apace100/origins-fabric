@@ -176,7 +176,7 @@ public class OriginDisplayScreen extends Screen {
     }
 
     protected Text getTitleText() {
-        return new LiteralText("Origins");
+        return Text.of("Origins");
     }
 
     private void renderOriginWindow(MatrixStack matrices, int mouseX, int mouseY) {
@@ -210,7 +210,7 @@ public class OriginDisplayScreen extends Screen {
         }
         if(mouseX >= guiLeft + 128 && mouseX <= guiLeft + 158
             && mouseY >= guiTop + 19 && mouseY <= guiTop + 27) {
-            TranslatableText ttc = (TranslatableText) new TranslatableText(Origins.MODID + ".gui.impact.impact").append(": ").append(impact.getTextComponent());
+            MutableText ttc = Text.translatable(Origins.MODID + ".gui.impact.impact").append(": ").append(impact.getTextComponent());
             this.renderTooltip(matrices, ttc, mouseX, mouseY);
         }
     }

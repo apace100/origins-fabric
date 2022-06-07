@@ -11,10 +11,10 @@ import net.minecraft.util.registry.Registry;
 
 public class ModEntities {
 
-    public static final EntityType ENDERIAN_PEARL;
+    public static final EntityType<EnderianPearlEntity> ENDERIAN_PEARL;
 
     static {
-        ENDERIAN_PEARL = FabricEntityTypeBuilder.<EnderianPearlEntity>create(SpawnGroup.MISC, (type, world) -> new EnderianPearlEntity(type, world)).dimensions(EntityDimensions.fixed(0.25f, 0.25f)).trackable(64, 10).build();
+        ENDERIAN_PEARL = FabricEntityTypeBuilder.<EnderianPearlEntity>create(SpawnGroup.MISC, EnderianPearlEntity::new).dimensions(EntityDimensions.fixed(0.25f, 0.25f)).trackable(64, 10).build();
     }
 
     public static void register() {

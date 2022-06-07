@@ -1,6 +1,7 @@
 package io.github.apace100.origins.origin;
 
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public enum Impact {
@@ -32,8 +33,8 @@ public enum Impact {
 		return textStyle;
 	}
 	
-	public TranslatableText getTextComponent() {
-		return (TranslatableText)new TranslatableText(getTranslationKey()).formatted(getTextStyle());
+	public MutableText getTextComponent() {
+		return Text.translatable(getTranslationKey()).formatted(getTextStyle());
 	}
 	
 	public static Impact getByValue(int impactValue) {

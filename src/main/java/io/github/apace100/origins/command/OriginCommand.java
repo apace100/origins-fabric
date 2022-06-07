@@ -14,7 +14,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 
 import java.util.Collection;
 
@@ -41,9 +41,9 @@ public class OriginCommand {
 										i++;
 									}
 									if (targets.size() == 1) {
-										command.getSource().sendFeedback(new TranslatableText("commands.origin.set.success.single", targets.iterator().next().getDisplayName(), new TranslatableText(l.getTranslationKey()), o.getName()), true);
+										command.getSource().sendFeedback(Text.translatable("commands.origin.set.success.single", targets.iterator().next().getDisplayName(), Text.translatable(l.getTranslationKey()), o.getName()), true);
 									} else {
-										command.getSource().sendFeedback(new TranslatableText("commands.origin.set.success.multiple", targets.size(), new TranslatableText(l.getTranslationKey()), o.getName()), true);
+										command.getSource().sendFeedback(Text.translatable("commands.origin.set.success.multiple", targets.size(), Text.translatable(l.getTranslationKey()), o.getName()), true);
 									}
 									return i;
 								}))))
@@ -65,11 +65,11 @@ public class OriginCommand {
 										}
 									}
 									if (i == 0) {
-										command.getSource().sendError(new TranslatableText("commands.execute.conditional.fail"));
+										command.getSource().sendError(Text.translatable("commands.execute.conditional.fail"));
 									} else if (targets.size() == 1) {
-										command.getSource().sendFeedback(new TranslatableText("commands.execute.conditional.pass"), false);
+										command.getSource().sendFeedback(Text.translatable("commands.execute.conditional.pass"), false);
 									} else {
-										command.getSource().sendFeedback(new TranslatableText("commands.execute.conditional.pass_count", i), false);
+										command.getSource().sendFeedback(Text.translatable("commands.execute.conditional.pass_count", i), false);
 									}
 									return i;
 								}))))
@@ -82,7 +82,7 @@ public class OriginCommand {
 								OriginLayer layer = LayerArgumentType.getLayer(command, "layer");
 								OriginComponent component = ModComponents.ORIGIN.get(target);
 								Origin origin = component.getOrigin(layer);
-								command.getSource().sendFeedback(new TranslatableText("commands.origin.get.result", target.getDisplayName(), new TranslatableText(layer.getTranslationKey()), origin.getName(), origin.getIdentifier()), false);
+								command.getSource().sendFeedback(Text.translatable("commands.origin.get.result", target.getDisplayName(), Text.translatable(layer.getTranslationKey()), origin.getName(), origin.getIdentifier()), false);
 								return 1;
 							})
 						)
@@ -105,7 +105,7 @@ public class OriginCommand {
 								data.writeBoolean(false);
 								ServerPlayNetworking.send(target, ModPackets.OPEN_ORIGIN_SCREEN, data);
 							});
-							command.getSource().sendFeedback(new TranslatableText("commands.origin.gui.all", targets.size()), false);
+							command.getSource().sendFeedback(Text.translatable("commands.origin.gui.all", targets.size()), false);
 							return targets.size();
 						})
 						.then(argument("layer", LayerArgumentType.layer())
@@ -123,7 +123,7 @@ public class OriginCommand {
 									data.writeBoolean(false);
 									ServerPlayNetworking.send(target, ModPackets.OPEN_ORIGIN_SCREEN, data);
 								});
-								command.getSource().sendFeedback(new TranslatableText("commands.origin.gui.layer", targets.size(), new TranslatableText(layer.getTranslationKey())), false);
+								command.getSource().sendFeedback(Text.translatable("commands.origin.gui.layer", targets.size(), Text.translatable(layer.getTranslationKey())), false);
 								return targets.size();
 							})
 						)

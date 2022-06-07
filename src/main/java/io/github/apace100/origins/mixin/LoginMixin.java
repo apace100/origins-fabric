@@ -58,7 +58,7 @@ public abstract class LoginMixin {
 		BadgeManager.sync(player);
 
 		List<ServerPlayerEntity> playerList = getPlayerList();
-		playerList.forEach(spe -> ModComponents.ORIGIN.syncWith(spe, ComponentProvider.fromEntity(player)));
+		playerList.forEach(spe -> ModComponents.ORIGIN.syncWith(spe, (ComponentProvider)player));
 		OriginComponent.sync(player);
 		if(!component.hasAllOrigins()) {
 			if(component.checkAutoChoosingLayers(player, true)) {

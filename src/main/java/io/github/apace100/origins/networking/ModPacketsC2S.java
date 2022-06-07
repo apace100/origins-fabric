@@ -13,8 +13,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerLoginNetworkHandler;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -50,18 +49,18 @@ public class ModPacketsC2S {
                         if(component.hasAllOrigins() && !hadAllOrigins) {
                             OriginComponent.onChosen(playerEntity, hadOriginBefore);
                         }
-                        Origins.LOGGER.info("Player " + playerEntity.getDisplayName().asString() + " chose Origin: " + originId + ", for layer: " + layerId);
+                        Origins.LOGGER.info("Player " + playerEntity.getDisplayName().getContent() + " chose Origin: " + originId + ", for layer: " + layerId);
                     } else {
-                        Origins.LOGGER.info("Player " + playerEntity.getDisplayName().asString() + " tried to choose unchoosable Origin for layer " + layerId + ": " + originId + ".");
+                        Origins.LOGGER.info("Player " + playerEntity.getDisplayName().getContent() + " tried to choose unchoosable Origin for layer " + layerId + ": " + originId + ".");
                         component.setOrigin(layer, Origin.EMPTY);
                     }
                     confirmOrigin(playerEntity, layer, component.getOrigin(layer));
                     component.sync();
                 } else {
-                    Origins.LOGGER.warn("Player " + playerEntity.getDisplayName().asString() + " chose unknown origin: " + originId);
+                    Origins.LOGGER.warn("Player " + playerEntity.getDisplayName().getContent() + " chose unknown origin: " + originId);
                 }
             } else {
-                Origins.LOGGER.warn("Player " + playerEntity.getDisplayName().asString() + " tried to choose origin for layer " + layerId + " while having one already.");
+                Origins.LOGGER.warn("Player " + playerEntity.getDisplayName().getContent() + " tried to choose origin for layer " + layerId + " while having one already.");
             }
         });
     }
@@ -84,15 +83,15 @@ public class ModPacketsC2S {
                     if(component.hasAllOrigins() && !hadAllOrigins) {
                         OriginComponent.onChosen(playerEntity, hadOriginBefore);
                     }
-                    Origins.LOGGER.info("Player " + playerEntity.getDisplayName().asString() + " was randomly assigned the following Origin: " + randomOrigin + ", for layer: " + layerId);
+                    Origins.LOGGER.info("Player " + playerEntity.getDisplayName().getContent() + " was randomly assigned the following Origin: " + randomOrigin + ", for layer: " + layerId);
                 } else {
-                    Origins.LOGGER.info("Player " + playerEntity.getDisplayName().asString() + " tried to choose a random Origin for layer " + layerId + ", which is not allowed!");
+                    Origins.LOGGER.info("Player " + playerEntity.getDisplayName().getContent() + " tried to choose a random Origin for layer " + layerId + ", which is not allowed!");
                     component.setOrigin(layer, Origin.EMPTY);
                 }
                 confirmOrigin(playerEntity, layer, component.getOrigin(layer));
                 component.sync();
             } else {
-                Origins.LOGGER.warn("Player " + playerEntity.getDisplayName().asString() + " tried to choose origin for layer " + layerId + " while having one already.");
+                Origins.LOGGER.warn("Player " + playerEntity.getDisplayName().getContent() + " tried to choose origin for layer " + layerId + " while having one already.");
             }
         });
     }
@@ -116,10 +115,10 @@ public class ModPacketsC2S {
                         clientVersionString.append(".");
                     }
                 }
-                serverLoginNetworkHandler.disconnect(new TranslatableText("origins.gui.version_mismatch", Origins.VERSION, clientVersionString));
+                serverLoginNetworkHandler.disconnect(Text.translatable("origins.gui.version_mismatch", Origins.VERSION, clientVersionString));
             }
         } else {
-            serverLoginNetworkHandler.disconnect(new LiteralText("This server requires you to install the Origins mod (v" + Origins.VERSION + ") to play."));
+            serverLoginNetworkHandler.disconnect(Text.of("This server requires you to install the Origins mod (v" + Origins.VERSION + ") to play."));
         }
     }
 

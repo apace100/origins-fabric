@@ -10,7 +10,7 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -53,7 +53,7 @@ public record CraftingRecipeBadge(Identifier spriteId,
     public List<TooltipComponent> getTooltipComponents(PowerType<?> powerType, int widthLimit, float time, TextRenderer textRenderer) {
         List<TooltipComponent> tooltips = new LinkedList<>();
         if(MinecraftClient.getInstance().options.advancedItemTooltips) {
-            Text recipeIdText = new LiteralText(recipe.getId().toString()).formatted(Formatting.DARK_GRAY);
+            Text recipeIdText = ((MutableText)Text.of(recipe.getId().toString())).formatted(Formatting.DARK_GRAY);
             widthLimit = Math.max(130, textRenderer.getWidth(recipeIdText));
             if(prefix != null) TooltipBadge.addLines(tooltips, prefix, textRenderer, widthLimit);
             tooltips.add(new CraftingRecipeTooltipComponent(this.peekInputs(time), this.recipe.getOutput()));

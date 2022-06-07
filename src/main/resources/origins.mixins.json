@@ -4,6 +4,7 @@
   "package": "io.github.apace100.origins.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "ArgumentTypesMixin",
     "ConduitOnLandMixin",
     "LikeWaterMixin",
     "LoginMixin",
