@@ -9,16 +9,13 @@ import io.github.apace100.calio.registry.DataObjectRegistry;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.integration.AutoBadgeCallback;
 import io.github.apace100.origins.networking.ModPackets;
-import io.github.apace100.origins.util.PowerKeyManager;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.option.KeyBinding;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -143,16 +140,13 @@ public final class BadgeManager {
         Power power = powerType.create(null);
         if(power instanceof Active active) {
             boolean toggle = active instanceof TogglePower || active instanceof ToggleNightVisionPower;
-            Text keyText = ((MutableText)Text.of("["))
-                .append(KeyBinding.getLocalizedName(PowerKeyManager.getKeyIdentifier(powerId)).get())
-                .append(Text.of("]"));
             Identifier autoBadgeId = toggle ? TOGGLE_BADGE_ID : ACTIVE_BADGE_ID;
             if(REGISTRY.containsId(autoBadgeId)) {
                 badgeList.add(REGISTRY.get(autoBadgeId));
             } else {
-                badgeList.add(new TooltipBadge(toggle ? TOGGLE_BADGE_SPRITE : ACTIVE_BADGE_SPRITE,
-                    toggle ? Text.translatable("origins.gui.badge.toggle", keyText)
-                        : Text.translatable("origins.gui.badge.active", keyText)
+                badgeList.add(new KeybindBadge(toggle ? TOGGLE_BADGE_SPRITE : ACTIVE_BADGE_SPRITE,
+                    toggle ? "origins.gui.badge.toggle"
+                        : "origins.gui.badge.active"
                 ));
             }
         } else if(power instanceof RecipePower recipePower) {
