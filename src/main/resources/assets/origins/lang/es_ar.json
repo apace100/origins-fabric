@@ -211,8 +211,8 @@
 
 	"origins.gui.badge.active": "Habilidad activa. Presione %s para activarla.",
 	"origins.gui.badge.toggle": "Alternar con %s.",
-	"origins.gui.badge.recipe.crafting.shaped": "Crafting recipe (Shaped) provided by the power:",
-	"origins.gui.badge.recipe.crafting.shapeless": "Crafting recipe (Shapeless) provided by the power:",
+	"origins.gui.badge.recipe.crafting.shaped": "Este poder te deja usar esta Receta (Con forma definida):",
+	"origins.gui.badge.recipe.crafting.shapeless": "Este poder te deja usar esta Receta (Sin forma definida):",
 
 	"origins.gui.unbound_key": "§ono asignado§r",
 
