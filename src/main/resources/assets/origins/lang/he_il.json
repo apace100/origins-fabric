@@ -198,8 +198,8 @@
   "origin.origins.random.description": "יוקצה לך אחד מהבאים:",
 
   "layer.origins.origin.name": "מקור",
-  "layer.origins.origin.missing_origin.name": "חסר",
-  "layer.origins.origin.missing_origin.description": "אין לך מקור.",
+  "origin.origins.empty.name": "חסר",
+  "origin.origins.empty.description": "אין לך מקור.",
 
   "death.attack.no_water_for_gills": "%1$s לא הצליח להישאר רטוב.",
   "death.attack.no_water_for_gills.player": "%1$s לא הצליחו להשאר רטובים מפני שהם נלחמו ב-%2$s.",

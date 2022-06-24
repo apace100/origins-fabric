@@ -201,8 +201,8 @@
   "origin.origins.random.description": "Zostaniesz przydzielony do jednego z poniższych:",
 
   "layer.origins.origin.name": "Pochodzenie ",
-  "layer.origins.origin.missing_origin.name": "Nieznane pochodzenie",
-  "layer.origins.origin.missing_origin.description": "Twoje pochodzenie jest nieznane. Kim jesteś?",
+  "origin.origins.empty.name": "Nieznane pochodzenie",
+  "origin.origins.empty.description": "Twoje pochodzenie jest nieznane. Kim jesteś?",
 
   "death.attack.no_water_for_gills": "%1$s nie udało się pozostać mokrym.",
   "death.attack.no_water_for_gills.player": "%1$s nie udało się pozostać mokrym, ponieważ walczył z %2$s.",
