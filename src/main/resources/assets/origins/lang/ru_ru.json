@@ -201,8 +201,8 @@
   "origin.origins.random.description": "Вам будет назначен один из следующих:",
 
   "layer.origins.origin.name": "Происхождение",
-  "layer.origins.origin.missing_origin.name": "Отсутствует",
-  "layer.origins.origin.missing_origin.description": "У вас нет происхождения.",
+  "origin.origins.empty.name": "Отсутствует",
+  "origin.origins.empty.description": "У вас нет происхождения.",
 
   "death.attack.no_water_for_gills": "%1$s не успел погрузиться в воду.",
   "death.attack.no_water_for_gills.player": "%1$s не успел погрузиться в воду из-за боя с %2$s.",

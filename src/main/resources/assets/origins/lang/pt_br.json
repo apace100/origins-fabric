@@ -201,8 +201,8 @@
   "origin.origins.random.description": "Aleatóriamente, pode cair uma das seguintes origens:",
 
   "layer.origins.origin": "Origem",
-  "layer.origins.origin.missing_origin.name": "Faltando",
-  "layer.origins.origin.missing_origin.description": "Você não tem uma origem",
+  "origin.origins.empty.name": "Faltando",
+  "origin.origins.empty.description": "Você não tem uma origem",
 
   "death.attack.no_water_for_gills": "%1$s não conseguiu se manter molhado",
   "death.attack.no_water_for_gills.player": "%1$s não conseguiu se manter molhado porque estava lutando com %2$s",

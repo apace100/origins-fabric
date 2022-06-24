@@ -209,8 +209,8 @@
   "origin.origins.random.description": "Bu Originlerden biri olacaksınız:",
 
   "layer.origins.origin.name": "Origin",
-  "layer.origins.origin.missing_origin.name": "Eksik",
-  "layer.origins.origin.missing_origin.description": "Bir Origin'in yok.",
+  "origin.origins.empty.name": "Eksik",
+  "origin.origins.empty.description": "Bir Origin'in yok.",
 
   "death.attack.no_water_for_gills": "%1$s ıslak kalmayı başaramadı",
   "death.attack.no_water_for_gills.player": "%1$s ıslak kalmayı başaramadı çünkü %2$s ile savaşıyordu.",
