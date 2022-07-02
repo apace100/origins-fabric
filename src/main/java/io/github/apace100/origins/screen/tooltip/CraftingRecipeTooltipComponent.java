@@ -11,14 +11,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 
-/**A {@link TooltipComponent} used for {@link io.github.apace100.origins.screen.badge.CraftingRecipeBadge}
+/**A {@link TooltipComponent} used for {@link io.github.apace100.origins.badge.CraftingRecipeBadge}
  * Draws a snapshot of a 3x3 crafting recipe in the tooltip*/
 public class CraftingRecipeTooltipComponent implements TooltipComponent {
+    private final int recipeWidth;
     private final DefaultedList<ItemStack> inputs;
     private final ItemStack output;
     private static final Identifier TEXTURE = Origins.identifier("textures/gui/tooltip/recipe_tooltip.png");
 
-    public CraftingRecipeTooltipComponent(DefaultedList<ItemStack> inputs, ItemStack output) {
+    public CraftingRecipeTooltipComponent(int recipeWidth, DefaultedList<ItemStack> inputs, ItemStack output) {
+        this.recipeWidth = recipeWidth;
         this.inputs = inputs;
         this.output = output;
     }
@@ -38,10 +40,10 @@ public class CraftingRecipeTooltipComponent implements TooltipComponent {
         this.drawBackGround(matrices, x, y, z);
         for(int column = 0; column < 3; ++column) {
             for(int row = 0; row < 3; ++row) {
-                int index = column + row * 3;
+                int index = column + row * recipeWidth;
                 int slotX = x + 8 + column * 18;
                 int slotY = y + 8 + row * 18;
-                ItemStack stack = inputs.get(index);
+                ItemStack stack = column >= recipeWidth ? ItemStack.EMPTY : inputs.get(index);
                 itemRenderer.renderInGuiWithOverrides(stack, slotX, slotY, index);
                 itemRenderer.renderGuiItemOverlay(textRenderer, stack, slotX, slotY);
             }

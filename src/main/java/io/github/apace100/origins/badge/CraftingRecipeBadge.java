@@ -10,6 +10,7 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.ShapedRecipe;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -52,17 +53,18 @@ public record CraftingRecipeBadge(Identifier spriteId,
     @Override
     public List<TooltipComponent> getTooltipComponents(PowerType<?> powerType, int widthLimit, float time, TextRenderer textRenderer) {
         List<TooltipComponent> tooltips = new LinkedList<>();
+        int recipeWidth = this.recipe instanceof ShapedRecipe shapedRecipe ? shapedRecipe.getWidth() : 3;
         if(MinecraftClient.getInstance().options.advancedItemTooltips) {
             Text recipeIdText = ((MutableText)Text.of(recipe.getId().toString())).formatted(Formatting.DARK_GRAY);
             widthLimit = Math.max(130, textRenderer.getWidth(recipeIdText));
             if(prefix != null) TooltipBadge.addLines(tooltips, prefix, textRenderer, widthLimit);
-            tooltips.add(new CraftingRecipeTooltipComponent(this.peekInputs(time), this.recipe.getOutput()));
+            tooltips.add(new CraftingRecipeTooltipComponent(recipeWidth, this.peekInputs(time), this.recipe.getOutput()));
             if(suffix != null) TooltipBadge.addLines(tooltips, suffix, textRenderer, widthLimit);
             TooltipBadge.addLines(tooltips, recipeIdText, textRenderer, widthLimit);
         } else {
             widthLimit = 130;
             if(prefix != null) TooltipBadge.addLines(tooltips, prefix, textRenderer, widthLimit);
-            tooltips.add(new CraftingRecipeTooltipComponent(this.peekInputs(time), this.recipe.getOutput()));
+            tooltips.add(new CraftingRecipeTooltipComponent(recipeWidth, this.peekInputs(time), this.recipe.getOutput()));
             if(suffix != null) TooltipBadge.addLines(tooltips, suffix, textRenderer, widthLimit);
         }
         return tooltips;
