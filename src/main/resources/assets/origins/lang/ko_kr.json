@@ -201,8 +201,8 @@
     "origin.origins.random.description": "다음 중 하나가 할당됩니다.",
 
     "layer.origins.origin.name": "종족",
-    "layer.origins.origin.missing_origin.name": "없음",
-    "layer.origins.origin.missing_origin.description": "종족이 없습니다.",
+    "origin.origins.empty.name": "없음",
+    "origin.origins.empty.description": "종족이 없습니다.",
 
     "death.attack.no_water_for_gills": "%1$s는 젖지 않았습니다.",
     "death.attack.no_water_for_gills.player": "%1$s은 (는) %2$s와 싸우고 있었기 때문에 젖지 않았습니다.",

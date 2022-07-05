@@ -201,8 +201,8 @@
   "origin.origins.random.description": "次のいずれかが割り当てられます：",
 
   "layer.origins.origin.name": "オリジン",
-  "layer.origins.origin.missing_origin.name": "存在しません",
-  "layer.origins.origin.missing_origin.description": "あなたはオリジンを所持していません。",
+  "origin.origins.empty.name": "存在しません",
+  "origin.origins.empty.description": "あなたはオリジンを所持していません。",
 
   "death.attack.no_water_for_gills": "%1$s は地上でも呼吸が出来ると思った",
   "death.attack.no_water_for_gills.player": "%1$s は %2$s　と戦うのに夢中で水に入るのを忘れてしまった",

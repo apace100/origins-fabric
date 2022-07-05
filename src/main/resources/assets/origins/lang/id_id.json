@@ -201,8 +201,8 @@
   "origin.origins.random.description": "Kamu telah ditetapkan sebagai salah satu ini:",
 
   "layer.origins.origin.name": "Origin",
-  "layer.origins.origin.missing_origin.name": "Tidak berada",
-  "layer.origins.origin.missing_origin.description": "Kamu tidak mempunyai origin apapun.",
+  "origin.origins.empty.name": "Tidak berada",
+  "origin.origins.empty.description": "Kamu tidak mempunyai origin apapun.",
 
   "death.attack.no_water_for_gills": "%1$s tidak bisa bertahan basah.",
   "death.attack.no_water_for_gills.player": "%1$s tidak bisa bertahan basah karena dia berantem dengan  %2$s.",

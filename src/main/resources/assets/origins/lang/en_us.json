@@ -220,8 +220,8 @@
   "origin.origins.random.description": "You'll be assigned one of the following:",
 
   "layer.origins.origin.name": "Origin",
-  "layer.origins.origin.missing_origin.name": "Missing",
-  "layer.origins.origin.missing_origin.description": "You do not have an Origin.",
+  "origin.origins.empty.name": "Missing",
+  "origin.origins.empty.description": "You do not have an Origin.",
 
   "death.attack.no_water_for_gills": "%1$s didn't manage to keep wet",
   "death.attack.no_water_for_gills.player": "%1$s didn't manage to keep wet because they were fighting %2$s",
