@@ -183,8 +183,8 @@
   "origins.gui.impact.high": "Élevé",
 
   "layer.origins.origin.name": "Origine",
-  "layer.origins.origin.missing_origin.name": "Manquante",
-  "layer.origins.origin.missing_origin.description": "Vous n'avez pas d'origine.",
+  "origin.origins.empty.name": "Manquante",
+  "origin.origins.empty.description": "Vous n'avez pas d'origine.",
 
   "death.attack.no_water_for_gills": "%s n'a pas réussi à rester mouillé(e).",
   "death.attack.hurt_by_water": "%s a pris son bain trop longtemps.",

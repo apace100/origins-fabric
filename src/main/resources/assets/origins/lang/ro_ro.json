@@ -201,8 +201,8 @@
   "origin.origins.random.description": "Vi se va atribui una dintre următoarele:",
 
   "layer.origins.origin.name": "Origine",
-  "layer.origins.origin.missing_origin.name": "Absent",
-  "layer.origins.origin.missing_origin.description": "Nu aveți o origine.",
+  "origin.origins.empty.name": "Absent",
+  "origin.origins.empty.description": "Nu aveți o origine.",
 
   "death.attack.no_water_for_gills": "%1$s nu a reușit să se ude",
   "death.attack.no_water_for_gills.player": "%1$s nu a reușit să se ude pentru că se luptau cu %2$s",
