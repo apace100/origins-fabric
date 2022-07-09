@@ -2,6 +2,7 @@ package io.github.apace100.origins.networking;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.event.PlayerOriginUpdateEvent;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
@@ -51,6 +52,7 @@ public class ModPacketsC2S {
                             OriginComponent.onChosen(playerEntity, hadOriginBefore);
                         }
                         Origins.LOGGER.info("Player " + playerEntity.getDisplayName().asString() + " chose Origin: " + originId + ", for layer: " + layerId);
+                        PlayerOriginUpdateEvent.emit(new PlayerOriginUpdateEvent(playerEntity, originId));
                     } else {
                         Origins.LOGGER.info("Player " + playerEntity.getDisplayName().asString() + " tried to choose unchoosable Origin for layer " + layerId + ": " + originId + ".");
                         component.setOrigin(layer, Origin.EMPTY);
