@@ -1,22 +1,28 @@
 package io.github.apace100.origins.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
+import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.registry.ModComponents;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -30,118 +36,232 @@ public class OriginCommand {
 					.then(argument("targets", EntityArgumentType.players())
 						.then(argument("layer", LayerArgumentType.layer())
 							.then(argument("origin", OriginArgumentType.origin())
-								.executes((command) -> {
-									// Sets the origins of several people in the given layer.
-									int i = 0;
-									Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(command, "targets");
-									OriginLayer l = LayerArgumentType.getLayer(command, "layer");
-									Origin o = OriginArgumentType.getOrigin(command, "origin");
-									for(ServerPlayerEntity target : targets) {
-										setOrigin(target, l, o);
-										i++;
-									}
-									if (targets.size() == 1) {
-										command.getSource().sendFeedback(Text.translatable("commands.origin.set.success.single", targets.iterator().next().getDisplayName(), Text.translatable(l.getTranslationKey()), o.getName()), true);
-									} else {
-										command.getSource().sendFeedback(Text.translatable("commands.origin.set.success.multiple", targets.size(), Text.translatable(l.getTranslationKey()), o.getName()), true);
-									}
-									return i;
-								}))))
+								.executes(OriginCommand::setOrigin))))
 				)
 				.then(literal("has")
 					.then(argument("targets", EntityArgumentType.players())
 						.then(argument("layer", LayerArgumentType.layer())
 							.then(argument("origin", OriginArgumentType.origin())
-								.executes((command) -> {
-									// Returns the number of people in the target selector with the origin in the given layer.
-									// Useful for checking if a player has the given origin in functions.
-									int i = 0;
-									Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(command, "targets");
-									OriginLayer l = LayerArgumentType.getLayer(command, "layer");
-									Origin o = OriginArgumentType.getOrigin(command, "origin");
-									for(ServerPlayerEntity target : targets) {
-										if (hasOrigin(target, l, o)) {
-											i++;
-										}
-									}
-									if (i == 0) {
-										command.getSource().sendError(Text.translatable("commands.execute.conditional.fail"));
-									} else if (targets.size() == 1) {
-										command.getSource().sendFeedback(Text.translatable("commands.execute.conditional.pass"), false);
-									} else {
-										command.getSource().sendFeedback(Text.translatable("commands.execute.conditional.pass_count", i), false);
-									}
-									return i;
-								}))))
+								.executes(OriginCommand::hasOrigin))))
 				)
 				.then(literal("get")
 					.then(argument("target", EntityArgumentType.player())
 						.then(argument("layer", LayerArgumentType.layer())
-							.executes((command) -> {
-								ServerPlayerEntity target = EntityArgumentType.getPlayer(command, "target");
-								OriginLayer layer = LayerArgumentType.getLayer(command, "layer");
-								OriginComponent component = ModComponents.ORIGIN.get(target);
-								Origin origin = component.getOrigin(layer);
-								command.getSource().sendFeedback(Text.translatable("commands.origin.get.result", target.getDisplayName(), Text.translatable(layer.getTranslationKey()), origin.getName(), origin.getIdentifier()), false);
-								return 1;
-							})
+							.executes(OriginCommand::getOrigin)
 						)
 					)
 				)
 				.then(literal("gui")
 					.then(argument("targets", EntityArgumentType.players())
-						.executes((command) -> {
-							Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(command, "targets");
-							targets.forEach(target -> {
-								OriginComponent component = ModComponents.ORIGIN.get(target);
-								OriginLayers.getLayers().forEach(layer -> {
-									if(layer.isEnabled()) {
-										component.setOrigin(layer, Origin.EMPTY);
-									}
-								});
-								component.checkAutoChoosingLayers(target, false);
-								component.sync();
-								PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
-								data.writeBoolean(false);
-								ServerPlayNetworking.send(target, ModPackets.OPEN_ORIGIN_SCREEN, data);
-							});
-							command.getSource().sendFeedback(Text.translatable("commands.origin.gui.all", targets.size()), false);
-							return targets.size();
-						})
+						.executes(commandContext -> OriginCommand.openGui(commandContext, false))
 						.then(argument("layer", LayerArgumentType.layer())
-							.executes((command) -> {
-								OriginLayer layer = LayerArgumentType.getLayer(command, "layer");
-								Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(command, "targets");
-								targets.forEach(target -> {
-									OriginComponent component = ModComponents.ORIGIN.get(target);
-									if(layer.isEnabled()) {
-										component.setOrigin(layer, Origin.EMPTY);
-									}
-									component.checkAutoChoosingLayers(target, false);
-									component.sync();
-									PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
-									data.writeBoolean(false);
-									ServerPlayNetworking.send(target, ModPackets.OPEN_ORIGIN_SCREEN, data);
-								});
-								command.getSource().sendFeedback(Text.translatable("commands.origin.gui.layer", targets.size(), Text.translatable(layer.getTranslationKey())), false);
-								return targets.size();
-							})
+							.executes(commandContext -> OriginCommand.openGui(commandContext, true))
+						)
+					)
+				)
+				.then(literal("random")
+					.then(argument("targets", EntityArgumentType.players())
+						.then(argument("layer", LayerArgumentType.layer())
+							.executes(OriginCommand::randomizeOrigin)
 						)
 					)
 				)
 		);
 	}
-
-	private static void setOrigin(PlayerEntity player, OriginLayer layer, Origin origin) {
-		OriginComponent component = ModComponents.ORIGIN.get(player);
-		component.setOrigin(layer, origin);
-		OriginComponent.sync(player);
-		boolean hadOriginBefore = component.hadOriginBefore();
-		OriginComponent.partialOnChosen(player, hadOriginBefore, origin);
+	
+	/*
+		Sets the origin of the player in the specified origin layer
+	 */
+	private static int setOrigin(CommandContext<ServerCommandSource> commandContext) throws CommandSyntaxException {
+		
+		Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(commandContext, "targets");
+		OriginLayer originLayer = LayerArgumentType.getLayer(commandContext, "layer");
+		Origin origin = OriginArgumentType.getOrigin(commandContext, "origin");
+		ServerCommandSource serverCommandSource = commandContext.getSource();
+		
+		int processedTargets = 0;
+		
+		if (originLayer.getOrigins().contains(origin.getIdentifier())) {
+			
+			for (ServerPlayerEntity target : targets) {
+				
+				OriginComponent originComponent = ModComponents.ORIGIN.get(target);
+				boolean hadOriginBefore = originComponent.hadOriginBefore();
+				
+				originComponent.setOrigin(originLayer, origin);
+				originComponent.sync();
+				
+				OriginComponent.partialOnChosen(target, hadOriginBefore, origin);
+				
+				processedTargets++;
+				
+			}
+			
+			if (processedTargets == 1) serverCommandSource.sendFeedback(Text.translatable("commands.origin.set.success.single", targets.iterator().next().getDisplayName().getString(), Text.translatable(originLayer.getTranslationKey()), origin.getName()), true);
+			else serverCommandSource.sendFeedback(Text.translatable("commands.origin.set.success.multiple", processedTargets, Text.translatable(originLayer.getTranslationKey()), origin.getName()), true);
+			
+		}
+		
+		else serverCommandSource.sendError(Text.translatable("commands.origin.origin_in_layer_not_found", origin.getIdentifier(), originLayer.getIdentifier()));
+		
+		return processedTargets;
+		
 	}
-
-	private static boolean hasOrigin(PlayerEntity player, OriginLayer layer, Origin origin) {
-		OriginComponent component = ModComponents.ORIGIN.get(player);
-		return component.hasOrigin(layer) && component.getOrigin(layer).equals(origin);
+	
+	/*
+		Returns the number of players that has the specified origin in the specified origin layer.
+		(Useful for checking if a player has a certain origin in functions.)
+	 */
+	private static int hasOrigin(CommandContext<ServerCommandSource> commandContext) throws CommandSyntaxException {
+		
+		Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(commandContext, "targets");
+		OriginLayer originLayer = LayerArgumentType.getLayer(commandContext, "layer");
+		Origin origin = OriginArgumentType.getOrigin(commandContext, "origin");
+		ServerCommandSource serverCommandSource = commandContext.getSource();
+		
+		int processedTargets = 0;
+		
+		if (originLayer.getOrigins().contains(origin.getIdentifier())) {
+			
+			for (ServerPlayerEntity target : targets) {
+				OriginComponent originComponent = ModComponents.ORIGIN.get(target);
+				if (originComponent.hasOrigin(originLayer) && originComponent.getOrigin(originLayer).equals(origin)) processedTargets++;
+			}
+			
+			if (processedTargets == 0) serverCommandSource.sendError(Text.translatable("commands.execute.conditional.fail"));
+			else if (processedTargets == 1) serverCommandSource.sendFeedback(Text.translatable("commands.execute.conditional.pass"), true);
+			else serverCommandSource.sendFeedback(Text.translatable("commands.execute.conditional.pass_count", processedTargets), true);
+			
+		}
+		
+		else serverCommandSource.sendError(Text.translatable("commands.origin.origin_in_layer_not_found", origin.getIdentifier(), originLayer.getIdentifier()));
+		
+		return processedTargets;
+		
 	}
+	
+	/*
+		Gets the origin of the player from the specified origin layer
+	 */
+	private static int getOrigin(CommandContext<ServerCommandSource> commandContext) throws CommandSyntaxException {
+		
+		ServerPlayerEntity target = EntityArgumentType.getPlayer(commandContext, "target");
+		ServerCommandSource serverCommandSource = commandContext.getSource();
+		OriginComponent originComponent = ModComponents.ORIGIN.get(target);
+		OriginLayer originLayer = LayerArgumentType.getLayer(commandContext, "layer");
+		Origin origin = originComponent.getOrigin(originLayer);
+		
+		serverCommandSource.sendFeedback(Text.translatable("commands.origin.get.result", target.getDisplayName().getString(), Text.translatable(originLayer.getTranslationKey()), origin.getName(), origin.getIdentifier()), true);
+		
+		return 1;
+		
+	}
+	
+	/*
+		Opens the 'Choose Origin' screen for the specified origin layer *(or all enabled origin layers, if not specified).*
+	 */
+	private static int openGui(CommandContext<ServerCommandSource> commandcontext, boolean hasOriginLayer) throws CommandSyntaxException {
+		
+		Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(commandcontext, "targets");
+		ServerCommandSource serverCommandSource = commandcontext.getSource();
+		OriginLayer originLayer = null;
+		if (hasOriginLayer) originLayer = LayerArgumentType.getLayer(commandcontext, "layer");
+
+		int processedTargets = 0;
+		
+		for (ServerPlayerEntity target : targets) {
+			
+			OriginComponent originComponent = ModComponents.ORIGIN.get(target);
+			PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
+			
+			if (hasOriginLayer && originLayer.isEnabled()) originComponent.setOrigin(originLayer, Origin.EMPTY);
+			else OriginLayers.getLayers().forEach(
+				layer -> {
+					if (layer.isEnabled()) originComponent.setOrigin(layer, Origin.EMPTY);
+				}
+			);
+			
+			originComponent.checkAutoChoosingLayers(target, false);
+			originComponent.sync();
+			
+			buffer.writeBoolean(false);
+			ServerPlayNetworking.send(target, ModPackets.OPEN_ORIGIN_SCREEN, buffer);
+			
+			processedTargets++;
+			
+		}
+		
+		serverCommandSource.sendFeedback(Text.translatable("commands.origin.gui.all", processedTargets), false);
+		return processedTargets;
+		
+	}
+	
+	/*
+		Set the origin of the player in the specified origin layer randomly.
+	 */
+	private static int randomizeOrigin(CommandContext<ServerCommandSource> commandContext) throws CommandSyntaxException {
+		
+		Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(commandContext, "targets");
+		OriginLayer originLayer = LayerArgumentType.getLayer(commandContext, "layer");
+		ServerCommandSource serverCommandSource = commandContext.getSource();
+
+		Entity sourceEntity = serverCommandSource.getEntity();
+		Entity targetEntity = targets.iterator().next();
+		Origin origin = null;
+		
+		int processedTargets = 0;
+		
+		if (originLayer.isRandomAllowed()) {
+			
+			for (ServerPlayerEntity target : targets) {
+				
+				OriginComponent originComponent = ModComponents.ORIGIN.get(target);
+				List<Origin> randomOrigins = originLayer.getRandomOrigins(target).stream().map(OriginRegistry::get).toList();
+				origin = randomOrigins.get(new Random().nextInt(randomOrigins.size()));
+				
+				boolean hadOriginBefore = originComponent.hadOriginBefore();
+				boolean hadAllOrigins = originComponent.hasAllOrigins();
+				
+				originComponent.setOrigin(originLayer, origin);
+				originComponent.checkAutoChoosingLayers(target, false);
+				originComponent.sync();
+				
+				if (originComponent.hasAllOrigins() && !hadAllOrigins) OriginComponent.onChosen(target ,hadOriginBefore);
+
+				Origins.LOGGER.info(
+					"Player {} was randomly assigned the following Origin: {} for layer: {}",
+					target.getDisplayName().getString(),
+					origin.getIdentifier().toString(),
+					originLayer.getIdentifier().toString()
+				);
+				
+				target.sendMessage(
+					Text.translatable(
+						"commands.origin.random.success.to_target",
+						origin.getName(),
+						Text.translatable(originLayer.getTranslationKey())
+					),
+					false
+				);
+				
+				processedTargets++;
+				
+			}
+			
+			if (processedTargets == 1) {
+				if (sourceEntity != null && !sourceEntity.equals(targetEntity)) serverCommandSource.sendFeedback(Text.translatable("commands.origin.random.success.single", targetEntity.getDisplayName().getString(), origin.getName(), Text.translatable(originLayer.getTranslationKey())), true);
+			}
+			else serverCommandSource.sendFeedback(Text.translatable("commands.origin.random.success.multiple", processedTargets, Text.translatable(originLayer.getTranslationKey())), true);
+			
+		}
+		
+		else {
+			if (targets.size() == 1) serverCommandSource.sendFeedback(Text.translatable("commands.origin.random.fail.single", targetEntity.getDisplayName().getString(), Text.translatable(originLayer.getTranslationKey()), Text.translatable("commands.origin.layer_random_not_allowed")), true);
+			else serverCommandSource.sendFeedback(Text.translatable("commands.origin.random.fail.multiple", targets.size(), Text.translatable(originLayer.getTranslationKey()), Text.translatable("commands.origin.layer_random_not_allowed")), true);
+		}
+		
+		return processedTargets;
+		
+	}
+	
 }
