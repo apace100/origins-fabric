@@ -102,7 +102,7 @@ public class OriginCommand {
 			
 		}
 		
-		else serverCommandSource.sendError(Text.translatable("commands.origin.origin_in_layer_not_found", origin.getIdentifier(), originLayer.getIdentifier()));
+		else serverCommandSource.sendError(Text.translatable("commands.origin.unregistered_in_layer", origin.getIdentifier(), originLayer.getIdentifier()));
 		
 		return processedTargets;
 		
@@ -134,7 +134,7 @@ public class OriginCommand {
 			
 		}
 		
-		else serverCommandSource.sendError(Text.translatable("commands.origin.origin_in_layer_not_found", origin.getIdentifier(), originLayer.getIdentifier()));
+		else serverCommandSource.sendError(Text.translatable("commands.origin.unregistered_in_layer", origin.getIdentifier(), originLayer.getIdentifier()));
 		
 		return processedTargets;
 		
@@ -205,7 +205,6 @@ public class OriginCommand {
 		OriginLayer originLayer = LayerArgumentType.getLayer(commandContext, "layer");
 		ServerCommandSource serverCommandSource = commandContext.getSource();
 
-		Entity sourceEntity = serverCommandSource.getEntity();
 		Entity targetEntity = targets.iterator().next();
 		Origin origin = null;
 		
@@ -229,36 +228,22 @@ public class OriginCommand {
 				if (originComponent.hasAllOrigins() && !hadAllOrigins) OriginComponent.onChosen(target ,hadOriginBefore);
 
 				Origins.LOGGER.info(
-					"Player {} was randomly assigned the following Origin: {} for layer: {}",
+					"Player {} was randomly assigned the origin {} for layer {}",
 					target.getDisplayName().getString(),
 					origin.getIdentifier().toString(),
 					originLayer.getIdentifier().toString()
-				);
-				
-				target.sendMessage(
-					Text.translatable(
-						"commands.origin.random.success.to_target",
-						origin.getName(),
-						Text.translatable(originLayer.getTranslationKey())
-					),
-					false
 				);
 				
 				processedTargets++;
 				
 			}
 			
-			if (processedTargets == 1) {
-				if (sourceEntity != null && !sourceEntity.equals(targetEntity)) serverCommandSource.sendFeedback(Text.translatable("commands.origin.random.success.single", targetEntity.getDisplayName().getString(), origin.getName(), Text.translatable(originLayer.getTranslationKey())), true);
-			}
+			if (processedTargets == 1) serverCommandSource.sendFeedback(Text.translatable("commands.origin.random.success.single", targetEntity.getDisplayName().getString(), origin.getName(), Text.translatable(originLayer.getTranslationKey())), true);
 			else serverCommandSource.sendFeedback(Text.translatable("commands.origin.random.success.multiple", processedTargets, Text.translatable(originLayer.getTranslationKey())), true);
 			
 		}
 		
-		else {
-			if (targets.size() == 1) serverCommandSource.sendFeedback(Text.translatable("commands.origin.random.fail.single", targetEntity.getDisplayName().getString(), Text.translatable(originLayer.getTranslationKey()), Text.translatable("commands.origin.layer_random_not_allowed")), true);
-			else serverCommandSource.sendFeedback(Text.translatable("commands.origin.random.fail.multiple", targets.size(), Text.translatable(originLayer.getTranslationKey()), Text.translatable("commands.origin.layer_random_not_allowed")), true);
-		}
+		else serverCommandSource.sendError(Text.translatable("commands.origin.random.not_allowed", Text.translatable(originLayer.getTranslationKey())));
 		
 		return processedTargets;
 		
