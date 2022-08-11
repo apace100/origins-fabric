@@ -42,6 +42,7 @@ public class OriginArgumentType implements ArgumentType<Identifier> {
       try {
          return OriginRegistry.get(id);
       }
+
       catch(IllegalArgumentException e) {
          throw ORIGIN_NOT_FOUND.create(id);
       }
@@ -52,12 +53,16 @@ public class OriginArgumentType implements ArgumentType<Identifier> {
    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
 
       List<Identifier> availableOrigins = new ArrayList<>();
-      availableOrigins.add(Origin.EMPTY.getIdentifier());
 
-      Identifier originLayerId = context.getArgument("layer", Identifier.class);
-      OriginLayer originLayer = OriginLayers.getLayer(originLayerId);
+      try {
+          Identifier originLayerId = context.getArgument("layer", Identifier.class);
+          OriginLayer originLayer = OriginLayers.getLayer(originLayerId);
 
-      availableOrigins.addAll(originLayer.getOrigins());
+          availableOrigins.add(Origin.EMPTY.getIdentifier());
+          if (originLayer != null) availableOrigins.addAll(originLayer.getOrigins());
+      }
+
+      catch(IllegalArgumentException ignored) {}
 
       return CommandSource.suggestIdentifiers(availableOrigins.stream(), builder);
 
