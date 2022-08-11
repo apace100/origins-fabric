@@ -81,7 +81,7 @@ public class OriginCommand {
 		
 		int processedTargets = 0;
 		
-		if (originLayer.getOrigins().contains(origin.getIdentifier())) {
+		if (origin.equals(Origin.EMPTY) || originLayer.getOrigins().contains(origin.getIdentifier())) {
 			
 			for (ServerPlayerEntity target : targets) {
 				
@@ -121,11 +121,11 @@ public class OriginCommand {
 		
 		int processedTargets = 0;
 		
-		if (originLayer.getOrigins().contains(origin.getIdentifier())) {
+		if (origin.equals(Origin.EMPTY) || originLayer.getOrigins().contains(origin.getIdentifier())) {
 			
 			for (ServerPlayerEntity target : targets) {
 				OriginComponent originComponent = ModComponents.ORIGIN.get(target);
-				if (originComponent.hasOrigin(originLayer) && originComponent.getOrigin(originLayer).equals(origin)) processedTargets++;
+				if ((origin.equals(Origin.EMPTY) || originComponent.hasOrigin(originLayer)) && originComponent.getOrigin(originLayer).equals(origin)) processedTargets++;
 			}
 			
 			if (processedTargets == 0) serverCommandSource.sendError(Text.translatable("commands.execute.conditional.fail"));
