@@ -2,7 +2,6 @@ package io.github.apace100.origins.registry;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.util.OriginLootCondition;
-import net.fabricmc.fabric.api.loot.v2.FabricLootPoolBuilder;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
@@ -50,7 +49,7 @@ public class ModLoot {
                     .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
                         .weight(10)
                         .apply(SetNbtLootFunction.builder(waterProtectionLevel2)))
-                    .with(EmptyEntry.Serializer().weight(80));
+                    .with(EmptyEntry.builder().weight(80));
                 tableBuilder.pool(lootPool);
             } else if (STRONGHOLD_LIBRARY.equals(identifier)) {
                 LootPool.Builder lootPool = new LootPool.Builder();
@@ -61,7 +60,7 @@ public class ModLoot {
                     .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
                         .weight(10)
                         .apply(SetNbtLootFunction.builder(waterProtectionLevel3)))
-                    .with(EmptyEntry.Serializer().weight(80));
+                    .with(EmptyEntry.builder().weight(80));
                 tableBuilder.pool(lootPool);
             } else if (MINESHAFT.equals(identifier)) {
                 LootPool.Builder lootPool = new LootPool.Builder();
@@ -72,7 +71,7 @@ public class ModLoot {
                     .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
                         .weight(5)
                         .apply(SetNbtLootFunction.builder(waterProtectionLevel2)))
-                    .with(EmptyEntry.Serializer().weight(90));
+                    .with(EmptyEntry.builder().weight(90));
                 tableBuilder.pool(lootPool);
             } else if (WATER_RUIN.equals(identifier)) {
                 LootPool.Builder lootPool = new LootPool.Builder();
@@ -83,7 +82,7 @@ public class ModLoot {
                     .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
                         .weight(20)
                         .apply(SetNbtLootFunction.builder(waterProtectionLevel2)))
-                    .with(EmptyEntry.Serializer().weight(110));
+                    .with(EmptyEntry.builder().weight(110));
                 tableBuilder.pool(lootPool);
             }
         }));
