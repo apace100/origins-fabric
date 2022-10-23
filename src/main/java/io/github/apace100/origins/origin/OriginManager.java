@@ -3,6 +3,7 @@ package io.github.apace100.origins.origin;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import io.github.apace100.apoli.Apoli;
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.calio.data.MultiJsonDataLoader;
 import io.github.apace100.origins.Origins;
@@ -11,9 +12,7 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class OriginManager extends MultiJsonDataLoader implements IdentifiableResourceReloadListener {
@@ -68,5 +67,10 @@ public class OriginManager extends MultiJsonDataLoader implements IdentifiableRe
 	@Override
 	public Identifier getFabricId() {
 		return new Identifier(Origins.MODID, "origins");
+	}
+
+	@Override
+	public Collection<Identifier> getFabricDependencies() {
+		return Set.of(Apoli.identifier("powers"));
 	}
 }

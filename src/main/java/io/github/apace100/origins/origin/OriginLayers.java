@@ -99,4 +99,9 @@ public class OriginLayers extends MultiJsonDataLoader implements IdentifiableRes
     public Identifier getFabricId() {
         return new Identifier(Origins.MODID, "origin_layers");
     }
+
+    @Override
+    public Collection<Identifier> getFabricDependencies() {
+        return Set.of(Origins.identifier("origins"));
+    }
 }

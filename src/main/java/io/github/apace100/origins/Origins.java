@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.github.apace100.apoli.Apoli;
 import io.github.apace100.apoli.power.PowerType;
+import io.github.apace100.apoli.power.PowerTypes;
 import io.github.apace100.apoli.util.NamespaceAlias;
 import io.github.apace100.calio.mixin.CriteriaRegistryInvoker;
 import io.github.apace100.calio.resource.OrderedResourceListenerInitializer;
@@ -27,6 +28,7 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.serializer.ConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -107,12 +109,15 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 		Identifier powerData = Apoli.identifier("powers");
 		Identifier originData = Origins.identifier("origins");
 
-		manager.register(ResourceType.SERVER_DATA, new OriginManager()).after(powerData).complete();
+		OriginManager originLoader = new OriginManager();
+		manager.register(ResourceType.SERVER_DATA, originLoader).after(powerData).complete();
 		manager.register(ResourceType.SERVER_DATA, new OriginLayers()).after(originData).complete();
 
 		BadgeManager.init();
 
-		manager.register(ResourceType.SERVER_DATA, BadgeManager.REGISTRY.getLoader()).before(powerData).complete();
+		IdentifiableResourceReloadListener badgeLoader = BadgeManager.REGISTRY.getLoader();
+		manager.register(ResourceType.SERVER_DATA, badgeLoader).before(powerData).complete();
+		PowerTypes.DEPENDENCIES.add(badgeLoader.getFabricId());
 	}
 
 	@Config(name = Origins.MODID + "_server")
