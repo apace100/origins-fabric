@@ -9,6 +9,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.tick.OrderedTick;
 
 public class TemporaryCobwebBlock extends CobwebBlock {
 
@@ -35,7 +36,7 @@ public class TemporaryCobwebBlock extends CobwebBlock {
 
 	@Override
 	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
-		worldIn.createAndScheduleBlockTick(pos, this, 60);
+		worldIn.scheduleBlockTick(pos, this, 60);
 		super.onBlockAdded(state, worldIn, pos, oldState, isMoving);
 	}
 

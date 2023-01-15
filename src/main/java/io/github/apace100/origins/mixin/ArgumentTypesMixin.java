@@ -7,7 +7,7 @@ import io.github.apace100.origins.command.OriginArgumentType;
 import net.minecraft.command.argument.ArgumentTypes;
 import net.minecraft.command.argument.serialize.ArgumentSerializer;
 import net.minecraft.command.argument.serialize.ConstantArgumentSerializer;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,7 +21,7 @@ public abstract class ArgumentTypesMixin {
         throw new AssertionError("Mixins for basic functionality are fun.");
     }
 
-    @Inject(method = "register(Lnet/minecraft/util/registry/Registry;)Lnet/minecraft/command/argument/serialize/ArgumentSerializer;", at = @At("RETURN"))
+    @Inject(method = "register(Lnet/minecraft/registry/Registry;)Lnet/minecraft/command/argument/serialize/ArgumentSerializer;", at = @At("RETURN"))
     private static void registerApoliArgumentTypes(Registry<ArgumentSerializer<?, ?>> registry, CallbackInfoReturnable<ArgumentSerializer<?, ?>> cir) {
         register(registry, Origins.MODID + ":origin", OriginArgumentType.class, ConstantArgumentSerializer.of(OriginArgumentType::origin));
         register(registry, Origins.MODID + ":layer", LayerArgumentType.class, ConstantArgumentSerializer.of(LayerArgumentType::layer));

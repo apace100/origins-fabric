@@ -18,8 +18,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ClientPlayerEntity.class)
 public abstract class WaterVisibilityMixin extends AbstractClientPlayerEntity {
 
-    public WaterVisibilityMixin(ClientWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey) {
-        super(world, profile, publicKey);
+    public WaterVisibilityMixin(ClientWorld world, GameProfile profile) {
+        super(world, profile);
     }
 
     @Inject(at = @At("HEAD"), method = "getUnderwaterVisibility", cancellable = true)

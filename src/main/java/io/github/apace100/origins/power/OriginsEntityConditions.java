@@ -13,7 +13,7 @@ import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 
 public class OriginsEntityConditions {
 

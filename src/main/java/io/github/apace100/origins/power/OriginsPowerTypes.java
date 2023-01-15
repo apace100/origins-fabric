@@ -10,7 +10,7 @@ import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import io.github.apace100.origins.Origins;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 
 @SuppressWarnings("unchecked")
 public class OriginsPowerTypes {
