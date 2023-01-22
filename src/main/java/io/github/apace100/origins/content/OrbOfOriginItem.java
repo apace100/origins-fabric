@@ -14,6 +14,7 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemGroups;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -32,7 +33,7 @@ import java.util.Map;
 public class OrbOfOriginItem extends Item {
 
     public OrbOfOriginItem() {
-        super(new Item.Settings().maxCount(1).group(ItemGroup.MISC).rarity(Rarity.RARE));
+        super(new Item.Settings().maxCount(1).rarity(Rarity.RARE));
     }
 
     @Override

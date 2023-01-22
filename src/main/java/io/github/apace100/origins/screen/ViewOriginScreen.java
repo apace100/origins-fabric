@@ -60,29 +60,30 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 	protected void init() {
 		super.init();
         if(originLayers.size() > 0 && OriginsClient.isServerRunningOrigins) {
-			addDrawableChild(chooseOriginButton = new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight - 40, 100, 20, Text.translatable(Origins.MODID + ".gui.choose"), b -> {
+			addDrawableChild(chooseOriginButton = ButtonWidget.builder(Text.translatable(Origins.MODID + ".gui.choose"), b -> {
 				MinecraftClient.getInstance().setScreen(new ChooseOriginScreen(Lists.newArrayList(originLayers.get(currentLayer).getLeft()), 0, false));
-			}));
+			}).dimensions(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight - 40, 100, 20).build());
+
 			PlayerEntity player = MinecraftClient.getInstance().player;
 			chooseOriginButton.active = chooseOriginButton.visible = originLayers.get(currentLayer).getRight() == Origin.EMPTY && originLayers.get(currentLayer).getLeft().getOriginOptionCount(player) > 0;
 			if(originLayers.size() > 1) {
-				addDrawableChild(new ButtonWidget(guiLeft - 40,this.height / 2 - 10, 20, 20, Text.of("<"), b -> {
+				addDrawableChild(ButtonWidget.builder(Text.of("<"), b -> {
 					currentLayer = (currentLayer - 1 + originLayers.size()) % originLayers.size();
 					Pair<OriginLayer, Origin> current = originLayers.get(currentLayer);
 					showOrigin(current.getRight(), current.getLeft(), false);
 					chooseOriginButton.active = chooseOriginButton.visible = current.getRight() == Origin.EMPTY && current.getLeft().getOriginOptionCount(player) > 0;
-				}));
-				addDrawableChild(new ButtonWidget(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20, Text.of(">"), b -> {
+				}).dimensions(guiLeft - 40,this.height / 2 - 10, 20, 20).build());
+				addDrawableChild(ButtonWidget.builder(Text.of(">"), b -> {
 					currentLayer = (currentLayer + 1) % originLayers.size();
 					Pair<OriginLayer, Origin> current = originLayers.get(currentLayer);
 					showOrigin(current.getRight(), current.getLeft(), false);
 					chooseOriginButton.active = chooseOriginButton.visible = current.getRight() == Origin.EMPTY && current.getLeft().getOriginOptionCount(player) > 0;
-				}));
+				}).dimensions(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20).build());
 			}
 		}
-		addDrawableChild(new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20, Text.translatable(Origins.MODID + ".gui.close"), b -> {
+		addDrawableChild(ButtonWidget.builder(Text.translatable(Origins.MODID + ".gui.close"), b -> {
 			MinecraftClient.getInstance().setScreen(null);
-        }));
+		}).dimensions(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20).build());
 	}
 	
 	@Override

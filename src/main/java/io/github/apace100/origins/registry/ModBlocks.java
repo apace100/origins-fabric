@@ -7,9 +7,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 
 public class ModBlocks {
 
@@ -24,9 +24,9 @@ public class ModBlocks {
     }
 
     private static void register(String blockName, Block block, boolean withBlockItem) {
-        Registry.register(Registry.BLOCK, new Identifier(Origins.MODID, blockName), block);
+        Registry.register(Registries.BLOCK, new Identifier(Origins.MODID, blockName), block);
         if(withBlockItem) {
-            Registry.register(Registry.ITEM, new Identifier(Origins.MODID, blockName), new BlockItem(block, new Item.Settings().group(ItemGroup.MISC)));
+            Registry.register(Registries.ITEM, new Identifier(Origins.MODID, blockName), new BlockItem(block, new Item.Settings()));
         }
     }
 }

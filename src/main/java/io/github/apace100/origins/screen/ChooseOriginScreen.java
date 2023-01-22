@@ -81,18 +81,18 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 	protected void init() {
 		super.init();
 		if(maxSelection > 1) {
-			addDrawableChild(new ButtonWidget(guiLeft - 40,this.height / 2 - 10, 20, 20, Text.of("<"), b -> {
+			addDrawableChild(ButtonWidget.builder(Text.of("<"), b -> {
 				currentOrigin = (currentOrigin - 1 + maxSelection) % maxSelection;
 				Origin newOrigin = getCurrentOriginInternal();
 				showOrigin(newOrigin, layerList.get(currentLayerIndex), newOrigin == randomOrigin);
-			}));
-			addDrawableChild(new ButtonWidget(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20, Text.of(">"), b -> {
+			}).dimensions(guiLeft - 40, this.height / 2 - 10, 20, 20).build());
+			addDrawableChild(ButtonWidget.builder(Text.of(">"), b -> {
 				currentOrigin = (currentOrigin + 1) % maxSelection;
 				Origin newOrigin = getCurrentOriginInternal();
 				showOrigin(newOrigin, layerList.get(currentLayerIndex), newOrigin == randomOrigin);
-			}));
+			}).dimensions(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20).build());
 		}
-		addDrawableChild(new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20, Text.translatable(Origins.MODID + ".gui.select"), b -> {
+		addDrawableChild(ButtonWidget.builder(Text.translatable(Origins.MODID + ".gui.select"), b -> {
 			PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 			if(currentOrigin == originSelection.size()) {
 				buf.writeString(layerList.get(currentLayerIndex).getIdentifier().toString());
@@ -103,7 +103,7 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 				ClientPlayNetworking.send(ModPackets.CHOOSE_ORIGIN, buf);
 			}
 			openNextLayerScreen();
-        }));
+		}).dimensions(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20).build());
 	}
 
 	@Override

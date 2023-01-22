@@ -36,6 +36,7 @@ repositories {
 	maven {
 		url "https://maven.terraformersmc.com/"
 	}
+	mavenLocal()
 }
 
 dependencies {

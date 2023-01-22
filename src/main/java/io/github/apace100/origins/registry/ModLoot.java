@@ -15,9 +15,10 @@ import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.function.SetNbtLootFunction;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonSerializer;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 
 public class ModLoot {
 
@@ -29,7 +30,7 @@ public class ModLoot {
     public static final LootConditionType ORIGIN_LOOT_CONDITION = registerLootCondition("origin", new OriginLootCondition.Serializer());
 
     private static LootConditionType registerLootCondition(String path, JsonSerializer<? extends LootCondition> serializer) {
-        return Registry.register(Registry.LOOT_CONDITION_TYPE, Origins.identifier(path), new LootConditionType(serializer));
+        return Registry.register(Registries.LOOT_CONDITION_TYPE, Origins.identifier(path), new LootConditionType(serializer));
     }
 
     public static void registerLootTables() {
