@@ -28,8 +28,10 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.serializer.ConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.item.ItemGroups;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
@@ -89,6 +91,10 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			OriginCommand.register(dispatcher);
 		});
+		ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register((content) -> {
+			content.add(ModItems.ORB_OF_ORIGIN);
+		});
+
 		CriteriaRegistryInvoker.callRegister(ChoseOriginCriterion.INSTANCE);
 	}
 
