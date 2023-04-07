@@ -1,8 +1,8 @@
 package io.github.apace100.origins.mixin;
 
 import io.github.apace100.apoli.mixin.EntityAccessor;
-import io.github.apace100.origins.power.OriginsPowerTypes;
 import io.github.apace100.origins.registry.ModDamageSources;
+import io.github.apace100.origins.power.OriginsPowerTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;

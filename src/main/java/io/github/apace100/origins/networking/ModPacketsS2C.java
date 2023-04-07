@@ -1,17 +1,17 @@
 package io.github.apace100.origins.networking;
 
 import io.github.apace100.calio.data.SerializableData;
+import io.github.apace100.origins.component.OriginComponent;
+import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.OriginsClient;
 import io.github.apace100.origins.badge.Badge;
 import io.github.apace100.origins.badge.BadgeManager;
-import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.integration.OriginDataLoadedCallback;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
-import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.screen.ChooseOriginScreen;
 import io.github.apace100.origins.screen.WaitForNextLayerScreen;
 import io.netty.util.concurrent.Future;

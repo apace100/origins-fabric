@@ -2,6 +2,7 @@ package io.github.apace100.origins.screen.tooltip;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.badge.CraftingRecipeBadge;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
@@ -11,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 
-/**A {@link TooltipComponent} used for {@link io.github.apace100.origins.badge.CraftingRecipeBadge}
+/**A {@link TooltipComponent} used for {@link CraftingRecipeBadge}
  * Draws a snapshot of a 3x3 crafting recipe in the tooltip*/
 public class CraftingRecipeTooltipComponent implements TooltipComponent {
     private final int recipeWidth;

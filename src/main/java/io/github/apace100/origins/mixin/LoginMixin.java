@@ -1,13 +1,13 @@
 package io.github.apace100.origins.mixin;
 
 import dev.onyxstudios.cca.api.v3.component.ComponentProvider;
-import io.github.apace100.origins.badge.BadgeManager;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.badge.BadgeManager;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.ClientConnection;
