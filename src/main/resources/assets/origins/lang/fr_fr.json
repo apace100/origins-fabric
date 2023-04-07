@@ -192,7 +192,7 @@
   "commands.origin.origin_not_found": "Origine inconnue: %s",
   "commands.origin.set.success.single": "L'origine de %s a été définie à %s.",
   "commands.origin.set.success.multiple": "Les origines de %s ont été définies à %s.",
-  "power.origins.end_spawn.name": "End Inhabitant",
+  "power.origins.end_spawn.name": "Habitant de l'End",
   "power.origins.end_spawn.description": "Your journey begins in the End.",
   "power.origins.master_of_webs.name": "Master of Webs",
   "power.origins.master_of_webs.description": "You navigate cobweb perfectly, and are able to climb in them. When you hit an enemy in melee, they get stuck in cobweb for a while. Non-arthropods stuck in cobweb will be sensed by you. You are able to craft cobweb from string.",
