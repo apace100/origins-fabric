@@ -4,21 +4,21 @@
   "package": "io.github.apace100.origins.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "net.diamonddev.origins.mixin.ArgumentTypesMixin",
-    "net.diamonddev.origins.mixin.ConduitOnLandMixin",
-    "net.diamonddev.origins.mixin.LikeWaterMixin",
-    "net.diamonddev.origins.mixin.LoginMixin",
-    "net.diamonddev.origins.mixin.NoCobwebSlowdownMixin",
-    "net.diamonddev.origins.mixin.OriginUpgradeMixin",
-    "net.diamonddev.origins.mixin.ScareCreepersMixin",
-    "net.diamonddev.origins.mixin.SelectionInvulnerabilityMixin",
+    "ArgumentTypesMixin",
+    "ConduitOnLandMixin",
+    "LikeWaterMixin",
+    "LoginMixin",
+    "NoCobwebSlowdownMixin",
+    "OriginUpgradeMixin",
+    "ScareCreepersMixin",
+    "SelectionInvulnerabilityMixin",
     "WaterBreathingMixin$CanBreatheInWater",
     "WaterBreathingMixin$UpdateAir"
   ],
   "client": [
-    "net.diamonddev.origins.mixin.ScreenAccessor",
-    "net.diamonddev.origins.mixin.ServerCheckMixin",
-    "net.diamonddev.origins.mixin.WaterVisibilityMixin"
+    "ScreenAccessor",
+    "ServerCheckMixin",
+    "WaterVisibilityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

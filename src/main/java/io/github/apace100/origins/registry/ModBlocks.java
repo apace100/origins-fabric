@@ -1,7 +1,7 @@
 package io.github.apace100.origins.registry;
 
-import io.github.apace100.origins.content.TemporaryCobwebBlock;
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.content.TemporaryCobwebBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;

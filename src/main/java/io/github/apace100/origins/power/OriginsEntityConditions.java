@@ -23,8 +23,7 @@ public class OriginsEntityConditions {
             .add("origin", SerializableDataTypes.IDENTIFIER)
             .add("layer", SerializableDataTypes.IDENTIFIER, null),
             (data, entity) -> {
-                if(entity instanceof PlayerEntity) {
-                    OriginComponent component = ModComponents.ORIGIN.get(entity);
+                if(entity instanceof PlayerEntity) {OriginComponent component = ModComponents.ORIGIN.get(entity);
                     Identifier originId = data.getId("origin");
                     if(data.isPresent("layer")) {
                         Identifier layerId = data.getId("layer");

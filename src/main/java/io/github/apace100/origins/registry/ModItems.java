@@ -1,7 +1,7 @@
 package io.github.apace100.origins.registry;
 
-import io.github.apace100.origins.content.OrbOfOriginItem;
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.content.OrbOfOriginItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
