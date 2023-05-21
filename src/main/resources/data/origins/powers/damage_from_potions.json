@@ -10,10 +10,6 @@
   "entity_action": {
     "type": "origins:damage",
     "amount": 2,
-    "source": {
-      "name": "hurt_by_water",
-      "unblockable": true,
-      "bypasses_armor": true
-    }
+    "damage_type": "origins:hurt_by_water"
   }
 }
