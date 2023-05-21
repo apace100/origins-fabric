@@ -36,19 +36,19 @@ public class CraftingRecipeTooltipComponent implements TooltipComponent {
     }
 
     @Override
-    public void drawItems(TextRenderer textRenderer, int x, int y, MatrixStack matrices, ItemRenderer itemRenderer, int z) {
-        this.drawBackGround(matrices, x, y, z);
+    public void drawItems(TextRenderer textRenderer, int x, int y, MatrixStack matrices, ItemRenderer itemRenderer) {
+        this.drawBackGround(matrices, x, y, 0);
         for(int column = 0; column < 3; ++column) {
             for(int row = 0; row < 3; ++row) {
                 int index = column + row * recipeWidth;
                 int slotX = x + 8 + column * 18;
                 int slotY = y + 8 + row * 18;
                 ItemStack stack = column >= recipeWidth ? ItemStack.EMPTY : inputs.get(index);
-                itemRenderer.renderInGuiWithOverrides(stack, slotX, slotY, index);
-                itemRenderer.renderGuiItemOverlay(textRenderer, stack, slotX, slotY);
+                itemRenderer.renderInGuiWithOverrides(matrices, stack, slotX, slotY, index);
+                itemRenderer.renderGuiItemOverlay(matrices, textRenderer, stack, slotX, slotY);
             }
         }
-        itemRenderer.renderInGuiWithOverrides(output, x + 101, y + 25, 10);
+        itemRenderer.renderInGuiWithOverrides(matrices, output, x + 101, y + 25, 10);
     }
 
     public void drawBackGround(MatrixStack matrices, int x, int y, int z) {

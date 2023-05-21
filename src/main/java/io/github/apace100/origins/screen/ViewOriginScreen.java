@@ -91,9 +91,9 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 		super.render(matrices, mouseX, mouseY, delta);
 		if(originLayers.size() == 0) {
 			if(OriginsClient.isServerRunningOrigins) {
-				drawCenteredText(matrices, this.textRenderer, Text.translatable(Origins.MODID + ".gui.view_origin.empty").getString(), width / 2, guiTop + 48, 0xFFFFFF);
+				drawCenteredTextWithShadow(matrices, this.textRenderer, Text.translatable(Origins.MODID + ".gui.view_origin.empty").getString(), width / 2, guiTop + 48, 0xFFFFFF);
 			} else {
-				drawCenteredText(matrices, this.textRenderer, Text.translatable(Origins.MODID + ".gui.view_origin.not_installed").getString(), width / 2, guiTop + 48, 0xFFFFFF);
+				drawCenteredTextWithShadow(matrices, this.textRenderer, Text.translatable(Origins.MODID + ".gui.view_origin.not_installed").getString(), width / 2, guiTop + 48, 0xFFFFFF);
 			}
 		}
 	}

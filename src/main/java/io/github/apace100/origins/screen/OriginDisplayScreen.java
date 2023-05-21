@@ -76,11 +76,11 @@ public class OriginDisplayScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(MatrixStack matrices, int vOffset) {
+    public void renderBackground(MatrixStack matrices) {
         if(showDirtBackground) {
-            super.renderBackgroundTexture(vOffset);
+            super.renderBackgroundTexture(matrices);
         } else {
-            super.renderBackground(matrices, vOffset);
+            super.renderBackground(matrices);
         }
     }
 
@@ -193,7 +193,7 @@ public class OriginDisplayScreen extends Screen {
             RenderSystem.setShaderTexture(0, WINDOW);
             this.renderOriginImpact(matrices, mouseX, mouseY);
             Text title = getTitleText();
-            this.drawCenteredText(matrices, this.textRenderer, title.getString(), width / 2, guiTop - 15, 0xFFFFFF);
+            this.drawCenteredTextWithShadow(matrices, this.textRenderer, title.getString(), width / 2, guiTop - 15, 0xFFFFFF);
         }
         RenderSystem.disableBlend();
     }
@@ -218,9 +218,9 @@ public class OriginDisplayScreen extends Screen {
 
     private void renderOriginName(MatrixStack matrices) {
         StringVisitable originName = textRenderer.trimToWidth(getCurrentOrigin().getName(), windowWidth - 36);
-        drawStringWithShadow(matrices, textRenderer, originName.getString(), guiLeft + 39, guiTop + 19, 0xFFFFFF);
+        drawTextWithShadow(matrices, textRenderer, originName.getString(), guiLeft + 39, guiTop + 19, 0xFFFFFF);
         ItemStack is = getCurrentOrigin().getDisplayItem();
-        this.itemRenderer.renderInGui(is, guiLeft + 15, guiTop + 15);
+        this.itemRenderer.renderInGui(matrices, is, guiLeft + 15, guiTop + 15);
     }
 
     private void renderWindowBackground(MatrixStack matrices, int offsetYStart, int offsetYEnd) {

@@ -52,11 +52,11 @@ public class WaitForNextLayerScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(MatrixStack matrices, int vOffset) {
+    public void renderBackground(MatrixStack matrices) {
         if(showDirtBackground) {
-            super.renderBackgroundTexture(vOffset);
+            super.renderBackgroundTexture(matrices);
         } else {
-            super.renderBackground(matrices, vOffset);
+            super.renderBackground(matrices);
         }
     }
 }
