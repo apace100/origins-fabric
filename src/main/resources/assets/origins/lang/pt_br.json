@@ -211,8 +211,8 @@
   "death.attack.genericDamageOverTime.player": "%1$s morreu por dano continuo enquanto lutava com %2$s",
 
   "commands.origin.origin_not_found": "Origem desconhecida: %s",
-  "commands.origin.set.success.single": "Origem de %s definida para %s.",
-  "commands.origin.set.success.multiple": "Origens de %s alvos para %s.",
+  "commands.origin.set.success.single": "Origem de %s na camada %s definida para %s.",
+  "commands.origin.set.success.multiple": "Origem de %s alvos na camada %s definida para %s.",
 
   "origins.avian_sleep_fail": "Você precisa de ar fresco para dormir",
   "power.origins.phantomize.name": "Forma Etérea",
