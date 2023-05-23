@@ -215,8 +215,8 @@
   "commands.origin.set.success.multiple": "Origens de %s alvos para %s.",
 
   "origins.avian_sleep_fail": "Você precisa de ar fresco para dormir",
-  "power.origins.phantomize.name": "Forma Etéria",
-  "power.origins.phantomize.description": "Você pode mudar entre a forma humana e etéria quando quiser, enquanto estiver saturado o suficiente para correr",
+  "power.origins.phantomize.name": "Forma Etérea",
+  "power.origins.phantomize.description": "Você pode mudar entre a forma humana e etérea quando quiser, enquanto estiver saturado o suficiente para correr",
   "power.origins.like_air.name": "Como o Ar",
   "power.origins.like_air.description": "Modificadores de velocidade de movimento também se aplicam no ar.",
   "power.origins.velvet_paws.name": "Patas de Seda",
