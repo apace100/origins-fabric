@@ -19,6 +19,14 @@
     "minecraft:cooked_beef",
     "minecraft:cooked_mutton",
     "minecraft:cooked_salmon",
-    "minecraft:spider_eye"
+    "minecraft:spider_eye",
+    {
+      "id": "#c:raw_meat",
+      "required": false
+    },
+    {
+      "id": "#c:cooked_meat",
+      "required": false
+    }
   ]
 }
