@@ -173,9 +173,9 @@
   "key.origins.view_origin": "Ver Origem",
 
   "text.autoconfig.origins.title": "Configuração do Origins",
-  "text.autoconfig.origins.option.xOffset": "Cooldown Bar Offset X",
-  "text.autoconfig.origins.option.yOffset": "Cooldown Bar Offset Y",
-  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Phantomized Overlay Strength",
+  "text.autoconfig.origins.option.xOffset": "Ajuste X da Barra de Cooldown",
+  "text.autoconfig.origins.option.yOffset": "Ajuste Y da Barra de Cooldown",
+  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Visibilidade da Sobreposição da Forma Fantasma",
 
   "item.origins.orb_of_origin": "Orbe de Origem",
 
@@ -225,8 +225,8 @@
   "item.origins.orb_of_origin.layer_specific": "Definie sua %1$s para \"%2$s\".",
   "origins.gui.badge.active": "Habilidade ativa, use com %s.",
   "origins.gui.badge.toggle": "Troque com %s.",
-  "origins.gui.unbound_key": "§ounbound§r",
-  "layer.origins.origin.name": "Origin",
+  "origins.gui.unbound_key": "§onão vinculado§r",
+  "layer.origins.origin.name": "Origem",
   "commands.origin.get.result": "%s tem o seguinte %s: %s (%s)",
   "commands.origin.gui.all": "Abriu a seleção de GUI para %s jogadores.",
   "commands.origin.gui.layer": "Abriu a GUI de seleção \"%2$s\" para %1$s jogadores.",
