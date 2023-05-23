@@ -168,9 +168,9 @@
   "power.origins.lay_eggs.description": "Sempre que você acordar de manhã, você botará um ovo.",
 
   "category.origins": "Origens",
-  "key.origins.primary_active": "Poder Ativo(Primario)",
-  "key.origins.secondary_active": "Poder Ativo(Secundario)",
-  "key.origins.view_origin": "Ver origem",
+  "key.origins.primary_active": "Poder Ativo (Primário)",
+  "key.origins.secondary_active": "Poder Ativo (Secundário)",
+  "key.origins.view_origin": "Ver Origem",
 
   "text.autoconfig.origins.title": "Configuração do Origins",
   "text.autoconfig.origins.option.xOffset": "Cooldown Bar Offset X",
