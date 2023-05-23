@@ -188,7 +188,7 @@
   "origins.gui.choose": "Escolher",
   "origins.gui.choose_origin.title": "Escolha sua %s.",
   "origins.gui.view_origin.title": "Esta é sua %s.",
-  "origins.gui.view_origin.empty": "Você não pode ter nenhuma origem.",
+  "origins.gui.view_origin.empty": "Você não pode ter uma Origem.",
   "origins.gui.view_origin.not_installed": "O servidor não possui o mod Origins instalado.",
   "origins.gui.impact.impact": "Impacto",
   "origins.gui.impact.none": "Nenhum",
