@@ -234,10 +234,10 @@
   "origins.gui.badge.recipe.crafting.shaped": "Receita de criação (Com Forma) provida pelo poder:",
   "origins.gui.badge.recipe.crafting.shapeless": "Receita de criação (Sem Forma) provida pelo poder:",
   
-  "commands.origin.layer_not_found": "Unknown layer: %s",
-  "commands.origin.random.all": "Randomly assigned an origin to %1$s targets in %2$s layers",
-  "commands.origin.random.not_allowed": "The layer %1$s does not allow for random origins!",
-  "commands.origin.random.success.multiple": "Randomly assigned an origin to %1$s targets in layer %2$s",
-  "commands.origin.random.success.single": "Randomly assigned the origin %2$s to %1$s in layer %3$s",
-  "commands.origin.unregistered_in_layer": "Origin %1$s is not registered in layer %2$s!"
+  "commands.origin.layer_not_found": "Camada desconhecida: %s",
+  "commands.origin.random.all": "Atribuiu-se aleatoriamente uma Origem a %1$s alvos em %2$s camadas",
+  "commands.origin.random.not_allowed": "A camada %1$s não permite atribuições aleatórias!",
+  "commands.origin.random.success.multiple": "Atribuiu-se aleatoriamente uma Origem a %1$s alvos na camada %2$s",
+  "commands.origin.random.success.single": "Atribuiu-se aleatoriamente a Origem %2$s para %1$s na camada %3$s",
+  "commands.origin.unregistered_in_layer": "Origem %1$s não está registrada na camada %2$s!"
 }
