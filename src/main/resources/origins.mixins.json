@@ -6,6 +6,7 @@
   "mixins": [
     "ArgumentTypesMixin",
     "ConduitOnLandMixin",
+    "EnchantmentHelperMixin",
     "LikeWaterMixin",
     "LoginMixin",
     "NoCobwebSlowdownMixin",

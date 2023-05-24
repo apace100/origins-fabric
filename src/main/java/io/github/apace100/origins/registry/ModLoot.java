@@ -38,52 +38,52 @@ public class ModLoot {
         NbtCompound waterProtectionLevel2 = createEnchantmentTag(ModEnchantments.WATER_PROTECTION, 2);
         NbtCompound waterProtectionLevel3 = createEnchantmentTag(ModEnchantments.WATER_PROTECTION, 3);
         LootTableEvents.MODIFY.register(((resourceManager, lootManager, identifier, tableBuilder, source) -> {
-            if (!source.isBuiltin()) {
+            if (Origins.config.enableWaterProtectionEnchantment || !source.isBuiltin()) {
                 return;
             }
             if (DUNGEON_LOOT.equals(identifier)) {
                 LootPool.Builder lootPool = new LootPool.Builder();
                 lootPool.rolls(ConstantLootNumberProvider.create(1))
-                    .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
-                        .weight(20)
-                        .apply(SetNbtLootFunction.builder(waterProtectionLevel1)))
-                    .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
-                        .weight(10)
-                        .apply(SetNbtLootFunction.builder(waterProtectionLevel2)))
-                    .with(EmptyEntry.builder().weight(80));
+                        .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
+                                .weight(20)
+                                .apply(SetNbtLootFunction.builder(waterProtectionLevel1)))
+                        .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
+                                .weight(10)
+                                .apply(SetNbtLootFunction.builder(waterProtectionLevel2)))
+                        .with(EmptyEntry.builder().weight(80));
                 tableBuilder.pool(lootPool);
             } else if (STRONGHOLD_LIBRARY.equals(identifier)) {
                 LootPool.Builder lootPool = new LootPool.Builder();
                 lootPool.rolls(ConstantLootNumberProvider.create(1))
-                    .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
-                        .weight(20)
-                        .apply(SetNbtLootFunction.builder(waterProtectionLevel2)))
-                    .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
-                        .weight(10)
-                        .apply(SetNbtLootFunction.builder(waterProtectionLevel3)))
-                    .with(EmptyEntry.builder().weight(80));
+                        .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
+                                .weight(20)
+                                .apply(SetNbtLootFunction.builder(waterProtectionLevel2)))
+                        .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
+                                .weight(10)
+                                .apply(SetNbtLootFunction.builder(waterProtectionLevel3)))
+                        .with(EmptyEntry.builder().weight(80));
                 tableBuilder.pool(lootPool);
             } else if (MINESHAFT.equals(identifier)) {
                 LootPool.Builder lootPool = new LootPool.Builder();
                 lootPool.rolls(ConstantLootNumberProvider.create(1))
-                    .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
-                        .weight(20)
-                        .apply(SetNbtLootFunction.builder(waterProtectionLevel1)))
-                    .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
-                        .weight(5)
-                        .apply(SetNbtLootFunction.builder(waterProtectionLevel2)))
-                    .with(EmptyEntry.builder().weight(90));
+                        .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
+                                .weight(20)
+                                .apply(SetNbtLootFunction.builder(waterProtectionLevel1)))
+                        .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
+                                .weight(5)
+                                .apply(SetNbtLootFunction.builder(waterProtectionLevel2)))
+                        .with(EmptyEntry.builder().weight(90));
                 tableBuilder.pool(lootPool);
             } else if (WATER_RUIN.equals(identifier)) {
                 LootPool.Builder lootPool = new LootPool.Builder();
                 lootPool.rolls(ConstantLootNumberProvider.create(1))
-                    .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
-                        .weight(10)
-                        .apply(SetNbtLootFunction.builder(waterProtectionLevel1)))
-                    .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
-                        .weight(20)
-                        .apply(SetNbtLootFunction.builder(waterProtectionLevel2)))
-                    .with(EmptyEntry.builder().weight(110));
+                        .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
+                                .weight(10)
+                                .apply(SetNbtLootFunction.builder(waterProtectionLevel1)))
+                        .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
+                                .weight(20)
+                                .apply(SetNbtLootFunction.builder(waterProtectionLevel2)))
+                        .with(EmptyEntry.builder().weight(110));
                 tableBuilder.pool(lootPool);
             }
         }));
