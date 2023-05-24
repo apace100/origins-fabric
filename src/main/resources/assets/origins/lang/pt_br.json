@@ -206,7 +206,7 @@
   "death.attack.no_water_for_gills": "%1$s não conseguiu se manter molhado",
   "death.attack.no_water_for_gills.player": "%1$s não conseguiu se manter molhado porque estava lutando com %2$s",
   "death.attack.hurt_by_water": "%1$s demorou demais no banho",
-  "death.attack.hurt_by_water.player": "%1$s foi jogado na gua por %2$s",
+  "death.attack.hurt_by_water.player": "%1$s foi jogado na água por %2$s",
   "death.attack.genericDamageOverTime": "%1$s morreu por dano contínuo",
   "death.attack.genericDamageOverTime.player": "%1$s morreu por dano contínuo enquanto lutava com %2$s",
 
