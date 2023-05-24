@@ -215,8 +215,8 @@
   "commands.origin.set.success.multiple": "Origem de %s alvos na camada %s definida para %s.",
 
   "origins.avian_sleep_fail": "Você precisa de ar fresco para dormir",
-  "power.origins.phantomize.name": "Forma Etérea",
-  "power.origins.phantomize.description": "Você pode trocar entre a forma humana e etérea quando quiser, desde que esteja alimentado o suficiente para conseguir correr.",
+  "power.origins.phantomize.name": "Forma Fantasma",
+  "power.origins.phantomize.description": "Você pode trocar entre a forma humana e fantasma quando quiser, desde que esteja alimentado o suficiente para conseguir correr.",
   "power.origins.like_air.name": "Como o Ar",
   "power.origins.like_air.description": "Modificadores de velocidade de movimento também se aplicam no ar.",
   "power.origins.velvet_paws.name": "Patas de Veludo",
