@@ -208,7 +208,7 @@
   "death.attack.hurt_by_water": "%1$s demorou demais no banho",
   "death.attack.hurt_by_water.player": "%1$s foi jogado na agua por %2$s",
   "death.attack.genericDamageOverTime": "%1$s morreu por dano contínuo",
-  "death.attack.genericDamageOverTime.player": "%1$s morreu por dano contnuo enquanto lutava com %2$s",
+  "death.attack.genericDamageOverTime.player": "%1$s morreu por dano contínuo enquanto lutava com %2$s",
 
   "commands.origin.origin_not_found": "Origem desconhecida: %s",
   "commands.origin.set.success.single": "Origem de %s na camada %s definida para %s.",
