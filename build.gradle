@@ -48,10 +48,14 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation "com.github.apace100:apoli:${project.apoli_version}"
+	modApi "com.github.apace100:apoli:${project.apoli_version}"
 	include "com.github.apace100:apoli:${project.apoli_version}"
-	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cca_version}"
-	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${cca_version}"
+	modApi("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cca_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+	modApi("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${cca_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
 
 	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
@@ -59,7 +63,7 @@ dependencies {
 
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 
-	include modImplementation("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}")
+	include modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}")
 }
 
 processResources {
