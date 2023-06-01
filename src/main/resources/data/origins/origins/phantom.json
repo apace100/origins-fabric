@@ -7,7 +7,8 @@
 		"origins:burn_in_daylight",
 		"origins:hunger_over_time",
 		"origins:fragile",
-		"origins:phantomize_overlay"
+		"origins:phantomize_overlay",
+		"origins:phantomize_callback"
 	],
 	"icon": {
 		"item": "minecraft:phantom_membrane"
