@@ -237,5 +237,11 @@
     "commands.origin.gui.layer": "为%1$s个玩家打开了 %2$s 的选择GUI",
     
     "origins.avian_sleep_fail":"你需要新鲜空气才能正常入睡",
-    "enchantment.origins.water_protection.desc": "Delays damage from hydrophobia."
+    "enchantment.origins.water_protection.desc": "Delays damage from hydrophobia.",
+    "commands.origin.layer_not_found": "Unknown layer: %s",
+    "commands.origin.unregistered_in_layer": "Origin %1$s is not registered in layer %2$s!",
+    "commands.origin.random.all": "Randomly assigned an origin to %1$s targets in %2$s layers",
+    "commands.origin.random.not_allowed": "The layer %1$s does not allow for random origins!",
+    "commands.origin.random.success.multiple": "Randomly assigned an origin to %1$s targets in layer %2$s",
+    "commands.origin.random.success.single": "Randomly assigned the origin %2$s to %1$s in layer %3$s"
 }

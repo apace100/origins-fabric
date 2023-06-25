@@ -231,5 +231,11 @@
   "commands.origin.gui.layer": "Opened the \"%2$s\" selection GUI for %1$s players.",
   "enchantment.origins.water_protection.desc": "Delays damage from hydrophobia.",
   "origins.gui.badge.recipe.crafting.shaped": "Crafting recipe (Shaped) provided by the power:",
-  "origins.gui.badge.recipe.crafting.shapeless": "Crafting recipe (Shapeless) provided by the power:"
+  "origins.gui.badge.recipe.crafting.shapeless": "Crafting recipe (Shapeless) provided by the power:",
+  "commands.origin.layer_not_found": "Unknown layer: %s",
+  "commands.origin.unregistered_in_layer": "Origin %1$s is not registered in layer %2$s!",
+  "commands.origin.random.all": "Randomly assigned an origin to %1$s targets in %2$s layers",
+  "commands.origin.random.not_allowed": "The layer %1$s does not allow for random origins!",
+  "commands.origin.random.success.multiple": "Randomly assigned an origin to %1$s targets in layer %2$s",
+  "commands.origin.random.success.single": "Randomly assigned the origin %2$s to %1$s in layer %3$s"
 }
