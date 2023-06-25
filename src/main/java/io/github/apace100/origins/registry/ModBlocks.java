@@ -13,7 +13,7 @@ import net.minecraft.registry.Registry;
 
 public class ModBlocks {
 
-    public static final Block TEMPORARY_COBWEB = new TemporaryCobwebBlock(FabricBlockSettings.of(Material.COBWEB).noCollision().requiresTool().strength(4.0F));
+    public static final Block TEMPORARY_COBWEB = new TemporaryCobwebBlock(FabricBlockSettings.create(Material.COBWEB).noCollision().requiresTool().strength(4.0F));
 
     public static void register() {
         register("temporary_cobweb", TEMPORARY_COBWEB, false);
