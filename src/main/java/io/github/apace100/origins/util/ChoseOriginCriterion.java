@@ -8,7 +8,7 @@ import net.minecraft.advancement.criterion.AbstractCriterion;
 import net.minecraft.advancement.criterion.AbstractCriterionConditions;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
 import net.minecraft.predicate.entity.AdvancementEntityPredicateSerializer;
-import net.minecraft.predicate.entity.EntityPredicate;
+import net.minecraft.predicate.entity.LootContextPredicate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
@@ -20,7 +20,7 @@ public class ChoseOriginCriterion extends AbstractCriterion<ChoseOriginCriterion
     private static final Identifier ID = new Identifier(Origins.MODID, "chose_origin");
 
     @Override
-    protected Conditions conditionsFromJson(JsonObject obj, EntityPredicate.Extended playerPredicate, AdvancementEntityPredicateDeserializer predicateDeserializer) {
+    protected Conditions conditionsFromJson(JsonObject obj, LootContextPredicate playerPredicate, AdvancementEntityPredicateDeserializer predicateDeserializer) {
         Identifier id = Identifier.tryParse(JsonHelper.getString(obj, "origin"));
         return new Conditions(playerPredicate, id);
     }
@@ -37,7 +37,7 @@ public class ChoseOriginCriterion extends AbstractCriterion<ChoseOriginCriterion
     public static class Conditions extends AbstractCriterionConditions {
         private final Identifier originId;
 
-        public Conditions(EntityPredicate.Extended player, Identifier originId) {
+        public Conditions(LootContextPredicate player, Identifier originId) {
             super(ChoseOriginCriterion.ID, player);
             this.originId = originId;
         }

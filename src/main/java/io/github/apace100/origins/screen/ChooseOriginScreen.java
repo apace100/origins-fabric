@@ -10,8 +10,8 @@ import io.github.apace100.origins.registry.ModItems;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -142,11 +142,11 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 	}
 
 	@Override
-	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
 		if(maxSelection == 0) {
 			openNextLayerScreen();
 			return;
 		}
-		super.render(matrices, mouseX, mouseY, delta);
+		super.render(context, mouseX, mouseY, delta);
 	}
 }

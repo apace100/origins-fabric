@@ -1,12 +1,9 @@
 package io.github.apace100.origins.screen.tooltip;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.apace100.origins.Origins;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
-import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
@@ -36,25 +33,25 @@ public class CraftingRecipeTooltipComponent implements TooltipComponent {
     }
 
     @Override
-    public void drawItems(TextRenderer textRenderer, int x, int y, MatrixStack matrices, ItemRenderer itemRenderer) {
-        this.drawBackGround(matrices, x, y, 0);
+    public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
+        this.drawBackground(context, x, y);
         for(int column = 0; column < 3; ++column) {
             for(int row = 0; row < 3; ++row) {
                 int index = column + row * recipeWidth;
                 int slotX = x + 8 + column * 18;
                 int slotY = y + 8 + row * 18;
                 ItemStack stack = column >= recipeWidth ? ItemStack.EMPTY : inputs.get(index);
-                itemRenderer.renderInGuiWithOverrides(matrices, stack, slotX, slotY, index);
-                itemRenderer.renderGuiItemOverlay(matrices, textRenderer, stack, slotX, slotY);
+                context.drawItem(stack, slotX, slotY);
+                context.drawItemInSlot(textRenderer, stack, slotX, slotY);
             }
         }
-        itemRenderer.renderInGuiWithOverrides(matrices, output, x + 101, y + 25, 10);
+        context.drawItem(output, x + 101, y + 25);
+        context.drawItemInSlot(textRenderer, output, x + 101, y + 25);
     }
 
-    public void drawBackGround(MatrixStack matrices, int x, int y, int z) {
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, TEXTURE);
-        DrawContext.drawTexture(matrices, x, y, z, 0, 0, 130, 86, 256, 256);
+    public void drawBackground(DrawContext context, int x, int y) {
+        context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        context.drawTexture(TEXTURE, x, y, 0, 0, 130, 86, 256, 256);
     }
 
 }

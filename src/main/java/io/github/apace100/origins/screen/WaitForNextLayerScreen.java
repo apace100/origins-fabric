@@ -4,8 +4,8 @@ import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 
@@ -43,20 +43,20 @@ public class WaitForNextLayerScreen extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         if(maxSelection == 0) {
             openSelection();
             return;
         }
-        this.renderBackground(matrices);
+        this.renderBackground(context);
     }
 
     @Override
-    public void renderBackground(MatrixStack matrices) {
+    public void renderBackground(DrawContext context) {
         if(showDirtBackground) {
-            super.renderBackgroundTexture(matrices);
+            super.renderBackgroundTexture(context);
         } else {
-            super.renderBackground(matrices);
+            super.renderBackground(context);
         }
     }
 }

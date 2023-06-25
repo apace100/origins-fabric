@@ -58,7 +58,7 @@ public final class WaterBreathingMixin {
                                 double f = this.random.nextDouble() - this.random.nextDouble();
                                 double g = this.random.nextDouble() - this.random.nextDouble();
                                 double h = this.random.nextDouble() - this.random.nextDouble();
-                                this.world.addParticle(ParticleTypes.BUBBLE, this.getParticleX(0.5), this.getEyeY() + this.random.nextGaussian() * 0.08D, this.getParticleZ(0.5), f * 0.5F, g * 0.5F + 0.25F, h * 0.5F);
+                                this.getWorld().addParticle(ParticleTypes.BUBBLE, this.getParticleX(0.5), this.getEyeY() + this.random.nextGaussian() * 0.08D, this.getParticleZ(0.5), f * 0.5F, g * 0.5F + 0.25F, h * 0.5F);
                             }
 
                             this.damage(ModDamageSources.getSource(getDamageSources(), ModDamageSources.NO_WATER_FOR_GILLS), 2.0F);

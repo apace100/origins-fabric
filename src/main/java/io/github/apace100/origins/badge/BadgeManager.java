@@ -151,7 +151,7 @@ public final class BadgeManager {
             }
         } else if(power instanceof RecipePower recipePower) {
             Recipe<CraftingInventory> recipe = recipePower.getRecipe();
-            String type = recipe instanceof ShapedRecipe ? "shaped" : "shapeless";
+            String type = (Recipe<?>)recipe instanceof ShapedRecipe ? "shaped" : "shapeless";
             badgeList.add(new CraftingRecipeBadge(RECIPE_BADGE_SPRITE, recipe,
                 Text.translatable("origins.gui.badge.recipe.crafting." + type), null
             ));

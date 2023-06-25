@@ -39,13 +39,13 @@ public class EnderianPearlEntity extends ThrownItemEntity {
       Entity entity = this.getOwner();
 
       for(int i = 0; i < 32; ++i) {
-         this.world.addParticle(ParticleTypes.PORTAL, this.getX(), this.getY() + this.random.nextDouble() * 2.0D, this.getZ(), this.random.nextGaussian(), 0.0D, this.random.nextGaussian());
+         this.getWorld().addParticle(ParticleTypes.PORTAL, this.getX(), this.getY() + this.random.nextDouble() * 2.0D, this.getZ(), this.random.nextGaussian(), 0.0D, this.random.nextGaussian());
       }
 
-      if (!this.world.isClient && !this.isRemoved()) {
+      if (!this.getWorld().isClient && !this.isRemoved()) {
          if (entity instanceof ServerPlayerEntity) {
             ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity)entity;
-            if (serverPlayerEntity.networkHandler.isConnectionOpen() && serverPlayerEntity.world == this.world && !serverPlayerEntity.isSleeping()) {
+            if (serverPlayerEntity.networkHandler.isConnectionOpen() && serverPlayerEntity.getWorld() == this.getWorld() && !serverPlayerEntity.isSleeping()) {
 
                if (entity.hasVehicle()) {
                   entity.stopRiding();
@@ -76,7 +76,7 @@ public class EnderianPearlEntity extends ThrownItemEntity {
 
    public Entity moveToWorld(ServerWorld destination) {
       Entity entity = this.getOwner();
-      if (entity != null && entity.world.getRegistryKey() != destination.getRegistryKey()) {
+      if (entity != null && entity.getWorld().getRegistryKey() != destination.getRegistryKey()) {
          this.setOwner((Entity)null);
       }
 

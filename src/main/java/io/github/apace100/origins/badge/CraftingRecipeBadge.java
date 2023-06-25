@@ -60,7 +60,7 @@ public record CraftingRecipeBadge(Identifier spriteId,
             return tooltips;
         }
         DynamicRegistryManager dynamicRegistryManager = MinecraftClient.getInstance().world.getRegistryManager();
-        int recipeWidth = this.recipe instanceof ShapedRecipe shapedRecipe ? shapedRecipe.getWidth() : 3;
+        int recipeWidth = (Recipe<?>)this.recipe instanceof ShapedRecipe shapedRecipe ? shapedRecipe.getWidth() : 3;
         if(MinecraftClient.getInstance().options.advancedItemTooltips) {
             Text recipeIdText = ((MutableText)Text.of(recipe.getId().toString())).formatted(Formatting.DARK_GRAY);
             widthLimit = Math.max(130, textRenderer.getWidth(recipeIdText));

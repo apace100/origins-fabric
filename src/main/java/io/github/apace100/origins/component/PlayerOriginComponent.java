@@ -148,7 +148,7 @@ public class PlayerOriginComponent implements OriginComponent {
         }
         this.hadOriginBefore = compoundTag.getBoolean("HadOriginBefore");
 
-        if(!player.world.isClient) {
+        if(!player.getWorld().isClient) {
             PowerHolderComponent powerComponent = PowerHolderComponent.KEY.get(player);
             for(Origin origin : origins.values()) {
                 // Grants powers only if the player doesn't have them yet from the specific Origin source.

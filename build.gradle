@@ -12,8 +12,8 @@ group = project.maven_group
 
 repositories {
 	maven {
-		name = "Ladysnake Libs"
-		url = 'https://ladysnake.jfrog.io/artifactory/mods'
+		name = 'Ladysnake Mods'
+		url = 'https://maven.ladysnake.org/releases'
 	}
 	maven {
 		url = 'https://maven.cafeteria.dev'
@@ -48,8 +48,8 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation "com.github.apace100:apoli:${project.apoli_version}"
-	include "com.github.apace100:apoli:${project.apoli_version}"
+	modImplementation "com.github.apace100:apoli:v${project.apoli_version}"
+	include "com.github.apace100:apoli:v${project.apoli_version}"
 	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cca_version}"
 	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${cca_version}"
 

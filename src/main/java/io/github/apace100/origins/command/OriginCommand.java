@@ -108,8 +108,11 @@ public class OriginCommand {
 				
 			}
 			
-			if (processedTargets == 1) serverCommandSource.sendFeedback(Text.translatable("commands.origin.set.success.single", targets.iterator().next().getDisplayName().getString(), Text.translatable(originLayer.getTranslationKey()), origin.getName()), true);
-			else serverCommandSource.sendFeedback(Text.translatable("commands.origin.set.success.multiple", processedTargets, Text.translatable(originLayer.getTranslationKey()), origin.getName()), true);
+			if (processedTargets == 1) serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.set.success.single", targets.iterator().next().getDisplayName().getString(), Text.translatable(originLayer.getTranslationKey()), origin.getName()), true);
+			else {
+				int finalProcessedTargets = processedTargets;
+				serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.set.success.multiple", finalProcessedTargets, Text.translatable(originLayer.getTranslationKey()), origin.getName()), true);
+			}
 			
 		}
 		
@@ -142,8 +145,11 @@ public class OriginCommand {
 			}
 			
 			if (processedTargets == 0) serverCommandSource.sendError(Text.translatable("commands.execute.conditional.fail"));
-			else if (processedTargets == 1) serverCommandSource.sendFeedback(Text.translatable("commands.execute.conditional.pass"), true);
-			else serverCommandSource.sendFeedback(Text.translatable("commands.execute.conditional.pass_count", processedTargets), true);
+			else if (processedTargets == 1) serverCommandSource.sendFeedback(() -> Text.translatable("commands.execute.conditional.pass"), true);
+			else {
+				int finalProcessedTargets = processedTargets;
+				serverCommandSource.sendFeedback(() -> Text.translatable("commands.execute.conditional.pass_count", finalProcessedTargets), true);
+			}
 			
 		}
 		
@@ -168,7 +174,7 @@ public class OriginCommand {
 		OriginLayer originLayer = LayerArgumentType.getLayer(commandContext, "layer");
 		Origin origin = originComponent.getOrigin(originLayer);
 		
-		serverCommandSource.sendFeedback(Text.translatable("commands.origin.get.result", target.getDisplayName().getString(), Text.translatable(originLayer.getTranslationKey()), origin.getName(), origin.getIdentifier()), true);
+		serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.get.result", target.getDisplayName().getString(), Text.translatable(originLayer.getTranslationKey()), origin.getName(), origin.getIdentifier()), true);
 		
 		return 1;
 		
@@ -190,7 +196,7 @@ public class OriginCommand {
 			openLayerScreen(target, originLayer);
 		}
 
-		serverCommandSource.sendFeedback(Text.translatable("commands.origin.gui.layer", targets.size(), Text.translatable(originLayer.getTranslationKey())), true);
+		serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.gui.layer", targets.size(), Text.translatable(originLayer.getTranslationKey())), true);
 		return targets.size();
 
 	}
@@ -218,7 +224,7 @@ public class OriginCommand {
 			}
 		}
 
-		serverCommandSource.sendFeedback(Text.translatable("commands.origin.gui.all", targets.size()), false);
+		serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.gui.all", targets.size()), false);
 		return targets.size();
 
 	}
@@ -242,8 +248,11 @@ public class OriginCommand {
 				origin = getRandomOrigin(target, originLayer);
 			}
 
-			if (targets.size() > 1) serverCommandSource.sendFeedback(Text.translatable("commands.origin.random.success.multiple", targets.size(), Text.translatable(originLayer.getTranslationKey())), true);
-			else if (targets.size() == 1) serverCommandSource.sendFeedback(Text.translatable("commands.origin.random.success.single", targets.iterator().next().getDisplayName().getString(), origin.getName(), Text.translatable(originLayer.getTranslationKey())), false);
+			if (targets.size() > 1) serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.random.success.multiple", targets.size(), Text.translatable(originLayer.getTranslationKey())), true);
+			else if (targets.size() == 1) {
+				Origin finalOrigin = origin;
+				serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.random.success.single", targets.iterator().next().getDisplayName().getString(), finalOrigin.getName(), Text.translatable(originLayer.getTranslationKey())), false);
+			}
 
 			return targets.size();
 
@@ -279,7 +288,7 @@ public class OriginCommand {
 			}
 		}
 
-		serverCommandSource.sendFeedback(Text.translatable("commands.origin.random.all", targets.size(), originLayers.size()), false);
+		serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.random.all", targets.size(), originLayers.size()), false);
 		return targets.size();
 
 	}
