@@ -1,36 +1,36 @@
 {
   "origin.origins.human.name": "İnsan",
-  "origin.origins.human.description": "Normal bir insan. Sıradan Minecraft deneyimi.",
+  "origin.origins.human.description": "Sıradan bir insan. Sıradan Minecraft deneyimin seni bekliyor.",
 
   "origin.origins.merling.name": "Merling",
-  "origin.origins.merling.description": "Bu okyanus sakinleri uzun süre sudan çıkmaya alışkın değiller.",
+  "origin.origins.merling.description": "Okyanusun bu doğal yerlileri uzun süre sudan çıkmaya alışkın değiller.",
 
-  "origin.origins.arachnid.name": "Arachnid",
-  "origin.origins.arachnid.description": "Tırmanma yetenekleri ve düşmanlarını örümcek ağına hapsedebilme yetenekleri, Arachnid'i mükemmel avcılar yapar.",
+  "origin.origins.arachnid.name": "Araknid",
+  "origin.origins.arachnid.description": "Tırmanma yetenekleri ve düşmanlarını örümcek ağına hapsedebilme yetenekleri, Araknid'i mükemmel avcılar yapar.",
 
   "origin.origins.blazeborn.name": "Blazeborn",
-  "origin.origins.blazeborn.description": "Blaze'in son torunları olan Blazeborn, doğal olarak Nether'in tehlikelerine karşı bağışıklığı vardır.",
+  "origin.origins.blazeborn.description": "Blaze'in son torunları olan Blazeborn, doğal olarak Nether'ın tehlikelerine karşı bağışıklığı vardır.",
 
-  "origin.origins.avian.name": "Avian",
-  "origin.origins.avian.description": "Avian ırkı, uçma yeteneğini uzun zaman önce kaybetti. Şimdi bu barışçıl yaratıklar bir yerden diğerine süzülürken görülebilir.",
+  "origin.origins.avian.name": "Aviyan",
+  "origin.origins.avian.description": "Aviyan ırkı uçma yeteneğini uzun zaman önce kaybetti. Şimdi bu barışçıl yaratıklar bir yerden diğerine süzülürken görülebilir.",
 
-  "origin.origins.phantom.name": "Phantom",
-  "origin.origins.phantom.description": "Yarı-insan ve yarı-phantom yavrular olarak, bu yaratıklar hayalet formu ve normal bir form arasında geçiş yapabilirler.",
+  "origin.origins.phantom.name": "Fantom",
+  "origin.origins.phantom.description": "Yarı-insan ve yarı-fantom varlıklar olarak, bu yaratıklar fantom formu ve normal bir form arasında geçiş yapabilirler.",
 
-  "origin.origins.feline.name": "Feline",
-  "origin.origins.feline.description": "Kedi benzeri görünümleriyle Feline, creeperları korkutur. Kedilerin yeteneği ile her zaman güvenle dört ayaklarının üzerine inerler",
+  "origin.origins.feline.name": "Kedigil",
+  "origin.origins.feline.description": "Kedi benzeri görünümleriyle Kedigil, creeperları korkutur. Kedilerin becerisiyle her zaman güvenle dört ayaklarının üzerine inerler",
 
-  "origin.origins.elytrian.name": "Elytrian",
-  "origin.origins.elytrian.description": "Elytrian'lar genellikle rüzgarlarda uçar, başlarının üzerinde yeterince alan olmadığında rahatsız olurlar.",
+  "origin.origins.elytrian.name": "Elitriyan",
+  "origin.origins.elytrian.description": "Genellikle rüzgarla birlikte etrafta uçan Elitriyanlar başlarının üzerinde yeterince alan olmadığında rahatsız olurlar.",
 
-  "origin.origins.enderian.name": "Enderian",
-  "origin.origins.enderian.description": "Ender Ejderhasının oğulları ve kızları olarak doğan Enderian'lar ışınlanma yeteneğine sahipler ancak suya karşı savunmasızlar.",
+  "origin.origins.enderian.name": "Enderiyan",
+  "origin.origins.enderian.description": "Ender Ejderhasının çocukları olarak doğan Enderiyanlar ışınlanma yeteneğine sahipler ancak suya karşı hassaslar.",
 
   "origin.origins.shulk.name": "Shulk",
   "origin.origins.shulk.description": "Shulkerlarla kan bağları olan Shulk'ın vücutları koruyucu kabuk benzeri bir deri ile donatılmıştır.",
 
   "power.origins.water_breathing.name": "Solungaçlar",
-  "power.origins.water_breathing.description": "Su altında nesfes alabilirsin ama su üstünde alamazsın.",
+  "power.origins.water_breathing.description": "Suyun altında nefes alabilirsin ama karada alamazsın.",
 
   "power.origins.aqua_affinity.name": "Su Adaptasyonu",
   "power.origins.aqua_affinity.description": "Diğerlerinin karada yaptığı gibi su altında blokları kırabilirsiniz.",
@@ -42,12 +42,12 @@
   "power.origins.swim_speed.description": "Su altında daha hızlısın.",
 
   "power.origins.like_water.name": "Su Gibi",
-  "power.origins.like_water.description": "Suyun altındayken istemediğiniz sürece batmazsınız.",
+  "power.origins.like_water.description": "Suyun altındayken istemediğiniz sürece dibe batmazsınız.",
 
-  "power.origins.fragile.name": "Kırılgan",
+  "power.origins.fragile.name": "Narin",
   "power.origins.fragile.description": "İnsanlardan 3 kalp daha az canınız var.",
 
-  "power.origins.webbing.name": "Dokuma",
+  "power.origins.webbing.name": "Ağlama",
   "power.origins.webbing.description": "Yakın dövüşte bir düşmana vurduğunuzda, örümcek ağına takılırlar.",
 
   "power.origins.climbing.name": "Tırmanma",
@@ -74,29 +74,29 @@
   "power.origins.tailwind.name": "Kuyruk Rüzgarı",
   "power.origins.tailwind.description": "Diğerlerinden biraz daha hızlısın.",
 
-  "power.origins.slow_falling.name": "Tüy Gibi",
+  "power.origins.slow_falling.name": "Tüy Gibi Hafif",
   "power.origins.slow_falling.description": "Eğilmediğiniz sürece yere bir tüy kadar nazikçe düşersiniz.",
 
   "power.origins.vegetarian.name": "Vejetaryen",
   "power.origins.vegetarian.description": "Et yiyemezsin.",
 
   "power.origins.fresh_air.name": "Temiz Hava",
-  "power.origins.fresh_air.description": "Yatarken temiz hava alabilmeniz için uyurken en az 86 blok yükseklikte olmanız gerekir.",
+  "power.origins.fresh_air.description": "Yatarken temiz hava alabilmeniz için yatağınız rakımını en az 86 blok yüksekliğinde olması gerekir.",
 
-  "power.origins.phasing.name": "Fazlaşma",
-  "power.origins.phasing.description": "Hayalet formundayken, Obsidiyen hariç katı blokların içinden geçebilirsiniz.",
+  "power.origins.phasing.name": "İçinden Geçme",
+  "power.origins.phasing.description": "Fantom formundayken Obsidiyen hariç katı maddelerin içinden geçebilirsiniz.",
 
   "power.origins.invisibility.name": "Görünmezlik",
-  "power.origins.invisibility.description": "Hayalet formundayken görünmez olursunuz.",
+  "power.origins.invisibility.description": "Fantom formundayken görünmezsiniz.",
 
   "power.origins.hunger_over_time.name": "Hızlı Metabolizma",
-  "power.origins.hunger_over_time.description": "Hayalet formunda olmak acıkmanıza sebep olur.",
+  "power.origins.hunger_over_time.description": "Fantom formunda olmak acıkmanıza sebep olur.",
 
   "power.origins.burn_in_daylight.name": "Fotoalerjik",
-  "power.origins.burn_in_daylight.description": "Hayalet formunda değilken güneşe maruz kalmanız yanmanıza sebep olur.",
+  "power.origins.burn_in_daylight.description": "Görünmez değilken gün ışığında yanmaya başlarsınız.",
 
   "power.origins.fall_immunity.name": "Akrobasi",
-  "power.origins.fall_immunity.description": "Hangi yükseklikten düştüğünüz önemli değil, asla düşerek hasar almazsınız.",
+  "power.origins.fall_immunity.description": "Hangi yükseklikten düşerseniz düşün, asla düşme hasarı almazsınız.",
 
   "power.origins.sprint_jump.name": "Güçlü Ayak Bilekleri",
   "power.origins.sprint_jump.description": "Koşarken daha yükseğe zıplayabilirsiniz.",
@@ -104,53 +104,53 @@
   "power.origins.nine_lives.name": "Dokuz Canlı",
   "power.origins.nine_lives.description": "İnsanlardan 1 kalp daha az canınız var.",
 
-  "power.origins.cat_vision.name": "Gece Hayvanı",
-  "power.origins.cat_vision.description": "Suyun altında değilken karanlıkta diğerlerinden daha iyi görebilirsiniz.",
+  "power.origins.cat_vision.name": "Noktürnal",
+  "power.origins.cat_vision.description": "Suyun altında değilken karanlıkta daha iyi görürsünüz.",
 
-  "power.origins.weak_arms.name": "Güçsüz Kollar",
-  "power.origins.weak_arms.description": "Bir güç iksirinin etkisi altında olmadığın sürece, yanında ikiden fazla doğal taş olan taşları kıramazsınız.",
+  "power.origins.weak_arms.name": "Cılız Kollar",
+  "power.origins.weak_arms.description": "Bir güç iksirinin etkisi altında olmadığın sürece, yanında ikiden fazla doğal taş olan doğal taşları kıramazsınız.",
 
   "power.origins.scare_creepers.name": "Kedi-Gibi Görünüm",
-  "power.origins.scare_creepers.description": "Creeperlar senden korkar ve sadece sen onlara saldırırsan patlarlar.",
+  "power.origins.scare_creepers.description": "Creeperlar senden korkar ve sadece onlara ilk sen saldırırsan patlarlar.",
 
   "power.origins.launch_into_air.name": "Rüzgarların Hediyesi",
-  "power.origins.launch_into_air.description": "30 saniyede bir kendinizi 20 blok yükseğe fırlatabilirsiniz.",
+  "power.origins.launch_into_air.description": "Her 30 saniyede bir kendinizi yaklaşık havada 20 blok yükseğe fırlatabilirsiniz.",
 
   "power.origins.elytra.name": "Kanatlı",
-  "power.origins.elytra.description": "Hiç giymenize gerek kalmadan Elytra kanatlarınız var.",
+  "power.origins.elytra.description": "Hiç giymenize gerek kalmadan Elitra kanatlarınız var.",
 
-  "power.origins.light_armor.name": "Hareket İhtiyacı",
-  "power.origins.light_armor.description": "Herhangi bir ağır zırh (zincir zırhından daha yüksek koruma değerlerine sahip zırh) giyemezsiniz.",
+  "power.origins.light_armor.name": "Hareketlilik İhtiyacı",
+  "power.origins.light_armor.description": "Herhangi bir ağır zırh (zincirden daha yüksek koruma değerlerine sahip zırh) giyemezsiniz.",
 
   "power.origins.claustrophobia.name": "Klostrofobi",
   "power.origins.claustrophobia.description": "Çok uzun süre alçak tavanlı bir yerde olmak sizi zayıflatır ve yavaşlatır.",
 
-  "power.origins.more_kinetic_damage.name": "Kırılgan kemikler",
-  "power.origins.more_kinetic_damage.description": "Düşmekten ve bloklara süzülerek çarpmaktan daha fazla hasar alırsınız.",
+  "power.origins.more_kinetic_damage.name": "Kırılgan Kemikler",
+  "power.origins.more_kinetic_damage.description": "Düşmekten ve bloklara uçarken çarpmaktan daha fazla hasar alırsınız.",
 
   "power.origins.aerial_combatant.name": "Hava Savaşçısı",
-  "power.origins.aerial_combatant.description": "Elytra ile süzülürken önemli ölçüde daha fazla hasar verirsiniz.",
+  "power.origins.aerial_combatant.description": "Elitra ile süzülürken önemli ölçüde daha fazla hasar verirsiniz.",
 
   "power.origins.throw_ender_pearl.name": "Işınlanma",
   "power.origins.throw_ender_pearl.description": "İstediğiniz zaman, hiçbir hasar vermeyen ve ışınlanmanıza izin veren bir ender incisi fırlatabilirsiniz.",
 
-  "power.origins.pumpkin_hate.name": "Balkabaklarından Korkmak",
-  "power.origins.pumpkin_hate.description": "Balkabaklarından korkuyorsun. İyi bir nedeni var.",
+  "power.origins.pumpkin_hate.name": "Bal Kabağı Korkusu",
+  "power.origins.pumpkin_hate.description": "Bal kabaklarından korkuyorsun. İyi bir sebebi var.",
 
-  "power.origins.extra_reach.name": "Uzun Vücüt",
+  "power.origins.extra_reach.name": "Uzun Vücut",
   "power.origins.extra_reach.description": "Daha uzaktaki bloklara ve varlıklara erişebilirsiniz.",
 
   "power.origins.shulker_inventory.name": "İstifçi",
-  "power.origins.shulker_inventory.description": "İçindeki eşyaları ölüm halinde koruyan fazladan 9 envanter yuvasına erişiminiz var.",
+  "power.origins.shulker_inventory.description": "İçindeki eşyaları öldüğünüzde bile düşürmeyen fazladan 9 envanter yuvasına erişiminiz var.",
 
-  "power.origins.natural_armor.name": "Sağlam Vücut",
+  "power.origins.natural_armor.name": "Sağlam Cilt",
   "power.origins.natural_armor.description": "Zırh giymeden bile cildiniz doğal koruma sağlar.",
 
   "power.origins.more_exhaustion.name": "Büyük İştah",
   "power.origins.more_exhaustion.description": "Diğerlerinden çok daha çabuk yorulursunuz, bu yüzden daha fazla yemenizi gerektirir.",
 
-  "power.origins.no_shield.name": "Kontrolsüz",
-  "power.origins.no_shield.description": "Elinizin şeklinden dolayı bir kalkanı dik tutamazsınız.",
+  "power.origins.no_shield.name": "Kullanışsız",
+  "power.origins.no_shield.description": "Ellerinizin şeklinden dolayı kalkanları doğru düzgün tutamıyorsunuz.",
 
   "power.origins.strong_arms.name": "Güçlü Kollar",
   "power.origins.strong_arms.description": "Kazma kullanmadan doğal taşları kıracak kadar güçlüsünüz.",
@@ -159,80 +159,89 @@
   "power.origins.translucent.description": "Vücudunuz yarı saydamdır.",
 
   "power.origins.end_spawn.name": "End Yerlisi",
-  "power.origins.end_spawn.description": "Maceran End'de başlar.",
+  "power.origins.end_spawn.description": "Yolculuğun End'de başlar.",
 
   "power.origins.master_of_webs.name": "Ağların Ustası",
-  "power.origins.master_of_webs.description": "Ağların içinde hiç sorun olmadan hareket edibilir, onlara tırmanabilirsiniz. Yakın dövüşte bir düşmana vurduğunuzda belli bir süreliğine ağda sıkışırlar. Ağda sıkışmış eklem bacaklı olmayan varlıkları sezebilirsiniz. İpten ağ üretebilirsin.",
+  "power.origins.master_of_webs.description": "Ağların içinde hiç sorun olmadan hareket edebilir ve onlara tırmanabilirsiniz. Yakın dövüşte bir düşmana vurduğunuzda belli bir süreliğine ağda sıkışırlar. Ağda sıkışmış eklem bacaklı olmayan varlıkları sezebilirsiniz. İpten ağ üretebilirsin.",
 
   "power.origins.lay_eggs.name": "Yumurtlayan",
   "power.origins.lay_eggs.description": "Sabah uyandığında yumurtlarsın.",
 
-  "power.origins.phantomize.name": "Hayalet Formu",
-  "power.origins.phantomize.description": "İstediğin zaman hayalet formu ile insan formu arasında geçiş yapabilirsin.",
+  "power.origins.phantomize.name": "Fantom Formu",
+  "power.origins.phantomize.description": "İstediğiniz zaman insan ve fantom formu arasında geçiş yapabilirsiniz, ama sadece tokluğunuz koşmanıza yetebiliyorken.",
 
-  "category.origins": "Originler",
+  "power.origins.like_air.name": "Hava Gibi",
+  "power.origins.like_air.description": "Yürüme hızınıza etki eden değişiklikler ayrıca siz havadayken de etki eder.",
+
+  "power.origins.velvet_paws.name": "Kadife Patiler",
+  "power.origins.velvet_paws.description": "Adımlarınız yakınınızdaki diğer yaşam formları tarafından algılanacak titreşimler oluşturmaz.",
+
+  "category.origins": "Kökenler",
   "key.origins.primary_active": "Aktif Güç (Birincil)",
   "key.origins.secondary_active": "Aktif Güç (İkincil)",
-  "key.origins.view_origin": "Origin'nini Gör",
+  "key.origins.view_origin": "Kökenini Gör",
 
-  "text.autoconfig.origins.title": "Origins Yapılandırma",
-  "text.autoconfig.origins.option.xOffset": "Cooldown Göstergesinin X doğrultusundaki yeri",
-  "text.autoconfig.origins.option.yOffset": "Cooldown Göstergesinin Y doğrultusundaki yeri",
-  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Hayalet formunda arayüz görünürlüğü",
+  "text.autoconfig.origins.title": "Origins Konfigürasyon",
+  "text.autoconfig.origins.option.xOffset": "Bekleme Göstergesinin X doğrultusundaki yeri",
+  "text.autoconfig.origins.option.yOffset": "Bekleme Göstergesinin Y doğrultusundaki yeri",
+  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Fantom Formu Arayüz Görünürlüğü",
 
-  "item.origins.orb_of_origin": "Origin Küresi",
+  "item.origins.orb_of_origin": "Köken Küresi",
+  "item.origins.orb_of_origin.layer_generic": "Yeni bir %s şeçmenizi sağlar.",
+  "item.origins.orb_of_origin.layer_specific": "%1$s'nızı \"%2$s\"ye ayarlar.",
 
   "enchantment.origins.water_protection": "Su Koruması",
+  "enchantment.origins.water_protection.desc": "Hidrofobi hasarını geciktirir.",
 
   "container.shulker_inventory_power": "Shulker Envateri",
 
   "origins.gui.select": "Seç",
   "origins.gui.close": "Kapat",
   "origins.gui.choose": "Seç",
-  "origins.gui.choose_origin.title": "Kendininkini seç %s.",
-  "origins.gui.view_origin.title": "Bu senin %s.",
-  "origins.gui.view_origin.empty": "Herhangi bir Origin'e sahip olamazsınız.",
+  "origins.gui.choose_origin.title": "Kendi %s'ini seç.",
+  "origins.gui.view_origin.title": "Bu senin %s'in.",
+  "origins.gui.view_origin.empty": "Herhangi bir Kökene sahip olamazsınız.",
   "origins.gui.view_origin.not_installed": "Bu serverda Origins modu yok.",
   "origins.gui.impact.impact": "Etki",
   "origins.gui.impact.none": "Hiç",
   "origins.gui.impact.low": "Düşük",
   "origins.gui.impact.medium": "Orta",
   "origins.gui.impact.high": "Yüksek",
-  "origins.gui.version_mismatch": "Bu server başka bir Origins sürümü kullanıyor (v%1$s). Bu sürüm senin yüklediğin sürümle uyumlu değil. (v%2$s).",
+  "origins.gui.version_mismatch": "Bu server başka bir Origins sürümü kullanıyor (v%1$s). Bu sürüm senin yüklediğin sürümle (v%2$s) uyumlu değil.",
 
-  "origins.gui.badge.active": "Aktif Özellik,  %s ile kullan.",
-  "origins.gui.badge.toggle": "Özelliği %s ile aç, kapa.",
+  "origins.gui.badge.active": "Aktif özellik, %s ile kullan.",
+  "origins.gui.badge.toggle": "Özelliği %s ile aç kapa.",
+  "origins.gui.badge.recipe.crafting.shaped": "Tarif (şekilli):",
+  "origins.gui.badge.recipe.crafting.shapeless": "Tarif (şekilsiz):",
 
   "origins.gui.unbound_key": "§oatanmamış§r",
 
   "origin.origins.random.name": "Rastgele",
-  "origin.origins.random.description": "Bu Originlerden biri olacaksınız:",
+  "origin.origins.random.description": "Aşağıdakilerden biri olacaksınız:",
 
-  "layer.origins.origin.name": "Origin",
+  "layer.origins.origin.name": "Köken",
   "origin.origins.empty.name": "Eksik",
-  "origin.origins.empty.description": "Bir Origin'in yok.",
+  "origin.origins.empty.description": "Bir Kökenin yok.",
 
   "death.attack.no_water_for_gills": "%1$s ıslak kalmayı başaramadı",
   "death.attack.no_water_for_gills.player": "%1$s ıslak kalmayı başaramadı çünkü %2$s ile savaşıyordu.",
-  "death.attack.hurt_by_water": "%1$s çok uzun süre duş aldı.",
+  "death.attack.hurt_by_water": "%1$s çok uzun süre duş aldı",
   "death.attack.hurt_by_water.player": "%1$s %2$s tarafından suya atıldı",
-  "death.attack.genericDamageOverTime": "%1$s zamanla bir hasar sonucu öldü.",
-  "death.attack.genericDamageOverTime.player": "%1$s %2$s ile savaşırken zamanla bir hasar sonucu öldü.",
+  "death.attack.genericDamageOverTime": "%1$s zamanla hasar almadan ötürü öldü",
+  "death.attack.genericDamageOverTime.player": "%1$s %2$s ile savaşırken zamanla hasar almadan ötürü öldü",
 
-  "commands.origin.origin_not_found": "Bilinmeyen Origin: %s",
-  "commands.origin.set.success.single": "%s Origin'ini %s katmanınada %s olarak ayarla.",
-  "commands.origin.set.success.multiple": "%s Origin'inlerini %s katmanınada %s olarak ayarla.",
+  "commands.origin.origin_not_found": "Bilinmeyen Köken: %s",
+  "commands.origin.layer_not_found": "Bilinmeyen katman: %s",
+  "commands.origin.unregistered_in_layer": "Köken %1$s, %2$s katmanında kayıtlı değil!",
   "commands.origin.get.result": "%s şuna sahip %s: %s (%s)",
+  "commands.origin.gui.all": "%s oyuncu için şeçim GUI'si açıldı",
+  "commands.origin.gui.layer": "%1$s oyuncu için \"%2$s\" şeçim GUI'si açıldı",
+  "commands.origin.random.all": "%1$s hedef için %2$s katmandan rastgele bir köken atandı",
+  "commands.origin.random.not_allowed": "%1$s katmanı rastgele kökenlere izin vermiyor!",
+  "commands.origin.random.success.multiple": "%1$s hedef için %2$s katmanından rastgele bir köken atandı",
+  "commands.origin.random.success.single": "%3$s katmanından %2$s kökeni rastgele bir şekilde %1$s oyuncusuna atandı",
+  "commands.origin.set.success.multiple": "%s hedefin kökeni %s katmanından %s olarak ayarlandı",
+  "commands.origin.set.success.single": "%s oyuncusunun kökeni %s katmanından %s olarak ayarlandı",
 
-  "origins.avian_sleep_fail": "Uyumak için temiz havaya ihtiyacın var.",
-  "power.origins.like_air.name": "Hava Gibi",
-  "power.origins.like_air.description": "Yürüme hızınıza etki eden değişiklikler ayrıca siz havadayken de etki eder.",
-  "power.origins.velvet_paws.name": "Kadife Patiler",
-  "power.origins.velvet_paws.description": "Adımlarınız yakındaki diğer yaşam formları tarafından algılanacak titreşimler oluşturmaz.",
-  "item.origins.orb_of_origin.layer_generic": "Yeni bir %s şeçmenizi sağlar.",
-  "item.origins.orb_of_origin.layer_specific": "%1$s'nızı \"%2$s\"ye ayarlar.",
-  "commands.origin.gui.all": "%s oyuncular için şeçim GUI'si açıldı.",
-  "commands.origin.gui.layer": "%1$s oyuncuları için \"%2$s\" şeçim GUI'si açıldı.",
-  "origins.gui.badge.recipe.crafting.shaped": "Crafting recipe (Shaped) provided by the power:",
-  "origins.gui.badge.recipe.crafting.shapeless": "Crafting recipe (Shapeless) provided by the power:"
+  "origins.avian_sleep_fail": "Uyumak için temiz havaya ihtiyacın var"
 }
