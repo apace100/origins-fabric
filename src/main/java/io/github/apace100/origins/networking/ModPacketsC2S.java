@@ -49,18 +49,18 @@ public class ModPacketsC2S {
                         if(component.hasAllOrigins() && !hadAllOrigins) {
                             OriginComponent.onChosen(playerEntity, hadOriginBefore);
                         }
-                        Origins.LOGGER.info("Player " + playerEntity.getEntityName() + " chose Origin: " + originId + ", for layer: " + layerId);
+                        Origins.LOGGER.info("Player " + playerEntity.getName().getString() + " chose Origin: " + originId + ", for layer: " + layerId);
                     } else {
-                        Origins.LOGGER.info("Player " + playerEntity.getEntityName() + " tried to choose unchoosable Origin for layer " + layerId + ": " + originId + ".");
+                        Origins.LOGGER.info("Player " + playerEntity.getName().getString() + " tried to choose unchoosable Origin for layer " + layerId + ": " + originId + ".");
                         component.setOrigin(layer, Origin.EMPTY);
                     }
                     confirmOrigin(playerEntity, layer, component.getOrigin(layer));
                     component.sync();
                 } else {
-                    Origins.LOGGER.warn("Player " + playerEntity.getEntityName() + " chose unknown origin: " + originId);
+                    Origins.LOGGER.warn("Player " + playerEntity.getName().getString() + " chose unknown origin: " + originId);
                 }
             } else {
-                Origins.LOGGER.warn("Player " + playerEntity.getEntityName() + " tried to choose origin for layer " + layerId + " while having one already.");
+                Origins.LOGGER.warn("Player " + playerEntity.getName().getString() + " tried to choose origin for layer " + layerId + " while having one already.");
             }
         });
     }
@@ -83,15 +83,15 @@ public class ModPacketsC2S {
                     if(component.hasAllOrigins() && !hadAllOrigins) {
                         OriginComponent.onChosen(playerEntity, hadOriginBefore);
                     }
-                    Origins.LOGGER.info("Player " + playerEntity.getEntityName() + " was randomly assigned the following Origin: " + randomOrigin + ", for layer: " + layerId);
+                    Origins.LOGGER.info("Player " + playerEntity.getName().getString() + " was randomly assigned the following Origin: " + randomOrigin + ", for layer: " + layerId);
                 } else {
-                    Origins.LOGGER.info("Player " + playerEntity.getEntityName() + " tried to choose a random Origin for layer " + layerId + ", which is not allowed!");
+                    Origins.LOGGER.info("Player " + playerEntity.getName().getString() + " tried to choose a random Origin for layer " + layerId + ", which is not allowed!");
                     component.setOrigin(layer, Origin.EMPTY);
                 }
                 confirmOrigin(playerEntity, layer, component.getOrigin(layer));
                 component.sync();
             } else {
-                Origins.LOGGER.warn("Player " + playerEntity.getEntityName() + " tried to choose origin for layer " + layerId + " while having one already.");
+                Origins.LOGGER.warn("Player " + playerEntity.getName().getString() + " tried to choose origin for layer " + layerId + " while having one already.");
             }
         });
     }

@@ -108,7 +108,7 @@ public class OriginCommand {
 
 			}
 
-			if (processedTargets == 1) serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.set.success.single", targets.iterator().next().getDisplayName().getString(), Text.translatable(originLayer.getTranslationKey()), origin.getName()), true);
+			if (processedTargets == 1) serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.set.success.single", targets.iterator().next().getName().getString(), Text.translatable(originLayer.getTranslationKey()), origin.getName()), true);
 			else {
 				int finalProcessedTargets = processedTargets;
 				serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.set.success.multiple", finalProcessedTargets, Text.translatable(originLayer.getTranslationKey()), origin.getName()), true);
@@ -174,7 +174,7 @@ public class OriginCommand {
 		OriginLayer originLayer = LayerArgumentType.getLayer(commandContext, "layer");
 		Origin origin = originComponent.getOrigin(originLayer);
 
-		serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.get.result", target.getDisplayName().getString(), Text.translatable(originLayer.getTranslationKey()), origin.getName(), origin.getIdentifier()), true);
+		serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.get.result", target.getName().getString(), Text.translatable(originLayer.getTranslationKey()), origin.getName(), origin.getIdentifier()), true);
 
 		return 1;
 
@@ -251,7 +251,7 @@ public class OriginCommand {
 			if (targets.size() > 1) serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.random.success.multiple", targets.size(), Text.translatable(originLayer.getTranslationKey())), true);
 			else if (targets.size() == 1) {
 				Origin finalOrigin = origin;
-				serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.random.success.single", targets.iterator().next().getDisplayName().getString(), finalOrigin.getName(), Text.translatable(originLayer.getTranslationKey())), false);
+				serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.random.success.single", targets.iterator().next().getName().getString(), finalOrigin.getName(), Text.translatable(originLayer.getTranslationKey())), false);
 			}
 
 			return targets.size();
@@ -325,7 +325,7 @@ public class OriginCommand {
 
 		Origins.LOGGER.info(
 			"Player {} was randomly assigned the origin {} for layer {}",
-			target.getDisplayName().getString(),
+			target.getName().getString(),
 			origin.getIdentifier().toString(),
 			originLayer.getIdentifier().toString()
 		);
