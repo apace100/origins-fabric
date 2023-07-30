@@ -25,9 +25,9 @@ public abstract class NametagPrefixMixin {
         ModComponents.ORIGIN.get(this).getOrigins().entrySet().stream()
             .filter(entry -> !(entry.getKey().isHidden() || Origins.config.nametagPrefixBlacklist.contains(entry.getKey().getIdentifier().toString())))
             .sorted(Map.Entry.comparingByKey())
-            .forEach(entry -> combinedPrefix.append(entry.getValue().getNametagPrefix()));
+            .forEach(entry -> combinedPrefix.append(entry.getValue().getNametagPrefix()).append(" "));
 
-        return combinedPrefix;
+        return combinedPrefix.equals(Text.EMPTY) ? name : combinedPrefix.append(name);
 
     }
 
