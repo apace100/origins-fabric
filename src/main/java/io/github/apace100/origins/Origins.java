@@ -38,6 +38,9 @@ import net.minecraft.util.JsonHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Origins implements ModInitializer, OrderedResourceListenerInitializer {
 
 	public static final String MODID = "origins";
@@ -130,6 +133,10 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 	public static class ServerConfig implements ConfigData {
 
 		public boolean performVersionCheck = true;
+
+		public boolean enableNametagPrefix = false;
+
+		public List<String> nametagPrefixBlacklist = new ArrayList<>();
 
 		public JsonObject origins = new JsonObject();
 

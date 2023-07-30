@@ -64,4 +64,5 @@ public class OriginsClient implements ClientModInitializer {
 
         PowerClearCallback.EVENT.register(PowerKeyManager::clearCache);
     }
+
 }

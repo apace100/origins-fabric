@@ -23,6 +23,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,7 +41,8 @@ public class Origin {
         .add("loading_priority", SerializableDataTypes.INT, 0)
         .add("upgrades", OriginsDataTypes.UPGRADES, null)
         .add("name", SerializableDataTypes.STRING, "")
-        .add("description", SerializableDataTypes.STRING, "");
+        .add("description", SerializableDataTypes.STRING, "")
+        .add("nametag_prefix", SerializableDataTypes.TEXT, null);
 
     public static final Origin EMPTY;
 
@@ -80,6 +82,7 @@ public class Origin {
 
     private String nameTranslationKey;
     private String descriptionTranslationKey;
+    private Text nametagPrefix;
 
     public Origin(Identifier id, ItemStack icon, Impact impact, int order, int loadingPriority) {
         this.identifier = id;
@@ -138,6 +141,11 @@ public class Origin {
 
     public Origin setDescription(String description) {
         this.descriptionTranslationKey = description;
+        return this;
+    }
+
+    public Origin setNametagPrefix(@Nullable Text nametagPrefix) {
+        this.nametagPrefix = nametagPrefix;
         return this;
     }
 
@@ -206,6 +214,10 @@ public class Origin {
         return Text.translatable(getOrCreateDescriptionTranslationKey());
     }
 
+    public Text getNametagPrefix() {
+        return nametagPrefix == null ? Text.literal("[").append(Text.translatable(this.getOrCreateNameTranslationKey())).append("]") : nametagPrefix;
+    }
+
     public int getOrder() {
         return this.order;
     }
@@ -220,6 +232,7 @@ public class Origin {
         data.set("powers", powerTypes.stream().map(PowerType::getIdentifier).collect(Collectors.toList()));
         data.set("name", getOrCreateNameTranslationKey());
         data.set("description", getOrCreateDescriptionTranslationKey());
+        data.set("nametag_prefix", nametagPrefix);
         data.set("upgrades", upgrades);
         DATA.write(buffer, data);
     }
@@ -251,6 +264,7 @@ public class Origin {
 
         origin.setName(data.getString("name"));
         origin.setDescription(data.getString("description"));
+        origin.setNametagPrefix(data.get("nametag_prefix"));
 
         return origin;
     }

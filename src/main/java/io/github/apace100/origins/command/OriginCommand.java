@@ -84,42 +84,42 @@ public class OriginCommand {
 	 * 	@throws CommandSyntaxException if the entity is not found or if the entity is <b>not</b> an instance of {@link ServerPlayerEntity}
 	 */
 	private static int setOrigin(CommandContext<ServerCommandSource> commandContext) throws CommandSyntaxException {
-		
+
 		Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(commandContext, "targets");
 		OriginLayer originLayer = LayerArgumentType.getLayer(commandContext, "layer");
 		Origin origin = OriginArgumentType.getOrigin(commandContext, "origin");
 		ServerCommandSource serverCommandSource = commandContext.getSource();
-		
+
 		int processedTargets = 0;
-		
+
 		if (origin.equals(Origin.EMPTY) || originLayer.getOrigins().contains(origin.getIdentifier())) {
-			
+
 			for (ServerPlayerEntity target : targets) {
-				
+
 				OriginComponent originComponent = ModComponents.ORIGIN.get(target);
 				boolean hadOriginBefore = originComponent.hadOriginBefore();
-				
+
 				originComponent.setOrigin(originLayer, origin);
 				originComponent.sync();
-				
+
 				OriginComponent.partialOnChosen(target, hadOriginBefore, origin);
-				
+
 				processedTargets++;
-				
+
 			}
-			
-			if (processedTargets == 1) serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.set.success.single", targets.iterator().next().getDisplayName().getString(), Text.translatable(originLayer.getTranslationKey()), origin.getName()), true);
+
+			if (processedTargets == 1) serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.set.success.single", targets.iterator().next().getName().getString(), Text.translatable(originLayer.getTranslationKey()), origin.getName()), true);
 			else {
 				int finalProcessedTargets = processedTargets;
 				serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.set.success.multiple", finalProcessedTargets, Text.translatable(originLayer.getTranslationKey()), origin.getName()), true);
 			}
-			
+
 		}
-		
+
 		else serverCommandSource.sendError(Text.translatable("commands.origin.unregistered_in_layer", origin.getIdentifier(), originLayer.getIdentifier()));
-		
+
 		return processedTargets;
-		
+
 	}
 
 	/**
@@ -129,34 +129,34 @@ public class OriginCommand {
 	 * 	@throws CommandSyntaxException if the entity is not found or if the entity is <b>not</b> an instance of {@link ServerPlayerEntity}
 	 */
 	private static int hasOrigin(CommandContext<ServerCommandSource> commandContext) throws CommandSyntaxException {
-		
+
 		Collection<ServerPlayerEntity> targets = EntityArgumentType.getPlayers(commandContext, "targets");
 		OriginLayer originLayer = LayerArgumentType.getLayer(commandContext, "layer");
 		Origin origin = OriginArgumentType.getOrigin(commandContext, "origin");
 		ServerCommandSource serverCommandSource = commandContext.getSource();
-		
+
 		int processedTargets = 0;
-		
+
 		if (origin.equals(Origin.EMPTY) || originLayer.getOrigins().contains(origin.getIdentifier())) {
-			
+
 			for (ServerPlayerEntity target : targets) {
 				OriginComponent originComponent = ModComponents.ORIGIN.get(target);
 				if ((origin.equals(Origin.EMPTY) || originComponent.hasOrigin(originLayer)) && originComponent.getOrigin(originLayer).equals(origin)) processedTargets++;
 			}
-			
+
 			if (processedTargets == 0) serverCommandSource.sendError(Text.translatable("commands.execute.conditional.fail"));
 			else if (processedTargets == 1) serverCommandSource.sendFeedback(() -> Text.translatable("commands.execute.conditional.pass"), true);
 			else {
 				int finalProcessedTargets = processedTargets;
 				serverCommandSource.sendFeedback(() -> Text.translatable("commands.execute.conditional.pass_count", finalProcessedTargets), true);
 			}
-			
+
 		}
-		
+
 		else serverCommandSource.sendError(Text.translatable("commands.origin.unregistered_in_layer", origin.getIdentifier(), originLayer.getIdentifier()));
-		
+
 		return processedTargets;
-		
+
 	}
 
 	/**
@@ -166,18 +166,18 @@ public class OriginCommand {
 	 * 	@throws CommandSyntaxException if the entity is not found or if the entity is <b>not</b> an instance of {@link ServerPlayerEntity}
 	 */
 	private static int getOrigin(CommandContext<ServerCommandSource> commandContext) throws CommandSyntaxException {
-		
+
 		ServerPlayerEntity target = EntityArgumentType.getPlayer(commandContext, "target");
 		ServerCommandSource serverCommandSource = commandContext.getSource();
 
 		OriginComponent originComponent = ModComponents.ORIGIN.get(target);
 		OriginLayer originLayer = LayerArgumentType.getLayer(commandContext, "layer");
 		Origin origin = originComponent.getOrigin(originLayer);
-		
-		serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.get.result", target.getDisplayName().getString(), Text.translatable(originLayer.getTranslationKey()), origin.getName(), origin.getIdentifier()), true);
-		
+
+		serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.get.result", target.getName().getString(), Text.translatable(originLayer.getTranslationKey()), origin.getName(), origin.getIdentifier()), true);
+
 		return 1;
-		
+
 	}
 
 	/**
@@ -251,7 +251,7 @@ public class OriginCommand {
 			if (targets.size() > 1) serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.random.success.multiple", targets.size(), Text.translatable(originLayer.getTranslationKey())), true);
 			else if (targets.size() == 1) {
 				Origin finalOrigin = origin;
-				serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.random.success.single", targets.iterator().next().getDisplayName().getString(), finalOrigin.getName(), Text.translatable(originLayer.getTranslationKey())), false);
+				serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.random.success.single", targets.iterator().next().getName().getString(), finalOrigin.getName(), Text.translatable(originLayer.getTranslationKey())), false);
 			}
 
 			return targets.size();
@@ -325,7 +325,7 @@ public class OriginCommand {
 
 		Origins.LOGGER.info(
 			"Player {} was randomly assigned the origin {} for layer {}",
-			target.getDisplayName().getString(),
+			target.getName().getString(),
 			origin.getIdentifier().toString(),
 			originLayer.getIdentifier().toString()
 		);
@@ -333,5 +333,5 @@ public class OriginCommand {
 		return origin;
 
 	}
-	
+
 }
