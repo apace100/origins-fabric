@@ -10,9 +10,8 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.tag.FluidTags;
-import net.minecraft.tag.Tag;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -59,10 +58,10 @@ public final class WaterBreathingMixin {
                                 double f = this.random.nextDouble() - this.random.nextDouble();
                                 double g = this.random.nextDouble() - this.random.nextDouble();
                                 double h = this.random.nextDouble() - this.random.nextDouble();
-                                this.world.addParticle(ParticleTypes.BUBBLE, this.getParticleX(0.5), this.getEyeY() + this.random.nextGaussian() * 0.08D, this.getParticleZ(0.5), f * 0.5F, g * 0.5F + 0.25F, h * 0.5F);
+                                this.getWorld().addParticle(ParticleTypes.BUBBLE, this.getParticleX(0.5), this.getEyeY() + this.random.nextGaussian() * 0.08D, this.getParticleZ(0.5), f * 0.5F, g * 0.5F + 0.25F, h * 0.5F);
                             }
 
-                            this.damage(ModDamageSources.NO_WATER_FOR_GILLS, 2.0F);
+                            this.damage(ModDamageSources.getSource(getDamageSources(), ModDamageSources.NO_WATER_FOR_GILLS), 2.0F);
                         }
                     } else {
                         int landGain = this.getNextAirOnLand(0);
@@ -74,7 +73,7 @@ public final class WaterBreathingMixin {
             }
         }
 
-        @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isSubmergedIn(Lnet/minecraft/tag/TagKey;)Z"), method = "updateTurtleHelmet")
+        @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isSubmergedIn(Lnet/minecraft/registry/tag/TagKey;)Z"), method = "updateTurtleHelmet")
         public boolean isSubmergedInProxy(PlayerEntity player, TagKey<Fluid> fluidTag) {
             boolean submerged = this.isSubmergedIn(fluidTag);
             if(OriginsPowerTypes.WATER_BREATHING.isActive(this)) {

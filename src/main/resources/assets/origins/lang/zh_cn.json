@@ -210,6 +210,8 @@
     
     "origins.gui.badge.active": "主动能力，按下%s键使用",
     "origins.gui.badge.toggle": "使用%s键开关",
+    "origins.gui.badge.recipe.crafting.shaped": "能力提供的有序合成配方：",
+    "origins.gui.badge.recipe.crafting.shapeless": "能力提供的无序合成配方：",
     
     "origins.gui.unbound_key": "§o未绑定§r",
     
@@ -217,8 +219,8 @@
     "origin.origins.random.description":"你将在以下中被随机抽选一项：",
     
     "layer.origins.origin.name":"起源",
-    "layer.origins.origin.missing_origin.name":"丢失",
-    "layer.origins.origin.missing_origin.description":"你没有任何起源。",
+    "origin.origins.empty.name":"丢失",
+    "origin.origins.empty.description":"你没有任何起源。",
 
     "death.attack.no_water_for_gills":"%1$s没能保持湿润",
     "death.attack.no_water_for_gills.player":"%1$s在与%2$s战斗时没能保持湿润",
@@ -228,11 +230,18 @@
     "death.attack.genericDamageOverTime.player":"%1$s在与%2$s战斗时被持续性伤害效果杀死了",
 
     "commands.origin.origin_not_found":"未知起源：%s",
-    "commands.origin.set.success.single":"已将%s的%s层起源设置为：%s",
-    "commands.origin.set.success.multiple":"已将%s个目标的%s层起源设置为：%s",
+    "commands.origin.set.success.single":"已将%s的%s设置为：%s",
+    "commands.origin.set.success.multiple":"已将%s个目标的%s设置为：%s",
     "commands.origin.get.result": "%s拥有以下%s：%s（%s）",
     "commands.origin.gui.all": "为%s个玩家打开了选择GUI",
     "commands.origin.gui.layer": "为%1$s个玩家打开了 %2$s 的选择GUI",
     
-    "origins.avian_sleep_fail":"你需要新鲜空气才能正常入睡"
+    "origins.avian_sleep_fail":"你需要新鲜空气才能正常入睡",
+    "enchantment.origins.water_protection.desc": "Delays damage from hydrophobia.",
+    "commands.origin.layer_not_found": "Unknown layer: %s",
+    "commands.origin.unregistered_in_layer": "Origin %1$s is not registered in layer %2$s!",
+    "commands.origin.random.all": "Randomly assigned an origin to %1$s targets in %2$s layers",
+    "commands.origin.random.not_allowed": "The layer %1$s does not allow for random origins!",
+    "commands.origin.random.success.multiple": "Randomly assigned an origin to %1$s targets in layer %2$s",
+    "commands.origin.random.success.single": "Randomly assigned the origin %2$s to %1$s in layer %3$s"
 }

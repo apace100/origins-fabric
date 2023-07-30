@@ -28,6 +28,8 @@ public class OriginLayer implements Comparable<OriginLayer> {
     private boolean enabled = false;
 
     private String nameTranslationKey;
+    private String titleViewOriginTranslationKey;
+    private String titleChooseOriginTranslationKey;
     private String missingOriginNameTranslationKey;
     private String missingOriginDescriptionTranslationKey;
 
@@ -39,6 +41,8 @@ public class OriginLayer implements Comparable<OriginLayer> {
     private boolean autoChooseIfNoChoice = false;
 
     private boolean hidden = false;
+    private boolean overrideViewOriginTitle = false;
+    private boolean overrideChooseOriginTitle = false;
 
     public String getOrCreateTranslationKey() {
         if(nameTranslationKey == null || nameTranslationKey.isEmpty()) {
@@ -56,6 +60,28 @@ public class OriginLayer implements Comparable<OriginLayer> {
             this.missingOriginNameTranslationKey = "layer." + identifier.getNamespace() + "." + identifier.getPath() + ".missing_origin.name";
         }
         return missingOriginNameTranslationKey;
+    }
+
+    public String getTitleViewOriginTranslationKey() {
+        if(titleViewOriginTranslationKey == null || titleViewOriginTranslationKey.isEmpty()) {
+            this.titleViewOriginTranslationKey = "layer." + identifier.getNamespace() + "." + identifier.getPath() + ".view_origin.name";
+        }
+        return titleViewOriginTranslationKey;
+    }
+
+    public boolean shouldOverrideViewOriginTitle() {
+        return overrideViewOriginTitle;
+    }
+
+    public String getTitleChooseOriginTranslationKey() {
+        if(titleChooseOriginTranslationKey == null || titleChooseOriginTranslationKey.isEmpty()) {
+            this.titleChooseOriginTranslationKey = "layer." + identifier.getNamespace() + "." + identifier.getPath() + ".choose_origin.name";
+        }
+        return titleChooseOriginTranslationKey;
+    }
+
+    public boolean shouldOverrideChooseOriginTitle() {
+        return overrideChooseOriginTitle;
     }
 
     public String getMissingOriginDescriptionTranslationKey() {
@@ -135,6 +161,17 @@ public class OriginLayer implements Comparable<OriginLayer> {
         if(json.has("name")) {
             this.nameTranslationKey = JsonHelper.getString(json, "name", "");
         }
+        if(json.has("gui_title")) {
+            JsonObject guiTitleObj = json.getAsJsonObject("gui_title");
+            if(guiTitleObj.has("view_origin")) {
+                this.titleViewOriginTranslationKey = JsonHelper.getString(guiTitleObj, "view_origin", "");
+                this.overrideViewOriginTitle = true;
+            }
+            if(guiTitleObj.has("choose_origin")) {
+                this.titleChooseOriginTranslationKey = JsonHelper.getString(guiTitleObj, "choose_origin", "");
+                this.overrideChooseOriginTitle = true;
+            }
+        }
         if(json.has("missing_name")) {
             this.missingOriginNameTranslationKey = JsonHelper.getString(json, "missing_name", "");
         }
@@ -194,6 +231,8 @@ public class OriginLayer implements Comparable<OriginLayer> {
         buffer.writeInt(conditionedOrigins.size());
         conditionedOrigins.forEach(co -> co.write(buffer));
         buffer.writeString(getOrCreateTranslationKey());
+        buffer.writeString(getTitleViewOriginTranslationKey());
+        buffer.writeString(getTitleChooseOriginTranslationKey());
         buffer.writeString(getMissingOriginNameTranslationKey());
         buffer.writeString(getMissingOriginDescriptionTranslationKey());
         buffer.writeBoolean(isRandomAllowed());
@@ -208,6 +247,8 @@ public class OriginLayer implements Comparable<OriginLayer> {
         }
         buffer.writeBoolean(autoChooseIfNoChoice);
         buffer.writeBoolean(hidden);
+        buffer.writeBoolean(overrideViewOriginTitle);
+        buffer.writeBoolean(overrideChooseOriginTitle);
     }
 
     @Environment(EnvType.CLIENT)
@@ -222,6 +263,8 @@ public class OriginLayer implements Comparable<OriginLayer> {
             layer.conditionedOrigins.add(ConditionedOrigin.read(buffer));
         }
         layer.nameTranslationKey = buffer.readString();
+        layer.titleViewOriginTranslationKey = buffer.readString();
+        layer.titleChooseOriginTranslationKey = buffer.readString();
         layer.missingOriginNameTranslationKey = buffer.readString();
         layer.missingOriginDescriptionTranslationKey = buffer.readString();
         layer.isRandomAllowed = buffer.readBoolean();
@@ -238,6 +281,8 @@ public class OriginLayer implements Comparable<OriginLayer> {
         }
         layer.autoChooseIfNoChoice = buffer.readBoolean();
         layer.hidden = buffer.readBoolean();
+        layer.overrideViewOriginTitle = buffer.readBoolean();
+        layer.overrideChooseOriginTitle = buffer.readBoolean();
         return layer;
     }
 
@@ -256,9 +301,19 @@ public class OriginLayer implements Comparable<OriginLayer> {
         layer.enabled = enabled;
         layer.identifier = id;
         layer.nameTranslationKey = JsonHelper.getString(json, "name", "");
+        if(json.has("gui_title") && json.get("gui_title").isJsonObject()) {
+            JsonObject guiTitleObj = json.getAsJsonObject("gui_title");
+            if(guiTitleObj.has("view_origin")) {
+                layer.titleViewOriginTranslationKey = JsonHelper.getString(guiTitleObj, "view_origin", "");
+                layer.overrideViewOriginTitle = true;
+            }
+            if(guiTitleObj.has("choose_origin")) {
+                layer.titleChooseOriginTranslationKey = JsonHelper.getString(guiTitleObj, "choose_origin", "");
+                layer.overrideChooseOriginTitle = true;
+            }
+        }
         layer.missingOriginNameTranslationKey = JsonHelper.getString(json, "missing_name", "");
         layer.missingOriginDescriptionTranslationKey = JsonHelper.getString(json, "missing_description", "");
-
         layer.isRandomAllowed = JsonHelper.getBoolean(json, "allow_random", false);
         layer.doesRandomAllowUnchoosable = JsonHelper.getBoolean(json, "allow_random_unchoosable", false);
         layer.originsExcludedFromRandom = new LinkedList<>();

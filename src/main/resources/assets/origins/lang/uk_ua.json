@@ -1,0 +1,247 @@
+{
+  "origin.origins.human.name": "Людина",
+  "origin.origins.human.description": "Звичайна людина. Вас очікує звичайне проходження Minecraft.",
+
+  "origin.origins.merling.name": "Водяник",
+  "origin.origins.merling.description": "Ці природні мешканці океану не звикли довго перебувати поза водою.",
+
+  "origin.origins.arachnid.name": "Павукоподібний",
+  "origin.origins.arachnid.description": "Їх здібності лазати та ловити ворогів в павутину робить Павукоподібних найкращими мисливцями.",
+
+  "origin.origins.blazeborn.name": "Полум'яник",
+  "origin.origins.blazeborn.description": "Останні нащадки Пломенів, Полум'яники, мають вроджений імунітет до небезпек Незеру.",
+
+  "origin.origins.avian.name": "Птахоподібний",
+  "origin.origins.avian.description": "Птахоподібні втратили можливість до польоту дуже давно. Зараз цих мирних створінь можна побачити паруючими з одного місця на інше.",
+
+  "origin.origins.phantom.name": "Фантом",
+  "origin.origins.phantom.description": "Будучи наполовину людиною, на половину фантомом, ці створіння можуть перемикатись між Фантомною та нормальною формою.",
+
+  "origin.origins.feline.name": "Кішкоподібний",
+  "origin.origins.feline.description": "З їх виглядом, схожим на котів, Кішкоподібні відлякують кріперів. Зі спритністю котів, вони завжди приземляються на лапи.",
+
+  "origin.origins.elytrian.name": "Елітрієць",
+  "origin.origins.elytrian.description": "Часто літаючи в поривах вітру, Елітрійці відчувають себе некомфортно коли їм не достатньо місця над головою.",
+
+  "origin.origins.enderian.name": "Ендерієць",
+  "origin.origins.enderian.description": "Народжені як діти Ендер Дракона, Ендерійці здатдні до телепортації але вразливі до води.",
+
+  "origin.origins.shulk.name": "Шалк",
+  "origin.origins.shulk.description": "Будучи пов'язаними до Шалкерів, тіло Шалків вкрито захисною панциро-подібною шкірою.",
+
+  "power.origins.water_breathing.name": "Зябри",
+  "power.origins.water_breathing.description": "Ви можете дихати під водою, але не на суші.",
+
+  "power.origins.aqua_affinity.name": "Рідність води",
+  "power.origins.aqua_affinity.description": "Ви можете ламати блоки під водою, так само як і на суші.",
+
+  "power.origins.water_vision.name": "Мокрі очі",
+  "power.origins.water_vision.description": "Ваш зір під водою став краще.",
+
+  "power.origins.swim_speed.name": "Плавці",
+  "power.origins.swim_speed.description": "Ваша швидкість під водою підвищена.",
+
+  "power.origins.like_water.name": "Наче вода",
+  "power.origins.like_water.description": "Коли під водою, ви не тонете на дно, доки не захочете.",
+
+  "power.origins.fragile.name": "Крихкий",
+  "power.origins.fragile.description": "У вас на 3 сердечка менше, ніж у звичайних людей.",
+
+  "power.origins.webbing.name": "Павутиномет",
+  "power.origins.webbing.description": "Коли ви б'єте ворога в ближньому бою, вони застрягають в павутині.",
+
+  "power.origins.climbing.name": "Лазання",
+  "power.origins.climbing.description": "Ви спроможні лазати по любому виду стін, не тільки по драбині.",
+
+  "power.origins.carnivore.name": "Хижак",
+  "power.origins.carnivore.description": "Ваша дієта обмежена м'ясом, ви не можете їсти овочі.",
+
+  "power.origins.fire_immunity.name": "Імунітет до вогню",
+  "power.origins.fire_immunity.description": "У вас є імунітет до любої шкоди від вогню.",
+
+  "power.origins.nether_spawn.name": "Мешканець Незеру",
+  "power.origins.nether_spawn.description": "Ваша точка відродження по замовчування знаходиться в Незері.",
+
+  "power.origins.burning_wrath.name": "Палаючий гнів",
+  "power.origins.burning_wrath.description": "Коли ви горите, ви наносите додаткову шкоду вашими атаками.",
+
+  "power.origins.hotblooded.name": "Теплокровний",
+  "power.origins.hotblooded.description": "Завдяки вашому гарячому тілу, отрути згорають, роблячи вас захищеними від ефектів отрути та голоду.",
+
+  "power.origins.water_vulnerability.name": "Гідрофобія",
+  "power.origins.water_vulnerability.description": "Ви отримуєте шкоду при любому контакті з водою.",
+
+  "power.origins.tailwind.name": "Попутний вітер",
+  "power.origins.tailwind.description": "Ви трохи швидші пішки ніж ішні.",
+
+  "power.origins.slow_falling.name": "Наче пір'їнка",
+  "power.origins.slow_falling.description": "Ви падаєте на землю так само обережно, як пір'їнка, тільки якщо ви не спішитеся.",
+
+  "power.origins.vegetarian.name": "Вегетаріанець",
+  "power.origins.vegetarian.description": "Ви не здатні їсти м'ясо.",
+
+  "power.origins.fresh_air.name": "Свіже повітря",
+  "power.origins.fresh_air.description": "Коли ви намагаєтесь поспати, ваше ліжко має бути щонайменше на 86 висоті, щоб ви могли дихати свіжим повітрям.",
+
+  "power.origins.phasing.name": "Фантомізація",
+  "power.origins.phasing.description": "Коли у формі фантома, ви можете проходити крізь блоки, окрім Обсидіана.",
+
+  "power.origins.invisibility.name": "Невидимість",
+  "power.origins.invisibility.description": "Коли у формі фантома, ви невидимі.",
+
+  "power.origins.hunger_over_time.name": "Швидкий метаболізм",
+  "power.origins.hunger_over_time.description": "Форма фантома змушує вас втрачати більше голоду.",
+
+  "power.origins.burn_in_daylight.name": "Чутливість до сонця",
+  "power.origins.burn_in_daylight.description": "Ви починаєте горіти на сонячному світлі, якщо ви не невидимі.",
+
+  "power.origins.fall_immunity.name": "Акробат",
+  "power.origins.fall_immunity.description": "Ви ніколи не отримуєте шкоди від падіння, не зважаючи на висоту з якої ви впали.",
+
+  "power.origins.sprint_jump.name": "Сильні ноги",
+  "power.origins.sprint_jump.description": "Ви можете стрибати вище якщо ви біжите.",
+
+  "power.origins.nine_lives.name": "Дев'ять життів",
+  "power.origins.nine_lives.description": "У вас на 1 сердечко менше ніж у звичайних людей.",
+
+  "power.origins.cat_vision.name": "Нічний спосіб життя",
+  "power.origins.cat_vision.description": "Ви можете бачити у темряві, коли не у воді.",
+
+  "power.origins.weak_arms.name": "Слабкі руки",
+  "power.origins.weak_arms.description": "Коли ви не перебуваєте під дією зілля сили, ви можете добувати камінь, лише якщо поруч з ним менше 2 інших блоків каменю.",
+
+  "power.origins.scare_creepers.name": "Котяча зовнішність",
+  "power.origins.scare_creepers.description": "Кріпери лякаються вас і будуть вибухати тільки якщо ви вдарите їх першими.",
+
+  "power.origins.launch_into_air.name": "Дарунок вітрів",
+  "power.origins.launch_into_air.description": "Кожні 30 секунд, ви здатні запустити себе у повітря на 20 блоків в висоту.",
+
+  "power.origins.elytra.name": "Окриляє!",
+  "power.origins.elytra.description": "У вас є Елітри без потреби їх одягання.",
+
+  "power.origins.light_armor.name": "Потреба у мобільності",
+  "power.origins.light_armor.description": "Ви не можете одягати тяжку броню (броня з рівнем захисту, вища за кольчужну).",
+
+  "power.origins.claustrophobia.name": "Клаустрафобія",
+  "power.origins.claustrophobia.description": "Перебування у місці з низькою стелею занадто довго послабить та заповільнить вас.",
+
+  "power.origins.more_kinetic_damage.name": "Крихкі кістки",
+  "power.origins.more_kinetic_damage.description": "Ви отримуєте більшу шкоду від падіння та від влітання у блоки.",
+
+  "power.origins.aerial_combatant.name": "Повітряні сили",
+  "power.origins.aerial_combatant.description": "Ви завдаєте суттєво більше шкоди при польоті на Елітрах.",
+
+  "power.origins.throw_ender_pearl.name": "Телепортація",
+  "power.origins.throw_ender_pearl.description": "Коли б ви не хотіли, ви можете жбурнути Перлину Енду, яка не завдає шкоди, дозволяючи вам телепортуватись.",
+
+  "power.origins.pumpkin_hate.name": "Гарбузофобія",
+  "power.origins.pumpkin_hate.description": "Ви боїтесь гарбузів. З поважних причин.",
+
+  "power.origins.extra_reach.name": "Довге тіло",
+  "power.origins.extra_reach.description": "Ви можете дістати до блоків та створінь набагато далі ніж інші.",
+
+  "power.origins.shulker_inventory.name": "Велика кишеня",
+  "power.origins.shulker_inventory.description": "У вас є доступ до 9 додаткових слотів в інвентарі, які зберігають предмети навіть після смерті.",
+
+  "power.origins.natural_armor.name": "Міцна шкіра",
+  "power.origins.natural_armor.description": "Навіть без броні, ваша шкіра забезпечує вам захист.",
+
+  "power.origins.more_exhaustion.name": "Ненажера",
+  "power.origins.more_exhaustion.description": "Ви виснагаєте набагато швидше ніж інші, це заставляє вас їсти більше.",
+
+  "power.origins.no_shield.name": "Громіздкий",
+  "power.origins.no_shield.description": "Форма ваших рук не дає вам можливості тримати щит для оборони.",
+
+  "power.origins.strong_arms.name": "Сильні руки",
+  "power.origins.strong_arms.description": "Ви достатньо сильні щоб ламати камінь без потреби використовувати кайло.",
+
+  "power.origins.translucent.name": "Напівпрозорий",
+  "power.origins.translucent.description": "Ваша шкіра напівпрозора.",
+
+  "power.origins.end_spawn.name": "Мешканець Енду",
+  "power.origins.end_spawn.description": "Ваша подорож починається у Енді.",
+
+  "power.origins.master_of_webs.name": "Майстер павутиння",
+  "power.origins.master_of_webs.description": "Ви відмінно орієнтуєтеся в павутині і вмієте в них лазити. Коли ви вдаряєте ворога в ближньому бою, він на деякий час застряє в павутині. Ви відчуваєте всіх не членистоногих істот, які застрягли в павутині. З ниток ви можете виготовити павутину.",
+
+  "power.origins.lay_eggs.name": "Яйце-Райце",
+  "power.origins.lay_eggs.description": "Кожен раз як ви прокидаєтесь у ліжку, ви відкладаєте яйце.",
+
+  "power.origins.phantomize.name": "Форма фантома",
+  "power.origins.phantomize.description": "Ви можете перемикатися між людською та фантомною формою за бажанням, але лише тоді, коли ви достатньо насичені, щоб бігти.",
+
+  "power.origins.like_air.name": "Наче повітря",
+  "power.origins.like_air.description": "Модифікатори вашої швидкості ходьби також застосовуються під час перебування в повітрі.",
+
+  "power.origins.velvet_paws.name": "Оксамитові лапки",
+  "power.origins.velvet_paws.description": "Ваші кроки не викликають вібрацій, які інші істоти могли б відчути.",
+
+  "category.origins": "Origins",
+  "key.origins.primary_active": "Активувати здібність (Перша)",
+  "key.origins.secondary_active": "Активувати здібність (Друга)",
+  "key.origins.view_origin": "Переглянути походження",
+
+  "text.autoconfig.origins.title": "Конфігурація Origins",
+  "text.autoconfig.origins.option.xOffset": "Зміщеняя Панелі Перезарядки По Осі X",
+  "text.autoconfig.origins.option.yOffset": "Зміщеняя Панелі Перезарядки По Осі Y",
+  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Сила Оверлею Фантомної форми",
+
+  "item.origins.orb_of_origin": "Сфера походження",
+  "item.origins.orb_of_origin.layer_generic": "Дозволяє вам обрати нове %s.",
+  "item.origins.orb_of_origin.layer_specific": "Встановить вашу %1$s на \"%2$s\".",
+
+  "enchantment.origins.water_protection": "Водяний захист",
+  "enchantment.origins.water_protection.desc": "Знижує шкоду від гідрофобії.",
+
+  "container.shulker_inventory_power": "Кишеня Шалкера",
+
+  "origins.gui.select": "Вибрати",
+  "origins.gui.close": "Закрити",
+  "origins.gui.choose": "Обрати",
+  "origins.gui.choose_origin.title": "Оберіть ваше %s.",
+  "origins.gui.view_origin.title": "Це ваше %s.",
+  "origins.gui.view_origin.empty": "Ви не можете мати жодного Походження.",
+  "origins.gui.view_origin.not_installed": "На сервері не встановлено мод Origins.",
+  "origins.gui.impact.impact": "Внесок",
+  "origins.gui.impact.none": "Ніякий",
+  "origins.gui.impact.low": "Низький",
+  "origins.gui.impact.medium": "Середній",
+  "origins.gui.impact.high": "Високий",
+  "origins.gui.version_mismatch": "Цей сервер запущено на іншій версії мода Origins (v%1$s) яка не сумісна з вашою версією моду (v%2$s).",
+
+  "origins.gui.badge.active": "Активувати здібність, натисніть %s.",
+  "origins.gui.badge.toggle": "Увімкнути на %s.",
+  "origins.gui.badge.recipe.crafting.shaped": "Рецепт майстрування (сформований):",
+  "origins.gui.badge.recipe.crafting.shapeless": "Рецепт майстрування (безформний):",
+
+  "origins.gui.unbound_key": "§oвідв'язати§r",
+
+  "origin.origins.random.name": "Випадково",
+  "origin.origins.random.description": "Вам буде випадково призначено одне з:",
+
+  "layer.origins.origin.name": "Походження",
+  "origin.origins.empty.name": "Відсутнє",
+  "origin.origins.empty.description": "У вас немає Походження.",
+
+  "death.attack.no_water_for_gills": "%1$s не зміг забезпечити себе водою",
+  "death.attack.no_water_for_gills.player": "%1$s не зміг забезпечити себе водою через %2$s",
+  "death.attack.hurt_by_water": "%1$s занадто довго приймав ванну",
+  "death.attack.hurt_by_water.player": "%1$s був затягнут під воду %2$s",
+  "death.attack.genericDamageOverTime": "%1$s помер від тимчасового ефекту шкоди",
+  "death.attack.genericDamageOverTime.player": "%1$s помер від тимчасового ефекту шкоди під час бою з %2$s",
+
+  "commands.origin.origin_not_found": "Невідоме походження: %s",
+  "commands.origin.layer_not_found": "Невідомий шар: %s",
+  "commands.origin.unregistered_in_layer": "Походження %1$s не зареєстроване в шарі %2$s!",
+  "commands.origin.get.result": "%s має наступне %s: %s (%s)",
+  "commands.origin.gui.all": "Відкрито інтерфейс вибору для %s гравців",
+  "commands.origin.gui.layer": "Відкрито інтерфейс вибору \"%2$s\" для %1$s гравців",
+  "commands.origin.random.all": "Випадково назначено походження для %1$s цілей в %2$s шарах",
+  "commands.origin.random.not_allowed": "Шар %1$s не дозволений для випадкових походжень!",
+  "commands.origin.random.success.multiple": "Випадково назначено походження для %1$s цілей в шарі %2$s",
+  "commands.origin.random.success.single": "Випадково назначено походження %2$s для %1$s в шарі %3$s",
+  "commands.origin.set.success.multiple": "Встановлено походження %s цілей в шарі %s на %s",
+  "commands.origin.set.success.single": "Встановлено походження %s в шарі %s на %s.",
+
+  "origins.avian_sleep_fail": "Вам необхідне свіже повітря для сну"
+}

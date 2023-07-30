@@ -4,12 +4,12 @@ import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-
-import java.util.Random;
+import net.minecraft.world.tick.OrderedTick;
 
 public class TemporaryCobwebBlock extends CobwebBlock {
 
@@ -36,7 +36,7 @@ public class TemporaryCobwebBlock extends CobwebBlock {
 
 	@Override
 	public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
-		worldIn.createAndScheduleBlockTick(pos, this, 60);
+		worldIn.scheduleBlockTick(pos, this, 60);
 		super.onBlockAdded(state, worldIn, pos, oldState, isMoving);
 	}
 

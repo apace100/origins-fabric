@@ -17,14 +17,14 @@ public abstract class LikeWaterMixin extends Entity {
         super(type, world);
     }
 
-    @Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;method_26317(DZLnet/minecraft/util/math/Vec3d;)Lnet/minecraft/util/math/Vec3d;"))
+    @Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyFluidMovingSpeed(DZLnet/minecraft/util/math/Vec3d;)Lnet/minecraft/util/math/Vec3d;"))
     public Vec3d method_26317Proxy(LivingEntity entity, double d, boolean bl, Vec3d vec3d) {
-        Vec3d oldReturn = entity.method_26317(d, bl, vec3d);
+        Vec3d oldReturn = entity.applyFluidMovingSpeed(d, bl, vec3d);
         if(OriginsPowerTypes.LIKE_WATER.isActive(this)) {
             if (Math.abs(vec3d.y - d / 16.0D) < 0.025D) {
                 return new Vec3d(oldReturn.x, 0, oldReturn.z);
             }
         }
-        return entity.method_26317(d, bl, vec3d);
+        return entity.applyFluidMovingSpeed(d, bl, vec3d);
     }
 }

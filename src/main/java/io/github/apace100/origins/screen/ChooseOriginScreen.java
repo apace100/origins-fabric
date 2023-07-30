@@ -10,16 +10,14 @@ import io.github.apace100.origins.registry.ModItems;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -36,7 +34,7 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 	private Origin randomOrigin;
 	
 	public ChooseOriginScreen(ArrayList<OriginLayer> layerList, int currentLayerIndex, boolean showDirtBackground) {
-		super(new TranslatableText(Origins.MODID + ".screen.choose_origin"), showDirtBackground);
+		super(Text.translatable(Origins.MODID + ".screen.choose_origin"), showDirtBackground);
 		this.layerList = layerList;
 		this.currentLayerIndex = currentLayerIndex;
 		this.originSelection = new ArrayList<>(10);
@@ -83,18 +81,18 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 	protected void init() {
 		super.init();
 		if(maxSelection > 1) {
-			addDrawableChild(new ButtonWidget(guiLeft - 40,this.height / 2 - 10, 20, 20, new LiteralText("<"), b -> {
+			addDrawableChild(ButtonWidget.builder(Text.of("<"), b -> {
 				currentOrigin = (currentOrigin - 1 + maxSelection) % maxSelection;
 				Origin newOrigin = getCurrentOriginInternal();
 				showOrigin(newOrigin, layerList.get(currentLayerIndex), newOrigin == randomOrigin);
-			}));
-			addDrawableChild(new ButtonWidget(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20, new LiteralText(">"), b -> {
+			}).dimensions(guiLeft - 40, this.height / 2 - 10, 20, 20).build());
+			addDrawableChild(ButtonWidget.builder(Text.of(">"), b -> {
 				currentOrigin = (currentOrigin + 1) % maxSelection;
 				Origin newOrigin = getCurrentOriginInternal();
 				showOrigin(newOrigin, layerList.get(currentLayerIndex), newOrigin == randomOrigin);
-			}));
+			}).dimensions(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20).build());
 		}
-		addDrawableChild(new ButtonWidget(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20, new TranslatableText(Origins.MODID + ".gui.select"), b -> {
+		addDrawableChild(ButtonWidget.builder(Text.translatable(Origins.MODID + ".gui.select"), b -> {
 			PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
 			if(currentOrigin == originSelection.size()) {
 				buf.writeString(layerList.get(currentLayerIndex).getIdentifier().toString());
@@ -105,12 +103,15 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 				ClientPlayNetworking.send(ModPackets.CHOOSE_ORIGIN, buf);
 			}
 			openNextLayerScreen();
-        }));
+		}).dimensions(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20).build());
 	}
 
 	@Override
 	protected Text getTitleText() {
-		return new TranslatableText(Origins.MODID + ".gui.choose_origin.title", new TranslatableText(getCurrentLayer().getTranslationKey()));
+		if (getCurrentLayer().shouldOverrideChooseOriginTitle()) {
+			return Text.translatable(getCurrentLayer().getTitleChooseOriginTranslationKey());
+		}
+		return Text.translatable(Origins.MODID + ".gui.choose_origin.title", Text.translatable(getCurrentLayer().getTranslationKey()));
 	}
 
 	private Origin getCurrentOriginInternal() {
@@ -125,7 +126,7 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 
 	private void initRandomOrigin() {
 		this.randomOrigin = new Origin(Origins.identifier("random"), new ItemStack(ModItems.ORB_OF_ORIGIN), Impact.NONE, -1, Integer.MAX_VALUE);
-		MutableText randomOriginText = new LiteralText("");
+		MutableText randomOriginText = (MutableText)Text.of("");
 		List<Identifier> randoms = layerList.get(currentLayerIndex).getRandomOrigins(MinecraftClient.getInstance().player);
 		randoms.sort((ia, ib) -> {
 			Origin a = OriginRegistry.get(ia);
@@ -135,17 +136,17 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 		});
 		for(Identifier id : randoms) {
 			randomOriginText.append(OriginRegistry.get(id).getName());
-			randomOriginText.append(new LiteralText("\n"));
+			randomOriginText.append(Text.of("\n"));
 		}
 		setRandomOriginText(randomOriginText);
 	}
 
 	@Override
-	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
 		if(maxSelection == 0) {
 			openNextLayerScreen();
 			return;
 		}
-		super.render(matrices, mouseX, mouseY, delta);
+		super.render(context, mouseX, mouseY, delta);
 	}
 }

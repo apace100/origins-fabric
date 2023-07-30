@@ -1,0 +1,247 @@
+{
+  "origin.origins.human.name": "Ihminen",
+  "origin.origins.human.description": "Tavallinen ihminen. Tavanomainen Minecraft-kokemuksesi odottaa.",
+
+  "origin.origins.merling.name": "Merliini",
+  "origin.origins.merling.description": "Nämä meren asukkaat eivät ole tottuneet olemaan liian pitkään ilman vettä.",
+
+  "origin.origins.arachnid.name": "Hämähäkkieläin",
+  "origin.origins.arachnid.description": "Kiipeilytaito ja kyky vangita vihollisensa hämähäkinverkkoon tekevät niistä täydellisiä metsästäjiä.",
+
+  "origin.origins.blazeborn.name": "Roihukainen",
+  "origin.origins.blazeborn.description": "Roihun jälkeläisinä roihukaiset ovat luonnostaan immuuneja Netherin vaaroille.",
+
+  "origin.origins.avian.name": "Siivekäs",
+  "origin.origins.avian.description": "Siivekäs-rotu on menettänyt lentokykynsä jo kauan sitten. Nyt näitä rauhallisia olentoja voi havaita liitelevän paikasta toiseen.",
+
+  "origin.origins.phantom.name": "Aave",
+  "origin.origins.phantom.description": "Puoliksi ihminen ja puoliksi aave, nämä olennot pystyvät vaihtamaan aaveen ja normaalin muodon välillä.",
+
+  "origin.origins.feline.name": "Kissaeläin",
+  "origin.origins.feline.description": "Kissamaisen ulkonäkönsä ansiosta kissaeläimet pelottavat creeperit pois. Ne laskeutuvat aina turvallisesti jaloilleen kissan näppäryydellä.",
+
+  "origin.origins.elytrian.name": "Elytrialainen",
+  "origin.origins.elytrian.description": "Elytrialaiset lentävät usein tuulien mukana, ja tuntevat olonsa epämukavaksi, kun heidän yläpuolella ei ole tarpeeksi tilaa.",
+
+  "origin.origins.enderian.name": "Enderialainen",
+  "origin.origins.enderian.description": "Ender-lohikäärmeen lapsina syntyneet enderialaiset kykenevät teleportaatioon, mutta ovat alttiita vedelle.",
+
+  "origin.origins.shulk.name": "Shulkki",
+  "origin.origins.shulk.description": "Samoin kuin shulkerit, shulkkien vartalot on varustettu suojaavalla kuorimaisella iholla.",
+
+  "power.origins.water_breathing.name": "Kidukset",
+  "power.origins.water_breathing.description": "Voit hengittää veden alla, mutta et kuivalla maalla.",
+
+  "power.origins.aqua_affinity.name": "Vesimieltymys",
+  "power.origins.aqua_affinity.description": "Voit rikkoa kuutioita veden alla, kuten muut tekevät kuivalla maalla.",
+
+  "power.origins.water_vision.name": "Kosteat silmät",
+  "power.origins.water_vision.description": "Näkösi veden alla on täydellinen.",
+
+  "power.origins.swim_speed.name": "Evät",
+  "power.origins.swim_speed.description": "Vedenalainen nopeutesi on suurempi.",
+
+  "power.origins.like_water.name": "Kuin vettä",
+  "power.origins.like_water.description": "Kun olet veden alla, et painu pohjaan, ellet halua.",
+
+  "power.origins.fragile.name": "Hauras",
+  "power.origins.fragile.description": "Sinulla on 3 sydäntä vähemmän elinvoimaa kuin ihmisillä.",
+
+  "power.origins.webbing.name": "Verkosto",
+  "power.origins.webbing.description": "Kun osut viholliseen lähitaistelussa, se takertuu hämähäkinseittiin.",
+
+  "power.origins.climbing.name": "Kiipeily",
+  "power.origins.climbing.description": "Pystyt kiipeämään ylös mitä tahansa seinää, etkä vain tikkaita.",
+
+  "power.origins.carnivore.name": "Lihansyöjä",
+  "power.origins.carnivore.description": "Ruokavaliosi koostuu vain lihasta, et voi syödä kasvisruokia.",
+
+  "power.origins.fire_immunity.name": "Tuli immuniteetti",
+  "power.origins.fire_immunity.description": "Olet immuuni kaikenlaiselle tulivahingolle.",
+
+  "power.origins.nether_spawn.name": "Nether asukki",
+  "power.origins.nether_spawn.description": "Syntymäpisteesi on Netherissä.",
+
+  "power.origins.burning_wrath.name": "Palava raivo",
+  "power.origins.burning_wrath.description": "Kun olet tulessa, aiheutat lisävahinkoa hyökkäyksilläsi.",
+
+  "power.origins.hotblooded.name": "Kuumaverinen",
+  "power.origins.hotblooded.description": "Kuuman kehosi ansiosta myrkyt palavat, jolloin olet immuuni myrkky- ja nälkätilavaikutuksille.",
+
+  "power.origins.water_vulnerability.name": "Vesikammo",
+  "power.origins.water_vulnerability.description": "Otat vahinkoa ajan myötä, kun olet kosketuksissa veden kanssa.",
+
+  "power.origins.tailwind.name": "Myötätuuli",
+  "power.origins.tailwind.description": "Olet hieman nopeampi kuin muut.",
+
+  "power.origins.slow_falling.name": "Höyhensarjalainen",
+  "power.origins.slow_falling.description": "Putoat maahan yhtä kevyesti kuin höyhen, ellet hiivi.",
+
+  "power.origins.vegetarian.name": "Kasvissyöjä",
+  "power.origins.vegetarian.description": "Et pysty syömään lihaa.",
+
+  "power.origins.fresh_air.name": "Raikas ilma",
+  "power.origins.fresh_air.description": "Kun nukut, sänkysi on oltava vähintään 86 kuution korkeudessa, jotta voit hengittää raitista ilmaa.",
+
+  "power.origins.phasing.name": "Aineeton",
+  "power.origins.phasing.description": "Kun olet aave muodossa, voit kävellä kiinteiden materiaalien läpi, paitsi obsidiaanin.",
+
+  "power.origins.invisibility.name": "Näkymättömyys",
+  "power.origins.invisibility.description": "Kun olet aave muodossa, olet näkymätön.",
+
+  "power.origins.hunger_over_time.name": "Nopea aineenvaihdunta",
+  "power.origins.hunger_over_time.description": "Aave muodossa oleminen tekee sinusta nälkäisen.",
+
+  "power.origins.burn_in_daylight.name": "Valoallerginen",
+  "power.origins.burn_in_daylight.description": "Palat päivänvalossa, jos et ole näkymätön.",
+
+  "power.origins.fall_immunity.name": "Akrobatia",
+  "power.origins.fall_immunity.description": "Et ota koskaan putoamisvahinkoa, riippumatta siitä, miltä korkeudelta putoat.",
+
+  "power.origins.sprint_jump.name": "Vahvat nilkat",
+  "power.origins.sprint_jump.description": "Voit hypätä korkeammalle hyppäämällä samalla kun juokset.",
+
+  "power.origins.nine_lives.name": "Yhdeksän elämää",
+  "power.origins.nine_lives.description": "Sinulla on 1 sydän vähemmän elinvoimaa kuin ihmisillä.",
+
+  "power.origins.cat_vision.name": "Öinen",
+  "power.origins.cat_vision.description": "Näet hieman pimeässä, mikäli et ole vedessä.",
+
+  "power.origins.weak_arms.name": "Heikot kädet",
+  "power.origins.weak_arms.description": "Kun et ole vahvuuden taikajuoman vaikutuksen alaisena, voit louhia luonnonkiviä vain, jos sen ympärillä on enintään 2 muuta luonnonkivikuutiota.",
+
+  "power.origins.scare_creepers.name": "Kissamainen ulkonäkö",
+  "power.origins.scare_creepers.description": "Creeperit pelkäävät sinua ja räjähtävät vain, jos hyökkäät niiden kimppuun ensin.",
+
+  "power.origins.launch_into_air.name": "Tuulten lahja",
+  "power.origins.launch_into_air.description": "Joka 30. sekunti voit laukaista itsesi noin 20 kuution korkeuteen.",
+
+  "power.origins.elytra.name": "Siivekäs",
+  "power.origins.elytra.description": "Sinulla on elytra-siivet ilman, että sinun tarvitsee pukea niitä.",
+
+  "power.origins.light_armor.name": "Liikkumisen tarve",
+  "power.origins.light_armor.description": "Et voi käyttää raskaita panssareita (panssareita, joiden suojaavuus on suurempi kuin rengashaarniskan).",
+
+  "power.origins.claustrophobia.name": "Klaustrofobia",
+  "power.origins.claustrophobia.description": "Liian pitkä oleskelu matalassa tilassa heikentää sinua ja tekee sinusta hitaamman.",
+
+  "power.origins.more_kinetic_damage.name": "Hauraat luut",
+  "power.origins.more_kinetic_damage.description": "Otat enemmän vahinkoa putoamisesta ja kuutioihin lentämisestä.",
+
+  "power.origins.aerial_combatant.name": "Lentotaistelija",
+  "power.origins.aerial_combatant.description": "Aiheutat huomattavasti enemmän vahinkoa, kun olet elytralennossa.",
+
+  "power.origins.throw_ender_pearl.name": "Teleportaatio",
+  "power.origins.throw_ender_pearl.description": "Voit aina halutessasi heittää ender-helmen, joka ei aiheuta vahinkoa ja jonka avulla voit teleportata.",
+
+  "power.origins.pumpkin_hate.name": "Kurpitsoja pelkäävä",
+  "power.origins.pumpkin_hate.description": "Pelkäät kurpitsoja. Hyvästä syystä.",
+
+  "power.origins.extra_reach.name": "Hoikka vartalo",
+  "power.origins.extra_reach.description": "Yletyt kauempana oleviin kuutioihin ja olioihin.",
+
+  "power.origins.shulker_inventory.name": "Hamstraaja",
+  "power.origins.shulker_inventory.description": "Sinulla on käytössäsi 9 ylimääräistä tavaraluettelon paikkaa, jotka säilyttävät esineet kuoleman sattuessa.",
+
+  "power.origins.natural_armor.name": "Vankka iho",
+  "power.origins.natural_armor.description": "Ihosi tarjoaa luonnollisen suojan myös ilman panssaria.",
+
+  "power.origins.more_exhaustion.name": "Suuri ruokahalu",
+  "power.origins.more_exhaustion.description": "Sinä uuvut paljon nopeammin kuin muut, joten sinun on syötävä enemmän.",
+
+  "power.origins.no_shield.name": "Kömpelö",
+  "power.origins.no_shield.description": "Tapa, miten kätesi ovat muotoutuneet, ei anna mahdollisuutta pitää kilpiä pystyasennossa.",
+
+  "power.origins.strong_arms.name": "Vahvat kädet",
+  "power.origins.strong_arms.description": "Olet niin vahva, että pystyt rikkomaan luonnonkiviä ilman hakkua.",
+
+  "power.origins.translucent.name": "Läpikuultava",
+  "power.origins.translucent.description": "Ihosi on läpikuultava.",
+
+  "power.origins.end_spawn.name": "End asukki",
+  "power.origins.end_spawn.description": "Matkasi alkaa Endissä.",
+
+  "power.origins.master_of_webs.name": "Verkkojen mestari",
+  "power.origins.master_of_webs.description": "Liikut täydellisesti hämähäkinseiteissä ja pystyt kiipeilemään niissä. Kun osut viholliseen lähitaistelussa, se takertuu hämähäkinseittiin hetkeksi. Tunnistat hämähäkinseittiin juuttuneet, jos ne ei ole niveljalkaisia. Pystyt valmistamaan hämähäkinverkkoa narusta.",
+
+  "power.origins.lay_eggs.name": "Ovipaarinen",
+  "power.origins.lay_eggs.description": "Aina kun heräät aamulla, munit munan.",
+
+  "power.origins.phantomize.name": "Aave muoto",
+  "power.origins.phantomize.description": "Voit vaihtaa halutessasi ihmis- ja aavemuodon välillä, mutta vain silloin, kun olet tarpeeksi kylläinen juostaksesi.",
+
+  "power.origins.like_air.name": "Kuin ilmaa",
+  "power.origins.like_air.description": "Kävelynopeuden määrittelyjä käytetään myös ilmassa ollessasi.",
+
+  "power.origins.velvet_paws.name": "Samettitassut",
+  "power.origins.velvet_paws.description": "Askeleesi eivät aiheuta värähtelyjä, jotka läheiset elämänmuodot voisivat muuten havaita.",
+
+  "category.origins": "Alkuperät",
+  "key.origins.primary_active": "Aktiivinen voima (ensisijainen)",
+  "key.origins.secondary_active": "Aktiivinen voima (toissijainen)",
+  "key.origins.view_origin": "Näytä alkuperä",
+
+  "text.autoconfig.origins.title": "Origins-konfiguraatio",
+  "text.autoconfig.origins.option.xOffset": "Jäähdytyspalkin poikkeama X",
+  "text.autoconfig.origins.option.yOffset": "Jäähdytyspalkin poikkeama Y",
+  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Aave muodon voimakkuus",
+
+  "item.origins.orb_of_origin": "Alkuperän pallo",
+  "item.origins.orb_of_origin.layer_generic": "Antaa sinun valita uuden %sn.",
+  "item.origins.orb_of_origin.layer_specific": "Asettaa sinun %1$sn arvoksi \"%2$s\".",
+
+  "enchantment.origins.water_protection": "Vesisuojaus",
+  "enchantment.origins.water_protection.desc": "Viivästyttää vesikammon aiheuttamaa vahinkoa.",
+
+  "container.shulker_inventory_power": "Shulkerin tavaraluettelo",
+
+  "origins.gui.select": "Valitse",
+  "origins.gui.close": "Sulje",
+  "origins.gui.choose": "Valitse",
+  "origins.gui.choose_origin.title": "Valitse oma %s.",
+  "origins.gui.view_origin.title": "Tämä on sinun %s.",
+  "origins.gui.view_origin.empty": "Sinulla ei voi olla mitään alkuperää.",
+  "origins.gui.view_origin.not_installed": "Palvelimelle ei ole asennettu Originsia.",
+  "origins.gui.impact.impact": "Vaikutus",
+  "origins.gui.impact.none": "Ei yhtään",
+  "origins.gui.impact.low": "Matala",
+  "origins.gui.impact.medium": "Keskisuuri",
+  "origins.gui.impact.high": "Korkea",
+  "origins.gui.version_mismatch": "Tällä palvelimella on käytössä eri versio Originsista (v%1$s), joka ei ole yhteensopiva asentamasi version (v%2$s) kanssa.",
+
+  "origins.gui.badge.active": "Aktiivinen voima, käytä näppäimellä %s.",
+  "origins.gui.badge.toggle": "Kytke näppäimellä %s.",
+  "origins.gui.badge.recipe.crafting.shaped": "Resepti (muotoiltu):",
+  "origins.gui.badge.recipe.crafting.shapeless": "Resepti (muodoton):",
+
+  "origins.gui.unbound_key": "§oei näppäintä§r",
+
+  "origin.origins.random.name": "Satunnainen",
+  "origin.origins.random.description": "Sinulle asetetaan yksi seuraavista vaihtoehdoista:",
+
+  "layer.origins.origin.name": "Alkuperä",
+  "origin.origins.empty.name": "Puuttuu",
+  "origin.origins.empty.description": "Sinulla ei ole alkuperää.",
+
+  "death.attack.no_water_for_gills": "%1$s ei onnistunut pysymään kosteana",
+  "death.attack.no_water_for_gills.player": "%1$s ei onnistunut pysymään kosteana koska taisteli pelaajaa %2$s vastaan",
+  "death.attack.hurt_by_water": "%1$s kylpi liian kauan",
+  "death.attack.hurt_by_water.player": "%1$s upotettiin veden alle pelaajan %2$s toimesta",
+  "death.attack.genericDamageOverTime": "%1$s kuoli ajan myötä tapahtuvaan vahinkoon",
+  "death.attack.genericDamageOverTime.player": "%1$s kuoli ajan myötä tapahtuvaan vahinkoon taistellessaan pelaajaa %2$s vastaan",
+
+  "commands.origin.origin_not_found": "Tuntematon alkuperä: %s",
+  "commands.origin.layer_not_found": "Tuntematon kerros: %s",
+  "commands.origin.unregistered_in_layer": "Alkuperä %1$s ei ole rekisteröity kerrokseen %2$s!",
+  "commands.origin.get.result": "Pelaajalla %s on seuraava %s: %s (%s)",
+  "commands.origin.gui.all": "Valintakäyttöliittymä avattu %s pelaajalle",
+  "commands.origin.gui.layer": "Valintakäyttöliittymä \"%2$s\" avattu %1$s pelaajalle",
+  "commands.origin.random.all": "Satunnaisesti asetettiin alkuperä %1$s kohteelle %2$s kerroksessa",
+  "commands.origin.random.not_allowed": "Kerros %1$s ei salli satunnaisia alkuperiä!",
+  "commands.origin.random.success.multiple": "Satunnaisesti asetettiin alkuperä %1$s kohteelle kerroksessa %2$s",
+  "commands.origin.random.success.single": "Satunnaisesti asetettiin alkuperä %2$s pelaajalle %1$s kerroksessa %3$s",
+  "commands.origin.set.success.multiple": "Asetettiin %s kohteen alkuperä kerroksessa %s arvoon %s",
+  "commands.origin.set.success.single": "Asetettiin pelaajan %s alkuperä kerroksessa %s arvoon %s.",
+
+  "origins.avian_sleep_fail": "Tarvitset raikasta ilmaa nukkuaksesi"
+}

@@ -2,12 +2,12 @@ package io.github.apace100.origins.registry;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.util.OriginLootCondition;
-import net.fabricmc.fabric.api.loot.v1.FabricLootPoolBuilder;
-import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
+import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Items;
+import net.minecraft.loot.LootPool;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.condition.LootConditionType;
 import net.minecraft.loot.entry.EmptyEntry;
@@ -15,9 +15,10 @@ import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.function.SetNbtLootFunction;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonSerializer;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 
 public class ModLoot {
 
@@ -29,58 +30,61 @@ public class ModLoot {
     public static final LootConditionType ORIGIN_LOOT_CONDITION = registerLootCondition("origin", new OriginLootCondition.Serializer());
 
     private static LootConditionType registerLootCondition(String path, JsonSerializer<? extends LootCondition> serializer) {
-        return Registry.register(Registry.LOOT_CONDITION_TYPE, Origins.identifier(path), new LootConditionType(serializer));
+        return Registry.register(Registries.LOOT_CONDITION_TYPE, Origins.identifier(path), new LootConditionType(serializer));
     }
 
     public static void registerLootTables() {
         NbtCompound waterProtectionLevel1 = createEnchantmentTag(ModEnchantments.WATER_PROTECTION, 1);
         NbtCompound waterProtectionLevel2 = createEnchantmentTag(ModEnchantments.WATER_PROTECTION, 2);
         NbtCompound waterProtectionLevel3 = createEnchantmentTag(ModEnchantments.WATER_PROTECTION, 3);
-        LootTableLoadingCallback.EVENT.register(((resourceManager, lootManager, identifier, fabricLootSupplierBuilder, lootTableSetter) -> {
-            if(DUNGEON_LOOT.equals(identifier)) {
-                FabricLootPoolBuilder lootPool = FabricLootPoolBuilder.builder()
-                    .rolls(ConstantLootNumberProvider.create(1))
+        LootTableEvents.MODIFY.register(((resourceManager, lootManager, identifier, tableBuilder, source) -> {
+            if (!source.isBuiltin()) {
+                return;
+            }
+            if (DUNGEON_LOOT.equals(identifier)) {
+                LootPool.Builder lootPool = new LootPool.Builder();
+                lootPool.rolls(ConstantLootNumberProvider.create(1))
                     .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
                         .weight(20)
                         .apply(SetNbtLootFunction.builder(waterProtectionLevel1)))
                     .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
                         .weight(10)
                         .apply(SetNbtLootFunction.builder(waterProtectionLevel2)))
-                    .with(EmptyEntry.Serializer().weight(80));
-                fabricLootSupplierBuilder.withPool(lootPool.build());
-            } else if(STRONGHOLD_LIBRARY.equals(identifier)) {
-                FabricLootPoolBuilder lootPool = FabricLootPoolBuilder.builder()
-                    .rolls(ConstantLootNumberProvider.create(1))
+                    .with(EmptyEntry.builder().weight(80));
+                tableBuilder.pool(lootPool);
+            } else if (STRONGHOLD_LIBRARY.equals(identifier)) {
+                LootPool.Builder lootPool = new LootPool.Builder();
+                lootPool.rolls(ConstantLootNumberProvider.create(1))
                     .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
                         .weight(20)
                         .apply(SetNbtLootFunction.builder(waterProtectionLevel2)))
                     .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
                         .weight(10)
                         .apply(SetNbtLootFunction.builder(waterProtectionLevel3)))
-                    .with(EmptyEntry.Serializer().weight(80));
-                fabricLootSupplierBuilder.withPool(lootPool.build());
-            } else if(MINESHAFT.equals(identifier)) {
-                FabricLootPoolBuilder lootPool = FabricLootPoolBuilder.builder()
-                    .rolls(ConstantLootNumberProvider.create(1))
+                    .with(EmptyEntry.builder().weight(80));
+                tableBuilder.pool(lootPool);
+            } else if (MINESHAFT.equals(identifier)) {
+                LootPool.Builder lootPool = new LootPool.Builder();
+                lootPool.rolls(ConstantLootNumberProvider.create(1))
                     .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
                         .weight(20)
                         .apply(SetNbtLootFunction.builder(waterProtectionLevel1)))
                     .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
                         .weight(5)
                         .apply(SetNbtLootFunction.builder(waterProtectionLevel2)))
-                    .with(EmptyEntry.Serializer().weight(90));
-                fabricLootSupplierBuilder.withPool(lootPool.build());
-            } else if(WATER_RUIN.equals(identifier)) {
-                FabricLootPoolBuilder lootPool = FabricLootPoolBuilder.builder()
-                    .rolls(ConstantLootNumberProvider.create(1))
+                    .with(EmptyEntry.builder().weight(90));
+                tableBuilder.pool(lootPool);
+            } else if (WATER_RUIN.equals(identifier)) {
+                LootPool.Builder lootPool = new LootPool.Builder();
+                lootPool.rolls(ConstantLootNumberProvider.create(1))
                     .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
                         .weight(10)
                         .apply(SetNbtLootFunction.builder(waterProtectionLevel1)))
                     .with(ItemEntry.builder(Items.ENCHANTED_BOOK)
                         .weight(20)
                         .apply(SetNbtLootFunction.builder(waterProtectionLevel2)))
-                    .with(EmptyEntry.Serializer().weight(110));
-                fabricLootSupplierBuilder.withPool(lootPool.build());
+                    .with(EmptyEntry.builder().weight(110));
+                tableBuilder.pool(lootPool);
             }
         }));
     }

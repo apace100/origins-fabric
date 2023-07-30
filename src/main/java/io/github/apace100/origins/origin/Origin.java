@@ -6,7 +6,6 @@ import io.github.apace100.apoli.power.MultiplePowerType;
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypeRegistry;
 import io.github.apace100.calio.data.SerializableData;
-import io.github.apace100.calio.data.SerializableData.Instance;
 import io.github.apace100.calio.data.SerializableDataTypes;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.data.CompatibilityDataTypes;
@@ -20,9 +19,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 import javax.annotation.Nullable;
@@ -122,6 +120,10 @@ public class Origin {
         return this;
     }
 
+    public void removePowerType(PowerType<?> powerType) {
+        this.powerTypes.remove(powerType);
+    }
+
     protected Origin setUnchoosable() {
         this.isChoosable = false;
         return this;
@@ -196,8 +198,8 @@ public class Origin {
         return nameTranslationKey;
     }
 
-    public TranslatableText getName() {
-        return new TranslatableText(getOrCreateNameTranslationKey());
+    public MutableText getName() {
+        return Text.translatable(getOrCreateNameTranslationKey());
     }
 
     public String getOrCreateDescriptionTranslationKey() {
@@ -208,12 +210,12 @@ public class Origin {
         return descriptionTranslationKey;
     }
 
-    public TranslatableText getDescription() {
-        return new TranslatableText(getOrCreateDescriptionTranslationKey());
+    public MutableText getDescription() {
+        return Text.translatable(getOrCreateDescriptionTranslationKey());
     }
 
     public Text getNametagPrefix() {
-        return nametagPrefix == null ? new LiteralText("[").append(new TranslatableText(this.getOrCreateNameTranslationKey())).append("]") : nametagPrefix;
+        return nametagPrefix == null ? Text.literal("[").append(Text.translatable(this.getOrCreateNameTranslationKey())).append("]") : nametagPrefix;
     }
 
     public int getOrder() {

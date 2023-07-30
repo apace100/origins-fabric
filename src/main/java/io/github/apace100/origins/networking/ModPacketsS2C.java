@@ -3,6 +3,8 @@ package io.github.apace100.origins.networking;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.OriginsClient;
+import io.github.apace100.origins.badge.Badge;
+import io.github.apace100.origins.badge.BadgeManager;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.integration.OriginDataLoadedCallback;
 import io.github.apace100.origins.origin.Origin;
@@ -10,7 +12,6 @@ import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.registry.ModComponents;
-import io.github.apace100.origins.screen.Badge;
 import io.github.apace100.origins.screen.ChooseOriginScreen;
 import io.github.apace100.origins.screen.WaitForNextLayerScreen;
 import io.netty.util.concurrent.Future;
@@ -137,18 +138,18 @@ public class ModPacketsS2C {
                 List<Badge> badgeList = new LinkedList<>();
                 int badgeCount = packetByteBuf.readInt();
                 for(int j = 0; j < badgeCount; j++) {
-                    Badge badge = Badge.fromData(Badge.DATA.read(packetByteBuf));
+                    Badge badge = BadgeManager.REGISTRY.receiveDataObject(packetByteBuf);
                     badgeList.add(badge);
                 }
                 badges.put(powerId, badgeList);
             }
             minecraftClient.execute(() -> {
-                Origins.badgeManager.clear();
-                badges.forEach((id, list) -> {
-                    list.forEach(badge -> {
-                        Origins.badgeManager.addBadge(id, badge);
-                    });
-                });
+                BadgeManager.clear();
+                for(Map.Entry<Identifier, List<Badge>> badgeEntry : badges.entrySet()) {
+                    for(Badge badge : badgeEntry.getValue()) {
+                        BadgeManager.putPowerBadge(badgeEntry.getKey(), badge);
+                    }
+                }
             });
         } catch (Exception e) {
             Origins.LOGGER.error(e);

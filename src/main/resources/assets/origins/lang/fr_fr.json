@@ -183,8 +183,8 @@
   "origins.gui.impact.high": "Élevé",
 
   "layer.origins.origin.name": "Origine",
-  "layer.origins.origin.missing_origin.name": "Manquante",
-  "layer.origins.origin.missing_origin.description": "Vous n'avez pas d'origine.",
+  "origin.origins.empty.name": "Manquante",
+  "origin.origins.empty.description": "Vous n'avez pas d'origine.",
 
   "death.attack.no_water_for_gills": "%s n'a pas réussi à rester mouillé(e).",
   "death.attack.hurt_by_water": "%s a pris son bain trop longtemps.",
@@ -192,7 +192,7 @@
   "commands.origin.origin_not_found": "Origine inconnue: %s",
   "commands.origin.set.success.single": "L'origine de %s a été définie à %s.",
   "commands.origin.set.success.multiple": "Les origines de %s ont été définies à %s.",
-  "power.origins.end_spawn.name": "End Inhabitant",
+  "power.origins.end_spawn.name": "Habitant de l'End",
   "power.origins.end_spawn.description": "Your journey begins in the End.",
   "power.origins.master_of_webs.name": "Master of Webs",
   "power.origins.master_of_webs.description": "You navigate cobweb perfectly, and are able to climb in them. When you hit an enemy in melee, they get stuck in cobweb for a while. Non-arthropods stuck in cobweb will be sensed by you. You are able to craft cobweb from string.",
@@ -224,5 +224,14 @@
   "commands.origin.get.result": "%s has the following %s: %s (%s)",
   "commands.origin.gui.all": "Opened the selection GUI for %s players.",
   "commands.origin.gui.layer": "Opened the \"%2$s\" selection GUI for %1$s players.",
-  "origins.avian_sleep_fail": "You need fresh air to sleep"
+  "origins.avian_sleep_fail": "You need fresh air to sleep",
+  "enchantment.origins.water_protection.desc": "Delays damage from hydrophobia.",
+  "origins.gui.badge.recipe.crafting.shaped": "Crafting recipe (Shaped) provided by the power:",
+  "origins.gui.badge.recipe.crafting.shapeless": "Crafting recipe (Shapeless) provided by the power:",
+  "commands.origin.layer_not_found": "Unknown layer: %s",
+  "commands.origin.unregistered_in_layer": "Origin %1$s is not registered in layer %2$s!",
+  "commands.origin.random.all": "Randomly assigned an origin to %1$s targets in %2$s layers",
+  "commands.origin.random.not_allowed": "The layer %1$s does not allow for random origins!",
+  "commands.origin.random.success.multiple": "Randomly assigned an origin to %1$s targets in layer %2$s",
+  "commands.origin.random.success.single": "Randomly assigned the origin %2$s to %1$s in layer %3$s"
 }

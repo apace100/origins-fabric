@@ -75,7 +75,8 @@ public class OriginLayers extends MultiJsonDataLoader implements IdentifiableRes
     }
 
     public static OriginLayer getLayer(Identifier id) {
-        return layers.get(id);
+        if (!layers.containsKey(id)) throw new IllegalArgumentException("Could not get layer from id '" + id.toString() + "', as it doesn't exist!");
+        else return layers.get(id);
     }
 
     public static Collection<OriginLayer> getLayers() {
@@ -97,5 +98,10 @@ public class OriginLayers extends MultiJsonDataLoader implements IdentifiableRes
     @Override
     public Identifier getFabricId() {
         return new Identifier(Origins.MODID, "origin_layers");
+    }
+
+    @Override
+    public Collection<Identifier> getFabricDependencies() {
+        return Set.of(Origins.identifier("origins"));
     }
 }

@@ -4,6 +4,7 @@
   "package": "io.github.apace100.origins.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "ArgumentTypesMixin",
     "ConduitOnLandMixin",
     "LikeWaterMixin",
     "LoginMixin",
@@ -16,6 +17,7 @@
     "WaterBreathingMixin$UpdateAir"
   ],
   "client": [
+    "DrawContextAccessor",
     "ServerCheckMixin",
     "WaterVisibilityMixin"
   ],

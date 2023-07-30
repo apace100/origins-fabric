@@ -6,18 +6,19 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 
 public class ModEntities {
 
-    public static final EntityType ENDERIAN_PEARL;
+    public static final EntityType<EnderianPearlEntity> ENDERIAN_PEARL;
 
     static {
-        ENDERIAN_PEARL = FabricEntityTypeBuilder.<EnderianPearlEntity>create(SpawnGroup.MISC, (type, world) -> new EnderianPearlEntity(type, world)).dimensions(EntityDimensions.fixed(0.25f, 0.25f)).trackable(64, 10).build();
+        ENDERIAN_PEARL = FabricEntityTypeBuilder.<EnderianPearlEntity>create(SpawnGroup.MISC, EnderianPearlEntity::new).dimensions(EntityDimensions.fixed(0.25f, 0.25f)).trackable(64, 10).build();
     }
 
     public static void register() {
-        Registry.register(Registry.ENTITY_TYPE, new Identifier(Origins.MODID, "enderian_pearl"), ENDERIAN_PEARL);
+        Registry.register(Registries.ENTITY_TYPE, new Identifier(Origins.MODID, "enderian_pearl"), ENDERIAN_PEARL);
     }
 }

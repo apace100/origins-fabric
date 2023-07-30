@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "origins:no_water_for_gills",
+    "origins:hurt_by_water"
+  ]
+}
