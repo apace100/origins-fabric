@@ -1,13 +1,12 @@
 package io.github.apace100.origins.badge;
 
-import io.github.apace100.apoli.power.*;
+import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.calio.data.SerializableData;
+import io.github.apace100.origins.util.KeyBindingUtil;
 import io.github.apace100.origins.util.PowerKeyManager;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.tooltip.OrderedTextTooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -38,13 +37,17 @@ public record KeybindBadge(Identifier spriteId, String text) implements Badge {
 
     @Override
     public List<TooltipComponent> getTooltipComponents(PowerType<?> powerType, int widthLimit, float time, TextRenderer textRenderer) {
+
+        String keyId = PowerKeyManager.getKeyIdentifier(powerType.getIdentifier());
+
+        Text keyName = KeyBindingUtil.getLocalizedName(keyId);
+        Text keyText = Text.literal("[").append(keyName).append("]");
+
         List<TooltipComponent> tooltips = new LinkedList<>();
-        Text keyText;
-        keyText = ((MutableText)Text.of("["))
-            .append(KeyBinding.getLocalizedName(PowerKeyManager.getKeyIdentifier(powerType.getIdentifier())).get())
-            .append(Text.of("]"));
         addLines(tooltips, Text.translatable(text, keyText), textRenderer, widthLimit);
+
         return tooltips;
+
     }
 
     @Override
