@@ -5,16 +5,14 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.networking.ModPackets;
+import io.github.apace100.origins.networking.packet.s2c.OpenOriginScreenS2CPacket;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.registry.ModComponents;
-import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.command.argument.EntityArgumentType;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -266,9 +264,9 @@ public class OriginCommand {
 	}
 
 	/**
-	 * 	Randomize the origins of the specified entities in all of the origin layers that allows to be randomized.
+	 * 	Randomize the origins of the specified entities in all the origin layers that allows to be randomized.
 	 * 	@param commandContext the command context
-	 * 	@return the number of players that had their origins randomized in all of the origin layers that allows to be randomized
+	 * 	@return the number of players that had their origins randomized in all the origin layers that allows to be randomized
 	 * 	@throws CommandSyntaxException if the entity is not found or if the entity is not an instance of {@link ServerPlayerEntity}
 	 */
 	private static int randomizeOrigins(CommandContext<ServerCommandSource> commandContext, TargetType targetType) throws CommandSyntaxException {
@@ -296,15 +294,14 @@ public class OriginCommand {
 	private static void openLayerScreen(ServerPlayerEntity target, OriginLayer originLayer) {
 
 		OriginComponent originComponent = ModComponents.ORIGIN.get(target);
-		PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
-
-		if (originLayer.isEnabled()) originComponent.setOrigin(originLayer, Origin.EMPTY);
+		if (originLayer.isEnabled()) {
+			originComponent.setOrigin(originLayer, Origin.EMPTY);
+		}
 
 		originComponent.checkAutoChoosingLayers(target, false);
 		originComponent.sync();
 
-		buffer.writeBoolean(false);
-		ServerPlayNetworking.send(target, ModPackets.OPEN_ORIGIN_SCREEN, buffer);
+		ServerPlayNetworking.send(target, new OpenOriginScreenS2CPacket(false));
 
 	}
 

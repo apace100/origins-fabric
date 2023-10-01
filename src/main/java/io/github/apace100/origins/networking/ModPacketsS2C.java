@@ -1,12 +1,12 @@
 package io.github.apace100.origins.networking;
 
-import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.OriginsClient;
-import io.github.apace100.origins.badge.Badge;
 import io.github.apace100.origins.badge.BadgeManager;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.integration.OriginDataLoadedCallback;
+import io.github.apace100.origins.networking.packet.VersionHandshakePacket;
+import io.github.apace100.origins.networking.packet.s2c.*;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
@@ -14,145 +14,100 @@ import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.screen.ChooseOriginScreen;
 import io.github.apace100.origins.screen.WaitForNextLayerScreen;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.networking.v1.ClientLoginNetworking;
+import net.fabricmc.fabric.api.client.networking.v1.ClientConfigurationNetworking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientLoginNetworkHandler;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.network.ClientPlayerEntity;
 
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
+import java.util.ArrayList;
+import java.util.Collections;
 
+@SuppressWarnings("UnstableApiUsage")
 public class ModPacketsS2C {
 
     @Environment(EnvType.CLIENT)
     public static void register() {
-        ClientLoginNetworking.registerGlobalReceiver(ModPackets.HANDSHAKE, ModPacketsS2C::handleHandshake);
+
+        ClientConfigurationNetworking.registerGlobalReceiver(VersionHandshakePacket.TYPE, ModPacketsS2C::handleHandshake);
+
         ClientPlayConnectionEvents.INIT.register(((clientPlayNetworkHandler, minecraftClient) -> {
-            ClientPlayNetworking.registerReceiver(ModPackets.OPEN_ORIGIN_SCREEN, ModPacketsS2C::openOriginScreen);
-            ClientPlayNetworking.registerReceiver(ModPackets.ORIGIN_LIST, ModPacketsS2C::receiveOriginList);
-            ClientPlayNetworking.registerReceiver(ModPackets.LAYER_LIST, ModPacketsS2C::receiveLayerList);
-            ClientPlayNetworking.registerReceiver(ModPackets.CONFIRM_ORIGIN, ModPacketsS2C::receiveOriginConfirmation);
-            ClientPlayNetworking.registerReceiver(ModPackets.BADGE_LIST, ModPacketsS2C::receiveBadgeList);
+            ClientPlayNetworking.registerReceiver(OpenOriginScreenS2CPacket.TYPE, ModPacketsS2C::openOriginScreen);
+            ClientPlayNetworking.registerReceiver(SyncOriginRegistryS2CPacket.TYPE, ModPacketsS2C::receiveOriginList);
+            ClientPlayNetworking.registerReceiver(SyncOriginLayerRegistryS2CPacket.TYPE, ModPacketsS2C::receiveLayerList);
+            ClientPlayNetworking.registerReceiver(ConfirmOriginS2CPacket.TYPE, ModPacketsS2C::receiveOriginConfirmation);
+            ClientPlayNetworking.registerReceiver(SyncBadgeRegistryS2CPacket.TYPE, ModPacketsS2C::receiveBadgeList);
         }));
+
     }
 
     @Environment(EnvType.CLIENT)
-    private static void receiveOriginConfirmation(MinecraftClient minecraftClient, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
-        OriginLayer layer = OriginLayers.getLayer(packetByteBuf.readIdentifier());
-        Origin origin = OriginRegistry.get(packetByteBuf.readIdentifier());
-        minecraftClient.execute(() -> {
-            OriginComponent component = ModComponents.ORIGIN.get(minecraftClient.player);
-            component.setOrigin(layer, origin);
-            if(minecraftClient.currentScreen instanceof WaitForNextLayerScreen) {
-                ((WaitForNextLayerScreen)minecraftClient.currentScreen).openSelection();
-            }
-        });
-    }
+    private static void receiveOriginConfirmation(ConfirmOriginS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
 
-    @Environment(EnvType.CLIENT)
-    private static CompletableFuture<PacketByteBuf> handleHandshake(MinecraftClient minecraftClient, ClientLoginNetworkHandler clientLoginNetworkHandler, PacketByteBuf packetByteBuf, Consumer<GenericFutureListener<? extends Future<? super Void>>> genericFutureListenerConsumer) {
-        PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeInt(Origins.SEMVER.length);
-        for(int i = 0; i < Origins.SEMVER.length; i++) {
-            buf.writeInt(Origins.SEMVER[i]);
+        OriginLayer layer = OriginLayers.getLayer(packet.layerId());
+        Origin origin = OriginRegistry.get(packet.originId());
+
+        OriginComponent component = ModComponents.ORIGIN.get(player);
+        component.setOrigin(layer, origin);
+
+        if (MinecraftClient.getInstance().currentScreen instanceof WaitForNextLayerScreen nextLayerScreen) {
+            nextLayerScreen.openSelection();
         }
+
+    }
+
+    @Environment(EnvType.CLIENT)
+    private static void handleHandshake(VersionHandshakePacket packet, PacketSender responseSender) {
+        responseSender.sendPacket(new VersionHandshakePacket(Origins.SEMVER));
+    }
+
+    @Environment(EnvType.CLIENT)
+    private static void openOriginScreen(OpenOriginScreenS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
+
+        ArrayList<OriginLayer> layers = new ArrayList<>();
+        OriginComponent component = ModComponents.ORIGIN.get(player);
+
+        OriginLayers.getLayers()
+            .stream()
+            .filter(ol -> ol.isEnabled() && !component.hasOrigin(ol))
+            .forEach(layers::add);
+
+        Collections.sort(layers);
+        MinecraftClient.getInstance().setScreen(new ChooseOriginScreen(layers, 0, packet.showBackground()));
+
+    }
+
+    @Environment(EnvType.CLIENT)
+    private static void receiveOriginList(SyncOriginRegistryS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
+
         OriginsClient.isServerRunningOrigins = true;
-        return CompletableFuture.completedFuture(buf);
+        OriginRegistry.reset();
+
+        packet.origins().forEach(OriginRegistry::register);
+
     }
 
     @Environment(EnvType.CLIENT)
-    private static void openOriginScreen(MinecraftClient minecraftClient, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
-        boolean showDirtBackground = packetByteBuf.readBoolean();
-        minecraftClient.execute(() -> {
-            ArrayList<OriginLayer> layers = new ArrayList<>();
-            OriginComponent component = ModComponents.ORIGIN.get(minecraftClient.player);
-            OriginLayers.getLayers().forEach(layer -> {
-                if(layer.isEnabled() && !component.hasOrigin(layer)) {
-                    layers.add(layer);
-                }
-            });
-            Collections.sort(layers);
-            minecraftClient.setScreen(new ChooseOriginScreen(layers, 0, showDirtBackground));
-        });
+    private static void receiveLayerList(SyncOriginLayerRegistryS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
+
+        OriginLayers.clear();
+        packet.layers().forEach(OriginLayers::add);
+
+        OriginDataLoadedCallback.EVENT.invoker().onDataLoaded(true);
+
     }
 
     @Environment(EnvType.CLIENT)
-    private static void receiveOriginList(MinecraftClient minecraftClient, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
-        try {
-            Identifier[] ids = new Identifier[packetByteBuf.readInt()];
-            SerializableData.Instance[] origins = new SerializableData.Instance[ids.length];
-            for(int i = 0; i < origins.length; i++) {
-                ids[i] = Identifier.tryParse(packetByteBuf.readString());
-                origins[i] = Origin.DATA.read(packetByteBuf);
-            }
-            minecraftClient.execute(() -> {
-                OriginsClient.isServerRunningOrigins = true;
-                OriginRegistry.reset();
-                for(int i = 0; i < ids.length; i++) {
-                    OriginRegistry.register(ids[i], Origin.createFromData(ids[i], origins[i]));
-                }
-            });
-        } catch (Exception e) {
-            Origins.LOGGER.error(e);
-        }
+    private static void receiveBadgeList(SyncBadgeRegistryS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
+
+        BadgeManager.clear();
+        packet.badges().forEach((id, badges) ->
+            badges.forEach(badge -> BadgeManager.putPowerBadge(id, badge))
+        );
+
     }
 
-    @Environment(EnvType.CLIENT)
-    private static void receiveLayerList(MinecraftClient minecraftClient, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
-        try {
-            int layerCount = packetByteBuf.readInt();
-            OriginLayer[] layers = new OriginLayer[layerCount];
-            for(int i = 0; i < layerCount; i++) {
-                layers[i] = OriginLayer.read(packetByteBuf);
-            }
-            minecraftClient.execute(() -> {
-                OriginLayers.clear();
-                for(int i = 0; i < layerCount; i++) {
-                    OriginLayers.add(layers[i]);
-                }
-                OriginDataLoadedCallback.EVENT.invoker().onDataLoaded(true);
-            });
-        } catch (Exception e) {
-            Origins.LOGGER.error(e);
-        }
-    }
-
-    @Environment(EnvType.CLIENT)
-    private static void receiveBadgeList(MinecraftClient minecraftClient, ClientPlayNetworkHandler clientPlayNetworkHandler, PacketByteBuf packetByteBuf, PacketSender packetSender) {
-        try {
-            HashMap<Identifier, List<Badge>> badges = new HashMap<>();
-            int count = packetByteBuf.readInt();
-            for(int i = 0; i < count; i++) {
-                Identifier powerId = packetByteBuf.readIdentifier();
-                List<Badge> badgeList = new LinkedList<>();
-                int badgeCount = packetByteBuf.readInt();
-                for(int j = 0; j < badgeCount; j++) {
-                    Badge badge = BadgeManager.REGISTRY.receiveDataObject(packetByteBuf);
-                    badgeList.add(badge);
-                }
-                badges.put(powerId, badgeList);
-            }
-            minecraftClient.execute(() -> {
-                BadgeManager.clear();
-                for(Map.Entry<Identifier, List<Badge>> badgeEntry : badges.entrySet()) {
-                    for(Badge badge : badgeEntry.getValue()) {
-                        BadgeManager.putPowerBadge(badgeEntry.getKey(), badge);
-                    }
-                }
-            });
-        } catch (Exception e) {
-            Origins.LOGGER.error(e);
-        }
-    }
 }

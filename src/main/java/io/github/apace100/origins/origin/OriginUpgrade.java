@@ -3,10 +3,18 @@ package io.github.apace100.origins.origin;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import io.github.apace100.calio.data.SerializableData;
+import io.github.apace100.calio.data.SerializableDataTypes;
+import io.github.apace100.origins.data.OriginsDataTypes;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 public class OriginUpgrade {
+
+    public static final SerializableData DATA = new SerializableData()
+        .add("condition", SerializableDataTypes.IDENTIFIER)
+        .add("origin", SerializableDataTypes.IDENTIFIER)
+        .add("announcement", SerializableDataTypes.STRING, null);
 
     private final Identifier advancementCondition;
     private final Identifier upgradeToOrigin;
@@ -31,16 +39,12 @@ public class OriginUpgrade {
     }
 
     public void write(PacketByteBuf buffer) {
-        buffer.writeIdentifier(advancementCondition);
-        buffer.writeIdentifier(upgradeToOrigin);
-        buffer.writeString(announcement);
+        OriginsDataTypes.UPGRADE.send(buffer, this);
     }
 
     public static OriginUpgrade read(PacketByteBuf buffer) {
-        Identifier condition = buffer.readIdentifier();
-        Identifier origin = buffer.readIdentifier();
-        String announcement = buffer.readString(32767);
-        return new OriginUpgrade(condition, origin, announcement);
+        SerializableData.Instance data = DATA.read(buffer);
+        return new OriginUpgrade(data.get("condition"), data.get("origin"), data.get("announcement"));
     }
 
     public static OriginUpgrade fromJson(JsonElement jsonElement) {
@@ -66,4 +70,5 @@ public class OriginUpgrade {
             throw new JsonParseException("Origin upgrade JSON requires \"condition\" string and \"origin\" string.");
         }
     }
+
 }

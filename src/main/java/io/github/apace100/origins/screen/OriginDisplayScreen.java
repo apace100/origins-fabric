@@ -79,37 +79,45 @@ public class OriginDisplayScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(DrawContext context) {
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
         if(showDirtBackground) {
             super.renderBackgroundTexture(context);
         } else {
-            super.renderBackground(context);
+            super.renderBackground(context, mouseX, mouseY, delta);
         }
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+
         renderedBadges.clear();
         this.time += delta;
-        this.renderBackground(context);
+
+        this.renderBackground(context, mouseX, mouseY, delta);
         this.renderOriginWindow(context, mouseX, mouseY);
         super.render(context, mouseX, mouseY, delta);
+
         if(origin != null) {
             renderScrollbar(context, mouseX, mouseY);
             renderBadgeTooltip(context, mouseX, mouseY);
         }
+
     }
 
     private void renderScrollbar(DrawContext context, int mouseX, int mouseY) {
+
         if(!canScroll()) {
             return;
         }
+
         context.drawTexture(WINDOW, guiLeft + 155, guiTop + 35, 188, 24, 8, 134);
+
         int scrollbarY = 36;
         int maxScrollbarOffset = 141;
         int u = 176;
         float part = scrollPos / (float)currentMaxScroll;
-        scrollbarY += (maxScrollbarOffset - scrollbarY) * part;
+        scrollbarY += (int) ((maxScrollbarOffset - scrollbarY) * part);
+
         if(scrolling) {
             u += 6;
         } else if(mouseX >= guiLeft + 156 && mouseX < guiLeft + 156 + 6) {
@@ -117,7 +125,9 @@ public class OriginDisplayScreen extends Screen {
                 u += 6;
             }
         }
+
         context.drawTexture(WINDOW, guiLeft + 156, guiTop + scrollbarY, u, 24, 6, 27);
+
     }
 
     private boolean scrolling = false;
@@ -141,7 +151,7 @@ public class OriginDisplayScreen extends Screen {
             int scrollbarY = 36;
             int maxScrollbarOffset = 141;
             float part = scrollPos / (float)currentMaxScroll;
-            scrollbarY += (maxScrollbarOffset - scrollbarY) * part;
+            scrollbarY += (int) ((maxScrollbarOffset - scrollbarY) * part);
             if(mouseX >= guiLeft + 156 && mouseX < guiLeft + 156 + 6) {
                 if(mouseY >= guiTop + scrollbarY && mouseY < guiTop + scrollbarY + 27) {
                     scrolling = true;
@@ -158,7 +168,7 @@ public class OriginDisplayScreen extends Screen {
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         if(this.scrolling) {
             int delta = (int)(mouseY - mouseDragStart);
-            int newScrollPos = (int)Math.max(36, Math.min(141, scrollDragStart + delta));
+            int newScrollPos = Math.max(36, Math.min(141, scrollDragStart + delta));
             float part = (newScrollPos - 36) / (float)(141 - 36);
             scrollPos = (int)(part * currentMaxScroll);
         }
@@ -241,9 +251,9 @@ public class OriginDisplayScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double x, double y, double z) {
-        boolean retValue = super.mouseScrolled(x, y, z);
-        int np = this.scrollPos - (int)z * 4;
+    public boolean mouseScrolled(double x, double y, double horizontal, double vertical) {
+        boolean retValue = super.mouseScrolled(x, y, horizontal, vertical);
+        int np = this.scrollPos - (int) vertical * 4;
         this.scrollPos = np < 0 ? 0 : Math.min(np, this.currentMaxScroll);
         return retValue;
     }

@@ -11,6 +11,20 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
+	exclusiveContent {
+
+		forRepository {
+			maven {
+				name = "Modrinth"
+				url = "https://api.modrinth.com/maven"
+			}
+		}
+
+		filter {
+			includeGroup "maven.modrinth"
+		}
+
+	}
 	maven {
 		name = 'Ladysnake Mods'
 		url = 'https://maven.ladysnake.org/releases'
@@ -40,6 +54,7 @@ repositories {
 }
 
 dependencies {
+
 	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -48,8 +63,8 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modApi "com.github.apace100:apoli:v${project.apoli_version}"
-	include "com.github.apace100:apoli:v${project.apoli_version}"
+	modApi "com.github.apace100:apoli:${project.apoli_version}"
+	include "com.github.apace100:apoli:${project.apoli_version}"
 
 	modApi("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cca_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
@@ -63,8 +78,8 @@ dependencies {
 	}
 
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-
 	include modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}")
+
 }
 
 processResources {

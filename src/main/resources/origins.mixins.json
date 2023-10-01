@@ -7,7 +7,6 @@
 		"ArgumentTypesMixin",
 		"ConduitOnLandMixin",
 		"LikeWaterMixin",
-		"LoginMixin",
 		"NoCobwebSlowdownMixin",
 		"OriginUpgradeMixin",
 		"ScareCreepersMixin",

@@ -1,13 +1,13 @@
 package io.github.apace100.origins.screen;
 
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.networking.ModPackets;
+import io.github.apace100.origins.networking.packet.c2s.ChooseOriginC2SPacket;
+import io.github.apace100.origins.networking.packet.c2s.ChooseRandomOriginC2SPacket;
 import io.github.apace100.origins.origin.Impact;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.registry.ModItems;
-import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -15,7 +15,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -27,7 +26,7 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 
 	private final ArrayList<OriginLayer> layerList;
 	private int currentLayerIndex = 0;
-	private int currentOrigin = 0;
+	private int currentOriginIndex = 0;
 	private final List<Origin> originSelection;
 	private int maxSelection = 0;
 
@@ -82,27 +81,29 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 		super.init();
 		if(maxSelection > 1) {
 			addDrawableChild(ButtonWidget.builder(Text.of("<"), b -> {
-				currentOrigin = (currentOrigin - 1 + maxSelection) % maxSelection;
+				currentOriginIndex = (currentOriginIndex - 1 + maxSelection) % maxSelection;
 				Origin newOrigin = getCurrentOriginInternal();
 				showOrigin(newOrigin, layerList.get(currentLayerIndex), newOrigin == randomOrigin);
 			}).dimensions(guiLeft - 40, this.height / 2 - 10, 20, 20).build());
 			addDrawableChild(ButtonWidget.builder(Text.of(">"), b -> {
-				currentOrigin = (currentOrigin + 1) % maxSelection;
+				currentOriginIndex = (currentOriginIndex + 1) % maxSelection;
 				Origin newOrigin = getCurrentOriginInternal();
 				showOrigin(newOrigin, layerList.get(currentLayerIndex), newOrigin == randomOrigin);
 			}).dimensions(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20).build());
 		}
 		addDrawableChild(ButtonWidget.builder(Text.translatable(Origins.MODID + ".gui.select"), b -> {
-			PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-			if(currentOrigin == originSelection.size()) {
-				buf.writeString(layerList.get(currentLayerIndex).getIdentifier().toString());
-				ClientPlayNetworking.send(ModPackets.CHOOSE_RANDOM_ORIGIN, buf);
+
+			Identifier originId = getCurrentOrigin().getIdentifier();
+			Identifier layerId = layerList.get(currentLayerIndex).getIdentifier();
+
+			if (currentOriginIndex == originSelection.size()) {
+				ClientPlayNetworking.send(new ChooseRandomOriginC2SPacket(layerId));
 			} else {
-				buf.writeString(getCurrentOrigin().getIdentifier().toString());
-				buf.writeString(layerList.get(currentLayerIndex).getIdentifier().toString());
-				ClientPlayNetworking.send(ModPackets.CHOOSE_ORIGIN, buf);
+				ClientPlayNetworking.send(new ChooseOriginC2SPacket(layerId, originId));
 			}
+
 			openNextLayerScreen();
+
 		}).dimensions(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20).build());
 	}
 
@@ -115,13 +116,13 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 	}
 
 	private Origin getCurrentOriginInternal() {
-		if(currentOrigin == originSelection.size()) {
+		if(currentOriginIndex == originSelection.size()) {
 			if(randomOrigin == null) {
 				initRandomOrigin();
 			}
 			return randomOrigin;
 		}
-		return originSelection.get(currentOrigin);
+		return originSelection.get(currentOriginIndex);
 	}
 
 	private void initRandomOrigin() {

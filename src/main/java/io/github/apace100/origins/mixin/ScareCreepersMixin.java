@@ -32,7 +32,7 @@ public abstract class ScareCreepersMixin extends HostileEntity {
 
     @Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/goal/GoalSelector;add(ILnet/minecraft/entity/ai/goal/Goal;)V", ordinal = 8), method = "initGoals")
     private void redirectTargetGoal(GoalSelector goalSelector, int priority, Goal goal) {
-        Goal newGoal = new ActiveTargetGoal<PlayerEntity>(this, PlayerEntity.class, 10, true, false, e -> !OriginsPowerTypes.SCARE_CREEPERS.isActive(e));
+        Goal newGoal = new ActiveTargetGoal<>(this, PlayerEntity.class, 10, true, false, e -> !OriginsPowerTypes.SCARE_CREEPERS.isActive(e));
         goalSelector.add(priority, newGoal);
     }
 }

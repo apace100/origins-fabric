@@ -13,7 +13,7 @@ import io.github.apace100.origins.data.OriginsDataTypes;
 import io.github.apace100.origins.registry.ModComponents;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.advancement.Advancement;
+import net.minecraft.advancement.AdvancementEntry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -39,8 +39,8 @@ public class Origin {
         .add("impact", OriginsDataTypes.IMPACT, Impact.NONE)
         .add("loading_priority", SerializableDataTypes.INT, 0)
         .add("upgrades", OriginsDataTypes.UPGRADES, null)
-        .add("name", SerializableDataTypes.STRING, "")
-        .add("description", SerializableDataTypes.STRING, "");
+        .add("name", SerializableDataTypes.TEXT, null)
+        .add("description", SerializableDataTypes.TEXT, null);
 
     public static final Origin EMPTY;
 
@@ -81,6 +81,9 @@ public class Origin {
     private String nameTranslationKey;
     private String descriptionTranslationKey;
 
+    private Text name;
+    private Text description;
+
     public Origin(Identifier id, ItemStack icon, Impact impact, int order, int loadingPriority) {
         this.identifier = id;
         this.displayItem = icon.copy();
@@ -96,16 +99,13 @@ public class Origin {
     }
 
     public boolean hasUpgrade() {
-        return this.upgrades.size() > 0;
+        return !this.upgrades.isEmpty();
     }
 
-    public Optional<OriginUpgrade> getUpgrade(Advancement advancement) {
-        for(OriginUpgrade upgrade : upgrades) {
-            if(upgrade.getAdvancementCondition().equals(advancement.getId())) {
-                return Optional.of(upgrade);
-            }
-        }
-        return Optional.empty();
+    public Optional<OriginUpgrade> getUpgrade(AdvancementEntry advancement) {
+        return upgrades.stream()
+            .filter(ou -> ou.getAdvancementCondition().equals(advancement.id()))
+            .findFirst();
     }
 
     public Identifier getIdentifier() {
@@ -136,8 +136,18 @@ public class Origin {
         return this;
     }
 
+    public Origin setNameText(Text name) {
+        this.name = name;
+        return this;
+    }
+
     public Origin setDescription(String description) {
         this.descriptionTranslationKey = description;
+        return this;
+    }
+
+    public Origin setDescriptionText(Text description) {
+        this.description = description;
         return this;
     }
 
@@ -191,7 +201,7 @@ public class Origin {
     }
 
     public MutableText getName() {
-        return Text.translatable(getOrCreateNameTranslationKey());
+        return name != null ? name.copy() : Text.translatable(getOrCreateNameTranslationKey());
     }
 
     public String getOrCreateDescriptionTranslationKey() {
@@ -203,7 +213,7 @@ public class Origin {
     }
 
     public MutableText getDescription() {
-        return Text.translatable(getOrCreateDescriptionTranslationKey());
+        return description != null ? description.copy() : Text.translatable(getOrCreateDescriptionTranslationKey());
     }
 
     public int getOrder() {
@@ -218,19 +228,21 @@ public class Origin {
         data.set("loading_priority", loadingPriority);
         data.set("unchoosable", !this.isChoosable);
         data.set("powers", powerTypes.stream().map(PowerType::getIdentifier).collect(Collectors.toList()));
-        data.set("name", getOrCreateNameTranslationKey());
-        data.set("description", getOrCreateDescriptionTranslationKey());
+        data.set("name", getName());
+        data.set("description", getDescription());
         data.set("upgrades", upgrades);
         DATA.write(buffer, data);
     }
 
     @SuppressWarnings("unchecked")
     public static Origin createFromData(Identifier id, SerializableData.Instance data) {
+
         Origin origin = new Origin(id,
-            (ItemStack)data.get("icon"),
-            (Impact)data.get("impact"),
+            data.get("icon"),
+            data.get("impact"),
             data.getInt("order"),
-            data.getInt("loading_priority"));
+            data.getInt("loading_priority")
+        );
 
         if(data.getBoolean("unchoosable")) {
             origin.setUnchoosable();
@@ -238,7 +250,7 @@ public class Origin {
 
         ((List<Identifier>)data.get("powers")).forEach(powerId -> {
             try {
-                PowerType powerType = PowerTypeRegistry.get(powerId);
+                PowerType<?> powerType = PowerTypeRegistry.get(powerId);
                 origin.add(powerType);
             } catch(IllegalArgumentException e) {
                 Origins.LOGGER.error("Origin \"" + id + "\" contained unregistered power: \"" + powerId + "\"");
@@ -249,8 +261,8 @@ public class Origin {
             ((List<OriginUpgrade>)data.get("upgrades")).forEach(origin::addUpgrade);
         }
 
-        origin.setName(data.getString("name"));
-        origin.setDescription(data.getString("description"));
+        origin.setNameText(data.get("name"));
+        origin.setDescriptionText(data.get("description"));
 
         return origin;
     }
@@ -267,13 +279,13 @@ public class Origin {
 
     @Override
     public String toString() {
-        String str = "Origin(" + identifier.toString() + ")[";
+        StringBuilder str = new StringBuilder("Origin(" + identifier.toString() + ")[");
         for(PowerType<?> pt : powerTypes) {
-            str += PowerTypeRegistry.getId(pt);
-            str += ",";
+            str.append(PowerTypeRegistry.getId(pt));
+            str.append(",");
         }
-        str = str.substring(0, str.length() - 1) + "]";
-        return str;
+        str = new StringBuilder(str.substring(0, str.length() - 1) + "]");
+        return str.toString();
     }
 
     @Override
@@ -288,4 +300,5 @@ public class Origin {
         }
         return false;
     }
+
 }

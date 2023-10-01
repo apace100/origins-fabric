@@ -4,6 +4,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
 public class OriginRegistry {
@@ -44,6 +45,10 @@ public class OriginRegistry {
 
     public static Iterable<Origin> values() {
         return idToOrigin.values();
+    }
+
+    public static void forEach(BiConsumer<Identifier, Origin> processor) {
+        idToOrigin.forEach(processor);
     }
 
     public static Origin get(Identifier id) {

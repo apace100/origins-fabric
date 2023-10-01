@@ -11,10 +11,13 @@ import net.minecraft.util.collection.DefaultedList;
 /**A {@link TooltipComponent} used for {@link io.github.apace100.origins.badge.CraftingRecipeBadge}
  * Draws a snapshot of a 3x3 crafting recipe in the tooltip*/
 public class CraftingRecipeTooltipComponent implements TooltipComponent {
-    private final int recipeWidth;
+
+    private static final Identifier TEXTURE = Origins.identifier("textures/gui/tooltip/recipe_tooltip.png");
+
     private final DefaultedList<ItemStack> inputs;
     private final ItemStack output;
-    private static final Identifier TEXTURE = Origins.identifier("textures/gui/tooltip/recipe_tooltip.png");
+
+    private final int recipeWidth;
 
     public CraftingRecipeTooltipComponent(int recipeWidth, DefaultedList<ItemStack> inputs, ItemStack output) {
         this.recipeWidth = recipeWidth;
