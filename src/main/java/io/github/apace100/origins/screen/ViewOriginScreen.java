@@ -18,6 +18,7 @@ import net.minecraft.util.Pair;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ViewOriginScreen extends OriginDisplayScreen {
 
@@ -28,7 +29,7 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 	public ViewOriginScreen() {
 		super(Text.translatable(Origins.MODID + ".screen.view_origin"), false);
 		PlayerEntity player = MinecraftClient.getInstance().player;
-		HashMap<OriginLayer, Origin> origins = ModComponents.ORIGIN.get(player).getOrigins();
+		Map<OriginLayer, Origin> origins = ModComponents.ORIGIN.get(player).getOrigins();
 		originLayers = new ArrayList<>(origins.size());
 
 		origins.forEach((layer, origin) -> {

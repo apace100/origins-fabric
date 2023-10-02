@@ -21,6 +21,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.profiler.Profiler;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -73,8 +74,45 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
     private void postLoading(ServerPlayerEntity player, boolean init) {
 
         OriginComponent component = ModComponents.ORIGIN.get(player);
-        OriginComponent.sync(player);
+        boolean mismatch = false;
 
+        for (Map.Entry<OriginLayer, Origin> entry : component.getOrigins().entrySet()) {
+
+            OriginLayer oldLayer = entry.getKey();
+            Origin oldOrigin = entry.getValue();
+
+            if (!OriginRegistry.contains(oldOrigin) || !OriginLayers.contains(oldLayer)) {
+
+                if (OriginLayers.contains(oldLayer)) {
+                    Origins.LOGGER.error("Removed unregistered origin \"{}\" from origin layer \"{}\" from player {}!", oldOrigin.getIdentifier(), oldLayer.getIdentifier(), player.getName().getString());
+                    component.setOrigin(oldLayer, Origin.EMPTY);
+                } else {
+                    Origins.LOGGER.error("Removed unregistered origin layer \"{}\" from player {}!", oldLayer.getIdentifier(), player.getName().getString());
+                    component.removeLayer(oldLayer);
+                }
+
+                mismatch = true;
+                continue;
+
+            }
+
+            Origin newOrigin = OriginRegistry.get(oldOrigin.getIdentifier());
+            if (oldOrigin.toJson().equals(newOrigin.toJson())) {
+                continue;
+            }
+
+            Origins.LOGGER.warn("Mismatched data fields of origin \"{}\" from player {}! Updating...", oldOrigin.getIdentifier(), player.getName().getString());
+            mismatch = true;
+
+            component.setOrigin(oldLayer, newOrigin);
+
+        }
+
+        if (mismatch) {
+            Origins.LOGGER.info("Finished updating origin data of player {}!", player.getName().getString());
+        }
+
+        OriginComponent.sync(player);
         if (component.hasAllOrigins()) {
             return;
         }
@@ -106,7 +144,7 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
             try {
 
              minLayerPriority = Integer.MIN_VALUE;
-             Origins.LOGGER.info("Trying to read origin layer file \"{}\"", fileId);
+             Origins.LOGGER.info("Trying to read origin layer file \"{}\" from data pack [{}]", fileId, packName);
 
              JsonObject jsonObject = jsonElement.getAsJsonObject();
              boolean replace = JsonHelper.getBoolean(jsonObject, "replace", false);
@@ -132,7 +170,7 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
             }
         }));
 
-        Origins.LOGGER.info("Loaded {} origin layers. Merging...", loadedLayers.size());
+        Origins.LOGGER.info("Finished loading origin layers. Merging similar origin layers...");
         loadedLayers.forEach((id, prioritizedUnparsedLayers) -> {
 
             OriginLayer[] layer = {null};
@@ -162,6 +200,11 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
 
     }
 
+    @Nullable
+    public static OriginLayer getNullableLayer(Identifier id) {
+        return LAYERS.get(id);
+    }
+
     public static OriginLayer getLayer(Identifier id) {
 
         if (!LAYERS.containsKey(id)) {
@@ -184,6 +227,14 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
 
     public static Collection<OriginLayer> getLayers() {
         return LAYERS.values();
+    }
+
+    public static boolean contains(OriginLayer layer) {
+        return contains(layer.getIdentifier());
+    }
+
+    public static boolean contains(Identifier id) {
+        return LAYERS.containsKey(id);
     }
 
     public static int size() {

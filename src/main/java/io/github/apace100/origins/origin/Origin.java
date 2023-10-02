@@ -21,10 +21,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class Origin {
 
@@ -53,14 +50,14 @@ public class Origin {
         return OriginRegistry.register(origin);
     }
 
-    public static HashMap<OriginLayer, Origin> get(Entity entity) {
+    public static Map<OriginLayer, Origin> get(Entity entity) {
         if(entity instanceof PlayerEntity) {
             return get((PlayerEntity)entity);
         }
         return new HashMap<>();
     }
 
-    public static HashMap<OriginLayer, Origin> get(PlayerEntity player) {
+    public static Map<OriginLayer, Origin> get(PlayerEntity player) {
         return ModComponents.ORIGIN.get(player).getOrigins();
     }
 
@@ -280,6 +277,10 @@ public class Origin {
 
     public static Origin fromJson(Identifier id, JsonObject json) {
         return createFromData(id, DATA.read(json));
+    }
+
+    public JsonObject toJson() {
+        return DATA.write(toData());
     }
 
     @Override

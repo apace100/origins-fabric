@@ -14,24 +14,20 @@ import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public interface OriginComponent extends AutoSyncedComponent {
 
-	boolean hasOrigin(OriginLayer layer);
-	boolean hasAllOrigins();
-
-	HashMap<OriginLayer, Origin> getOrigins();
+	Map<OriginLayer, Origin> getOrigins();
 	Origin getOrigin(OriginLayer layer);
 
+	boolean hasOrigin(OriginLayer layer);
+	boolean hasAllOrigins();
 	boolean hadOriginBefore();
 
+	void removeLayer(OriginLayer layer);
 	void setOrigin(OriginLayer layer, Origin origin);
-
 	void sync();
 
 	@Deprecated(forRemoval = true)

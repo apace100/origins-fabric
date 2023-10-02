@@ -15,15 +15,15 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class PlayerOriginComponent implements OriginComponent {
 
-    private PlayerEntity player;
-    private HashMap<OriginLayer, Origin> origins = new HashMap<>();
+    private final Map<OriginLayer, Origin> origins = new HashMap<>();
+    private final PlayerEntity player;
 
     private boolean hadOriginBefore = false;
 
@@ -33,26 +33,27 @@ public class PlayerOriginComponent implements OriginComponent {
 
     @Override
     public boolean hasAllOrigins() {
-        return OriginLayers.getLayers().stream().allMatch(layer -> {
-            return !layer.isEnabled() || layer.getOrigins(player).size() == 0 || (origins.containsKey(layer) && origins.get(layer) != null && origins.get(layer) != Origin.EMPTY);
-        });
+        return OriginLayers.getLayers()
+            .stream()
+            .allMatch(layer -> !layer.isEnabled()
+                            || layer.getOrigins().isEmpty()
+                            || (origins.containsKey(layer) && origins.get(layer) != Origin.EMPTY));
     }
 
     @Override
-    public HashMap<OriginLayer, Origin> getOrigins() {
+    public Map<OriginLayer, Origin> getOrigins() {
         return origins;
     }
 
     @Override
     public boolean hasOrigin(OriginLayer layer) {
-        return origins != null && origins.containsKey(layer) && origins.get(layer) != null && origins.get(layer) != Origin.EMPTY;
+        return origins.containsKey(layer)
+            && origins.get(layer) != null
+            && origins.get(layer) != Origin.EMPTY;
     }
 
     @Override
     public Origin getOrigin(OriginLayer layer) {
-        if(!origins.containsKey(layer)) {
-            return null;
-        }
         return origins.get(layer);
     }
 
@@ -62,23 +63,34 @@ public class PlayerOriginComponent implements OriginComponent {
     }
 
     @Override
+    public void removeLayer(OriginLayer layer) {
+        origins.remove(layer);
+    }
+
+    @Override
     public void setOrigin(OriginLayer layer, Origin origin) {
+
         Origin oldOrigin = getOrigin(layer);
-        if(oldOrigin == origin) {
+        if (origin == oldOrigin) {
             return;
         }
-        this.origins.put(layer, origin);
+
         PowerHolderComponent powerComponent = PowerHolderComponent.KEY.get(player);
         grantPowersFromOrigin(origin, powerComponent);
-        if(oldOrigin != null) {
+        this.origins.put(layer, origin);
+
+        if (oldOrigin != null && !origin.getIdentifier().equals(oldOrigin.getIdentifier())) {
             powerComponent.removeAllPowersFromSource(oldOrigin.getIdentifier());
         }
-        if(this.hasAllOrigins()) {
+
+        if (this.hasAllOrigins()) {
             this.hadOriginBefore = true;
         }
-        if(player instanceof ServerPlayerEntity spe) {
+
+        if (player instanceof ServerPlayerEntity spe) {
             ChoseOriginCriterion.INSTANCE.trigger(spe, origin);
         }
+
     }
 
     private void grantPowersFromOrigin(Origin origin, PowerHolderComponent powerComponent) {
@@ -91,100 +103,119 @@ public class PlayerOriginComponent implements OriginComponent {
     }
 
     private void revokeRemovedPowers(Origin origin, PowerHolderComponent powerComponent) {
-        Identifier source = origin.getIdentifier();
-        List<PowerType<?>> powersByOrigin = powerComponent.getPowersFromSource(source);
-        powersByOrigin.stream().filter(p -> !origin.hasPowerType(p)).forEach(p -> powerComponent.removePower(p, source));
+        Identifier sourceId = origin.getIdentifier();
+        powerComponent.getPowersFromSource(sourceId)
+            .stream()
+            .filter(pt -> !origin.hasPowerType(pt))
+            .forEach(pt -> powerComponent.removePower(pt, sourceId));
     }
 
     @Override
-    public void readFromNbt(NbtCompound compoundTag) {
-        if(player == null) {
-            Origins.LOGGER.error("Player was null in `fromTag`! This is a bug!");
+    public void readFromNbt(@NotNull NbtCompound compoundTag) {
+
+        if (player == null) {
+            Origins.LOGGER.error("Player was null in PlayerOriginComponent#fromTag! This is not supposed to happen D:");
+            return;
         }
 
-        this.origins.clear();
+        PowerHolderComponent powerComponent = PowerHolderComponent.KEY.get(player);
+        origins.clear();
 
-        if(compoundTag.contains("Origin")) {
+        //  Migrate origin data from old versions
+        if (compoundTag.contains("Origin")) {
             try {
-                OriginLayer defaultOriginLayer = OriginLayers.getLayer(new Identifier(Origins.MODID, "origin"));
-                this.origins.put(defaultOriginLayer, OriginRegistry.get(Identifier.tryParse(compoundTag.getString("Origin"))));
-            } catch(IllegalArgumentException e) {
-                Origins.LOGGER.warn("Player " + player.getDisplayName().getContent() + " had old origin which could not be migrated: " + compoundTag.getString("Origin"));
+
+                OriginLayer defaultOriginLayer = OriginLayers.getLayer(Origins.identifier("origin"));
+                origins.put(defaultOriginLayer, OriginRegistry.get(new Identifier(compoundTag.getString("Origin"))));
+
+            } catch (Exception ignored) {
+                Origins.LOGGER.warn("Player {} had old origin which could not be migrated: {}", player.getName().getString(), compoundTag.getString("Origin"));
             }
         } else {
-            NbtList originLayerList = (NbtList) compoundTag.get("OriginLayers");
-            if(originLayerList != null) {
-                for(int i = 0; i < originLayerList.size(); i++) {
-                    NbtCompound layerTag = originLayerList.getCompound(i);
-                    Identifier layerId = Identifier.tryParse(layerTag.getString("Layer"));
-                    OriginLayer layer = null;
-                    try {
-                        layer = OriginLayers.getLayer(layerId);
-                    } catch(IllegalArgumentException e) {
-                        Origins.LOGGER.warn("Could not find origin layer with id " + layerId.toString() + ", which existed on the data of player " + player.getDisplayName().getContent() + ".");
-                    }
-                    if(layer != null) {
-                        Identifier originId = Identifier.tryParse(layerTag.getString("Origin"));
-                        Origin origin = null;
-                        try {
-                            origin = OriginRegistry.get(originId);
-                        } catch(IllegalArgumentException e) {
-                            Origins.LOGGER.warn("Could not find origin with id " + originId.toString() + ", which existed on the data of player " + player.getDisplayName().getContent() + ".");
-                            PowerHolderComponent powerComponent = PowerHolderComponent.KEY.get(player);
-                            powerComponent.removeAllPowersFromSource(originId);
-                        }
-                        if(origin != null) {
-                            if(!layer.contains(origin) && !origin.isSpecial()) {
-                                Origins.LOGGER.warn("Origin with id " + origin.getIdentifier().toString() + " is not in layer " + layer.getIdentifier().toString() + " and is not special, but was found on " + player.getDisplayName().getContent() + ", setting to EMPTY.");
-                                origin = Origin.EMPTY;
-                                PowerHolderComponent powerComponent = PowerHolderComponent.KEY.get(player);
-                                powerComponent.removeAllPowersFromSource(originId);
-                            }
-                            this.origins.put(layer, origin);
-                        }
-                    }
-                }
-            }
-        }
-        this.hadOriginBefore = compoundTag.getBoolean("HadOriginBefore");
 
-        if(!player.getWorld().isClient) {
-            PowerHolderComponent powerComponent = PowerHolderComponent.KEY.get(player);
-            for(Origin origin : origins.values()) {
-                // Grants powers only if the player doesn't have them yet from the specific Origin source.
-                // Needed in case the origin was set before the update to Apoli happened.
-                grantPowersFromOrigin(origin, powerComponent);
-            }
-            for(Origin origin : origins.values()) {
-                revokeRemovedPowers(origin, powerComponent);
+            NbtList originLayersNbt = compoundTag.getList("OriginLayers", NbtElement.COMPOUND_TYPE);
+            for (int i = 0; i < originLayersNbt.size(); i++) {
+
+                NbtCompound originLayerNbt = originLayersNbt.getCompound(i);
+                try {
+
+                    Identifier layerId = new Identifier(originLayerNbt.getString("Layer"));
+                    Identifier originId = new Identifier(originLayerNbt.getString("Origin"));
+
+                    OriginLayer layer = OriginLayers.getLayer(layerId);
+                    Origin origin = OriginRegistry.get(originId);
+
+                    origins.put(layer, origin);
+
+                    if (layer.contains(origin) || origin.isSpecial()) {
+                        continue;
+                    }
+
+                    Origins.LOGGER.warn("Origin \"{}\" is not in origin layer \"{}\" and is not considered special, but was found on player {}!", originId, layerId, player.getName().getString());
+
+                    powerComponent.removeAllPowersFromSource(originId);
+                    origins.put(layer, Origin.EMPTY);
+
+                } catch (Exception e) {
+                    Origins.LOGGER.error("There was a problem trying to read origin NBT data of player {}: {}", player.getName().getString(), e.getMessage());
+                }
+
             }
 
-            // Compatibility with old worlds:
-            // Loads power data from Origins tag, whereas new versions
-            // store the data in the Apoli tag.
-            if(compoundTag.contains("Powers")) {
-                NbtList powerList = (NbtList) compoundTag.get("Powers");
-                for(int i = 0; i < powerList.size(); i++) {
-                    NbtCompound powerTag = powerList.getCompound(i);
-                    Identifier powerTypeId = Identifier.tryParse(powerTag.getString("Type"));
-                    try {
-                        PowerType<?> type = PowerTypeRegistry.get(powerTypeId);
-                        if(powerComponent.hasPower(type)) {
-                            NbtElement data = powerTag.get("Data");
-                            try {
-                                powerComponent.getPower(type).fromTag(data);
-                            } catch(ClassCastException e) {
-                                // Occurs when power was overriden by data pack since last world load
-                                // to be a power type which uses different data class.
-                                Origins.LOGGER.warn("Data type of \"" + powerTypeId + "\" changed, skipping data for that power on player " + player.getName().getContent());
-                            }
-                        }
-                    } catch(IllegalArgumentException e) {
-                        Origins.LOGGER.warn("Power data of unregistered power \"" + powerTypeId + "\" found on player, skipping...");
-                    }
-                }
-            }
         }
+
+        hadOriginBefore = compoundTag.getBoolean("HadOriginBefore");
+        if (player.getWorld().isClient) {
+            return;
+        }
+
+        for (Origin origin : origins.values()) {
+            //  Grant powers only if the player doesn't have them yet from the specific Origin source.
+            //  Needed in case the origin was set before the update to Apoli happened.
+            grantPowersFromOrigin(origin, powerComponent);
+        }
+
+        for (Origin origin : origins.values()) {
+            revokeRemovedPowers(origin, powerComponent);
+        }
+
+        //  Compatibility with old worlds. Load power data from Origins' NBT, whereas in new versions, power data is
+        //  stored in Apoli's NBT
+        if (!compoundTag.contains("Powers")) {
+            return;
+        }
+
+        NbtList legacyPowersNbt = compoundTag.getList("Powers", NbtElement.COMPOUND_TYPE);
+        for (int i = 0; i < legacyPowersNbt.size(); i++) {
+
+            NbtCompound legacyPowerNbt = legacyPowersNbt.getCompound(i);
+            String legacyPowerString = legacyPowerNbt.getString("Type");
+
+            try {
+
+                Identifier legacyPowerId = new Identifier(legacyPowerString);
+                PowerType<?> legacyPowerType = PowerTypeRegistry.get(legacyPowerId);
+
+                if (!powerComponent.hasPower(legacyPowerType)) {
+                    continue;
+                }
+
+                try {
+                    NbtElement legacyPowerData = legacyPowerNbt.get("Data");
+                    powerComponent.getPower(legacyPowerType).fromTag(legacyPowerData);
+                } catch (ClassCastException e) {
+                    //  Occurs when the power was overridden by a data pack since last world load
+                    //  where the overridden power now uses different data classes
+                    Origins.LOGGER.warn("Data type of power \"{}\" changed, skipping data for that power on entity {}", legacyPowerId, player.getName().getString());
+                }
+
+
+            } catch (IllegalArgumentException e) {
+                Origins.LOGGER.warn("Power data of unregistered power \"{}\" found on player {}, skipping...", legacyPowerString, player.getName().getString());
+            }
+
+        }
+
     }
 
     @Override
@@ -193,20 +224,28 @@ public class PlayerOriginComponent implements OriginComponent {
     }
 
     @Override
-    public void writeToNbt(NbtCompound compoundTag) {
-        NbtList originLayerList = new NbtList();
-        for(Map.Entry<OriginLayer, Origin> entry : origins.entrySet()) {
-            NbtCompound layerTag = new NbtCompound();
-            layerTag.putString("Layer", entry.getKey().getIdentifier().toString());
-            layerTag.putString("Origin", entry.getValue().getIdentifier().toString());
-            originLayerList.add(layerTag);
-        }
-        compoundTag.put("OriginLayers", originLayerList);
-        compoundTag.putBoolean("HadOriginBefore", this.hadOriginBefore);
+    public void writeToNbt(@NotNull NbtCompound rootNbt) {
+
+        NbtList originLayersNbt = new NbtList();
+        origins.forEach((layer, origin) -> {
+
+            NbtCompound originLayerNbt = new NbtCompound();
+
+            originLayerNbt.putString("Layer", layer.getIdentifier().toString());
+            originLayerNbt.putString("Origin", origin.getIdentifier().toString());
+
+            originLayersNbt.add(originLayerNbt);
+
+        });
+
+        rootNbt.put("OriginLayers", originLayersNbt);
+        rootNbt.putBoolean("HadOriginBefore", hadOriginBefore);
+
     }
 
     @Override
     public void sync() {
         OriginComponent.sync(this.player);
     }
+
 }
