@@ -1,7 +1,7 @@
 package io.github.apace100.origins.content;
 
 import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.networking.packet.s2c.OpenOriginScreenS2CPacket;
+import io.github.apace100.origins.networking.packet.s2c.OpenChooseOriginScreenS2CPacket;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
@@ -58,7 +58,7 @@ public class OrbOfOriginItem extends Item {
             component.checkAutoChoosingLayers(user, false);
             component.sync();
 
-            ServerPlayNetworking.send((ServerPlayerEntity) user, new OpenOriginScreenS2CPacket(false));
+            ServerPlayNetworking.send((ServerPlayerEntity) user, new OpenChooseOriginScreenS2CPacket(false));
 
         }
         if(!user.isCreative()) {

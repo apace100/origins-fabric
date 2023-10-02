@@ -7,10 +7,7 @@ import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.integration.OriginDataLoadedCallback;
 import io.github.apace100.origins.networking.packet.VersionHandshakePacket;
 import io.github.apace100.origins.networking.packet.s2c.*;
-import io.github.apace100.origins.origin.Origin;
-import io.github.apace100.origins.origin.OriginLayer;
-import io.github.apace100.origins.origin.OriginLayers;
-import io.github.apace100.origins.origin.OriginRegistry;
+import io.github.apace100.origins.origin.*;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.screen.ChooseOriginScreen;
 import io.github.apace100.origins.screen.WaitForNextLayerScreen;
@@ -35,7 +32,7 @@ public class ModPacketsS2C {
         ClientConfigurationNetworking.registerGlobalReceiver(VersionHandshakePacket.TYPE, ModPacketsS2C::handleHandshake);
 
         ClientPlayConnectionEvents.INIT.register(((clientPlayNetworkHandler, minecraftClient) -> {
-            ClientPlayNetworking.registerReceiver(OpenOriginScreenS2CPacket.TYPE, ModPacketsS2C::openOriginScreen);
+            ClientPlayNetworking.registerReceiver(OpenChooseOriginScreenS2CPacket.TYPE, ModPacketsS2C::openOriginScreen);
             ClientPlayNetworking.registerReceiver(SyncOriginRegistryS2CPacket.TYPE, ModPacketsS2C::receiveOriginList);
             ClientPlayNetworking.registerReceiver(SyncOriginLayerRegistryS2CPacket.TYPE, ModPacketsS2C::receiveLayerList);
             ClientPlayNetworking.registerReceiver(ConfirmOriginS2CPacket.TYPE, ModPacketsS2C::receiveOriginConfirmation);
@@ -65,7 +62,7 @@ public class ModPacketsS2C {
     }
 
     @Environment(EnvType.CLIENT)
-    private static void openOriginScreen(OpenOriginScreenS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
+    private static void openOriginScreen(OpenChooseOriginScreenS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
 
         ArrayList<OriginLayer> layers = new ArrayList<>();
         OriginComponent component = ModComponents.ORIGIN.get(player);
@@ -84,9 +81,12 @@ public class ModPacketsS2C {
     private static void receiveOriginList(SyncOriginRegistryS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
 
         OriginsClient.isServerRunningOrigins = true;
-        OriginRegistry.reset();
 
-        packet.origins().forEach(OriginRegistry::register);
+        OriginRegistry.reset();
+        packet.origins().forEach((id, data) -> {
+            Origin origin = Origin.createFromData(id, data);
+            OriginRegistry.register(id, origin);
+        });
 
     }
 
@@ -94,7 +94,7 @@ public class ModPacketsS2C {
     private static void receiveLayerList(SyncOriginLayerRegistryS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
 
         OriginLayers.clear();
-        packet.layers().forEach(OriginLayers::add);
+        packet.layers().forEach(OriginLayers::register);
 
         OriginDataLoadedCallback.EVENT.invoker().onDataLoaded(true);
 

@@ -1,26 +1,26 @@
 {
-	"required": true,
-	"minVersion": "0.8",
-	"package": "io.github.apace100.origins.mixin",
-	"compatibilityLevel": "JAVA_16",
-	"mixins": [
-		"ArgumentTypesMixin",
-		"ConduitOnLandMixin",
-		"LikeWaterMixin",
-		"NoCobwebSlowdownMixin",
-		"OriginUpgradeMixin",
-		"ScareCreepersMixin",
-		"SelectionInvulnerabilityMixin",
-		"WaterBreathingMixin$CanBreatheInWater",
-		"WaterBreathingMixin$UpdateAir"
-	],
-	"client": [
-		"DrawContextAccessor",
-		"KeyBindingAccessor",
-		"ServerCheckMixin",
-		"WaterVisibilityMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
+    "required": true,
+    "minVersion": "0.8",
+    "package": "io.github.apace100.origins.mixin",
+    "compatibilityLevel": "JAVA_16",
+    "mixins": [
+        "ArgumentTypesMixin",
+        "ConduitOnLandMixin",
+        "LikeWaterMixin",
+        "NoCobwebSlowdownMixin",
+        "OriginUpgradeMixin",
+        "ScareCreepersMixin",
+        "SelectionInvulnerabilityMixin",
+        "WaterBreathingMixin$CanBreatheInWater",
+        "WaterBreathingMixin$UpdateAir"
+    ],
+    "client": [
+        "DrawContextAccessor",
+        "KeyBindingAccessor",
+        "ServerCheckMixin",
+        "WaterVisibilityMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
 	}
 }

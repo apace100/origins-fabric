@@ -2,23 +2,19 @@ package io.github.apace100.origins.origin;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dev.onyxstudios.cca.api.v3.component.ComponentProvider;
 import io.github.apace100.apoli.Apoli;
 import io.github.apace100.apoli.power.PowerType;
+import io.github.apace100.apoli.power.PowerTypes;
 import io.github.apace100.calio.data.IdentifiableMultiJsonDataLoader;
 import io.github.apace100.calio.data.MultiJsonDataContainer;
+import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.component.OriginComponent;
-import io.github.apace100.origins.networking.packet.s2c.OpenOriginScreenS2CPacket;
-import io.github.apace100.origins.networking.packet.s2c.SyncOriginLayerRegistryS2CPacket;
 import io.github.apace100.origins.networking.packet.s2c.SyncOriginRegistryS2CPacket;
-import io.github.apace100.origins.registry.ModComponents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 
@@ -26,73 +22,24 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class OriginManager extends IdentifiableMultiJsonDataLoader implements IdentifiableResourceReloadListener {
-	
-	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
+
+	public static final Identifier PHASE = Origins.identifier("phase/origins");
+	private static final Gson GSON = new GsonBuilder()
+		.disableHtmlEscaping()
+		.setPrettyPrinting()
+		.create();
 
 	public OriginManager() {
 		super(GSON, "origins", ResourceType.SERVER_DATA);
-		ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register((player, joined) -> {
+		ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.addPhaseOrdering(PowerTypes.PHASE, PHASE);
+		ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register(PHASE, (player, joined) -> {
 
-			OriginComponent component = ModComponents.ORIGIN.get(player);
+			Map<Identifier, SerializableData.Instance> origins = new HashMap<>();
 
-			List<OriginLayer> originLayers = new LinkedList<>();
-			Map<Identifier, Origin> origins = new HashMap<>();
-
-			OriginRegistry.forEach(origins::put);
-			SyncOriginRegistryS2CPacket syncOriginRegistryPacket = new SyncOriginRegistryS2CPacket(origins);
-
-			for (OriginLayer layer : OriginLayers.getLayers()) {
-
-				originLayers.add(layer);
-
-				if (layer.isEnabled() && !component.hasOrigin(layer)) {
-					component.setOrigin(layer, Origin.EMPTY);
-				}
-
-			}
-
-			SyncOriginLayerRegistryS2CPacket syncOriginLayerRegistryPacket = new SyncOriginLayerRegistryS2CPacket(originLayers);
-
-			ServerPlayNetworking.send(player, syncOriginRegistryPacket);
-			ServerPlayNetworking.send(player, syncOriginLayerRegistryPacket);
-
-			if (joined) {
-
-				List<ServerPlayerEntity> players = player.getServerWorld().getServer().getPlayerManager().getPlayerList();
-				players.remove(player);
-
-				players.forEach(otherPlayer -> ModComponents.ORIGIN.syncWith(otherPlayer, (ComponentProvider) player));
-
-			}
-
-			postLoad(player, joined);
+			OriginRegistry.forEach((id, origin) -> origins.put(id, origin.toData()));
+			ServerPlayNetworking.send(player, new SyncOriginRegistryS2CPacket(origins));
 
 		});
-	}
-
-	private void postLoad(ServerPlayerEntity player, boolean init) {
-
-		OriginComponent component = ModComponents.ORIGIN.get(player);
-		if (component.hasAllOrigins()) {
-			return;
-		}
-
-		if (component.checkAutoChoosingLayers(player, true)) {
-			component.sync();
-		}
-
-		if (init) {
-
-			OriginComponent.sync(player);
-
-			if (component.hasAllOrigins()) {
-				OriginComponent.onChosen(player, false);
-			} else {
-				ServerPlayNetworking.send(player, new OpenOriginScreenS2CPacket(true));
-			}
-
-		}
-
 	}
 
 	@Override

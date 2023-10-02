@@ -8,7 +8,7 @@ public class ModPackets {
 
     public static final Identifier HANDSHAKE = Origins.identifier("handshake");
 
-    public static final Identifier OPEN_ORIGIN_SCREEN = OpenOriginScreenS2CPacket.TYPE.getId();
+    public static final Identifier OPEN_ORIGIN_SCREEN = OpenChooseOriginScreenS2CPacket.TYPE.getId();
     public static final Identifier CHOOSE_ORIGIN = new Identifier(Origins.MODID, "choose_origin");
     public static final Identifier USE_ACTIVE_POWERS = new Identifier(Origins.MODID, "use_active_powers");
     public static final Identifier ORIGIN_LIST = SyncOriginRegistryS2CPacket.TYPE.getId();

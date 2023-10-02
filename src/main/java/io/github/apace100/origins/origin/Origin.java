@@ -11,8 +11,6 @@ import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.data.CompatibilityDataTypes;
 import io.github.apace100.origins.data.OriginsDataTypes;
 import io.github.apace100.origins.registry.ModComponents;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.advancement.AdvancementEntry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,7 +25,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class Origin {
 
@@ -67,22 +64,24 @@ public class Origin {
         return ModComponents.ORIGIN.get(player).getOrigins();
     }
 
-    private Identifier identifier;
-    private List<PowerType<?>> powerTypes = new LinkedList<>();
+    private final List<OriginUpgrade> upgrades = new LinkedList<>();
+    private final List<PowerType<?>> powerTypes = new LinkedList<>();
+    private final Identifier identifier;
     private final ItemStack displayItem;
     private final Impact impact;
-    private boolean isChoosable;
-    private final int order;
-    private final int loadingPriority;
-    private List<OriginUpgrade> upgrades = new LinkedList<>();
-
-    private boolean isSpecial;
 
     private String nameTranslationKey;
     private String descriptionTranslationKey;
 
     private Text name;
     private Text description;
+
+    private final int loadingPriority;
+    private final int order;
+
+    private boolean isChoosable;
+    private boolean isSpecial;
+
 
     public Origin(Identifier id, ItemStack icon, Impact impact, int order, int loadingPriority) {
         this.identifier = id;
@@ -194,8 +193,7 @@ public class Origin {
 
     public String getOrCreateNameTranslationKey() {
         if(nameTranslationKey == null || nameTranslationKey.isEmpty()) {
-            nameTranslationKey =
-                "origin." + identifier.getNamespace() + "." + identifier.getPath() + ".name";
+            nameTranslationKey = "origin." + identifier.getNamespace() + "." + identifier.getPath() + ".name";
         }
         return nameTranslationKey;
     }
@@ -206,8 +204,7 @@ public class Origin {
 
     public String getOrCreateDescriptionTranslationKey() {
         if(descriptionTranslationKey == null || descriptionTranslationKey.isEmpty()) {
-            descriptionTranslationKey =
-                "origin." + identifier.getNamespace() + "." + identifier.getPath() + ".description";
+            descriptionTranslationKey = "origin." + identifier.getNamespace() + "." + identifier.getPath() + ".description";
         }
         return descriptionTranslationKey;
     }
@@ -220,24 +217,33 @@ public class Origin {
         return this.order;
     }
 
-    public void write(PacketByteBuf buffer) {
+    public SerializableData.Instance toData() {
+
         SerializableData.Instance data = DATA.new Instance();
+
         data.set("icon", displayItem);
         data.set("impact", impact);
         data.set("order", order);
         data.set("loading_priority", loadingPriority);
-        data.set("unchoosable", !this.isChoosable);
-        data.set("powers", powerTypes.stream().map(PowerType::getIdentifier).collect(Collectors.toList()));
+        data.set("unchoosable", !isChoosable);
+        data.set("powers", powerTypes.stream().map(PowerType::getIdentifier).toList());
         data.set("name", getName());
         data.set("description", getDescription());
         data.set("upgrades", upgrades);
-        DATA.write(buffer, data);
+
+        return data;
+
+    }
+
+    public void write(PacketByteBuf buffer) {
+        DATA.write(buffer, toData());
     }
 
     @SuppressWarnings("unchecked")
     public static Origin createFromData(Identifier id, SerializableData.Instance data) {
 
-        Origin origin = new Origin(id,
+        Origin origin = new Origin(
+            id,
             data.get("icon"),
             data.get("impact"),
             data.getInt("order"),
@@ -267,10 +273,9 @@ public class Origin {
         return origin;
     }
 
-    @Environment(EnvType.CLIENT)
     public static Origin read(PacketByteBuf buffer) {
-        Identifier identifier = Identifier.tryParse(buffer.readString(32767));
-        return createFromData(identifier, DATA.read(buffer));
+        Identifier id = new Identifier(buffer.readString());
+        return createFromData(id, DATA.read(buffer));
     }
 
     public static Origin fromJson(Identifier id, JsonObject json) {
@@ -279,13 +284,18 @@ public class Origin {
 
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder("Origin(" + identifier.toString() + ")[");
-        for(PowerType<?> pt : powerTypes) {
-            str.append(PowerTypeRegistry.getId(pt));
-            str.append(",");
+
+        StringBuilder str = new StringBuilder("Origin[id = " + identifier.toString() + ", powers = {");
+        String separator = "";
+
+        for (PowerType<?> powerType : powerTypes) {
+            str.append(separator).append(powerType.getIdentifier());
+            separator = ", ";
         }
-        str = new StringBuilder(str.substring(0, str.length() - 1) + "]");
+
+        str.append("}]");
         return str.toString();
+
     }
 
     @Override
@@ -295,10 +305,7 @@ public class Origin {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof Origin) {
-            return ((Origin)obj).identifier.equals(identifier);
-        }
-        return false;
+        return this == obj || (obj instanceof Origin other && this.identifier.equals(other.identifier));
     }
 
 }
