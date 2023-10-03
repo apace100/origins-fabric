@@ -127,12 +127,27 @@ public class OriginLayer implements Comparable<OriginLayer> {
         return (int)choosableOrigins;
     }
 
+    public boolean contains(Identifier originId) {
+        return conditionedOrigins
+            .stream()
+            .flatMap(co -> co.getOrigins().stream())
+            .anyMatch(originId::equals);
+    }
+
     public boolean contains(Origin origin) {
-        return conditionedOrigins.stream().anyMatch(co -> co.getOrigins().stream().anyMatch(o -> o.equals(origin.getIdentifier())));
+        return contains(origin.getIdentifier());
+    }
+
+    public boolean contains(Identifier originId, PlayerEntity playerEntity) {
+        return conditionedOrigins
+            .stream()
+            .filter(co -> co.isConditionFulfilled(playerEntity))
+            .flatMap(co -> co.getOrigins().stream())
+            .anyMatch(originId::equals);
     }
 
     public boolean contains(Origin origin, PlayerEntity playerEntity) {
-        return conditionedOrigins.stream().filter(co -> co.isConditionFulfilled(playerEntity)).anyMatch(co -> co.getOrigins().stream().anyMatch(o -> o.equals(origin.getIdentifier())));
+        return contains(origin.getIdentifier(), playerEntity);
     }
 
     public boolean isRandomAllowed() {

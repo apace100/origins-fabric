@@ -21,7 +21,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.profiler.Profiler;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -81,9 +80,18 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
             OriginLayer oldLayer = entry.getKey();
             Origin oldOrigin = entry.getValue();
 
-            if (!OriginRegistry.contains(oldOrigin) || !OriginLayers.contains(oldLayer)) {
+            boolean originOrLayerNotAvailable = !OriginLayers.contains(oldLayer)
+                                             || !OriginRegistry.contains(oldOrigin);
+            boolean originUnregistered = OriginLayers.contains(oldLayer)
+                                      && !OriginLayers.getLayer(oldLayer.getIdentifier()).contains(oldOrigin);
 
-                if (OriginLayers.contains(oldLayer)) {
+            if (originOrLayerNotAvailable || originUnregistered) {
+
+                if (oldOrigin == Origin.EMPTY) {
+                    continue;
+                }
+
+                if (originUnregistered) {
                     Origins.LOGGER.error("Removed unregistered origin \"{}\" from origin layer \"{}\" from player {}!", oldOrigin.getIdentifier(), oldLayer.getIdentifier(), player.getName().getString());
                     component.setOrigin(oldLayer, Origin.EMPTY);
                 } else {
@@ -91,7 +99,6 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
                     component.removeLayer(oldLayer);
                 }
 
-                mismatch = true;
                 continue;
 
             }
@@ -198,11 +205,6 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
         Origins.LOGGER.info("Finished loading and merging origin layers from data files. Read {} origin layers.", loadedLayers.size());
         OriginDataLoadedCallback.EVENT.invoker().onDataLoaded(false);
 
-    }
-
-    @Nullable
-    public static OriginLayer getNullableLayer(Identifier id) {
-        return LAYERS.get(id);
     }
 
     public static OriginLayer getLayer(Identifier id) {

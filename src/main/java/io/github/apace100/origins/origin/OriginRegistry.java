@@ -1,7 +1,6 @@
 package io.github.apace100.origins.origin;
 
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,11 +49,6 @@ public class OriginRegistry {
 
     public static void forEach(BiConsumer<Identifier, Origin> processor) {
         idToOrigin.forEach(processor);
-    }
-
-    @Nullable
-    public static Origin getNullable(Identifier id) {
-        return idToOrigin.get(id);
     }
 
     public static Origin get(Identifier id) {
