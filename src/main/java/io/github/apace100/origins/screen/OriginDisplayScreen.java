@@ -80,11 +80,22 @@ public class OriginDisplayScreen extends Screen {
 
     @Override
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
-        if(showDirtBackground) {
-            super.renderBackgroundTexture(context);
+        if ((this.client != null && this.client.world != null) || showDirtBackground) {
+            this.renderInGameBackground(context);
         } else {
-            super.renderBackground(context, mouseX, mouseY, delta);
+            this.renderBackgroundTexture(context);
         }
+    }
+
+    public void renderInGameBackground(DrawContext context) {
+        context.fillGradient(0, 0, this.width, this.height, -5, -1072689136, -804253680);
+    }
+
+    @Override
+    public void renderBackgroundTexture(DrawContext context) {
+        context.setShaderColor(0.25F, 0.25F, 0.25F, 1.0F);
+        context.drawTexture(OPTIONS_BACKGROUND_TEXTURE, 0, 0, -5, 0.0F, 0.0F, this.width, this.height, 32, 32);
+        context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     @Override
@@ -200,7 +211,7 @@ public class OriginDisplayScreen extends Screen {
             this.renderOriginContent(context, mouseX, mouseY);
             //context.disableScissor();
         }
-        context.drawTexture(WINDOW, guiLeft, guiTop, 1, 0, 0, windowWidth, windowHeight, 256, 256);
+        context.drawTexture(WINDOW, guiLeft, guiTop, 2, 0, 0, windowWidth, windowHeight, 256, 256);
         if(origin != null) {
             context.getMatrices().push();
             context.getMatrices().translate(0, 0, 5);
@@ -220,9 +231,9 @@ public class OriginDisplayScreen extends Screen {
         int wOffset = impactValue * 8;
         for(int i = 0; i < 3; i++) {
             if(i < impactValue) {
-                context.drawTexture(WINDOW, guiLeft + 128 + i * 10, guiTop + 19, windowWidth + wOffset, 16, 8, 8);
+                context.drawTexture(WINDOW, guiLeft + 128 + i * 10, guiTop + 19, 2, windowWidth + wOffset, 16, 8, 8, 256, 256);
             } else {
-                context.drawTexture(WINDOW, guiLeft + 128 + i * 10, guiTop + 19, windowWidth, 16, 8, 8);
+                context.drawTexture(WINDOW, guiLeft + 128 + i * 10, guiTop + 19, 2, windowWidth, 16, 8, 8, 256, 256);
             }
         }
         if(mouseX >= guiLeft + 128 && mouseX <= guiLeft + 158
@@ -245,7 +256,7 @@ public class OriginDisplayScreen extends Screen {
         int endY = guiTop + windowHeight - border;
         for(int x = guiLeft; x < endX; x += 16) {
             for(int y = guiTop + offsetYStart; y < endY + offsetYEnd; y += 16) {
-                context.drawTexture(WINDOW, x, y, windowWidth, 0, Math.max(16, endX - x), Math.max(16, endY + offsetYEnd - y));
+                context.drawTexture(WINDOW, x, y, -1, windowWidth, 0, Math.max(16, endX - x), Math.max(16, endY + offsetYEnd - y), 256, 256);
             }
         }
     }
@@ -280,7 +291,7 @@ public class OriginDisplayScreen extends Screen {
         List<OrderedText> descLines = textRenderer.wrapLines(orgDesc, textWidth);
         for(OrderedText line : descLines) {
             if(y >= startY - 18 && y <= endY + 12) {
-                context.drawText(textRenderer, line, x + 2, y - 6, 0xCCCCCC, false);
+                context.drawTextWithShadow(this.textRenderer, line, x+2, y, 0xCCCCCC);
             }
             y += 12;
         }
@@ -290,7 +301,7 @@ public class OriginDisplayScreen extends Screen {
             for(OrderedText line : drawLines) {
                 y += 12;
                 if(y >= startY - 24 && y <= endY + 12) {
-                    context.drawText(textRenderer, line, x + 2, y, 0xCCCCCC, false);
+                    context.drawTextWithShadow(textRenderer, line, x + 2, y, 0xCCCCCC);
                 }
             }
             y += 14;
@@ -303,7 +314,7 @@ public class OriginDisplayScreen extends Screen {
                 Text desc = p.getDescription();
                 List<OrderedText> drawLines = textRenderer.wrapLines(desc, textWidth);
                 if(y >= startY - 24 && y <= endY + 12) {
-                    context.drawText(textRenderer, name, x, y, 0xFFFFFF, false);
+                    context.drawTextWithShadow(textRenderer, name, x, y, 0xFFFFFF);
                     int tw = textRenderer.getWidth(name);
                     List<Badge> badges = BadgeManager.getPowerBadges(p.getIdentifier());
                     int xStart = x + tw + 4;
@@ -318,7 +329,7 @@ public class OriginDisplayScreen extends Screen {
                 for(OrderedText line : drawLines) {
                     y += 12;
                     if(y >= startY - 24 && y <= endY + 12) {
-                        context.drawText(textRenderer, line, x + 2, y, 0xCCCCCC, false);
+                        context.drawTextWithShadow(textRenderer, line, x + 2, y, 0xCCCCCC);
                     }
                 }
 
