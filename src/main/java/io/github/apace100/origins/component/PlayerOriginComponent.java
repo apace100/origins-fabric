@@ -17,12 +17,12 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerOriginComponent implements OriginComponent {
 
-    private final Map<OriginLayer, Origin> origins = new HashMap<>();
+    private final Map<OriginLayer, Origin> origins = new ConcurrentHashMap<>();
     private final PlayerEntity player;
 
     private boolean hadOriginBefore = false;
@@ -64,7 +64,14 @@ public class PlayerOriginComponent implements OriginComponent {
 
     @Override
     public void removeLayer(OriginLayer layer) {
+
+        Origin oldOrigin = getOrigin(layer);
+        if (oldOrigin != null) {
+            PowerHolderComponent.KEY.get(player).removeAllPowersFromSource(oldOrigin.getIdentifier());
+        }
+
         origins.remove(layer);
+
     }
 
     @Override
