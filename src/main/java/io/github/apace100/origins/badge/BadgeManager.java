@@ -11,6 +11,8 @@ import io.github.apace100.calio.registry.DataObjectRegistry;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.integration.AutoBadgeCallback;
 import io.github.apace100.origins.networking.packet.s2c.SyncBadgeRegistryS2CPacket;
+import io.github.apace100.origins.origin.OriginManager;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.recipe.Recipe;
@@ -26,11 +28,14 @@ import java.util.List;
 import java.util.Map;
 
 public final class BadgeManager {
+
     public static final DataObjectRegistry<Badge> REGISTRY = new DataObjectRegistry.Builder<>(Origins.identifier("badge"), Badge.class)
         .readFromData("badges", true)
         .dataErrorHandler((id, exception) -> Origins.LOGGER.error("Failed to read badge " + id + ", caused by", exception))
         .defaultFactory(BadgeFactories.KEYBIND)
         .buildAndRegister();
+    public static final Identifier PHASE = Origins.identifier("phase/badge_manager");
+
     private static final Map<Identifier, List<Badge>> BADGES = new HashMap<>();
 
     private static final Identifier TOGGLE_BADGE_SPRITE = Origins.identifier("textures/gui/badge/toggle.png");
@@ -51,6 +56,8 @@ public final class BadgeManager {
         PowerTypes.registerAdditionalData("badges", BadgeManager::readCustomBadges);
         PostPowerLoadCallback.EVENT.register(BadgeManager::readAutoBadges);
         AutoBadgeCallback.EVENT.register(BadgeManager::createAutoBadges);
+        ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.addPhaseOrdering(OriginManager.PHASE, PHASE);
+        ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register(PHASE, (player, joined) -> sync(player));
     }
 
     public static void register(BadgeFactory factory) {

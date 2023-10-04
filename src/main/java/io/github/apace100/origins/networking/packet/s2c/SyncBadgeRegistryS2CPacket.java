@@ -49,7 +49,7 @@ public record SyncBadgeRegistryS2CPacket(Map<Identifier, List<Badge>> badges) im
 
                 valueBuffer.writeVarInt(badges.size());
                 for (Badge badge : badges) {
-                    badge.writeBuf(valueBuffer);
+                    BadgeManager.REGISTRY.writeDataObject(valueBuffer, badge);
                 }
 
             }
