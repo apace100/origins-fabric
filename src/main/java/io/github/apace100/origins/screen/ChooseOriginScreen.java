@@ -3,10 +3,7 @@ package io.github.apace100.origins.screen;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.networking.packet.c2s.ChooseOriginC2SPacket;
 import io.github.apace100.origins.networking.packet.c2s.ChooseRandomOriginC2SPacket;
-import io.github.apace100.origins.origin.Impact;
-import io.github.apace100.origins.origin.Origin;
-import io.github.apace100.origins.origin.OriginLayer;
-import io.github.apace100.origins.origin.OriginRegistry;
+import io.github.apace100.origins.origin.*;
 import io.github.apace100.origins.registry.ModItems;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
@@ -20,51 +17,65 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ChooseOriginScreen extends OriginDisplayScreen {
 
 	private final ArrayList<OriginLayer> layerList;
-	private int currentLayerIndex = 0;
-	private int currentOriginIndex = 0;
 	private final List<Origin> originSelection;
-	private int maxSelection = 0;
+
+	private final int currentLayerIndex;
 
 	private Origin randomOrigin;
+
+	private int currentOriginIndex = 0;
+	private int maxSelection = 0;
+
 	
 	public ChooseOriginScreen(ArrayList<OriginLayer> layerList, int currentLayerIndex, boolean showDirtBackground) {
 		super(Text.translatable(Origins.MODID + ".screen.choose_origin"), showDirtBackground);
+
 		this.layerList = layerList;
 		this.currentLayerIndex = currentLayerIndex;
-		this.originSelection = new ArrayList<>(10);
+		this.originSelection = new ArrayList<>(layerList.size());
+
 		PlayerEntity player = MinecraftClient.getInstance().player;
-		OriginLayer currentLayer = layerList.get(currentLayerIndex);
-		List<Identifier> originIdentifiers = currentLayer.getOrigins(player);
-		originIdentifiers.forEach(originId -> {
+		if (player == null) {
+			return;
+		}
+
+		OriginLayer currentLayer = getCurrentLayer();
+		currentLayer.getOrigins().forEach(originId -> {
+
 			Origin origin = OriginRegistry.get(originId);
-			if(origin.isChoosable()) {
-				ItemStack displayItem = origin.getDisplayItem();
-				if(displayItem.getItem() == Items.PLAYER_HEAD) {
-					if(!displayItem.hasNbt() || !displayItem.getNbt().contains("SkullOwner")) {
-						displayItem.getOrCreateNbt().putString("SkullOwner", player.getDisplayName().getString());
-					}
-				}
-				this.originSelection.add(origin);
+			if (!origin.isChoosable()) {
+				return;
 			}
+
+			ItemStack iconStack = origin.getDisplayItem();
+			if (iconStack.isOf(Items.PLAYER_HEAD) && (!iconStack.hasNbt() || !iconStack.getOrCreateNbt().contains("SkullOwner"))) {
+				iconStack.getOrCreateNbt().putString("SkullOwner", player.getName().getString());
+			}
+
+			originSelection.add(origin);
+
 		});
-		originSelection.sort((a, b) -> {
-			int impDelta = a.getImpact().getImpactValue() - b.getImpact().getImpactValue();
-			return impDelta == 0 ? a.getOrder() - b.getOrder() : impDelta;
-		});
+
+		originSelection.sort(Comparator.comparingInt((Origin o) -> o.getImpact().getImpactValue()).thenComparingInt(Origin::getOrder));
 		maxSelection = originSelection.size();
-		if(currentLayer.isRandomAllowed() && currentLayer.getRandomOrigins(player).size() > 0) {
+
+		if (currentLayer.isRandomAllowed() && !currentLayer.getRandomOrigins(player).isEmpty()) {
 			maxSelection += 1;
 		}
-		if(maxSelection == 0) {
+
+		if (maxSelection == 0) {
 			openNextLayerScreen();
 		}
-		Origin newOrigin = getCurrentOriginInternal();
-		showOrigin(newOrigin, layerList.get(currentLayerIndex), newOrigin == randomOrigin);
+
+		Origin newOrigin = getCurrentOrigin();
+		showOrigin(newOrigin, getCurrentLayer(), newOrigin == randomOrigin);
+
 	}
 
 	private void openNextLayerScreen() {
@@ -78,33 +89,79 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 
 	@Override
 	protected void init() {
+
 		super.init();
-		if(maxSelection > 1) {
-			addDrawableChild(ButtonWidget.builder(Text.of("<"), b -> {
-				currentOriginIndex = (currentOriginIndex - 1 + maxSelection) % maxSelection;
-				Origin newOrigin = getCurrentOriginInternal();
-				showOrigin(newOrigin, layerList.get(currentLayerIndex), newOrigin == randomOrigin);
-			}).dimensions(guiLeft - 40, this.height / 2 - 10, 20, 20).build());
-			addDrawableChild(ButtonWidget.builder(Text.of(">"), b -> {
-				currentOriginIndex = (currentOriginIndex + 1) % maxSelection;
-				Origin newOrigin = getCurrentOriginInternal();
-				showOrigin(newOrigin, layerList.get(currentLayerIndex), newOrigin == randomOrigin);
-			}).dimensions(guiLeft + windowWidth + 20, this.height / 2 - 10, 20, 20).build());
+		if (maxSelection <= 0) {
+			return;
 		}
-		addDrawableChild(ButtonWidget.builder(Text.translatable(Origins.MODID + ".gui.select"), b -> {
 
-			Identifier originId = getCurrentOrigin().getIdentifier();
-			Identifier layerId = layerList.get(currentLayerIndex).getIdentifier();
+		//	Draw the previous origin button
+		addDrawableChild(ButtonWidget.builder(
+			Text.of("<"),
+			button -> {
 
-			if (currentOriginIndex == originSelection.size()) {
-				ClientPlayNetworking.send(new ChooseRandomOriginC2SPacket(layerId));
-			} else {
-				ClientPlayNetworking.send(new ChooseOriginC2SPacket(layerId, originId));
+				currentOriginIndex = (currentOriginIndex - 1 + maxSelection) % maxSelection;
+				Origin newOrigin = getCurrentOrigin();
+
+				showOrigin(newOrigin, getCurrentLayer(), newOrigin == randomOrigin);
+
+			}
+		).dimensions(guiLeft - 40, height / 2 - 10, 20, 20).build());
+
+		//	Draw the next origin button
+		addDrawableChild(ButtonWidget.builder(
+			Text.of(">"),
+			button -> {
+
+				currentOriginIndex = (currentOriginIndex + 1) % maxSelection;
+				Origin newOrigin = getCurrentOrigin();
+
+				showOrigin(newOrigin, getCurrentLayer(), newOrigin == randomOrigin);
+
+			}
+		).dimensions(guiLeft + WINDOW_WIDTH + 20, height / 2 - 10, 20, 20).build());
+
+		//	Draw the select origin button
+		addDrawableChild(ButtonWidget.builder(
+			Text.translatable(Origins.MODID + ".gui.select"),
+			button -> {
+
+				Identifier originId = super.getCurrentOrigin().getIdentifier();
+				Identifier layerId = getCurrentLayer().getIdentifier();
+
+				if (currentOriginIndex == originSelection.size()) {
+					ClientPlayNetworking.send(new ChooseRandomOriginC2SPacket(layerId));
+				} else {
+					ClientPlayNetworking.send(new ChooseOriginC2SPacket(layerId, originId));
+				}
+
+				openNextLayerScreen();
+
+			}
+		).dimensions(guiLeft + WINDOW_WIDTH / 2 - 50, guiTop + WINDOW_HEIGHT + 5, 100, 20).build());
+
+	}
+
+	@Override
+	public OriginLayer getCurrentLayer() {
+		return layerList.get(currentLayerIndex);
+	}
+
+	@Override
+	public Origin getCurrentOrigin() {
+
+		if (currentOriginIndex == originSelection.size()) {
+
+			if (randomOrigin == null) {
+				initRandomOrigin();
 			}
 
-			openNextLayerScreen();
+			return randomOrigin;
 
-		}).dimensions(guiLeft + windowWidth / 2 - 50, guiTop + windowHeight + 5, 100, 20).build());
+		}
+
+		return originSelection.get(currentOriginIndex);
+
 	}
 
 	@Override
@@ -115,39 +172,41 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 		return Text.translatable(Origins.MODID + ".gui.choose_origin.title", Text.translatable(getCurrentLayer().getTranslationKey()));
 	}
 
-	private Origin getCurrentOriginInternal() {
-		if(currentOriginIndex == originSelection.size()) {
-			if(randomOrigin == null) {
-				initRandomOrigin();
-			}
-			return randomOrigin;
-		}
-		return originSelection.get(currentOriginIndex);
-	}
-
 	private void initRandomOrigin() {
+
 		this.randomOrigin = new Origin(Origins.identifier("random"), new ItemStack(ModItems.ORB_OF_ORIGIN), Impact.NONE, -1, Integer.MAX_VALUE);
-		MutableText randomOriginText = (MutableText)Text.of("");
+
+		MutableText randomOriginText = Text.of("").copy();
 		List<Identifier> randoms = layerList.get(currentLayerIndex).getRandomOrigins(MinecraftClient.getInstance().player);
+
 		randoms.sort((ia, ib) -> {
+
 			Origin a = OriginRegistry.get(ia);
 			Origin b = OriginRegistry.get(ib);
-			int impDelta = a.getImpact().getImpactValue() - b.getImpact().getImpactValue();
-			return impDelta == 0 ? a.getOrder() - b.getOrder() : impDelta;
+
+			int impactDelta = Integer.compare(a.getImpact().getImpactValue(), b.getImpact().getImpactValue());
+			return impactDelta != 0 ? impactDelta : Integer.compare(a.getOrder(), b.getOrder());
+
 		});
+
 		for(Identifier id : randoms) {
 			randomOriginText.append(OriginRegistry.get(id).getName());
 			randomOriginText.append(Text.of("\n"));
 		}
+
 		setRandomOriginText(randomOriginText);
+
 	}
 
 	@Override
 	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-		if(maxSelection == 0) {
+
+		if (maxSelection == 0) {
 			openNextLayerScreen();
-			return;
+		} else {
+			super.render(context, mouseX, mouseY, delta);
 		}
-		super.render(context, mouseX, mouseY, delta);
+
 	}
+
 }
