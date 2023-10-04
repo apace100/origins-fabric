@@ -23,7 +23,7 @@ public record ChooseRandomOriginC2SPacket(Identifier layerId) implements FabricP
 
     @Override
     public PacketType<?> getType() {
-        return null;
+        return TYPE;
     }
 
 }
