@@ -20,8 +20,14 @@ public class ModComponents implements EntityComponentInitializer {
         ORIGIN = ComponentRegistry.getOrCreate(new Identifier(Origins.MODID, "origin"), OriginComponent.class);
     }
 
+    public static void register() {}
+
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
-        registry.beginRegistration(PlayerEntity.class, ORIGIN).after(PowerHolderComponent.KEY).respawnStrategy(RespawnCopyStrategy.CHARACTER).end(PlayerOriginComponent::new);
+        registry.beginRegistration(PlayerEntity.class, ORIGIN)
+            .after(PowerHolderComponent.KEY)
+            .respawnStrategy(RespawnCopyStrategy.CHARACTER)
+            .end(PlayerOriginComponent::new);
     }
+
 }
