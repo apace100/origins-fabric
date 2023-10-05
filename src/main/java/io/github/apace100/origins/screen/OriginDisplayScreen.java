@@ -97,11 +97,15 @@ public class OriginDisplayScreen extends Screen {
 
     @Override
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+
         if (!showDirtBackground) {
             this.renderInGameBackground(context);
         } else {
             this.renderBackgroundTexture(context);
         }
+
+        context.drawGuiTexture(WINDOW_BACKGROUND, guiLeft, guiTop, -4, WINDOW_WIDTH, WINDOW_HEIGHT);
+
     }
 
     @Override
@@ -252,8 +256,6 @@ public class OriginDisplayScreen extends Screen {
     }
 
     protected void renderOriginWindow(DrawContext context, int mouseX, int mouseY) {
-
-        context.drawGuiTexture(WINDOW_BACKGROUND, guiLeft, guiTop, -3, WINDOW_WIDTH, WINDOW_HEIGHT);
 
         if(origin != null) {
             //context.enableScissor(guiLeft, guiTop, guiLeft + windowWidth, guiTop + windowHeight);
