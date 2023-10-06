@@ -37,19 +37,19 @@ public abstract class OriginUpgradeMixin {
         Origin.get(owner).forEach((originLayer, origin) -> origin.getUpgrade(advancement).ifPresent(originUpgrade -> {
             try {
 
-                Origin upgradeTo = OriginRegistry.get(originUpgrade.getUpgradeToOrigin());
+                Origin upgradeTo = OriginRegistry.get(originUpgrade.upgradeToOrigin());
                 OriginComponent component = ModComponents.ORIGIN.get(owner);
 
                 component.setOrigin(originLayer, upgradeTo);
                 component.sync();
 
-                String announcement = originUpgrade.getAnnouncement();
+                String announcement = originUpgrade.announcement();
                 if (announcement != null) {
                     owner.sendMessage(Text.translatable(announcement).formatted(Formatting.GOLD), false);
                 }
 
             } catch (Exception e) {
-                Origins.LOGGER.error("Could not perform Origins upgrade from \"{}\" to \"{}\", as the upgrade origin did not exist!", origin.getIdentifier(), originUpgrade.getUpgradeToOrigin().toString());
+                Origins.LOGGER.error("Could not perform Origins upgrade from \"{}\" to \"{}\", as the upgrade origin did not exist!", origin.getIdentifier(), originUpgrade.upgradeToOrigin().toString());
             }
         }));
 

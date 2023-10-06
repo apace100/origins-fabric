@@ -100,7 +100,7 @@ public class Origin {
 
     public Optional<OriginUpgrade> getUpgrade(AdvancementEntry advancement) {
         return upgrades.stream()
-            .filter(ou -> ou.getAdvancementCondition().equals(advancement.id()))
+            .filter(ou -> ou.advancementCondition().equals(advancement.id()))
             .findFirst();
     }
 

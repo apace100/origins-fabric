@@ -10,11 +10,13 @@ public final class OriginsDataTypes {
 
     public static final SerializableDataType<Impact> IMPACT = SerializableDataType.enumValue(Impact.class);
 
-    public static final SerializableDataType<OriginUpgrade> UPGRADE = new SerializableDataType<>(
+    public static final SerializableDataType<OriginUpgrade> UPGRADE = SerializableDataType.compound(
         OriginUpgrade.class,
-        (buf, upgrade) -> upgrade.write(buf),
-        OriginUpgrade::read,
-        OriginUpgrade::fromJson);
+        OriginUpgrade.DATA,
+        OriginUpgrade::fromData,
+        (serializableData, originUpgrade) -> originUpgrade.toData()
+    );
 
     public static final SerializableDataType<List<OriginUpgrade>> UPGRADES = SerializableDataType.list(UPGRADE);
+
 }
