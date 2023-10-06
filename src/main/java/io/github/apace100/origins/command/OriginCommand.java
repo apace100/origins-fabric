@@ -298,6 +298,7 @@ public class OriginCommand {
 			originComponent.setOrigin(originLayer, Origin.EMPTY);
 		}
 
+		originComponent.selectingOrigin(true);
 		originComponent.checkAutoChoosingLayers(target, false);
 		originComponent.sync();
 

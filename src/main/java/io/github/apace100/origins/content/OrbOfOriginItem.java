@@ -55,6 +55,7 @@ public class OrbOfOriginItem extends Item {
                 }
             }
 
+            component.selectingOrigin(true);
             component.checkAutoChoosingLayers(user, false);
             component.sync();
 

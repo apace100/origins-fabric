@@ -29,6 +29,7 @@ import me.shedaniel.autoconfig.serializer.ConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.advancement.criterion.Criteria;
@@ -97,6 +98,8 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 
 		Criteria.register(ChoseOriginCriterion.ID.toString(), ChoseOriginCriterion.INSTANCE);
 		Registry.register(Registries.LOOT_CONDITION_TYPE, identifier("origin"), OriginLootCondition.TYPE);
+
+		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> ModComponents.ORIGIN.get(handler.player).selectingOrigin(false));
 	}
 
 	public static void serializeConfig() {

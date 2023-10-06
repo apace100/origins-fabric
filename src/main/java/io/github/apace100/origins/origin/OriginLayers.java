@@ -135,7 +135,12 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
         if (component.hasAllOrigins()) {
             OriginComponent.onChosen(player, false);
         } else {
+
+            component.selectingOrigin(true);
+            component.sync();
+
             ServerPlayNetworking.send(player, new OpenChooseOriginScreenS2CPacket(true));
+
         }
 
     }

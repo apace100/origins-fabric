@@ -62,6 +62,7 @@ public class ModPacketsC2S {
             component.checkAutoChoosingLayers(player, false);
 
             component.sync();
+
             if (component.hasAllOrigins() && !hadAllOrigins) {
                 OriginComponent.onChosen(player, hadOriginBefore);
             }
@@ -71,6 +72,8 @@ public class ModPacketsC2S {
         }
 
         confirmOrigin(player, layer, component.getOrigin(layer));
+
+        component.selectingOrigin(false);
         component.sync();
 
     }
@@ -110,6 +113,8 @@ public class ModPacketsC2S {
         }
 
         confirmOrigin(player, layer, component.getOrigin(layer));
+
+        component.selectingOrigin(false);
         component.sync();
 
     }

@@ -25,10 +25,31 @@ public class PlayerOriginComponent implements OriginComponent {
     private final Map<OriginLayer, Origin> origins = new ConcurrentHashMap<>();
     private final PlayerEntity player;
 
+    private boolean selectingOrigin = false;
     private boolean hadOriginBefore = false;
+
+    private int invulnerabilityTicks = 0;
 
     public PlayerOriginComponent(PlayerEntity player) {
         this.player = player;
+    }
+
+    @Override
+    public boolean hasSelectionInvulnerability() {
+        return invulnerabilityTicks > 0;
+    }
+
+    @Override
+    public boolean isSelectingOrigin() {
+        return selectingOrigin;
+    }
+
+    @Override
+    public void selectingOrigin(boolean selectingOrigin) {
+        this.selectingOrigin = selectingOrigin;
+        if (selectingOrigin) {
+            invulnerabilityTicks = 60;
+        }
     }
 
     @Override
@@ -118,6 +139,13 @@ public class PlayerOriginComponent implements OriginComponent {
     }
 
     @Override
+    public void tick() {
+        if (!selectingOrigin && invulnerabilityTicks > 0) {
+            invulnerabilityTicks--;
+        }
+    }
+
+    @Override
     public void readFromNbt(@NotNull NbtCompound compoundTag) {
 
         if (player == null) {
@@ -171,7 +199,9 @@ public class PlayerOriginComponent implements OriginComponent {
 
         }
 
+        selectingOrigin = compoundTag.getBoolean("SelectingOrigin");
         hadOriginBefore = compoundTag.getBoolean("HadOriginBefore");
+
         if (player.getWorld().isClient) {
             return;
         }
@@ -231,7 +261,7 @@ public class PlayerOriginComponent implements OriginComponent {
     }
 
     @Override
-    public void writeToNbt(@NotNull NbtCompound rootNbt) {
+    public void writeToNbt(@NotNull NbtCompound compoundTag) {
 
         NbtList originLayersNbt = new NbtList();
         origins.forEach((layer, origin) -> {
@@ -245,8 +275,9 @@ public class PlayerOriginComponent implements OriginComponent {
 
         });
 
-        rootNbt.put("OriginLayers", originLayersNbt);
-        rootNbt.putBoolean("HadOriginBefore", hadOriginBefore);
+        compoundTag.put("OriginLayers", originLayersNbt);
+        compoundTag.putBoolean("SelectingOrigin", selectingOrigin);
+        compoundTag.putBoolean("HadOriginBefore", hadOriginBefore);
 
     }
 
