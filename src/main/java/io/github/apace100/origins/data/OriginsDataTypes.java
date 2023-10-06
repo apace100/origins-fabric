@@ -58,4 +58,11 @@ public final class OriginsDataTypes {
 
     public static final SerializableDataType<List<OriginLayer.ConditionedOrigin>> ORIGINS_OR_CONDITIONED_ORIGINS = SerializableDataType.list(ORIGIN_OR_CONDITIONED_ORIGIN);
 
+    public static final SerializableDataType<OriginLayer.GuiTitle> GUI_TITLE = SerializableDataType.compound(
+        OriginLayer.GuiTitle.class,
+        OriginLayer.GuiTitle.DATA,
+        OriginLayer.GuiTitle::fromData,
+        (serializableData, guiTitle) -> guiTitle.toData()
+    );
+
 }

@@ -14,8 +14,10 @@ import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -344,6 +346,29 @@ public class OriginLayer implements Comparable<OriginLayer> {
         layer.autoChooseIfNoChoice = JsonHelper.getBoolean(json, "auto_choose", false);
         layer.hidden = JsonHelper.getBoolean(json, "hidden", false);
         return layer;
+    }
+
+    public record GuiTitle(@Nullable Text viewOrigin, @Nullable Text chooseOrigin) {
+
+        public static final SerializableData DATA = new SerializableData()
+            .add("view_origin", SerializableDataTypes.TEXT, null)
+            .add("choose_origin", SerializableDataTypes.TEXT, null);
+
+        public SerializableData.Instance toData() {
+
+            SerializableData.Instance data = DATA.new Instance();
+
+            data.set("view_origin", viewOrigin);
+            data.set("choose_origin", chooseOrigin);
+
+            return data;
+
+        }
+
+        public static GuiTitle fromData(SerializableData.Instance data) {
+            return new GuiTitle(data.get("view_origin"), data.get("choose_origin"));
+        }
+
     }
 
     public record ConditionedOrigin(ConditionFactory<Entity>.Instance condition, List<Identifier> origins) {
