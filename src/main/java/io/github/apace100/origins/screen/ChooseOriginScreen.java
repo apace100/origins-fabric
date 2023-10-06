@@ -95,6 +95,29 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 			return;
 		}
 
+		//	Draw the select origin button
+		addDrawableChild(ButtonWidget.builder(
+			Text.translatable(Origins.MODID + ".gui.select"),
+			button -> {
+
+				Identifier originId = super.getCurrentOrigin().getIdentifier();
+				Identifier layerId = getCurrentLayer().getIdentifier();
+
+				if (currentOriginIndex == originSelection.size()) {
+					ClientPlayNetworking.send(new ChooseRandomOriginC2SPacket(layerId));
+				} else {
+					ClientPlayNetworking.send(new ChooseOriginC2SPacket(layerId, originId));
+				}
+
+				openNextLayerScreen();
+
+			}
+		).dimensions(guiLeft + WINDOW_WIDTH / 2 - 50, guiTop + WINDOW_HEIGHT + 5, 100, 20).build());
+
+		if (maxSelection <= 1) {
+			return;
+		}
+
 		//	Draw the previous origin button
 		addDrawableChild(ButtonWidget.builder(
 			Text.of("<"),
@@ -120,25 +143,6 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 
 			}
 		).dimensions(guiLeft + WINDOW_WIDTH + 20, height / 2 - 10, 20, 20).build());
-
-		//	Draw the select origin button
-		addDrawableChild(ButtonWidget.builder(
-			Text.translatable(Origins.MODID + ".gui.select"),
-			button -> {
-
-				Identifier originId = super.getCurrentOrigin().getIdentifier();
-				Identifier layerId = getCurrentLayer().getIdentifier();
-
-				if (currentOriginIndex == originSelection.size()) {
-					ClientPlayNetworking.send(new ChooseRandomOriginC2SPacket(layerId));
-				} else {
-					ClientPlayNetworking.send(new ChooseOriginC2SPacket(layerId, originId));
-				}
-
-				openNextLayerScreen();
-
-			}
-		).dimensions(guiLeft + WINDOW_WIDTH / 2 - 50, guiTop + WINDOW_HEIGHT + 5, 100, 20).build());
 
 	}
 
