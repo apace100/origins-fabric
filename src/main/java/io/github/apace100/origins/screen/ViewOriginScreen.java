@@ -149,7 +149,7 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 
 		OriginLayer currentLayer = super.getCurrentLayer();
 		if (currentLayer.shouldOverrideViewOriginTitle()) {
-			return Text.translatable(currentLayer.getTitleViewOriginTranslationKey());
+			return currentLayer.getViewOriginTitle();
 		}
 
 		return Text.translatable(Origins.MODID + ".gui.view_origin.title", Text.translatable(currentLayer.getTranslationKey()));

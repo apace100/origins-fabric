@@ -2,7 +2,6 @@ package io.github.apace100.origins.origin;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import dev.onyxstudios.cca.api.v3.component.ComponentProvider;
 import io.github.apace100.calio.data.IdentifiableMultiJsonDataLoader;
 import io.github.apace100.calio.data.MultiJsonDataContainer;
@@ -19,11 +18,15 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.JsonHelper;
 import net.minecraft.util.profiler.Profiler;
 
 import java.util.*;
 
+/**
+ *  FIXME:  Fix the order of which origin layers are loaded. For some reason, origin layers from data packs are always loaded before
+ *          the origin layer provided by Origins if one of the said data packs provide a custom origin layer. This is not the case
+ *          for other reload listeners that also use {@link IdentifiableMultiJsonDataLoader}
+ */
 public class OriginLayers extends IdentifiableMultiJsonDataLoader implements IdentifiableResourceReloadListener {
 
     public static final Identifier PHASE = Origins.identifier("phase/origin_layers");
@@ -149,33 +152,31 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
     protected void apply(List<MultiJsonDataContainer> prepared, ResourceManager manager, Profiler profiler) {
 
         clear();
-        Map<Identifier, Map<Integer, List<JsonObject>>> loadedLayers = new HashMap<>();
+        Map<Identifier, Map<Integer, List<OriginLayer>>> loadedLayers = new HashMap<>();
 
         Origins.LOGGER.info("Loading origin layer from data files...");
         prepared.forEach(multiJsonDataContainer -> multiJsonDataContainer.forEach((packName, fileId, jsonElement) -> {
             try {
 
-             minLayerPriority = Integer.MIN_VALUE;
-             Origins.LOGGER.info("Trying to read origin layer file \"{}\" from data pack [{}]", fileId, packName);
+                minLayerPriority = Integer.MIN_VALUE;
+                Origins.LOGGER.info("Trying to read origin layer file \"{}\" from data pack [{}]", fileId, packName);
 
-             JsonObject jsonObject = jsonElement.getAsJsonObject();
-             boolean replace = JsonHelper.getBoolean(jsonObject, "replace", false);
-             int loadingPriority = JsonHelper.getInt(jsonObject, "loading_priority", 0);
+                OriginLayer layer = OriginLayer.fromJson(fileId, jsonElement.getAsJsonObject());
+                int loadingPriority = layer.getLoadingPriority();
 
+                if (loadingPriority < minLayerPriority) {
+                    return;
+                }
 
-             if (loadingPriority < minLayerPriority) {
-                 return;
-             }
+                Map<Integer, List<OriginLayer>> prioritizedLayers = loadedLayers.computeIfAbsent(fileId, k -> new HashMap<>());
+                List<OriginLayer> layers = prioritizedLayers.computeIfAbsent(loadingPriority, i -> new LinkedList<>());
 
-             Map<Integer, List<JsonObject>> prioritizedUnparsedLayers = loadedLayers.computeIfAbsent(fileId, k -> new HashMap<>());
-             List<JsonObject> unparsedLayers = prioritizedUnparsedLayers.computeIfAbsent(loadingPriority, i -> new LinkedList<>());
+                if (layer.shouldReplaceConditionedOrigins()) {
+                    layers.clear();
+                    minLayerPriority = loadingPriority + 1;
+                }
 
-             if (replace) {
-                 unparsedLayers.clear();
-                 minLayerPriority = loadingPriority + 1;
-             }
-
-             unparsedLayers.add(jsonObject);
+                layers.add(layer);
 
             } catch (Exception e) {
                 Origins.LOGGER.error("There was a problem reading origin layer file \"{}\" (skipping): {}", fileId, e.getMessage());
@@ -183,27 +184,27 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
         }));
 
         Origins.LOGGER.info("Finished loading origin layers. Merging similar origin layers...");
-        loadedLayers.forEach((id, prioritizedUnparsedLayers) -> {
+        loadedLayers.forEach((id, prioritizedLayers) -> {
 
-            OriginLayer[] layer = {null};
-            List<Integer> priorities = prioritizedUnparsedLayers.keySet()
+            OriginLayer[] currentLayer = {null};
+            List<Integer> priorities = prioritizedLayers.keySet()
                 .stream()
                 .sorted()
                 .toList();
 
             for (int priority : priorities) {
-                for (JsonObject unparsedLayer : prioritizedUnparsedLayers.get(priority)) {
+                for (OriginLayer layer : prioritizedLayers.get(priority)) {
 
-                    if (layer[0] == null) {
-                        layer[0] = OriginLayer.fromJson(id, unparsedLayer);
+                    if (currentLayer[0] == null) {
+                        currentLayer[0] = layer;
                     } else {
-                        layer[0].merge(unparsedLayer);
+                        currentLayer[0].merge(layer);
                     }
 
                 }
             }
 
-            OriginLayers.register(id, layer[0]);
+            OriginLayers.register(id, currentLayer[0]);
 
         });
 
@@ -228,6 +229,7 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
             throw new IllegalArgumentException("Duplicate origin layer id tried to register: '" + id + "'");
         }
 
+        layer.id = id;
         LAYERS.put(id, layer);
 
     }
