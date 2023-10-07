@@ -375,7 +375,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
 
         public static final SerializableData DATA = new SerializableData()
             .add("condition", ApoliDataTypes.ENTITY_CONDITION, null)
-            .add("origins", SerializableDataTypes.IDENTIFIER);
+            .add("origins", SerializableDataTypes.IDENTIFIERS);
 
         public boolean isConditionFulfilled(PlayerEntity playerEntity) {
             return condition == null || condition.test(playerEntity);
