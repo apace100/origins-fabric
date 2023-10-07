@@ -43,38 +43,38 @@ public class OriginManager extends IdentifiableMultiJsonDataLoader implements Id
 	}
 
 	@Override
-	protected void apply(List<MultiJsonDataContainer> loader, ResourceManager manager, Profiler profiler) {
+	protected void apply(MultiJsonDataContainer prepared, ResourceManager manager, Profiler profiler) {
 
 		OriginRegistry.reset();
 		AtomicBoolean hasConfigChanged = new AtomicBoolean(false);
 
-		loader.forEach(multiJsonDataContainer -> multiJsonDataContainer.forEach((packName, fileId, jsonElement) -> {
+		prepared.forEach((packName, id, jsonElement) -> {
 
 			try {
 
-				Origin origin = Origin.fromJson(fileId, jsonElement.getAsJsonObject());
+				Origin origin = Origin.fromJson(id, jsonElement.getAsJsonObject());
 				int loadingPriority = origin.getLoadingPriority();
 
-				if (!OriginRegistry.contains(fileId)) {
-					OriginRegistry.register(fileId, origin);
-				} else if (OriginRegistry.get(fileId).getLoadingPriority() < loadingPriority) {
-					Origins.LOGGER.warn("Overriding origin \"{}\" (with prev. loading priority of {}) with a higher loading priority of {} from data pack [{}]!", fileId, OriginRegistry.get(fileId).getLoadingPriority(), loadingPriority, packName);
-					OriginRegistry.update(fileId, origin);
+				if (!OriginRegistry.contains(id)) {
+					OriginRegistry.register(id, origin);
+				} else if (OriginRegistry.get(id).getLoadingPriority() < loadingPriority) {
+					Origins.LOGGER.warn("Overriding origin \"{}\" (with prev. loading priority of {}) with a higher loading priority of {} from data pack [{}]!", id, OriginRegistry.get(id).getLoadingPriority(), loadingPriority, packName);
+					OriginRegistry.update(id, origin);
 				}
 
 			} catch (Exception e) {
-				Origins.LOGGER.error("There was a problem reading origin file \"{}\" (skipping): {}", fileId, e.getMessage());
+				Origins.LOGGER.error("There was a problem reading origin file \"{}\" (skipping): {}", id, e.getMessage());
 			}
 
-			if (!OriginRegistry.contains(fileId)) {
+			if (!OriginRegistry.contains(id)) {
 				return;
 			}
 
-			Origin origin = OriginRegistry.get(fileId);
+			Origin origin = OriginRegistry.get(id);
 			hasConfigChanged.set(hasConfigChanged.get() | Origins.config.addToConfig(origin));
 
-			if (Origins.config.isOriginDisabled(fileId)) {
-				OriginRegistry.remove(fileId);
+			if (Origins.config.isOriginDisabled(id)) {
+				OriginRegistry.remove(id);
 				return;
 			}
 
@@ -82,12 +82,12 @@ public class OriginManager extends IdentifiableMultiJsonDataLoader implements Id
 			origin.getPowerTypes().forEach(powers::add);
 
 			for (PowerType<?> power : powers) {
-				if (Origins.config.isPowerDisabled(fileId, power.getIdentifier())) {
+				if (Origins.config.isPowerDisabled(id, power.getIdentifier())) {
 					origin.removePowerType(power);
 				}
 			}
 
-		}));
+		});
 
 		Origins.LOGGER.info("Finished loading origins from data files. Registry contains {} origins.", OriginRegistry.size());
 		if (hasConfigChanged.get()) {

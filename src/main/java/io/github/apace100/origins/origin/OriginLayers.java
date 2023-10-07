@@ -22,11 +22,6 @@ import net.minecraft.util.profiler.Profiler;
 
 import java.util.*;
 
-/**
- *  FIXME:  Fix the order of which origin layers are loaded. For some reason, origin layers from data packs are always loaded before
- *          the origin layer provided by Origins if one of the said data packs provide a custom origin layer. This is not the case
- *          for other reload listeners that also use {@link IdentifiableMultiJsonDataLoader}
- */
 public class OriginLayers extends IdentifiableMultiJsonDataLoader implements IdentifiableResourceReloadListener {
 
     public static final Identifier PHASE = Origins.identifier("phase/origin_layers");
@@ -149,26 +144,26 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
     }
 
     @Override
-    protected void apply(List<MultiJsonDataContainer> prepared, ResourceManager manager, Profiler profiler) {
+    protected void apply(MultiJsonDataContainer prepared, ResourceManager manager, Profiler profiler) {
 
         clear();
         Map<Identifier, Map<Integer, List<OriginLayer>>> loadedLayers = new HashMap<>();
 
         Origins.LOGGER.info("Loading origin layer from data files...");
-        prepared.forEach(multiJsonDataContainer -> multiJsonDataContainer.forEach((packName, fileId, jsonElement) -> {
+        prepared.forEach((packName, id, jsonElement) -> {
             try {
 
                 minLayerPriority = Integer.MIN_VALUE;
-                Origins.LOGGER.info("Trying to read origin layer file \"{}\" from data pack [{}]", fileId, packName);
+                Origins.LOGGER.info("Trying to read origin layer file \"{}\" from data pack [{}]", id, packName);
 
-                OriginLayer layer = OriginLayer.fromJson(fileId, jsonElement.getAsJsonObject());
+                OriginLayer layer = OriginLayer.fromJson(id, jsonElement.getAsJsonObject());
                 int loadingPriority = layer.getLoadingPriority();
 
                 if (loadingPriority < minLayerPriority) {
                     return;
                 }
 
-                Map<Integer, List<OriginLayer>> prioritizedLayers = loadedLayers.computeIfAbsent(fileId, k -> new HashMap<>());
+                Map<Integer, List<OriginLayer>> prioritizedLayers = loadedLayers.computeIfAbsent(id, k -> new HashMap<>());
                 List<OriginLayer> layers = prioritizedLayers.computeIfAbsent(loadingPriority, i -> new LinkedList<>());
 
                 if (layer.shouldReplaceConditionedOrigins()) {
@@ -179,9 +174,9 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
                 layers.add(layer);
 
             } catch (Exception e) {
-                Origins.LOGGER.error("There was a problem reading origin layer file \"{}\" (skipping): {}", fileId, e.getMessage());
+                Origins.LOGGER.error("There was a problem reading origin layer file \"{}\" (skipping): {}", id, e.getMessage());
             }
-        }));
+        });
 
         Origins.LOGGER.info("Finished loading origin layers. Merging similar origin layers...");
         loadedLayers.forEach((id, prioritizedLayers) -> {
