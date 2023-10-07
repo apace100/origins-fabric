@@ -18,6 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public class OriginLayer implements Comparable<OriginLayer> {
@@ -200,7 +201,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
             .filter(co -> playerEntity == null || co.isConditionFulfilled(playerEntity))
             .flatMap(co -> co.origins.stream())
             .filter(OriginRegistry::contains)
-            .toList();
+            .collect(Collectors.toList());
     }
 
     public int getOriginOptionCount(PlayerEntity playerEntity) {
@@ -258,7 +259,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
             .filter(OriginRegistry::contains)
             .filter(oId -> !originsExcludedFromRandom.contains(oId))
             .filter(oid -> doesRandomAllowUnchoosable || OriginRegistry.get(oid).isChoosable())
-            .toList();
+            .collect(Collectors.toList());
     }
 
     public SerializableData.Instance toData() {
