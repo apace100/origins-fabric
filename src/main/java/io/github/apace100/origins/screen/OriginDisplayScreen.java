@@ -258,7 +258,7 @@ public class OriginDisplayScreen extends Screen {
 
     protected void renderOriginWindow(DrawContext context, int mouseX, int mouseY) {
 
-        if(origin != null) {
+        if (origin != null) {
             //context.enableScissor(guiLeft, guiTop, guiLeft + windowWidth, guiTop + windowHeight);
             this.renderOriginContent(context);
             //context.disableScissor();
@@ -267,7 +267,7 @@ public class OriginDisplayScreen extends Screen {
         context.drawGuiTexture(WINDOW_BORDER, guiLeft, guiTop, 2, WINDOW_WIDTH, WINDOW_HEIGHT);
         context.drawGuiTexture(WINDOW_NAME_PLATE, guiLeft + 10, guiTop + 10, -3, 150, 26);
 
-        if(origin != null) {
+        if (origin != null) {
 
             context.getMatrices().push();
             context.getMatrices().translate(0, 0, 5);
@@ -276,9 +276,7 @@ public class OriginDisplayScreen extends Screen {
             this.renderOriginImpact(context, mouseX, mouseY);
 
             context.getMatrices().pop();
-
-            Text title = getTitleText();
-            context.drawCenteredTextWithShadow(this.textRenderer, title.getString(), width / 2, guiTop - 15, 0xFFFFFF);
+            context.drawCenteredTextWithShadow(this.textRenderer, getTitleText(), width / 2, guiTop - 15, 0xFFFFFF);
 
         }
 
