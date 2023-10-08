@@ -55,10 +55,10 @@ public class OrbOfOriginItem extends Item {
                 }
             }
 
-            boolean canSelectOrigins = !component.checkAutoChoosingLayers(user, false)
-                                    && OriginLayers.getOriginOptionCount(user) > 0;
+            boolean originAutomaticallyAssigned = component.checkAutoChoosingLayers(user, false);
+            int originOptions = OriginLayers.getOriginOptionCount(user);
 
-            component.selectingOrigin(canSelectOrigins);
+            component.selectingOrigin(!originAutomaticallyAssigned || originOptions > 0);
             component.sync();
 
             if (component.isSelectingOrigin()) {

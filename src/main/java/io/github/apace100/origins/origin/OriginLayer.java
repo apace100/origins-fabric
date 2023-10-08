@@ -214,7 +214,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
             .filter(Origin::isChoosable)
             .count();
 
-        if (isRandomAllowed && !getRandomOrigins(playerEntity).isEmpty()) {
+        if (choosableOrigins > 1 && (isRandomAllowed && !getRandomOrigins(playerEntity).isEmpty())) {
             choosableOrigins++;
         }
 

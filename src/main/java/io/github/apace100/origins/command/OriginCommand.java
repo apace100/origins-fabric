@@ -306,10 +306,10 @@ public class OriginCommand {
 			.filter(OriginLayer::isEnabled)
 			.forEach(ol -> component.setOrigin(ol, Origin.EMPTY));
 
-		boolean canSelectOrigins = !component.checkAutoChoosingLayers(target, false)
-								&& OriginLayers.getOriginOptionCount(target) > 0;
+		boolean originAutomaticallyAssigned = component.checkAutoChoosingLayers(target, false);
+		int originOptions = layer != null ? layer.getOriginOptionCount(target) : OriginLayers.getOriginOptionCount(target);
 
-		component.selectingOrigin(canSelectOrigins);
+		component.selectingOrigin(!originAutomaticallyAssigned || originOptions > 0);
 		component.sync();
 
 		if (component.isSelectingOrigin()) {
