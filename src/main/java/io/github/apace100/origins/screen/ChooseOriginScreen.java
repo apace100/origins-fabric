@@ -46,7 +46,7 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 		}
 
 		OriginLayer currentLayer = getCurrentLayer();
-		currentLayer.getOrigins().forEach(originId -> {
+		currentLayer.getOrigins(player).forEach(originId -> {
 
 			Origin origin = OriginRegistry.get(originId);
 			if (!origin.isChoosable()) {
@@ -63,11 +63,7 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 		});
 
 		originSelection.sort(Comparator.comparingInt((Origin o) -> o.getImpact().getImpactValue()).thenComparingInt(Origin::getOrder));
-		maxSelection = originSelection.size();
-
-		if (currentLayer.isRandomAllowed() && !currentLayer.getRandomOrigins(player).isEmpty()) {
-			maxSelection += 1;
-		}
+		maxSelection = currentLayer.getOriginOptionCount(player);
 
 		if (maxSelection == 0) {
 			openNextLayerScreen();

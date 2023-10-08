@@ -95,17 +95,19 @@ public interface OriginComponent extends AutoSyncedComponent, CommonTickingCompo
 					.toList();
 
 				if (!origins.isEmpty()) {
+
 					setOrigin(layer, origins.get(0));
-				} else {
+					choseOneAutomatically = true;
+
+				} else if (layer.isRandomAllowed() && !layer.getRandomOrigins(player).isEmpty()) {
 
 					List<Identifier> randomOriginIds = layer.getRandomOrigins(player);
 					int randomOriginIndex = player.getRandom().nextInt(randomOriginIds.size());
 
 					setOrigin(layer, OriginRegistry.get(randomOriginIds.get(randomOriginIndex)));
+					choseOneAutomatically = true;
 
 				}
-
-				choseOneAutomatically = true;
 
 			}
 
