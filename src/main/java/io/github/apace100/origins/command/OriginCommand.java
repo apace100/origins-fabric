@@ -16,11 +16,9 @@ import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -209,7 +207,6 @@ public class OriginCommand {
 
 		ServerCommandSource serverCommandSource = commandContext.getSource();
 		List<ServerPlayerEntity> targets = new ArrayList<>();
-		List<OriginLayer> originLayers = OriginLayers.getLayers().stream().toList();
 
 		switch (targetType) {
 			case INVOKER -> targets.add(serverCommandSource.getPlayerOrThrow());
@@ -217,9 +214,7 @@ public class OriginCommand {
 		}
 
 		for (ServerPlayerEntity target : targets) {
-			for (OriginLayer originLayer : originLayers) {
-				openLayerScreen(target, originLayer);
-			}
+			openLayerScreen(target);
 		}
 
 		serverCommandSource.sendFeedback(() -> Text.translatable("commands.origin.gui.all", targets.size()), false);
@@ -291,18 +286,35 @@ public class OriginCommand {
 
 	}
 
-	private static void openLayerScreen(ServerPlayerEntity target, OriginLayer originLayer) {
+	private static void openLayerScreen(ServerPlayerEntity target) {
+		openLayerScreen(target, null);
+	}
 
-		OriginComponent originComponent = ModComponents.ORIGIN.get(target);
-		if (originLayer.isEnabled()) {
-			originComponent.setOrigin(originLayer, Origin.EMPTY);
+	private static void openLayerScreen(ServerPlayerEntity target, @Nullable OriginLayer layer) {
+
+		OriginComponent component = ModComponents.ORIGIN.get(target);
+		List<OriginLayer> layersToProcess = new LinkedList<>();
+
+		if (layer != null) {
+			layersToProcess.add(layer);
+		} else {
+			layersToProcess.addAll(OriginLayers.getLayers());
 		}
 
-		originComponent.selectingOrigin(true);
-		originComponent.checkAutoChoosingLayers(target, false);
-		originComponent.sync();
+		layersToProcess
+			.stream()
+			.filter(OriginLayer::isEnabled)
+			.forEach(ol -> component.setOrigin(ol, Origin.EMPTY));
 
-		ServerPlayNetworking.send(target, new OpenChooseOriginScreenS2CPacket(false));
+		boolean canSelectOrigins = !component.checkAutoChoosingLayers(target, false)
+								&& OriginLayers.getOriginOptionCount(target) > 0;
+
+		component.selectingOrigin(canSelectOrigins);
+		component.sync();
+
+		if (component.isSelectingOrigin()) {
+			ServerPlayNetworking.send(target, new OpenChooseOriginScreenS2CPacket(false));
+		}
 
 	}
 

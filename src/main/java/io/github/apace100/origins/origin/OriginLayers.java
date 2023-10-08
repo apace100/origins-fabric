@@ -14,6 +14,7 @@ import io.github.apace100.origins.registry.ModComponents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -21,6 +22,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 
 import java.util.*;
+import java.util.function.BiPredicate;
+import java.util.stream.IntStream;
 
 public class OriginLayers extends IdentifiableMultiJsonDataLoader implements IdentifiableResourceReloadListener {
 
@@ -231,6 +234,18 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
 
     public static Collection<OriginLayer> getLayers() {
         return LAYERS.values();
+    }
+
+    public static int getOriginOptionCount(PlayerEntity playerEntity) {
+        return getOriginOptionCount(playerEntity, (layer, component) -> component.hasOrigin(layer));
+    }
+
+    public static int getOriginOptionCount(PlayerEntity playerEntity, BiPredicate<OriginLayer, OriginComponent> condition) {
+        return LAYERS.values()
+            .stream()
+            .filter(ol -> ol.isEnabled() && ModComponents.ORIGIN.maybeGet(playerEntity).map(oc -> condition.test(ol, oc)).orElse(false))
+            .flatMapToInt(ol -> IntStream.of(ol.getOriginOptionCount(playerEntity)))
+            .sum();
     }
 
     public static boolean contains(OriginLayer layer) {

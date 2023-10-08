@@ -111,10 +111,6 @@ public interface OriginComponent extends AutoSyncedComponent, CommonTickingCompo
 
 		}
 
-		if (choseOneAutomatically) {
-			selectingOrigin(false);
-		}
-
 		return choseOneAutomatically;
 
 	}

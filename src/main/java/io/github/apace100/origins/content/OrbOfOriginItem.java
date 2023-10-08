@@ -55,16 +55,22 @@ public class OrbOfOriginItem extends Item {
                 }
             }
 
-            component.selectingOrigin(true);
-            component.checkAutoChoosingLayers(user, false);
+            boolean canSelectOrigins = !component.checkAutoChoosingLayers(user, false)
+                                    && OriginLayers.getOriginOptionCount(user) > 0;
+
+            component.selectingOrigin(canSelectOrigins);
             component.sync();
 
-            ServerPlayNetworking.send((ServerPlayerEntity) user, new OpenChooseOriginScreenS2CPacket(false));
+            if (component.isSelectingOrigin()) {
+                ServerPlayNetworking.send((ServerPlayerEntity) user, new OpenChooseOriginScreenS2CPacket(false));
+            }
 
         }
+
         if(!user.isCreative()) {
             stack.decrement(1);
         }
+
         return TypedActionResult.consume(stack);
 
     }
