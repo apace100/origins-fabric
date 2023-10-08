@@ -81,6 +81,10 @@ public class OriginLayer implements Comparable<OriginLayer> {
         return loadingPriority;
     }
 
+    protected List<ConditionedOrigin> getConditionedOrigins() {
+        return conditionedOrigins;
+    }
+
     public String getOrCreateTranslationKey() {
 
         if(nameTranslationKey == null || nameTranslationKey.isEmpty()) {

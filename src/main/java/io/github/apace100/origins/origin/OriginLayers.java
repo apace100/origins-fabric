@@ -23,6 +23,7 @@ import net.minecraft.util.profiler.Profiler;
 
 import java.util.*;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 public class OriginLayers extends IdentifiableMultiJsonDataLoader implements IdentifiableResourceReloadListener {
@@ -166,6 +167,17 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
                     return;
                 }
 
+                List<String> invalidOrigins = layer.getConditionedOrigins()
+                    .stream()
+                    .flatMap(co -> co.origins().stream())
+                    .filter(Predicate.not(OriginRegistry::contains))
+                    .map(Identifier::toString)
+                    .toList();
+
+                if (!invalidOrigins.isEmpty()) {
+                    Origins.LOGGER.error("Origin layer \"{}\" (from data pack [{}]) contained {} invalid origin(s): {}", layer.id, packName, invalidOrigins.size(), String.join(", ", invalidOrigins));
+                }
+
                 Map<Integer, List<OriginLayer>> prioritizedLayers = loadedLayers.computeIfAbsent(id, k -> new HashMap<>());
                 List<OriginLayer> layers = prioritizedLayers.computeIfAbsent(loadingPriority, i -> new LinkedList<>());
 
@@ -206,7 +218,7 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
 
         });
 
-        Origins.LOGGER.info("Finished loading and merging origin layers from data files. Read {} origin layers.", loadedLayers.size());
+        Origins.LOGGER.info("Finished merging similar origin layers from data files. Read {} origin layers.", loadedLayers.size());
         OriginDataLoadedCallback.EVENT.invoker().onDataLoaded(false);
 
     }
