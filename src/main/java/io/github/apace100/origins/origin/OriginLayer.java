@@ -99,8 +99,9 @@ public class OriginLayer implements Comparable<OriginLayer> {
         return name != null ? name : Text.translatable(getTranslationKey());
     }
 
+    @Nullable
     public Text getMissingName() {
-        return missingName != null ? missingName : Text.translatable(getMissingOriginNameTranslationKey());
+        return missingName != null ? missingName : null;
     }
 
     public String getMissingOriginNameTranslationKey() {
@@ -113,8 +114,9 @@ public class OriginLayer implements Comparable<OriginLayer> {
 
     }
 
+    @Nullable
     public Text getMissingDescription() {
-        return missingDescription != null ? missingDescription : Text.translatable(getMissingOriginDescriptionTranslationKey());
+        return missingDescription != null ? missingDescription : null;
     }
 
     public String getMissingOriginDescriptionTranslationKey() {

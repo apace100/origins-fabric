@@ -304,7 +304,7 @@ public class OriginDisplayScreen extends Screen {
 
         if (origin != prevOrigin) {
 
-            Text name = origin == Origin.EMPTY && layer != null ? layer.getMissingName() : origin.getName();
+            Text name = origin == Origin.EMPTY && layer != null && layer.getMissingName() != null ? layer.getMissingName() : origin.getName();
             remove(originNameWidget);
 
             originNameWidget = new ScrollingTextWidget(guiLeft + 38, guiTop + 18, WINDOW_WIDTH - (62 + 3 * 8), 9, name, true, textRenderer);
@@ -341,7 +341,7 @@ public class OriginDisplayScreen extends Screen {
 
         y -= scrollPos;
 
-        Text description = origin == Origin.EMPTY && layer != null ? layer.getMissingDescription() : origin.getDescription();
+        Text description = origin == Origin.EMPTY && layer != null && layer.getMissingDescription() != null ? layer.getMissingDescription() : origin.getDescription();
         for (OrderedText descriptionLine : textRenderer.wrapLines(description, textWidthLimit)) {
 
             if (y >= startY - 18 && y <= endY + 12) {
