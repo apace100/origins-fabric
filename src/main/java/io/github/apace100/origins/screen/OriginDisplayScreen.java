@@ -21,7 +21,6 @@ import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Language;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.LinkedList;
@@ -375,9 +374,20 @@ public class OriginDisplayScreen extends Screen {
                     continue;
                 }
 
-                //  TODO:   Perhaps use scrolling text widget for rendering the name of the power instead of trimming the text to width?
-                OrderedText powerName = Language.getInstance().reorder(textRenderer.trimToWidth(power.getName().formatted(Formatting.UNDERLINE), textWidthLimit));
-                int powerNameWidth = textRenderer.getWidth(powerName);
+                LinkedList<OrderedText> powerName = new LinkedList<>(textRenderer.wrapLines(power.getName().formatted(Formatting.UNDERLINE), textWidthLimit));
+                int powerNameWidth = textRenderer.getWidth(powerName.getLast());
+
+                for (OrderedText powerNameLine : powerName) {
+
+                    if (y >= startY - 18 && y <= endY + 12) {
+                        context.drawTextWithShadow(textRenderer, powerNameLine, x, y, 0xFFFFFF);
+                    }
+
+                    y += 12;
+
+                }
+
+                y -= 12;
 
                 int badgeStartX = x + powerNameWidth + 4;
                 int badgeEndX = x + 135;
@@ -386,8 +396,6 @@ public class OriginDisplayScreen extends Screen {
                 int badgeOffsetY = 0;
 
                 if (y >= startY - 18 && y <= endY + 12) {
-
-                    context.drawTextWithShadow(textRenderer, powerName, x, y, 0xFFFFFF);
 
                     for (Badge badge : BadgeManager.getPowerBadges(power.getIdentifier())) {
 
@@ -418,6 +426,7 @@ public class OriginDisplayScreen extends Screen {
                 for (OrderedText powerDescriptionLine : textRenderer.wrapLines(power.getDescription(), textWidthLimit)) {
 
                     y += 12;
+
                     if (y >= startY - 18 && y <= endY + 12) {
                         context.drawTextWithShadow(textRenderer, powerDescriptionLine, x + 2, y, 0xCCCCCC);
                     }
