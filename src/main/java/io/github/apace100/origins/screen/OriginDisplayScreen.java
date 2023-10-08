@@ -377,27 +377,46 @@ public class OriginDisplayScreen extends Screen {
                     continue;
                 }
 
+                //  TODO:   Perhaps use scrolling text widget for rendering the name of the power instead of trimming the text to width?
                 OrderedText powerName = Language.getInstance().reorder(textRenderer.trimToWidth(power.getName().formatted(Formatting.UNDERLINE), textWidthLimit));
+                int powerNameWidth = textRenderer.getWidth(powerName);
+
+                int badgeStartX = x + powerNameWidth + 4;
+                int badgeEndX = x + 135;
+
+                int badgeOffsetX = 0;
+                int badgeOffsetY = 0;
+
                 if (y >= startY - 18 && y <= endY + 12) {
 
                     context.drawTextWithShadow(textRenderer, powerName, x, y, 0xFFFFFF);
-                    int powerNameWidth = textRenderer.getWidth(powerName);
-
-                    int startX = x + powerNameWidth + 4;
-                    int offsetX = 0;
 
                     for (Badge badge : BadgeManager.getPowerBadges(power.getIdentifier())) {
 
-                        RenderedBadge renderedBadge = new RenderedBadge(power, badge, startX + 10 * offsetX, y - 1);
+                        int badgeX = badgeStartX + 10 * badgeOffsetX;
+                        int badgeY = (y - 1) + 10 * badgeOffsetY;
+
+                        if (badgeX >= badgeEndX) {
+
+                            badgeOffsetX = 0;
+                            badgeOffsetY++;
+
+                            badgeX = badgeStartX = x;
+                            badgeY = (y - 1) + 10 * badgeOffsetY;
+
+                        }
+
+                        RenderedBadge renderedBadge = new RenderedBadge(power, badge, badgeX, badgeY);
                         renderedBadges.add(renderedBadge);
 
                         context.drawTexture(badge.spriteId(), renderedBadge.x, renderedBadge.y, 0, 0, 9, 9, 9, 9);
-                        offsetX++;
+                        badgeOffsetX++;
 
                     }
 
                 }
 
+                y += badgeOffsetY * 10;
                 for (OrderedText powerDescriptionLine : textRenderer.wrapLines(power.getDescription(), textWidthLimit)) {
 
                     y += 12;
