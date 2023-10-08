@@ -354,23 +354,12 @@ public class OriginLayer implements Comparable<OriginLayer> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, conditionedOrigins);
+        return Objects.hash(id);
     }
 
     @Override
     public boolean equals(Object obj) {
-
-        if (this == obj) {
-            return true;
-        }
-
-        if (!(obj instanceof OriginLayer other)) {
-            return false;
-        }
-
-        return conditionedOrigins.equals(other.conditionedOrigins)
-            || ((this.id == null || other.id == null) || this.id.equals(other.id));
-
+        return this == obj || (obj instanceof OriginLayer other && Objects.deepEquals(this.id, other.id));
     }
 
     @Override
