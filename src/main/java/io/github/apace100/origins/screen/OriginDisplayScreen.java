@@ -49,6 +49,7 @@ public class OriginDisplayScreen extends Screen {
     private Origin origin;
     private Origin prevOrigin;
     private OriginLayer layer;
+    private OriginLayer prevLayer;
     private Text randomOriginText;
     private ScrollingTextWidget originNameWidget;
 
@@ -302,7 +303,7 @@ public class OriginDisplayScreen extends Screen {
 
     protected void renderOriginName(DrawContext context) {
 
-        if (origin != prevOrigin) {
+        if (origin != prevOrigin || layer != prevLayer) {
 
             Text name = origin == Origin.EMPTY && layer != null && layer.getMissingName() != null ? layer.getMissingName() : origin.getName();
             remove(originNameWidget);
@@ -311,7 +312,9 @@ public class OriginDisplayScreen extends Screen {
             originNameWidget.setAlignment(TextAlignment.LEFT);
 
             addDrawableChild(originNameWidget);
+
             prevOrigin = origin;
+            prevLayer = layer;
 
         }
 
