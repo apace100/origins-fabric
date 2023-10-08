@@ -237,7 +237,7 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
     }
 
     public static int getOriginOptionCount(PlayerEntity playerEntity) {
-        return getOriginOptionCount(playerEntity, (layer, component) -> component.hasOrigin(layer));
+        return getOriginOptionCount(playerEntity, (layer, component) -> !component.hasOrigin(layer));
     }
 
     public static int getOriginOptionCount(PlayerEntity playerEntity, BiPredicate<OriginLayer, OriginComponent> condition) {
