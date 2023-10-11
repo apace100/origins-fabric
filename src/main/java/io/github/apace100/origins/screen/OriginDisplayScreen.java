@@ -395,30 +395,31 @@ public class OriginDisplayScreen extends Screen {
                 int badgeOffsetX = 0;
                 int badgeOffsetY = 0;
 
-                if (y >= startY - 18 && y <= endY + 12) {
+                for (Badge badge : BadgeManager.getPowerBadges(power.getIdentifier())) {
 
-                    for (Badge badge : BadgeManager.getPowerBadges(power.getIdentifier())) {
+                    int badgeX = badgeStartX + 10 * badgeOffsetX;
+                    int badgeY = (y - 1) + 10 * badgeOffsetY;
 
-                        int badgeX = badgeStartX + 10 * badgeOffsetX;
-                        int badgeY = (y - 1) + 10 * badgeOffsetY;
+                    if (badgeX >= badgeEndX) {
 
-                        if (badgeX >= badgeEndX) {
+                        badgeOffsetX = 0;
+                        badgeOffsetY++;
 
-                            badgeOffsetX = 0;
-                            badgeOffsetY++;
+                        badgeX = badgeStartX = x;
+                        badgeY = (y - 1) + 10 * badgeOffsetY;
 
-                            badgeX = badgeStartX = x;
-                            badgeY = (y - 1) + 10 * badgeOffsetY;
+                    }
 
-                        }
+                    if (badgeY >= startY - 18 && badgeY <= endY + 12) {
 
                         RenderedBadge renderedBadge = new RenderedBadge(power, badge, badgeX, badgeY);
                         renderedBadges.add(renderedBadge);
 
                         context.drawTexture(badge.spriteId(), renderedBadge.x, renderedBadge.y, 0, 0, 9, 9, 9, 9);
-                        badgeOffsetX++;
 
                     }
+
+                    badgeOffsetX++;
 
                 }
 
