@@ -2,11 +2,13 @@ package io.github.apace100.origins;
 
 import io.github.apace100.apoli.ApoliClient;
 import io.github.apace100.apoli.integration.PowerClearCallback;
+import io.github.apace100.apoli.integration.PrePowerReloadCallback;
 import io.github.apace100.origins.networking.ModPacketsS2C;
 import io.github.apace100.origins.registry.ModBlocks;
 import io.github.apace100.origins.registry.ModEntities;
 import io.github.apace100.origins.screen.ViewOriginScreen;
 import io.github.apace100.origins.util.PowerKeyManager;
+import io.github.apace100.origins.util.TextureUtil;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -62,6 +64,7 @@ public class OriginsClient implements ClientModInitializer {
             }
         });
 
+        PrePowerReloadCallback.EVENT.register(TextureUtil::resetLoggedIds);
         PowerClearCallback.EVENT.register(PowerKeyManager::clearCache);
     }
 }
