@@ -10,6 +10,7 @@ import io.github.apace100.origins.mixin.DrawContextAccessor;
 import io.github.apace100.origins.origin.Impact;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
+import io.github.apace100.origins.util.TextureUtil;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -31,7 +32,8 @@ public class OriginDisplayScreen extends Screen {
     @SuppressWarnings("unused") //  The old sprite sheet for the origin screen
     private static final Identifier WINDOW = new Identifier(Origins.MODID, "textures/gui/choose_origin.png");
 
-    private static final Identifier WINDOW_BACKGROUND = Origins.identifier("choose_origin/background");
+    public static final Identifier SCREEN_BACKGROUND = Origins.identifier("textures/gui/sprites/choose_origin/background/screen.png");
+    private static final Identifier WINDOW_BACKGROUND = Origins.identifier("choose_origin/background/window");
     private static final Identifier WINDOW_BORDER = Origins.identifier("choose_origin/border");
     private static final Identifier WINDOW_NAME_PLATE = Origins.identifier("choose_origin/name_plate");
     private static final Identifier WINDOW_SCROLL_BAR = Origins.identifier("choose_origin/scroll_bar");
@@ -108,7 +110,7 @@ public class OriginDisplayScreen extends Screen {
             this.renderBackgroundTexture(context);
         }
 
-        context.drawGuiTexture(WINDOW_BACKGROUND, guiLeft, guiTop, -4, WINDOW_WIDTH, WINDOW_HEIGHT);
+        context.drawGuiTexture(TextureUtil.getGUITexture(this.origin, WINDOW_BACKGROUND), guiLeft, guiTop, -4, WINDOW_WIDTH, WINDOW_HEIGHT);
 
     }
 
@@ -120,7 +122,7 @@ public class OriginDisplayScreen extends Screen {
     @Override
     public void renderBackgroundTexture(DrawContext context) {
         context.setShaderColor(0.25F, 0.25F, 0.25F, 1.0F);
-        context.drawTexture(OPTIONS_BACKGROUND_TEXTURE, 0, 0, -5, 0.0F, 0.0F, this.width, this.height, 32, 32);
+        context.drawTexture(TextureUtil.getTexture(this.origin, SCREEN_BACKGROUND), 0, 0, -5, 0.0F, 0.0F, this.width, this.height, 32, 32);
         context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
@@ -215,7 +217,7 @@ public class OriginDisplayScreen extends Screen {
             return;
         }
 
-        context.drawGuiTexture(WINDOW_SCROLL_BAR_SLOT, guiLeft + 155, guiTop + 35, 8, 134);
+        context.drawGuiTexture(TextureUtil.getGUITexture(this.origin, WINDOW_SCROLL_BAR_SLOT), guiLeft + 155, guiTop + 35, 8, 134);
 
         int scrollbarY = 36;
         int maxScrollbarOffset = 141;
@@ -223,7 +225,7 @@ public class OriginDisplayScreen extends Screen {
         scrollbarY += (int) ((maxScrollbarOffset - scrollbarY) * (scrollPos / (float) currentMaxScroll));
 
         Identifier scrollBarTexture = this.dragScrolling || canDragScroll(mouseX, mouseY, scrollbarY) ? WINDOW_SCROLL_BAR_PRESSED : WINDOW_SCROLL_BAR;
-        context.drawGuiTexture(scrollBarTexture, guiLeft + 156, guiTop + scrollbarY, 6, 27);
+        context.drawGuiTexture(TextureUtil.getGUITexture(this.origin, scrollBarTexture), guiLeft + 156, guiTop + scrollbarY, 6, 27);
 
     }
 
@@ -267,8 +269,8 @@ public class OriginDisplayScreen extends Screen {
             //context.disableScissor();
         }
 
-        context.drawGuiTexture(WINDOW_BORDER, guiLeft, guiTop, 2, WINDOW_WIDTH, WINDOW_HEIGHT);
-        context.drawGuiTexture(WINDOW_NAME_PLATE, guiLeft + 10, guiTop + 10, -3, 150, 26);
+        context.drawGuiTexture(TextureUtil.getGUITexture(this.origin, WINDOW_BORDER), guiLeft, guiTop, 2, WINDOW_WIDTH, WINDOW_HEIGHT);
+        context.drawGuiTexture(TextureUtil.getGUITexture(this.origin, WINDOW_NAME_PLATE), guiLeft + 10, guiTop + 10, -3, 150, 26);
 
         if (origin != null) {
 
@@ -288,7 +290,7 @@ public class OriginDisplayScreen extends Screen {
     protected void renderOriginImpact(DrawContext context, int mouseX, int mouseY) {
 
         Impact impact = origin.getImpact();
-        context.drawGuiTexture(impact.getSpriteId(), guiLeft + 128, guiTop + 19, 2, 28, 8);
+        context.drawGuiTexture(TextureUtil.getGUITexture(this.origin, impact.getSpriteId()), guiLeft + 128, guiTop + 19, 2, 28, 8);
 
         if (this.isHoveringOverImpact(mouseX, mouseY)) {
             MutableText impactHoverTooltip = Text.translatable(Origins.MODID + ".gui.impact.impact").append(": ").append(impact.getTextComponent());

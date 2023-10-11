@@ -18,6 +18,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class ChooseOriginScreen extends OriginDisplayScreen {
@@ -178,7 +179,7 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 
 	private void initRandomOrigin() {
 
-		this.randomOrigin = new Origin(Origins.identifier("random"), new ItemStack(ModItems.ORB_OF_ORIGIN), Impact.NONE, -1, Integer.MAX_VALUE);
+		this.randomOrigin = new Origin(Origins.identifier("random"), new ItemStack(ModItems.ORB_OF_ORIGIN), Impact.NONE, -1, Integer.MAX_VALUE, new LinkedHashMap<>());
 
 		MutableText randomOriginText = Text.of("").copy();
 		List<Identifier> randoms = layerList.get(currentLayerIndex).getRandomOrigins(MinecraftClient.getInstance().player);

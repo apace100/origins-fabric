@@ -2,6 +2,7 @@ package io.github.apace100.origins.origin;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
+import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.MultiplePowerType;
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypeRegistry;
@@ -33,13 +34,14 @@ public class Origin {
         .add("impact", OriginsDataTypes.IMPACT, Impact.NONE)
         .add("loading_priority", SerializableDataTypes.INT, 0)
         .add("upgrades", OriginsDataTypes.UPGRADES, null)
+        .add("textures", ApoliDataTypes.IDENTIFIER_MAP, new LinkedHashMap<>())
         .add("name", SerializableDataTypes.TEXT, null)
         .add("description", SerializableDataTypes.TEXT, null);
 
     public static final Origin EMPTY;
 
     static {
-        EMPTY = register(new Origin(new Identifier(Origins.MODID, "empty"), new ItemStack(Items.AIR), Impact.NONE, -1, Integer.MAX_VALUE).setUnchoosable().setSpecial());
+        EMPTY = register(new Origin(new Identifier(Origins.MODID, "empty"), new ItemStack(Items.AIR), Impact.NONE, -1, Integer.MAX_VALUE, new LinkedHashMap<>()).setUnchoosable().setSpecial());
     }
 
     public static void init() {
@@ -78,15 +80,17 @@ public class Origin {
 
     private boolean isChoosable;
     private boolean isSpecial;
+    private final Map<Identifier, Identifier> textures;
 
 
-    public Origin(Identifier id, ItemStack icon, Impact impact, int order, int loadingPriority) {
+    public Origin(Identifier id, ItemStack icon, Impact impact, int order, int loadingPriority, Map<Identifier, Identifier> textures) {
         this.identifier = id;
         this.displayItem = icon.copy();
         this.impact = impact;
         this.isChoosable = true;
         this.order = order;
         this.loadingPriority = loadingPriority;
+        this.textures = textures;
     }
 
     public Origin addUpgrade(OriginUpgrade upgrade) {
@@ -214,6 +218,10 @@ public class Origin {
         return this.order;
     }
 
+    public Map<Identifier, Identifier> getTextures() {
+        return textures;
+    }
+
     public SerializableData.Instance toData() {
 
         SerializableData.Instance data = DATA.new Instance();
@@ -227,6 +235,7 @@ public class Origin {
         data.set("name", getName());
         data.set("description", getDescription());
         data.set("upgrades", upgrades);
+        data.set("textures", textures);
 
         return data;
 
@@ -244,7 +253,8 @@ public class Origin {
             data.get("icon"),
             data.get("impact"),
             data.getInt("order"),
-            data.getInt("loading_priority")
+            data.getInt("loading_priority"),
+            data.get("textures")
         );
 
         if(data.getBoolean("unchoosable")) {
