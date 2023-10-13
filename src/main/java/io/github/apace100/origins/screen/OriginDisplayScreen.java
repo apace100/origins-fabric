@@ -95,8 +95,6 @@ public class OriginDisplayScreen extends Screen {
         originNameWidget = new ScrollingTextWidget(guiLeft + 38, guiTop + 18, WINDOW_WIDTH - (62 + 3 * 8), 9, Text.empty(), true, textRenderer);
         refreshOriginNameWidget = true;
 
-        addDrawableChild(originNameWidget);
-
     }
 
     @Override
@@ -131,7 +129,7 @@ public class OriginDisplayScreen extends Screen {
         this.time += delta;
 
         this.renderBackground(context, mouseX, mouseY, delta);
-        this.renderOriginWindow(context, mouseX, mouseY);
+        this.renderOriginWindow(context, mouseX, mouseY, delta);
         super.render(context, mouseX, mouseY, delta);
 
         if(origin != null) {
@@ -259,7 +257,7 @@ public class OriginDisplayScreen extends Screen {
         return Text.of("Origins");
     }
 
-    protected void renderOriginWindow(DrawContext context, int mouseX, int mouseY) {
+    protected void renderOriginWindow(DrawContext context, int mouseX, int mouseY, float delta) {
 
         if (origin != null) {
             //context.enableScissor(guiLeft, guiTop, guiLeft + windowWidth, guiTop + windowHeight);
@@ -268,14 +266,14 @@ public class OriginDisplayScreen extends Screen {
         }
 
         context.drawGuiTexture(WINDOW_BORDER, guiLeft, guiTop, 2, WINDOW_WIDTH, WINDOW_HEIGHT);
-        context.drawGuiTexture(WINDOW_NAME_PLATE, guiLeft + 10, guiTop + 10, -3, 150, 26);
+        context.drawGuiTexture(WINDOW_NAME_PLATE, guiLeft + 10, guiTop + 10, 2, 150, 26);
 
         if (origin != null) {
 
             context.getMatrices().push();
             context.getMatrices().translate(0, 0, 5);
 
-            this.renderOriginName(context);
+            this.renderOriginName(context, mouseX, mouseY, delta);
             this.renderOriginImpact(context, mouseX, mouseY);
 
             context.getMatrices().pop();
@@ -302,17 +300,14 @@ public class OriginDisplayScreen extends Screen {
             && (mouseY >= guiTop + 19 && mouseY <= guiTop + 27);
     }
 
-    protected void renderOriginName(DrawContext context) {
+    protected void renderOriginName(DrawContext context, int mouseX, int mouseY, float delta) {
 
         if (refreshOriginNameWidget || (origin != prevOrigin || layer != prevLayer)) {
 
             Text name = origin == Origin.EMPTY && layer != null && layer.getMissingName() != null ? layer.getMissingName() : origin.getName();
-            remove(originNameWidget);
 
             originNameWidget = new ScrollingTextWidget(guiLeft + 38, guiTop + 18, WINDOW_WIDTH - (62 + 3 * 8), 9, name, true, textRenderer);
             originNameWidget.setAlignment(TextAlignment.LEFT);
-
-            addDrawableChild(originNameWidget);
 
             refreshOriginNameWidget = false;
 
@@ -320,6 +315,8 @@ public class OriginDisplayScreen extends Screen {
             prevLayer = layer;
 
         }
+
+        originNameWidget.render(context, mouseX, mouseY, delta);
 
         ItemStack iconStack = getCurrentOrigin().getDisplayItem();
         context.drawItem(iconStack, guiLeft + 15, guiTop + 15);
@@ -350,7 +347,7 @@ public class OriginDisplayScreen extends Screen {
         Text description = origin == Origin.EMPTY && layer != null && layer.getMissingDescription() != null ? layer.getMissingDescription() : origin.getDescription();
         for (OrderedText descriptionLine : textRenderer.wrapLines(description, textWidthLimit)) {
 
-            if (y >= startY - 18 && y <= endY + 12) {
+            if (y >= startY - 24 && y <= endY + 12) {
                 context.drawTextWithShadow(textRenderer, descriptionLine, x + 2, y, 0xCCCCCC);
             }
 
@@ -364,7 +361,8 @@ public class OriginDisplayScreen extends Screen {
             for (OrderedText randomOriginLine : textRenderer.wrapLines(randomOriginText, textWidthLimit)) {
 
                 y += 12;
-                if (y >= startY - 18 && y <= endY + 12) {
+
+                if (y >= startY - 24 && y <= endY + 12) {
                     context.drawTextWithShadow(textRenderer, randomOriginLine, x + 2, y, 0xCCCCCC);
                 }
 
@@ -385,7 +383,7 @@ public class OriginDisplayScreen extends Screen {
 
                 for (OrderedText powerNameLine : powerName) {
 
-                    if (y >= startY - 18 && y <= endY + 12) {
+                    if (y >= startY - 24 && y <= endY + 12) {
                         context.drawTextWithShadow(textRenderer, powerNameLine, x, y, 0xFFFFFF);
                     }
 
@@ -416,12 +414,12 @@ public class OriginDisplayScreen extends Screen {
 
                     }
 
-                    if (badgeY >= startY - 18 && badgeY <= endY + 12) {
+                    if (badgeY >= startY - 34 && badgeY <= endY + 12) {
 
                         RenderedBadge renderedBadge = new RenderedBadge(power, badge, badgeX, badgeY);
                         renderedBadges.add(renderedBadge);
 
-                        context.drawTexture(badge.spriteId(), renderedBadge.x, renderedBadge.y, 0, 0, 9, 9, 9, 9);
+                        context.drawTexture(badge.spriteId(), renderedBadge.x, renderedBadge.y, -2, 0, 0, 9, 9, 9, 9);
 
                     }
 
@@ -434,7 +432,7 @@ public class OriginDisplayScreen extends Screen {
 
                     y += 12;
 
-                    if (y >= startY - 18 && y <= endY + 12) {
+                    if (y >= startY - 24 && y <= endY + 12) {
                         context.drawTextWithShadow(textRenderer, powerDescriptionLine, x + 2, y, 0xCCCCCC);
                     }
 
