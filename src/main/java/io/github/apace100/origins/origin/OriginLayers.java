@@ -36,7 +36,8 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
         .setPrettyPrinting()
         .create();
 
-    private static int minLayerPriority = Integer.MIN_VALUE;
+    private static Identifier prevId = null;
+    private static int prevPriority = Integer.MIN_VALUE;
 
     public OriginLayers() {
         super(GSON, "origin_layers", ResourceType.SERVER_DATA);
@@ -151,19 +152,26 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
     protected void apply(MultiJsonDataContainer prepared, ResourceManager manager, Profiler profiler) {
 
         clear();
-        Map<Identifier, Map<Integer, List<OriginLayer>>> loadedLayers = new HashMap<>();
+        Map<Identifier, List<OriginLayer>> loadedLayers = new HashMap<>();
 
         Origins.LOGGER.info("Loading origin layer from data files...");
         prepared.forEach((packName, id, jsonElement) -> {
             try {
 
-                minLayerPriority = Integer.MIN_VALUE;
+                if (prevId == null || !prevId.equals(id)) {
+
+                    prevPriority = Integer.MIN_VALUE;
+                    prevId = id;
+
+                }
+
                 Origins.LOGGER.info("Trying to read origin layer file \"{}\" from data pack [{}]", id, packName);
 
                 OriginLayer layer = OriginLayer.fromJson(id, jsonElement.getAsJsonObject());
                 int loadingPriority = layer.getLoadingPriority();
 
-                if (loadingPriority < minLayerPriority) {
+                if (loadingPriority < prevPriority) {
+                    Origins.LOGGER.warn("Ignoring replaced duplicate origin layer \"{}\" with a lower loading priority.", id);
                     return;
                 }
 
@@ -178,12 +186,11 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
                     Origins.LOGGER.error("Origin layer \"{}\" (from data pack [{}]) contained {} invalid origin(s): {}", layer.id, packName, invalidOrigins.size(), String.join(", ", invalidOrigins));
                 }
 
-                Map<Integer, List<OriginLayer>> prioritizedLayers = loadedLayers.computeIfAbsent(id, k -> new HashMap<>());
-                List<OriginLayer> layers = prioritizedLayers.computeIfAbsent(loadingPriority, i -> new LinkedList<>());
+                List<OriginLayer> layers = loadedLayers.computeIfAbsent(id, k -> new LinkedList<>());
 
                 if (layer.shouldReplaceConditionedOrigins()) {
                     layers.clear();
-                    minLayerPriority = loadingPriority + 1;
+                    prevPriority = loadingPriority + 1;
                 }
 
                 layers.add(layer);
@@ -194,24 +201,22 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
         });
 
         Origins.LOGGER.info("Finished loading origin layers. Merging similar origin layers...");
-        loadedLayers.forEach((id, prioritizedLayers) -> {
+        loadedLayers.forEach((id, layers) -> {
 
             OriginLayer[] currentLayer = {null};
-            List<Integer> priorities = prioritizedLayers.keySet()
+            List<OriginLayer> sortedLayers = layers
                 .stream()
-                .sorted()
+                .sorted(Comparator.comparing(OriginLayer::getLoadingPriority))
                 .toList();
 
-            for (int priority : priorities) {
-                for (OriginLayer layer : prioritizedLayers.get(priority)) {
+            for (OriginLayer layer : sortedLayers) {
 
-                    if (currentLayer[0] == null) {
-                        currentLayer[0] = layer;
-                    } else {
-                        currentLayer[0].merge(layer);
-                    }
-
+                if (currentLayer[0] == null) {
+                    currentLayer[0] = layer;
+                } else {
+                    currentLayer[0].merge(layer);
                 }
+
             }
 
             OriginLayers.register(id, currentLayer[0]);
