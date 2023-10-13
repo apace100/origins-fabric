@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import dev.onyxstudios.cca.api.v3.component.ComponentProvider;
 import io.github.apace100.calio.data.IdentifiableMultiJsonDataLoader;
 import io.github.apace100.calio.data.MultiJsonDataContainer;
+import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.integration.OriginDataLoadedCallback;
@@ -152,11 +153,16 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
     protected void apply(MultiJsonDataContainer prepared, ResourceManager manager, Profiler profiler) {
 
         clear();
+        prevId = null;
+
         Map<Identifier, List<OriginLayer>> loadedLayers = new HashMap<>();
 
         Origins.LOGGER.info("Loading origin layer from data files...");
         prepared.forEach((packName, id, jsonElement) -> {
             try {
+
+                SerializableData.CURRENT_NAMESPACE = id.getNamespace();
+                SerializableData.CURRENT_PATH = id.getPath();
 
                 if (prevId == null || !prevId.equals(id)) {
 
@@ -225,6 +231,9 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
 
         Origins.LOGGER.info("Finished merging similar origin layers from data files. Read {} origin layers.", loadedLayers.size());
         OriginDataLoadedCallback.EVENT.invoker().onDataLoaded(false);
+
+        SerializableData.CURRENT_NAMESPACE = null;
+        SerializableData.CURRENT_PATH = null;
 
     }
 
