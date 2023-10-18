@@ -57,8 +57,8 @@ public class PlayerOriginComponent implements OriginComponent {
         return OriginLayers.getLayers()
             .stream()
             .allMatch(layer -> !layer.isEnabled()
-                            || layer.getOrigins().isEmpty()
-                            || (origins.containsKey(layer) && origins.get(layer) != Origin.EMPTY));
+                            || (layer.getOrigins().isEmpty() || layer.getOriginOptionCount(player) == 0)
+                            || hasOrigin(layer));
     }
 
     @Override
@@ -69,7 +69,6 @@ public class PlayerOriginComponent implements OriginComponent {
     @Override
     public boolean hasOrigin(OriginLayer layer) {
         return origins.containsKey(layer)
-            && origins.get(layer) != null
             && origins.get(layer) != Origin.EMPTY;
     }
 
