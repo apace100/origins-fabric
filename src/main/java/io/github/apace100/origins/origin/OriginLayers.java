@@ -1,5 +1,6 @@
 package io.github.apace100.origins.origin;
 
+import carpet.patches.EntityPlayerMPFake;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dev.onyxstudios.cca.api.v3.component.ComponentProvider;
@@ -15,6 +16,7 @@ import io.github.apace100.origins.registry.ModComponents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
@@ -138,15 +140,21 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
 
         if (component.hasAllOrigins()) {
             OriginComponent.onChosen(player, false);
-        } else {
+        } else if (!isFakePlayer(player)) {
 
             component.selectingOrigin(true);
             component.sync();
 
             ServerPlayNetworking.send(player, new OpenChooseOriginScreenS2CPacket(true));
 
+        } else {
+            component.sync();
         }
 
+    }
+
+    private static boolean isFakePlayer(ServerPlayerEntity player) {
+        return FabricLoader.getInstance().isModLoaded("carpet") && player instanceof EntityPlayerMPFake;
     }
 
     @Override
