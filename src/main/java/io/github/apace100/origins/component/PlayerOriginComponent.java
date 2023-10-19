@@ -103,12 +103,20 @@ public class PlayerOriginComponent implements OriginComponent {
         }
 
         PowerHolderComponent powerComponent = PowerHolderComponent.KEY.get(player);
+        if (oldOrigin != null) {
+
+            if (!oldOrigin.getIdentifier().equals(origin.getIdentifier())) {
+                powerComponent.removeAllPowersFromSource(oldOrigin.getIdentifier());
+            }
+
+            else if (!oldOrigin.toJson().equals(origin.toJson())) {
+                revokeRemovedPowers(origin, powerComponent);
+            }
+
+        }
+
         grantPowersFromOrigin(origin, powerComponent);
         this.origins.put(layer, origin);
-
-        if (oldOrigin != null && !origin.getIdentifier().equals(oldOrigin.getIdentifier())) {
-            powerComponent.removeAllPowersFromSource(oldOrigin.getIdentifier());
-        }
 
         if (this.hasAllOrigins()) {
             this.hadOriginBefore = true;
@@ -121,12 +129,11 @@ public class PlayerOriginComponent implements OriginComponent {
     }
 
     private void grantPowersFromOrigin(Origin origin, PowerHolderComponent powerComponent) {
-        Identifier source = origin.getIdentifier();
-        for(PowerType<?> powerType : origin.getPowerTypes()) {
-            if(!powerComponent.hasPower(powerType, source)) {
-                powerComponent.addPower(powerType, source);
-            }
-        }
+        Identifier sourceId = origin.getIdentifier();
+        origin.getPowerTypes()
+            .stream()
+            .filter(pt -> !powerComponent.hasPower(pt, sourceId))
+            .forEach(pt -> powerComponent.addPower(pt, sourceId));
     }
 
     private void revokeRemovedPowers(Origin origin, PowerHolderComponent powerComponent) {
