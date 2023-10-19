@@ -46,6 +46,9 @@ repositories {
 		}
 	}
 	maven {
+		url "https://masa.dy.fi/maven"
+	}
+	maven {
 		url "https://jitpack.io"
 	}
 	maven {
@@ -80,6 +83,8 @@ dependencies {
 	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
+
+	modCompileOnlyApi "carpet:fabric-carpet:${project.carpet_version}"
 
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 	include modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}")
