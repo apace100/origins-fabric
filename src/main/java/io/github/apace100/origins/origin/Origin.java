@@ -180,7 +180,7 @@ public class Origin {
         return this.isChoosable;
     }
 
-    public Iterable<PowerType<?>> getPowerTypes() {
+    public List<PowerType<?>> getPowerTypes() {
         return powerTypes;
     }
 
