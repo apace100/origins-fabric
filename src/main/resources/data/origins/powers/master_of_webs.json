@@ -19,6 +19,10 @@
           "block": "origins:temporary_cobweb"
         }
       }
+    },
+    "condition": {
+      "type": "origins:sneaking",
+      "inverted": true
     }
   },
   "no_slowdown": {
@@ -43,8 +47,17 @@
       ]
     },
     "hold_condition": {
-      "type": "origins:power_active",
-      "power": "*:*_climbing"
+      "type": "origins:and",
+      "conditions": [
+        {
+          "type": "origins:power_active",
+          "power": "*:*_climbing"
+        },
+        {
+          "type": "origins:sneaking",
+          "inverted": true
+        }
+      ]
     }
   },
   "punch_through": {

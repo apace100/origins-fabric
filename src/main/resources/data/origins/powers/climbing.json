@@ -9,7 +9,7 @@
   },
   "climbing": {
     "type": "origins:climbing",
-    "hold_condition": {
+    "condition": {
       "type": "origins:and",
       "conditions": [
         {
@@ -18,28 +18,14 @@
             {
               "type": "origins:block_collision",
               "offset_x": 0.01,
-              "offset_z": 0.01,
-              "offset_y": 0
+              "offset_z": 0.01
             },
             {
               "type": "origins:block_collision",
               "offset_x": -0.01,
-              "offset_z": -0.01,
-              "offset_y": 0
+              "offset_z": -0.01
             }
           ]
-        },
-        {
-          "type": "origins:power_active",
-          "power": "*:*_toggle"
-        }
-      ]
-    },
-    "condition": {
-      "type": "origins:and",
-      "conditions": [
-        {
-          "type": "origins:collided_horizontally"
         },
         {
           "type": "origins:power_active",
