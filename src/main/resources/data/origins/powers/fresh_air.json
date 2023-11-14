@@ -5,5 +5,7 @@
     "comparison": "<",
     "compare_to": 86
   },
-  "message": "origins.avian_sleep_fail"
+  "message": {
+    "translate": "origins.avian_sleep_fail"
+  }
 }
