@@ -13,23 +13,48 @@
       "type": "origins:and",
       "conditions": [
         {
+          "type": "origins:power_active",
+          "power": "*:*_toggle"
+        },
+        {
           "type": "origins:or",
           "conditions": [
             {
-              "type": "origins:block_collision",
-              "offset_x": 0.01,
-              "offset_z": 0.01
+              "type": "origins:and",
+              "conditions": [
+                {
+                  "type": "origins:sneaking",
+                  "inverted": true
+                },
+                {
+                  "type": "origins:collided_horizontally"
+                }
+              ]
             },
             {
-              "type": "origins:block_collision",
-              "offset_x": -0.01,
-              "offset_z": -0.01
+              "type": "origins:and",
+              "conditions": [
+                {
+                  "type": "origins:sneaking"
+                },
+                {
+                  "type": "origins:or",
+                  "conditions": [
+                    {
+                      "type": "origins:block_collision",
+                      "offset_x": 0.01,
+                      "offset_z": 0.01
+                    },
+                    {
+                      "type": "origins:block_collision",
+                      "offset_x": -0.01,
+                      "offset_z": -0.01
+                    }
+                  ]
+                }
+              ]
             }
           ]
-        },
-        {
-          "type": "origins:power_active",
-          "power": "*:*_toggle"
         }
       ]
     }
