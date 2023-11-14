@@ -45,7 +45,7 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 				iconStack.getOrCreateNbt().putString("SkullOwner", player.getName().getString());
 			}
 
-			if (!layer.isHidden() || (origin != Origin.EMPTY || layer.getOriginOptionCount(player) > 0)) {
+			if (!layer.isHidden() && (origin != Origin.EMPTY || layer.getOriginOptionCount(player) > 0)) {
 				originLayers.add(new Pair<>(layer, origin));
 			}
 

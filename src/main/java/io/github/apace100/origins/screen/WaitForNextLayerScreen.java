@@ -29,31 +29,42 @@ public class WaitForNextLayerScreen extends Screen {
     }
 
     public void openSelection() {
-        int index = currentLayerIndex + 1;
-        PlayerEntity player = MinecraftClient.getInstance().player;
-        OriginComponent component = ModComponents.ORIGIN.get(player);
-        while(index < layerList.size()) {
-            if(!component.hasOrigin(layerList.get(index)) && !layerList.get(index).getOrigins(player).isEmpty()) {
-                MinecraftClient.getInstance().setScreen(new ChooseOriginScreen(layerList, index, showDirtBackground));
-                return;
+
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.player != null) {
+
+            OriginComponent component = ModComponents.ORIGIN.get(client.player);
+            OriginLayer layer;
+
+            for (int index = currentLayerIndex + 1; index < layerList.size(); index++) {
+
+                layer = layerList.get(index);
+
+                if (!component.hasOrigin(layer) && !layer.getOrigins(client.player).isEmpty()) {
+                    client.setScreen(new ChooseOriginScreen(layerList, index, showDirtBackground));
+                    return;
+                }
+
             }
-            index++;
+
         }
-        MinecraftClient.getInstance().setScreen(null);
+
+        client.setScreen(null);
+
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        if(maxSelection == 0) {
+        if (maxSelection == 0) {
             openSelection();
-            return;
+        } else {
+            this.renderBackground(context, mouseX, mouseY, delta);
         }
-        this.renderBackground(context, mouseX, mouseY, delta);
     }
 
     @Override
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
-        if(showDirtBackground) {
+        if (showDirtBackground) {
             super.renderBackgroundTexture(context);
         } else {
             super.renderBackground(context, mouseX, mouseY, delta);
