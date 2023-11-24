@@ -1,5 +1,6 @@
 package io.github.apace100.origins;
 
+import blue.endless.jankson.Comment;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -25,6 +26,7 @@ import io.github.apace100.origins.util.OriginsJsonConfigSerializer;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.serializer.ConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -134,6 +136,20 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 	public static class ServerConfig implements ConfigData {
 
 		public boolean performVersionCheck = true;
+
+		@ConfigEntry.Gui.CollapsibleObject
+		public WaterProtection waterProtection = new WaterProtection();
+
+		public static class WaterProtection {
+			@Comment("Warning! Changing this may prevent you from joining origins servers. Do so at your own risk!")
+			public boolean register = true;
+
+			public boolean enchantingTable = false;
+
+			public boolean treasureBooks = true;
+
+			public boolean treasureOther = false;
+		}
 
 		public JsonObject origins = new JsonObject();
 
