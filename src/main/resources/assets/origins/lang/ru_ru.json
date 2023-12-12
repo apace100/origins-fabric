@@ -1,156 +1,156 @@
 {
   "origin.origins.human.name": "Человек",
-  "origin.origins.human.description": "Обычный Человек. Ваша обычная игра в Майнкрафт ждет вас.",
+  "origin.origins.human.description": "Ничем не примечательный Человек. Вас ожидает самая обычная игра в майнкрафт.",
 
-  "origin.origins.merling.name": "Мерлин",
-  "origin.origins.merling.description": "Эти естественные обитатели океана не привыкли слишком долго находиться на суше.",
+  "origin.origins.merling.name": "Русалки",
+  "origin.origins.merling.description": "Обитатели океана, не привыкшие слишком долго находиться на суше.",
 
   "origin.origins.arachnid.name": "Арахнид",
-  "origin.origins.arachnid.description": "Их способности взбираться и ловить своих врагов в паутину делают Арахнидов идеальными охотниками.",
+  "origin.origins.arachnid.description": "Способности карабкаться по стенам и ловить врагов в паутину делают Арахнидов превосходными охотниками.",
 
-  "origin.origins.blazeborn.name": "Огнерожденный",
-  "origin.origins.blazeborn.description": "Поздние потомки пламени, Огнерожденные, естественно, невосприимчивы к опасностям Нижнего Мира.",
+  "origin.origins.blazeborn.name": "Огнерождённый",
+  "origin.origins.blazeborn.description": "Поздние потомки всполохов, Огнерождённые, невосприимчивы к опасностям Нижнего мира.",
 
-  "origin.origins.avian.name": "Авианы",
-  "origin.origins.avian.description": "Авианы уже давно потеряли способность летать. Теперь эти мирные существа могут быть замечены скользящими с одного места на другое.",
+  "origin.origins.avian.name": "Авиан",
+  "origin.origins.avian.description": "Авианы уже давно утратили способности летать. Теперь эти мирные существа могут лишь планировать с места на место.",
 
   "origin.origins.phantom.name": "Фантом",
-  "origin.origins.phantom.description": "Будучи наполовину людьми и наполовину фантомами, эти существа могут переключаться между фантомом и нормальной формой.",
+  "origin.origins.phantom.description": "Наполовину люди и наполовину призраки - существа, застрявшие меж мирами и способные сменять призрачную и материальную формы.",
 
-  "origin.origins.feline.name": "Коточеловек",
-  "origin.origins.feline.description": "С их кошачьей внешностью, Котолюди отпугивают ползучих прочь. С кошачьей ловкостью они всегда благополучно приземляются на ноги.",
+  "origin.origins.feline.name": "Кошколюд",
+  "origin.origins.feline.description": "Обладая кошачьей внешностью, Кошколюды отпугивают криперов. С проворностью, не уступающей рыси, они всегда благополучно приземляются на лапы.",
 
   "origin.origins.elytrian.name": "Элитрианец",
-  "origin.origins.elytrian.description": "Часто летая по ветру, Элитрианцы чувствуют себя неуютно, когда им не хватает места над головой.",
+  "origin.origins.elytrian.description": "Частенько летают в вольных ветрах. Элитрианцы чувствуют себя неуютно, если им не хватает простора над головой.",
 
   "origin.origins.enderian.name": "Эндерианец",
-  "origin.origins.enderian.description": "Рожденные как сыновья и дочери Дракона Края, Эндерианцы способны к телепортации, но уязвимы для воды.",
+  "origin.origins.enderian.description": "Сыновья и дочери Дракона Края, Эндерианцы обладают способностью телепортироваться, но крайне уязвимы для воды.",
 
   "origin.origins.shulk.name": "Шалк",
-  "origin.origins.shulk.description": "Из-за родства с шалкерами, Шалки снабжены защитной оболочкой, похожий на панцирь.",
+  "origin.origins.shulk.description": "Из-за родства с шалкерами, Шалки снабжены защитной оболочкой, похожей на панцирь.",
 
   "power.origins.water_breathing.name": "Жабры",
-  "power.origins.water_breathing.description": "Ты можешь дышать под водой, но не на суше.",
+  "power.origins.water_breathing.description": "Вы можете дышать под водой, но не на суше.",
 
-  "power.origins.aqua_affinity.name": "Родство с Водой",
-  "power.origins.aqua_affinity.description": "Ты можешь ломать блоки под водой так же быстро, как и на земле.",
+  "power.origins.aqua_affinity.name": "Родство с водой",
+  "power.origins.aqua_affinity.description": "Вы можете ломать блоки под водой так же быстро, как и на земле.",
 
-  "power.origins.water_vision.name": "Мокрые Глаза",
-  "power.origins.water_vision.description": "Твое зрение под водой идеально.",
+  "power.origins.water_vision.name": "Влажные глаза",
+  "power.origins.water_vision.description": "Безупречное зрение под водой.",
 
-  "power.origins.swim_speed.name": "Ласты",
-  "power.origins.swim_speed.description": "Твоя подводная скорость увеличена.",
+  "power.origins.swim_speed.name": "Плавники",
+  "power.origins.swim_speed.description": "Скорость плавания увеличена.",
 
-  "power.origins.like_water.name": "Любовь к Воде",
-  "power.origins.like_water.description": "Находясь под водой, ты не опускаешься глубже, если не хочешь этого.",
+  "power.origins.like_water.name": "Подобный воде",
+  "power.origins.like_water.description": "Находясь под водой, вы не погружаетесь глубже, пока того не захотите.",
 
   "power.origins.fragile.name": "Хрупкость",
-  "power.origins.fragile.description": "У тебя на 3 сердца меньше здоровья, чем у людей.",
+  "power.origins.fragile.description": "На 3 сердца меньше, чем у людей.",
 
   "power.origins.webbing.name": "Плетение",
-  "power.origins.webbing.description": "Когда ты поражаешь врага в ближнем бою, он застревает в паутине.",
+  "power.origins.webbing.description": "Если ударить врага в ближнем бою, он застрянет в паутине.",
 
   "power.origins.climbing.name": "Карабканье",
-  "power.origins.climbing.description": "Ты можешь взобраться на любую стену, а не только по лестницам.",
+  "power.origins.climbing.description": "Вы можете взбираться на любые стены, и не только по лестницам.",
 
-  "power.origins.carnivore.name": "Хищничество",
-  "power.origins.carnivore.description": "Твой рацион ограничен мясом, ты не можешь есть овощи.",
+  "power.origins.carnivore.name": "Плотоядный",
+  "power.origins.carnivore.description": "Ваш рацион ограничен мясом, вы терпеть не можете овощи.",
 
-  "power.origins.fire_immunity.name": "Иммунитет к Огню",
-  "power.origins.fire_immunity.description": "Ты невосприимчив ко всем видам повреждений от огня.",
+  "power.origins.fire_immunity.name": "Огнестойкость",
+  "power.origins.fire_immunity.description": "Невосприимчивость ко всем видам повреждений от огня.",
 
-  "power.origins.nether_spawn.name": "Обитатель Нижнего Мира",
-  "power.origins.nether_spawn.description": "Твоя естественная точка появления будет в нижнем мире.",
+  "power.origins.nether_spawn.name": "Обитатель Нижнего мира",
+  "power.origins.nether_spawn.description": "Ваш путь начинается в Нижнем мире.",
 
-  "power.origins.burning_wrath.name": "Пылающий Гнев",
-  "power.origins.burning_wrath.description": "Когда ты в огне, ты наносишь дополнительный урон своими атаками.",
+  "power.origins.burning_wrath.name": "Пламенный гнев",
+  "power.origins.burning_wrath.description": "Когда вы загораетесь, то наносите дополнительный урон.",
 
-  "power.origins.hotblooded.name": "Горячая Кровь",
-  "power.origins.hotblooded.description": "Из-за твоего горячего тела, яды сгорают, что делает тебя невосприимчивыми к воздействию яда и голода.",
+  "power.origins.hotblooded.name": "Раскалённая кровь",
+  "power.origins.hotblooded.description": "Яды испаряются из горячего тела, обеспечивая устойчивость к отравлению и голоду.",
 
   "power.origins.water_vulnerability.name": "Гидрофобия",
-  "power.origins.water_vulnerability.description": "Ты получаешь повреждения с течением времени, находясь в контакте с водой.",
+  "power.origins.water_vulnerability.description": "Находясь в воде, вы получаете повреждения.",
 
-  "power.origins.tailwind.name": "Попутный Ветер",
-  "power.origins.tailwind.description": "Ты немного быстрее идешь пешком, чем другие.",
+  "power.origins.tailwind.name": "Попутный ветер",
+  "power.origins.tailwind.description": "Вы ходите немного быстрее других.",
 
-  "power.origins.slow_falling.name": "Легкий Вес",
-  "power.origins.slow_falling.description": "Ты падаешь на землю так же мягко, как перышко, если только не крадешься.",
+  "power.origins.slow_falling.name": "Невесомый",
+  "power.origins.slow_falling.description": "Пока не крадётесь, вы будете опускаться на землю так же плавно, как пёрышко.",
 
-  "power.origins.vegetarian.name": "Вегетарианец",
-  "power.origins.vegetarian.description": "Ты не можешь есть мясо.",
+  "power.origins.vegetarian.name": "Травоядный",
+  "power.origins.vegetarian.description": "Вы не способны переваривать мясо.",
   
-  "power.origins.fresh_air.name": "Свежий Воздух",
-  "power.origins.fresh_air.description": "Во время сна твоя кровать должна находиться на высоте не менее 86 блоков, чтобы ты мог дышать свежим воздухом.",
+  "power.origins.fresh_air.name": "Свежий воздух",
+  "power.origins.fresh_air.description": "Во время сна кровать должна находиться на высоте не менее 86 блоков, чтобы вы могли наслаждаться свежим воздухом.",
 
-  "power.origins.phasing.name": "Этапность",
-  "power.origins.phasing.description": "Будучи фантомизированным, ты можешь пройти сквозь твердый материал, за исключением обсидиана.",
+  "power.origins.phasing.name": "Смещение фазы",
+  "power.origins.phasing.description": "В призрачной форме вы способны проходить сквозь твёрдые препятствия, за исключением обсидиана.",
 
   "power.origins.invisibility.name": "Невидимость",
-  "power.origins.invisibility.description": "Во время фантомизации, ты невидим.",
+  "power.origins.invisibility.description": "Призрачная форма скрывает ваше присутствие.",
 
-  "power.origins.hunger_over_time.name": "Быстрый Метаболизм",
-  "power.origins.hunger_over_time.description": "Во время фантомизации ты быстро голодаешь.",
+  "power.origins.hunger_over_time.name": "Быстрый метаболизм",
+  "power.origins.hunger_over_time.description": "Голод тратится намного быстрее при нахождении в призрачной форме.",
 
-  "power.origins.burn_in_daylight.name": "Фотоаллергия",
-  "power.origins.burn_in_daylight.description": "Ты начинаешь гореть при дневном свете, если ты не невидим.",
+  "power.origins.burn_in_daylight.name": "Аллергия на солнце",
+  "power.origins.burn_in_daylight.description": "Дневной свет сжигает вас, если вы не в призрачной форме.",
 
   "power.origins.fall_immunity.name": "Акробатика",
-  "power.origins.fall_immunity.description": "Ты никогда не получаешь урон от падения, независимо от того, с какой высоты ты падаешь.",
+  "power.origins.fall_immunity.description": "Вне зависимости от высоты падения, вы не получите повреждений.",
 
-  "power.origins.sprint_jump.name": "Сильные Лодыжки",
-  "power.origins.sprint_jump.description": "Ты можешь прыгать выше, подпрыгивая во время спринта.",
+  "power.origins.sprint_jump.name": "Развитые лапы",
+  "power.origins.sprint_jump.description": "Вы прыгаете выше во время бега.",
 
-  "power.origins.nine_lives.name": "У Кошки Девять Жизней",
-  "power.origins.nine_lives.description": "У тебя на 1 сердце меньше чем у людей.",
+  "power.origins.nine_lives.name": "Девять жизней",
+  "power.origins.nine_lives.description": "На 1 сердце меньше, чем у людей.",
 
-  "power.origins.cat_vision.name": "Ноктурнал",
-  "power.origins.cat_vision.description": "Ты можешь немного видеть в темноте, когда не находишься в воде.",
+  "power.origins.cat_vision.name": "Сумеречный",
+  "power.origins.cat_vision.description": "Пока не находитесь в воде, вы способны видеть в темноте чуть лучше.",
 
-  "power.origins.weak_arms.name": "Слабые Руки",
-  "power.origins.weak_arms.description": "Когда ты не находишься под действием зелья силы, ты можешь добывать природный камень только в том случае, если рядом с ним есть не более 2 других природных каменных блоков.",
+  "power.origins.weak_arms.name": "Слабые руки",
+  "power.origins.weak_arms.description": "Пока на вас не действует зелье силы, вы не способны добывать природный камень, если рядом с ним находятся 2 и более других камней.",
 
-  "power.origins.scare_creepers.name": "Кошачья Внешность",
-  "power.origins.scare_creepers.description": "Криперы боятся тебя и взорвутся только в том случае, если ты нападешь на них первыми.",
+  "power.origins.scare_creepers.name": "Кошачья наружность",
+  "power.origins.scare_creepers.description": "Криперы боятся вас, а взрываются только в том случае, если вы нападёте на них первыми.",
 
-  "power.origins.launch_into_air.name": "Дар Крыльев",
-  "power.origins.launch_into_air.description": "Каждые 30 секунд ты можешь подниматься на расстояние до 20 блоков в воздух.",
+  "power.origins.launch_into_air.name": "Дар ветров",
+  "power.origins.launch_into_air.description": "Каждые 30 секунд вы способны подлетать на расстояние до 20 блоков ввысь.",
 
-  "power.origins.elytra.name": "Крылатый",
-  "power.origins.elytra.description": "У тебя есть крылья Элитр без необходимости их надевать.",
+  "power.origins.elytra.name": "Окрылённый",
+  "power.origins.elytra.description": "Элитры были у вас с рождения.",
 
-  "power.origins.light_armor.name": "Нужда в Мобильности",
-  "power.origins.light_armor.description": "Ты не можешь носить тяжелую броню (броня с более высокими значениями защиты, чем кольчуга).",
+  "power.origins.light_armor.name": "Свобода движений",
+  "power.origins.light_armor.description": "Вы не можете носить тяжёлую броню (броню с показателем защиты выше кольчужной).",
 
-  "power.origins.claustrophobia.name": "Клаустрафобия",
-  "power.origins.claustrophobia.description": "Пребывание где-то с низким потолком слишком долго - ослабит тебя и сделает медленнее.",
+  "power.origins.claustrophobia.name": "Клаустрофобия",
+  "power.origins.claustrophobia.description": "Нахождение в пространстве с низким потолком ослабляет вас и делает медленнее.",
 
-  "power.origins.more_kinetic_damage.name": "Хрустальные Кости",
-  "power.origins.more_kinetic_damage.description": "Ты получаешь больше урона от падения и/или полета в блоки.",
+  "power.origins.more_kinetic_damage.name": "Ломкие кости",
+  "power.origins.more_kinetic_damage.description": "Вы получаете больше урона от падения и столкновения с блоками в полёте.",
 
-  "power.origins.aerial_combatant.name": "Воздушный Боец",
-  "power.origins.aerial_combatant.description": "Ты наносишь значительно больше урона, находясь в полете на Элитрах.",
+  "power.origins.aerial_combatant.name": "Основы воздушного боя",
+  "power.origins.aerial_combatant.description": "Вы наносите намного больше урона, находясь в полёте на элитрах.",
 
   "power.origins.throw_ender_pearl.name": "Телепортация",
-  "power.origins.throw_ender_pearl.description": "Всякий раз, когда ты хочешь, ты можешь бросить жемчужину Эндера, которая не наносит никакого урона, позволяя тебе телепортироваться.",
+  "power.origins.throw_ender_pearl.description": "Вы в любой момент можете кинуть эндер-жемчуг, чтобы переместиться и не получить при этом урона.",
 
-  "power.origins.pumpkin_hate.name": "Боязнь Тыкв",
-  "power.origins.pumpkin_hate.description": "Ты боишься тыкв. По понятной причине.",
+  "power.origins.pumpkin_hate.name": "Боязнь тыкв",
+  "power.origins.pumpkin_hate.description": "Вы боитесь тыкв. Явно неспроста.",
 
-  "power.origins.extra_reach.name": "Длинное Тело",
-  "power.origins.extra_reach.description": "Вы можете дотянуться до далеко стоящих блоков и существ.",
+  "power.origins.extra_reach.name": "Вытянутое тело",
+  "power.origins.extra_reach.description": "Вы легче дотягиваетесь до далеко находящихся блоков и существ.",
 
-  "power.origins.shulker_inventory.name": "Хранитель",
-  "power.origins.shulker_inventory.description": "У вас есть доступ к дополнительным 9 ячейкам инвентаря, в которых хранятся предметы после смерти.",
+  "power.origins.shulker_inventory.name": "Запасливость",
+  "power.origins.shulker_inventory.description": "Вам доступны 9 дополнительных ячеек, предметы в которых сохраняются после смерти.",
 
   "power.origins.natural_armor.name": "Прочная кожа",
-  "power.origins.natural_armor.description": "Даже без брони, ваша кожа обеспечивает естественную защиту.",
+  "power.origins.natural_armor.description": "Даже без брони ваша кожа наделена естественной защитой.",
 
-  "power.origins.more_exhaustion.name": "Большой аппетит",
-  "power.origins.more_exhaustion.description": "Вы истощаетесь намного быстрее, чем другие, поэтому вам нужно есть больше.",
+  "power.origins.more_exhaustion.name": "Повышенный аппетит",
+  "power.origins.more_exhaustion.description": "Вы истощаетесь намного быстрее других, поэтому придётся есть больше.",
 
-  "power.origins.no_shield.name": "Громоздкий",
-  "power.origins.no_shield.description": "Из-за сложения рук, что присуще каждому Шалку, вы не можете держать щит вертикально.",
+  "power.origins.no_shield.name": "Неуклюжий",
+  "power.origins.no_shield.description": "Из-за своеобразного строения рук вы не можете держать щит должным образом.",
 
   "power.origins.strong_arms.name": "Сильные руки",
   "power.origins.strong_arms.description": "Вы достаточно сильны, чтобы разбивать природные камни без кирки.",
@@ -158,28 +158,39 @@
   "power.origins.translucent.name": "Полупрозрачный",
   "power.origins.translucent.description": "Ваша кожа полупрозрачная.",
   
-  "power.origins.end_spawn.name": "Житель Края",
-  "power.origins.end_spawn.description": "Твои приключения начинаются в Крае.",
+  "power.origins.end_spawn.name": "Обитатель Края",
+  "power.origins.end_spawn.description": "Ваши приключения начинаются в Краю.",
 
   "power.origins.master_of_webs.name": "Мастер паутин",
-  "power.origins.master_of_webs.description": "Ты отлично ориентируешься в паутине и умеешь по ней лазить. Когда ты бьёшь врага вблизи, он на время застревает в паутине. Ты можешь почувствовать, когда не членистоногие существа застревают в паутине. Ты можешь создавать паутину из нитки.",
+  "power.origins.master_of_webs.description": "Вы отлично ориентируетесь в паутине и умеете по ней взбираться. Когда вы бьёте врага, он на время застревает в паутине. Вы можете почувствовать, если в паутину попадут любые существа, кроме насекомых и пауков. Вы можете создавать паутину из ниток.",
   
-  "power.origins.lay_eggs.name": "Яйценосный",
-  "power.origins.lay_eggs.description": "Каждый раз, когда ты просыпаешся утром, ты откладываешь яйцо.",
+  "power.origins.lay_eggs.name": "Яйцекладущий",
+  "power.origins.lay_eggs.description": "Каждый раз, просыпаясь утром, вы откладываете яйцо.",
+
+  "power.origins.phantomize.name": "Призрачная форма",
+  "power.origins.phantomize.description": "Вы можете переключаться между материальной и призрачной формой, но только при достаточном уровне сытости.",
+
+  "power.origins.like_air.name": "Грация",
+  "power.origins.like_air.description": "Изменение скорости вашей ходьбы также применяется, когда вы находитесь в воздухе.",
+  "power.origins.velvet_paws.name": "Бархатные лапки",
+  "power.origins.velvet_paws.description": "Ваши шаги не издают никаких звуков, которые иначе могли бы быть услышаны созданиями неподалёку.",
 
   "category.origins": "Origins",
-  "key.origins.primary_active": "Активная сила (Главная)",
-  "key.origins.secondary_active": "Активная сила (Второстепенная)",
-  "key.origins.view_origin": "Просмотр происхождения",
+  "key.origins.primary_active": "Активная сила (главная)",
+  "key.origins.secondary_active": "Активная сила (вторичная)",
+  "key.origins.view_origin": "Описание происхождения",
 
-  "text.autoconfig.origins.title": "Настройка Origins",
-  "text.autoconfig.origins.option.xOffset": "Позиция полосы восстановления по оси X",
-  "text.autoconfig.origins.option.yOffset": "Позиция полосы восстановления по оси Y",
-  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Степень наложения фантомизации",
+  "text.autoconfig.origins.title": "Настройки мода Origins",
+  "text.autoconfig.origins.option.xOffset": "Положение полоски перезарядки по горизонтали",
+  "text.autoconfig.origins.option.yOffset": "Положение полоски перезарядки по вертикали",
+  "text.autoconfig.origins.option.phantomizedOverlayStrength": "Яркость обводки в призрачной форме",
 
-  "item.origins.orb_of_origin": "Сфера происхождения",
+  "item.origins.orb_of_origin": "Сфера происхождений",
+  "item.origins.orb_of_origin.layer_generic": "Позволяет вам выбрать новое %s.",
+  "item.origins.orb_of_origin.layer_specific": "Устанавливает для вашего %1$s значение \"%2$s\".", 
 
   "enchantment.origins.water_protection": "Защита от воды",
+  "enchantment.origins.water_protection.desc": "Замедляет урон от гидрофобии.",
 
   "container.shulker_inventory_power": "Шалкеровый инвентарь",
 
@@ -187,56 +198,49 @@
   "origins.gui.close": "Закрыть",
   "origins.gui.choose": "Выберите",
   "origins.gui.choose_origin.title": "Выберите ваше %s.",
-  "origins.gui.view_origin.title": "Это ваше %s.",
-  "origins.gui.view_origin.empty": "Вы не выбрали происхождение.",
-  "origins.gui.view_origin.not_installed": "На это сервере не установлен Origins.",
+  "origins.gui.view_origin.title": "Ваше %s.",
+  "origins.gui.view_origin.empty": "Вы не способны выбрать происхождение.",
+  "origins.gui.view_origin.not_installed": "На этом сервере не установлен мод Origins.",
   "origins.gui.impact.impact": "Влияние",
   "origins.gui.impact.none": "Никакое",
   "origins.gui.impact.low": "Низкое",
   "origins.gui.impact.medium": "Среднее",
   "origins.gui.impact.high": "Высокое",
-  "origins.gui.version_mismatch": "На это сервере установлена другая версия Origins (v%1$s), которая несовместима с той, что у вас (v%2$s).",
-  
-  "origin.origins.random.name": "Случайный",
-  "origin.origins.random.description": "Вам будет назначен один из следующих:",
+  "origins.gui.version_mismatch": "На сервере установлена другая версия Origins (v%1$s), которая несовместима с вашей (v%2$s).",
+
+  "origins.gui.badge.active": "Активная способность, применить - %s.",
+  "origins.gui.badge.toggle": "Переключать клавишей %s.",
+  "origins.gui.badge.recipe.crafting.shaped": "Рецепт создания (Определённый), связанный с силой:",
+  "origins.gui.badge.recipe.crafting.shapeless": "Рецепт создания (Бесформенный), связанный с силой:",
+
+  "origins.gui.unbound_key": "§oнесвязанный§r",
+
+  "origin.origins.random.name": "Случайное",
+  "origin.origins.random.description": "Будет выбрано одно из следующих:",
 
   "layer.origins.origin.name": "Происхождение",
   "origin.origins.empty.name": "Отсутствует",
   "origin.origins.empty.description": "У вас нет происхождения.",
 
   "death.attack.no_water_for_gills": "%1$s не успел погрузиться в воду.",
-  "death.attack.no_water_for_gills.player": "%1$s не успел погрузиться в воду из-за боя с %2$s.",
+  "death.attack.no_water_for_gills.player": "%1$s не успел погрузиться в воду, пока сражался с %2$s.",
   "death.attack.hurt_by_water": "%1$s принимал ванну слишком долго.",
-  "death.attack.hurt_by_water.player": "%1$s был утоплен под воду %2$s.",
-  "death.attack.genericDamageOverTime": "%1$s умер от временного эффекта урона.",
-  "death.attack.genericDamageOverTime.player": "%1$s умер от временного эффекта урона во время боя с %2$s.",
+  "death.attack.hurt_by_water.player": "%1$s был утоплен %2$s.",
+  "death.attack.genericDamageOverTime": "%1$s умер от постепенного урона.",
+  "death.attack.genericDamageOverTime.player": "%1$s умер от постепенного урона, пока сражался с %2$s.",
 
   "commands.origin.origin_not_found": "Неизвестное происхождение: %s",
-  "commands.origin.set.success.single": "Выбрать происхождение %s в слое %s к %s.",
-  "commands.origin.set.success.multiple": "Выбрать происхождение %s целям в слое %s к %s.",
+  "commands.origin.layer_not_found": "Неизвестный слой: %s",
+  "commands.origin.unregistered_in_layer": "Происхождение %1$s не входит в слой %2$s!",
+  "commands.origin.get.result": "%s имеет следующее %s: %s (%s)",
+  "commands.origin.gui.all": "Интерфейс выбора происхождения был открыт для %s игроков.",
+  "commands.origin.gui.layer": "Интерфейс выбора \"%2$s\" был открыт для %1$s игроков.",
+  "commands.origin.random.all": "Случайно выбраны происхождения для %1$s целей в %2$s слоях",
+  "commands.origin.random.not_allowed": "Слой %1$s не позволяет выбирать случайное происхождение!",
+  "commands.origin.random.success.multiple": "Случайно выбраны происхождения %1$s целей в слое %2$s",
+  "commands.origin.random.success.single": "Случайно выбрано происхождение %2$s для %1$s в слое %3$s",
+  "commands.origin.set.success.multiple": "Для %s целей в слое %s было выбрано происхождение %s.",
+  "commands.origin.set.success.single": "Для %s в слое %s было выбрано происхождение %s.",
   
-  "origins.avian_sleep_fail": "Тебе нужен свежий воздух для сна.",
-  "power.origins.phantomize.name": "Призрачная форма",
-  "power.origins.phantomize.description": "Вы можете переключаться между человеческой и формой фантома по желанию, но только пока вы достаточно сыты.",
-  "power.origins.like_air.name": "Как Воздух",
-  "power.origins.like_air.description": "Изменение скорости вашей ходьбы также применяются, когда вы находитесь в воздухе.",
-  "power.origins.velvet_paws.name": "Бархатные Лапки",
-  "power.origins.velvet_paws.description": "Ваши шаги не вызывают никаких звуков, которые в противном случае могли бы быть услышаны близлежащими формами жизни.",
-  "item.origins.orb_of_origin.layer_generic": "Позволяет вам выбрать новый %s.",
-  "item.origins.orb_of_origin.layer_specific": "Устанавливает для вашего % 1$s значение \"%2$s\".",
-  "origins.gui.badge.active": "Активная способность, использование с %s.",
-  "origins.gui.badge.toggle": "Переключаться с помощью %s.",
-  "origins.gui.unbound_key": "§§несвязанный§r",
-  "commands.origin.get.result": "%s имеет следующие %s: %s (%s)",
-  "commands.origin.gui.all": "Открыл графический интерфейс выбора для игроков %s.",
-  "commands.origin.gui.layer": "Открыл графический интерфейс выбора \"%2$s\" для игроков % 1$s.",
-  "enchantment.origins.water_protection.desc": "Delays damage from hydrophobia.",
-  "origins.gui.badge.recipe.crafting.shaped": "Crafting recipe (Shaped) provided by the power:",
-  "origins.gui.badge.recipe.crafting.shapeless": "Crafting recipe (Shapeless) provided by the power:",
-  "commands.origin.layer_not_found": "Unknown layer: %s",
-  "commands.origin.unregistered_in_layer": "Origin %1$s is not registered in layer %2$s!",
-  "commands.origin.random.all": "Randomly assigned an origin to %1$s targets in %2$s layers",
-  "commands.origin.random.not_allowed": "The layer %1$s does not allow for random origins!",
-  "commands.origin.random.success.multiple": "Randomly assigned an origin to %1$s targets in layer %2$s",
-  "commands.origin.random.success.single": "Randomly assigned the origin %2$s to %1$s in layer %3$s"
+  "origins.avian_sleep_fail": "Вам нужен свежий воздух для сна."
 }
