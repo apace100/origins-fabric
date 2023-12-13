@@ -8,7 +8,6 @@ import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public record SyncOriginRegistryS2CPacket(Map<Identifier, SerializableData.Instance> origins) implements FabricPacket {
@@ -18,21 +17,7 @@ public record SyncOriginRegistryS2CPacket(Map<Identifier, SerializableData.Insta
     );
 
     private static SyncOriginRegistryS2CPacket read(PacketByteBuf buffer) {
-
-        Map<Identifier, SerializableData.Instance> origins = new HashMap<>();
-        int size = buffer.readVarInt();
-
-        for (int i = 0; i < size; i++) {
-
-            Identifier originId = buffer.readIdentifier();
-            SerializableData.Instance originData = Origin.DATA.read(buffer);
-
-            origins.put(originId, originData);
-
-        }
-
-        return new SyncOriginRegistryS2CPacket(origins);
-
+        return new SyncOriginRegistryS2CPacket(buffer.readMap(PacketByteBuf::readIdentifier, Origin.DATA::read));
     }
 
     @Override
