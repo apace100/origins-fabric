@@ -22,8 +22,8 @@ import net.minecraft.client.network.ClientPlayerEntity;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.function.Predicate;
 
-@SuppressWarnings("UnstableApiUsage")
 public class ModPacketsS2C {
 
     @Environment(EnvType.CLIENT)
@@ -83,10 +83,11 @@ public class ModPacketsS2C {
         OriginsClient.isServerRunningOrigins = true;
 
         OriginRegistry.reset();
-        packet.origins().forEach((id, data) -> {
-            Origin origin = Origin.createFromData(id, data);
-            OriginRegistry.register(id, origin);
-        });
+        packet.origins().entrySet()
+            .stream()
+            .map(e -> Origin.createFromData(e.getKey(), e.getValue()))
+            .filter(Predicate.not(OriginRegistry::contains))
+            .forEach(OriginRegistry::register);
 
     }
 

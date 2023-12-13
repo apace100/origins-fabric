@@ -218,21 +218,22 @@ public class Origin {
 
         SerializableData.Instance data = DATA.new Instance();
 
-        data.set("icon", displayItem);
-        data.set("impact", impact);
-        data.set("order", order);
-        data.set("loading_priority", loadingPriority);
-        data.set("unchoosable", !isChoosable);
         data.set("powers", powerTypes.stream().map(PowerType::getIdentifier).toList());
+        data.set("icon", displayItem);
+        data.set("unchoosable", !isChoosable);
+        data.set("order", order);
+        data.set("impact", impact);
+        data.set("loading_priority", loadingPriority);
+        data.set("upgrades", upgrades);
         data.set("name", getName());
         data.set("description", getDescription());
-        data.set("upgrades", upgrades);
 
         return data;
 
     }
 
     public void write(PacketByteBuf buffer) {
+        buffer.writeIdentifier(identifier);
         DATA.write(buffer, toData());
     }
 

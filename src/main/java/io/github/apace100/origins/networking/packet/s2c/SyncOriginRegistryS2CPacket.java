@@ -27,9 +27,7 @@ public record SyncOriginRegistryS2CPacket(Map<Identifier, SerializableData.Insta
             Identifier originId = buffer.readIdentifier();
             SerializableData.Instance originData = Origin.DATA.read(buffer);
 
-            if (!originId.equals(Origin.EMPTY.getIdentifier())) {
-                origins.put(originId, originData);
-            }
+            origins.put(originId, originData);
 
         }
 
@@ -39,11 +37,7 @@ public record SyncOriginRegistryS2CPacket(Map<Identifier, SerializableData.Insta
 
     @Override
     public void write(PacketByteBuf buffer) {
-        buffer.writeMap(
-            origins,
-            PacketByteBuf::writeIdentifier,
-            Origin.DATA::write
-        );
+        buffer.writeMap(origins, PacketByteBuf::writeIdentifier, Origin.DATA::write);
     }
 
     @Override
