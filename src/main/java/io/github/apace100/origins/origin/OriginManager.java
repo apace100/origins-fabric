@@ -7,18 +7,16 @@ import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypes;
 import io.github.apace100.calio.data.IdentifiableMultiJsonDataLoader;
 import io.github.apace100.calio.data.MultiJsonDataContainer;
-import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.networking.packet.s2c.SyncOriginRegistryS2CPacket;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class OriginManager extends IdentifiableMultiJsonDataLoader implements IdentifiableResourceReloadListener {
@@ -32,14 +30,7 @@ public class OriginManager extends IdentifiableMultiJsonDataLoader implements Id
 	public OriginManager() {
 		super(GSON, "origins", ResourceType.SERVER_DATA);
 		ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.addPhaseOrdering(PowerTypes.PHASE, PHASE);
-		ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register(PHASE, (player, joined) -> {
-
-			Map<Identifier, SerializableData.Instance> origins = new HashMap<>();
-
-			OriginRegistry.forEach((id, origin) -> origins.put(id, origin.toData()));
-			ServerPlayNetworking.send(player, new SyncOriginRegistryS2CPacket(origins));
-
-		});
+		ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register(PHASE, (player, joined) -> OriginRegistry.send(player));
 	}
 
 	@Override
@@ -78,10 +69,7 @@ public class OriginManager extends IdentifiableMultiJsonDataLoader implements Id
 				return;
 			}
 
-			List<PowerType<?>> powers = new LinkedList<>();
-			origin.getPowerTypes().forEach(powers::add);
-
-			for (PowerType<?> power : powers) {
+			for (PowerType<?> power : origin.getPowerTypes()) {
 				if (Origins.config.isPowerDisabled(id, power.getIdentifier())) {
 					origin.removePowerType(power);
 				}

@@ -47,7 +47,7 @@
   "depends": {
     "java": ">=17",
     "fabricloader": ">=0.14.22",
-    "fabric-api": ">=0.89.2",
+    "fabric-api": ">=0.91.2",
     "minecraft": ">=1.20.2",
     "apoli": ">=2.10.0",
     "calio": ">=1.12.0",
