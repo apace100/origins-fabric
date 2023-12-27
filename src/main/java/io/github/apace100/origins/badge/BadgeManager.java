@@ -10,15 +10,11 @@ import io.github.apace100.apoli.power.*;
 import io.github.apace100.calio.registry.DataObjectRegistry;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.integration.AutoBadgeCallback;
-import io.github.apace100.origins.networking.packet.s2c.SyncBadgeRegistryS2CPacket;
-import io.github.apace100.origins.origin.OriginManager;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.ShapedRecipe;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -56,8 +52,8 @@ public final class BadgeManager {
         PowerTypes.registerAdditionalData("badges", BadgeManager::readCustomBadges);
         PostPowerLoadCallback.EVENT.register(BadgeManager::readAutoBadges);
         AutoBadgeCallback.EVENT.register(BadgeManager::createAutoBadges);
-        ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.addPhaseOrdering(OriginManager.PHASE, PHASE);
-        ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register(PHASE, (player, joined) -> sync(player));
+        ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.addPhaseOrdering(PowerTypes.PHASE, PHASE);
+        ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register(PHASE, (player, joined) -> REGISTRY.sync(player));
     }
 
     public static void register(BadgeFactory factory) {
@@ -75,10 +71,6 @@ public final class BadgeManager {
 
     public static void clear() {
         BADGES.clear();
-    }
-
-    public static void sync(ServerPlayerEntity player) {
-        ServerPlayNetworking.send(player, new SyncBadgeRegistryS2CPacket(BADGES));
     }
 
     public static void readCustomBadges(Identifier powerId, Identifier factoryId, boolean isSubPower, JsonElement data, PowerType<?> powerType) {

@@ -2,12 +2,17 @@ package io.github.apace100.origins.networking;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.OriginsClient;
-import io.github.apace100.origins.badge.BadgeManager;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.integration.OriginDataLoadedCallback;
 import io.github.apace100.origins.networking.packet.VersionHandshakePacket;
-import io.github.apace100.origins.networking.packet.s2c.*;
-import io.github.apace100.origins.origin.*;
+import io.github.apace100.origins.networking.packet.s2c.ConfirmOriginS2CPacket;
+import io.github.apace100.origins.networking.packet.s2c.OpenChooseOriginScreenS2CPacket;
+import io.github.apace100.origins.networking.packet.s2c.SyncOriginLayerRegistryS2CPacket;
+import io.github.apace100.origins.networking.packet.s2c.SyncOriginRegistryS2CPacket;
+import io.github.apace100.origins.origin.Origin;
+import io.github.apace100.origins.origin.OriginLayer;
+import io.github.apace100.origins.origin.OriginLayers;
+import io.github.apace100.origins.origin.OriginRegistry;
 import io.github.apace100.origins.registry.ModComponents;
 import io.github.apace100.origins.screen.ChooseOriginScreen;
 import io.github.apace100.origins.screen.WaitForNextLayerScreen;
@@ -36,7 +41,6 @@ public class ModPacketsS2C {
             ClientPlayNetworking.registerReceiver(SyncOriginRegistryS2CPacket.TYPE, ModPacketsS2C::receiveOriginList);
             ClientPlayNetworking.registerReceiver(SyncOriginLayerRegistryS2CPacket.TYPE, ModPacketsS2C::receiveLayerList);
             ClientPlayNetworking.registerReceiver(ConfirmOriginS2CPacket.TYPE, ModPacketsS2C::receiveOriginConfirmation);
-            ClientPlayNetworking.registerReceiver(SyncBadgeRegistryS2CPacket.TYPE, ModPacketsS2C::receiveBadgeList);
         }));
 
     }
@@ -98,16 +102,6 @@ public class ModPacketsS2C {
         packet.layers().forEach(OriginLayers::register);
 
         OriginDataLoadedCallback.EVENT.invoker().onDataLoaded(true);
-
-    }
-
-    @Environment(EnvType.CLIENT)
-    private static void receiveBadgeList(SyncBadgeRegistryS2CPacket packet, ClientPlayerEntity player, PacketSender responseSender) {
-
-        BadgeManager.clear();
-        packet.badges().forEach((id, badges) ->
-            badges.forEach(badge -> BadgeManager.putPowerBadge(id, badge))
-        );
 
     }
 
