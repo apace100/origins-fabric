@@ -2,13 +2,12 @@ package io.github.apace100.origins.networking;
 
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.OriginsClient;
+import io.github.apace100.origins.badge.Badge;
+import io.github.apace100.origins.badge.BadgeManager;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.integration.OriginDataLoadedCallback;
 import io.github.apace100.origins.networking.packet.VersionHandshakePacket;
-import io.github.apace100.origins.networking.packet.s2c.ConfirmOriginS2CPacket;
-import io.github.apace100.origins.networking.packet.s2c.OpenChooseOriginScreenS2CPacket;
-import io.github.apace100.origins.networking.packet.s2c.SyncOriginLayerRegistryS2CPacket;
-import io.github.apace100.origins.networking.packet.s2c.SyncOriginRegistryS2CPacket;
+import io.github.apace100.origins.networking.packet.s2c.*;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginLayers;
@@ -23,10 +22,12 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class ModPacketsS2C {
@@ -41,6 +42,7 @@ public class ModPacketsS2C {
             ClientPlayNetworking.registerReceiver(SyncOriginRegistryS2CPacket.TYPE, ModPacketsS2C::receiveOriginList);
             ClientPlayNetworking.registerReceiver(SyncOriginLayerRegistryS2CPacket.TYPE, ModPacketsS2C::receiveLayerList);
             ClientPlayNetworking.registerReceiver(ConfirmOriginS2CPacket.TYPE, ModPacketsS2C::receiveOriginConfirmation);
+            ClientPlayNetworking.registerReceiver(ModPackets.BADGE_LIST, ModPacketsS2C::receiveBadgeList);
         }));
 
     }
@@ -102,6 +104,23 @@ public class ModPacketsS2C {
         packet.layers().forEach(OriginLayers::register);
 
         OriginDataLoadedCallback.EVENT.invoker().onDataLoaded(true);
+
+    }
+
+    @Environment(EnvType.CLIENT)
+    private static void receiveBadgeList(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+
+        Map<Identifier, List<Badge>> badges = buf.readMap(
+            PacketByteBuf::readIdentifier,
+            valueBuf -> valueBuf.readCollection(size -> new LinkedList<>(), BadgeManager.REGISTRY::receiveDataObject)
+        );
+
+        client.execute(() -> {
+            BadgeManager.clear();
+            badges.forEach((powerId, powerBadges) -> powerBadges.forEach(powerBadge ->
+                BadgeManager.putPowerBadge(powerId, powerBadge))
+            );
+        });
 
     }
 
