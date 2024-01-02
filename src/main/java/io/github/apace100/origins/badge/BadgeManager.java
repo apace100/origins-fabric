@@ -10,11 +10,16 @@ import io.github.apace100.apoli.power.*;
 import io.github.apace100.calio.registry.DataObjectRegistry;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.integration.AutoBadgeCallback;
+import io.github.apace100.origins.networking.ModPackets;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.ShapedRecipe;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -53,7 +58,20 @@ public final class BadgeManager {
         PostPowerLoadCallback.EVENT.register(BadgeManager::readAutoBadges);
         AutoBadgeCallback.EVENT.register(BadgeManager::createAutoBadges);
         ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.addPhaseOrdering(PowerTypes.PHASE, PHASE);
-        ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register(PHASE, (player, joined) -> REGISTRY.sync(player));
+        ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register(PHASE, (player, joined) -> sync(player));
+    }
+
+    public static void sync(ServerPlayerEntity player) {
+
+        PacketByteBuf badgesBuf = PacketByteBufs.create();
+        REGISTRY.sync(player);
+
+        badgesBuf.writeMap(BADGES,
+            PacketByteBuf::writeIdentifier,
+            (valueBuf, badges) -> valueBuf.writeCollection(badges, REGISTRY::writeDataObject));
+
+        ServerPlayNetworking.send(player, ModPackets.BADGE_LIST, badgesBuf);
+
     }
 
     public static void register(BadgeFactory factory) {
