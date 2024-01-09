@@ -1,13 +1,19 @@
 package io.github.apace100.origins.badge;
 
+import io.github.apace100.apoli.component.PowerHolderComponent;
+import io.github.apace100.apoli.power.ModifyCraftingPower;
 import io.github.apace100.apoli.power.PowerType;
+import io.github.apace100.apoli.util.InventoryUtil;
 import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.screen.tooltip.CraftingRecipeTooltipComponent;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
@@ -21,6 +27,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -60,19 +67,31 @@ public record CraftingRecipeBadge(Identifier spriteId,
 
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public List<TooltipComponent> getTooltipComponents(PowerType<?> powerType, int widthLimit, float time, TextRenderer textRenderer) {
 
+        MinecraftClient client = MinecraftClient.getInstance();
         List<TooltipComponent> tooltips = new LinkedList<>();
-        if (MinecraftClient.getInstance().world == null) {
+
+        if (client.world == null) {
             Origins.LOGGER.warn("Could not construct crafting recipe badge, as world was null!");
             return tooltips;
         }
 
-        DynamicRegistryManager registryManager = MinecraftClient.getInstance().world.getRegistryManager();
         int recipeWidth = (Recipe<?>) recipe.value() instanceof ShapedRecipe shapedRecipe ? shapedRecipe.getWidth() : 3;
 
-        if (MinecraftClient.getInstance().options.advancedItemTooltips) {
+        DynamicRegistryManager registryManager = client.world.getRegistryManager();
+        StackReference outputStackReference = InventoryUtil.createStackReference(recipe.value().getResult(registryManager));
+
+        PowerHolderComponent.getPowers(client.player, ModifyCraftingPower.class)
+            .stream()
+            .filter(p -> p.doesApply(recipe.id(), outputStackReference.get()))
+            .max(Comparator.comparing(ModifyCraftingPower::getPriority))
+            .ifPresent(p -> p.getNewResult(outputStackReference));
+        CraftingRecipeTooltipComponent recipeTooltip = new CraftingRecipeTooltipComponent(recipeWidth, this.peekInputs(time), outputStackReference.get());
+
+        if (client.options.advancedItemTooltips) {
 
             Text recipeIdText = Text.literal(recipe.id().toString()).formatted(Formatting.DARK_GRAY);
             widthLimit = Math.max(130, textRenderer.getWidth(recipeIdText));
@@ -81,7 +100,7 @@ public record CraftingRecipeBadge(Identifier spriteId,
                 TooltipBadge.addLines(tooltips, prefix, textRenderer, widthLimit);
             }
 
-            tooltips.add(new CraftingRecipeTooltipComponent(recipeWidth, this.peekInputs(time), recipe.value().getResult(registryManager)));
+            tooltips.add(recipeTooltip);
             if (suffix != null) {
                 TooltipBadge.addLines(tooltips, suffix, textRenderer, widthLimit);
             }
@@ -95,7 +114,7 @@ public record CraftingRecipeBadge(Identifier spriteId,
                 TooltipBadge.addLines(tooltips, prefix, textRenderer, widthLimit);
             }
 
-            tooltips.add(new CraftingRecipeTooltipComponent(recipeWidth, this.peekInputs(time), recipe.value().getResult(registryManager)));
+            tooltips.add(recipeTooltip);
             if (suffix != null) {
                 TooltipBadge.addLines(tooltips, suffix, textRenderer, widthLimit);
             }
