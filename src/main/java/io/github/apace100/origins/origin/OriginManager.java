@@ -3,7 +3,6 @@ package io.github.apace100.origins.origin;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.github.apace100.apoli.Apoli;
-import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypes;
 import io.github.apace100.calio.data.IdentifiableMultiJsonDataLoader;
 import io.github.apace100.calio.data.MultiJsonDataContainer;
@@ -69,11 +68,9 @@ public class OriginManager extends IdentifiableMultiJsonDataLoader implements Id
 				return;
 			}
 
-			for (PowerType<?> power : origin.getPowerTypes()) {
-				if (Origins.config.isPowerDisabled(id, power.getIdentifier())) {
-					origin.removePowerType(power);
-				}
-			}
+			origin
+				.getPowerTypes()
+				.removeIf(pt -> Origins.config.isPowerDisabled(id, pt.getIdentifier()));
 
 		});
 
