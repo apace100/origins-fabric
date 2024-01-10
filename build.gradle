@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.4-SNAPSHOT'
+	id 'fabric-loom' version '1.5-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -97,12 +97,6 @@ processResources {
 
 	filesMatching("fabric.mod.json") {
 		expand "version": project.version
-	}
-}
-
-configurations.configureEach {
-	resolutionStrategy {
-		force("net.fabricmc:fabric-loader:$loader_version")
 	}
 }
 
