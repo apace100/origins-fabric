@@ -23,6 +23,7 @@ import net.minecraft.resource.ResourceType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.BiPredicate;
@@ -253,6 +254,11 @@ public class OriginLayers extends IdentifiableMultiJsonDataLoader implements Ide
 
         else return LAYERS.get(id);
 
+    }
+
+    @Nullable
+    public static OriginLayer getNullableLayer(Identifier id) {
+        return LAYERS.get(id);
     }
 
     public static void register(Identifier id, OriginLayer layer) {
