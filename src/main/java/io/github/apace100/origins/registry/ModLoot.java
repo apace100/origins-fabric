@@ -1,5 +1,6 @@
 package io.github.apace100.origins.registry;
 
+import io.github.apace100.origins.Origins;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
@@ -21,11 +22,12 @@ public class ModLoot {
     private static final Identifier WATER_RUIN = new Identifier("minecraft", "chests/underwater_ruin_small");
 
     public static void registerLootTables() {
+        if (ModEnchantments.WATER_PROTECTION == null) return;
         NbtCompound waterProtectionLevel1 = createEnchantmentTag(ModEnchantments.WATER_PROTECTION, 1);
         NbtCompound waterProtectionLevel2 = createEnchantmentTag(ModEnchantments.WATER_PROTECTION, 2);
         NbtCompound waterProtectionLevel3 = createEnchantmentTag(ModEnchantments.WATER_PROTECTION, 3);
         LootTableEvents.MODIFY.register(((resourceManager, lootManager, identifier, tableBuilder, source) -> {
-            if (!source.isBuiltin()) {
+            if (!Origins.config.waterProtection.treasureBooks || source.isBuiltin()) {
                 return;
             }
             if (DUNGEON_LOOT.equals(identifier)) {
