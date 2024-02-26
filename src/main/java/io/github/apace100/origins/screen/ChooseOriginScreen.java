@@ -5,6 +5,7 @@ import io.github.apace100.origins.networking.packet.c2s.ChooseOriginC2SPacket;
 import io.github.apace100.origins.networking.packet.c2s.ChooseRandomOriginC2SPacket;
 import io.github.apace100.origins.origin.*;
 import io.github.apace100.origins.registry.ModItems;
+import io.github.apace100.origins.screen.widget.CustomTexturedButtonWidget;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -32,6 +33,10 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 
 	private int currentOriginIndex = 0;
 	private int maxSelection = 0;
+
+	private CustomTexturedButtonWidget selectButton;
+	private CustomTexturedButtonWidget leftButton;
+	private CustomTexturedButtonWidget rightButton;
 
 	
 	public ChooseOriginScreen(ArrayList<OriginLayer> layerList, int currentLayerIndex, boolean showDirtBackground) {
@@ -93,8 +98,9 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 		}
 
 		//	Draw the select origin button
-		addDrawableChild(ButtonWidget.builder(
+		addDrawableChild(selectButton = CustomTexturedButtonWidget.builder(
 			Text.translatable(Origins.MODID + ".gui.select"),
+			this.getButtonTextures(),
 			button -> {
 
 				Identifier originId = super.getCurrentOrigin().getIdentifier();
@@ -116,8 +122,9 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 		}
 
 		//	Draw the previous origin button
-		addDrawableChild(ButtonWidget.builder(
+		addDrawableChild(leftButton = CustomTexturedButtonWidget.builder(
 			Text.of("<"),
+			this.getButtonTextures(),
 			button -> {
 
 				currentOriginIndex = (currentOriginIndex - 1 + maxSelection) % maxSelection;
@@ -129,8 +136,9 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 		).dimensions(guiLeft - 40, height / 2 - 10, 20, 20).build());
 
 		//	Draw the next origin button
-		addDrawableChild(ButtonWidget.builder(
+		addDrawableChild(rightButton = CustomTexturedButtonWidget.builder(
 			Text.of(">"),
+			this.getButtonTextures(),
 			button -> {
 
 				currentOriginIndex = (currentOriginIndex + 1) % maxSelection;
@@ -140,7 +148,14 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 
 			}
 		).dimensions(guiLeft + WINDOW_WIDTH + 20, height / 2 - 10, 20, 20).build());
+	}
 
+	@Override
+	public void showOrigin(Origin origin,OriginLayer layer, boolean isRandom) {
+		super.showOrigin(origin, layer, isRandom);
+		if(selectButton != null) selectButton.setTextures(this.getButtonTextures());
+		if(leftButton != null) leftButton.setTextures(this.getButtonTextures());
+		if(rightButton != null) rightButton.setTextures(this.getButtonTextures());
 	}
 
 	@Override

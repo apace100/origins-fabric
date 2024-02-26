@@ -6,6 +6,7 @@ import io.github.apace100.origins.OriginsClient;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.screen.widget.CustomTexturedButtonWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -22,9 +23,12 @@ import java.util.Map;
 public class ViewOriginScreen extends OriginDisplayScreen {
 
 	private final ArrayList<Pair<OriginLayer, Origin>> originLayers;
-	private ButtonWidget chooseOriginButton;
-
 	private int currentLayerIndex = 0;
+
+	private CustomTexturedButtonWidget chooseButton;
+	private CustomTexturedButtonWidget closeButton;
+	private CustomTexturedButtonWidget leftButton;
+	private CustomTexturedButtonWidget rightButton;
 
 	public ViewOriginScreen() {
 		super(Text.translatable(Origins.MODID + ".screen.view_origin"), false);
@@ -72,8 +76,9 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 		super.init();
 		MinecraftClient client = MinecraftClient.getInstance();
 
-		addDrawableChild(ButtonWidget.builder(
+		addDrawableChild(closeButton = CustomTexturedButtonWidget.builder(
 			Text.translatable(Origins.MODID + ".gui.close"),
+			this.getButtonTextures(),
 			button -> client.setScreen(null)
 		).dimensions(guiLeft + WINDOW_WIDTH / 2 - 50, guiTop + WINDOW_HEIGHT + 5, 100, 20).build());
 
@@ -81,40 +86,43 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 			return;
 		}
 
-		addDrawableChild(chooseOriginButton = ButtonWidget.builder(
+		addDrawableChild(chooseButton = CustomTexturedButtonWidget.builder(
 			Text.translatable(Origins.MODID + ".gui.choose"),
+			this.getButtonTextures(),
 			button -> client.setScreen(new ChooseOriginScreen(Lists.newArrayList(getCurrentLayer()), 0, false))
 		).dimensions(guiLeft + WINDOW_WIDTH / 2 - 50, guiTop + WINDOW_HEIGHT - 40, 100, 20).build());
 
 		PlayerEntity player = client.player;
-		chooseOriginButton.active = chooseOriginButton.visible = getCurrentOrigin() == Origin.EMPTY && getCurrentLayer().getOriginOptionCount(player) > 0;
+		chooseButton.active = chooseButton.visible = getCurrentOrigin() == Origin.EMPTY && getCurrentLayer().getOriginOptionCount(player) > 0;
 
 		if (originLayers.size() <= 1) {
 			return;
 		}
 
 		//	Draw previous layer button
-		addDrawableChild(ButtonWidget.builder(
+		addDrawableChild(leftButton = CustomTexturedButtonWidget.builder(
 			Text.of("<"),
+			this.getButtonTextures(),
 			button -> {
 
 				currentLayerIndex = (currentLayerIndex - 1 + originLayers.size()) % originLayers.size();
 				showOrigin(getCurrentOrigin(), getCurrentLayer(), false);
 
-				chooseOriginButton.active = chooseOriginButton.visible = getCurrentOrigin() == Origin.EMPTY && getCurrentLayer().getOriginOptionCount(player) > 0;
+				chooseButton.active = chooseButton.visible = getCurrentOrigin() == Origin.EMPTY && getCurrentLayer().getOriginOptionCount(player) > 0;
 
 			}
 		).dimensions(guiLeft - 40, height / 2 - 10, 20, 20).build());
 
 		//	Draw next layer button
-		addDrawableChild(ButtonWidget.builder(
+		addDrawableChild(rightButton = CustomTexturedButtonWidget.builder(
 			Text.of(">"),
+			this.getButtonTextures(),
 			button -> {
 
 				currentLayerIndex = (currentLayerIndex + 1) % originLayers.size();
 				showOrigin(getCurrentOrigin(), getCurrentLayer(), false);
 
-				chooseOriginButton.active = chooseOriginButton.visible = getCurrentOrigin() == Origin.EMPTY && getCurrentLayer().getOriginOptionCount(player) > 0;
+				chooseButton.active = chooseButton.visible = getCurrentOrigin() == Origin.EMPTY && getCurrentLayer().getOriginOptionCount(player) > 0;
 
 			}
 		).dimensions(guiLeft + WINDOW_WIDTH + 20, height / 2 - 10, 20, 20).build());
