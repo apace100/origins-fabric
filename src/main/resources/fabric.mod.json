@@ -46,11 +46,11 @@
 
   "depends": {
     "java": ">=17",
-    "fabricloader": ">=0.15.3",
-    "fabric-api": ">=0.91.2",
-    "minecraft": "~1.20.2",
-    "apoli": ">=2.10.0",
-    "calio": ">=1.12.0",
+    "fabricloader": ">=0.15.9",
+    "fabric-api": ">=0.96.11",
+    "minecraft": "~1.20.4",
+    "apoli": ">=2.11.7",
+    "calio": ">=1.13.1",
     "playerabilitylib": ">=1.9.0",
     "cardinal-components-base": ">=3.0.0",
     "cardinal-components-entity": ">=3.0.0",
