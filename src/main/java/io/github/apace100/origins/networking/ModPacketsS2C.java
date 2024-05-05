@@ -117,9 +117,7 @@ public class ModPacketsS2C {
 
         client.execute(() -> {
             BadgeManager.clear();
-            badges.forEach((powerId, powerBadges) -> powerBadges.forEach(powerBadge ->
-                BadgeManager.putPowerBadge(powerId, powerBadge))
-            );
+            badges.forEach(BadgeManager::putPowerBadges);
         });
 
     }

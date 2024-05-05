@@ -6,6 +6,7 @@ import io.github.apace100.apoli.Apoli;
 import io.github.apace100.apoli.power.PowerTypes;
 import io.github.apace100.calio.data.IdentifiableMultiJsonDataLoader;
 import io.github.apace100.calio.data.MultiJsonDataContainer;
+import io.github.apace100.calio.data.SerializableData;
 import io.github.apace100.origins.Origins;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
@@ -41,6 +42,9 @@ public class OriginManager extends IdentifiableMultiJsonDataLoader implements Id
 		prepared.forEach((packName, id, jsonElement) -> {
 
 			try {
+
+				SerializableData.CURRENT_NAMESPACE = id.getNamespace();
+				SerializableData.CURRENT_PATH = id.getPath();
 
 				Origin origin = Origin.fromJson(id, jsonElement.getAsJsonObject());
 				int loadingPriority = origin.getLoadingPriority();
@@ -78,6 +82,9 @@ public class OriginManager extends IdentifiableMultiJsonDataLoader implements Id
 		if (hasConfigChanged.get()) {
 			Origins.serializeConfig();
 		}
+
+		SerializableData.CURRENT_NAMESPACE = null;
+		SerializableData.CURRENT_PATH = null;
 
 	}
 

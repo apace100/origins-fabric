@@ -21,10 +21,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class BadgeManager {
 
@@ -82,6 +79,12 @@ public final class BadgeManager {
             .add(badge);
     }
 
+    public static void putPowerBadges(Identifier powerId, Collection<Badge> badges) {
+        BADGES
+            .computeIfAbsent(powerId, id -> new LinkedList<>())
+            .addAll(badges);
+    }
+
     public static List<Badge> getPowerBadges(Identifier powerId) {
         return BADGES.getOrDefault(powerId, List.of());
     }
@@ -110,6 +113,7 @@ public final class BadgeManager {
                 throw new JsonSyntaxException("\"badges\" should be a JSON array!");
             }
 
+            List<Badge> badges = BADGES.computeIfAbsent(powerId, id -> new LinkedList<>());
             for (JsonElement badgeJson : dataArray) {
 
                 Badge badge;
@@ -126,7 +130,7 @@ public final class BadgeManager {
                     throw new JsonSyntaxException("Nested JSON arrays are not allowed!");
                 }
 
-                putPowerBadge(powerId, badge);
+                badges.add(badge);
 
             }
 
@@ -136,13 +140,19 @@ public final class BadgeManager {
 
     }
 
+    /**
+     *  <p>Attempts to generate badges automatically for each power post-registration. Badges will only be generated if the power fulfills
+     *  certain conditions:</p>
+     *
+     *  <ol>
+     *      <li>The power doesn't have any badges defined in the {@code badges} field of its JSON.</li>
+     *      <li>The power doesn't use the {@code multiple} power type.
+     *      <li>The power is not manually hidden.</li>
+     *  </ol>
+     */
     public static void readAutoBadges(Identifier powerId, Identifier factoryId, boolean isSubPower, JsonObject json, PowerType<?> powerType) {
 
-        //  Auto-badges will only be generated if:
-        //  -   The power doesn't have any badges defined
-        //  -   The power is not hidden (except if it's a sub-power)
-
-        if (!BADGES.containsKey(powerId) && (isSubPower || !powerType.isHidden())) {
+        if (!hasPowerBadges(powerId) && !(powerType instanceof MultiplePowerType<?>) && (isSubPower || !powerType.isHidden())) {
             AutoBadgeCallback.EVENT
                 .invoker()
                 .createAutoBadge(powerId, powerType, BADGES.computeIfAbsent(powerId, id -> new LinkedList<>()));
