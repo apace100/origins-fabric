@@ -6,9 +6,9 @@ import com.google.gson.JsonPrimitive;
 import io.github.apace100.apoli.Apoli;
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypes;
-import io.github.apace100.apoli.util.IdentifierAlias;
 import io.github.apace100.calio.resource.OrderedResourceListenerInitializer;
 import io.github.apace100.calio.resource.OrderedResourceListenerManager;
+import io.github.apace100.calio.util.IdentifierAlias;
 import io.github.apace100.origins.badge.BadgeManager;
 import io.github.apace100.origins.command.OriginCommand;
 import io.github.apace100.origins.networking.ModPacketsC2S;
@@ -78,7 +78,7 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 			});
 		config = AutoConfig.getConfigHolder(ServerConfig.class).getConfig();
 
-		IdentifierAlias.addNamespaceAlias(MODID, "apoli");
+		IdentifierAlias.GLOBAL.addNamespaceAlias(MODID, "apoli");
 
 		OriginsPowerTypes.register();
 		OriginsEntityConditions.register();
