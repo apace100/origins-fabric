@@ -3,11 +3,8 @@ package io.github.apace100.origins;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import io.github.apace100.apoli.Apoli;
 import io.github.apace100.apoli.power.PowerType;
 import io.github.apace100.apoli.power.PowerTypes;
-import io.github.apace100.calio.resource.OrderedResourceListenerInitializer;
-import io.github.apace100.calio.resource.OrderedResourceListenerManager;
 import io.github.apace100.calio.util.IdentifierAlias;
 import io.github.apace100.origins.badge.BadgeManager;
 import io.github.apace100.origins.command.OriginCommand;
@@ -31,6 +28,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.item.ItemGroups;
@@ -42,7 +40,7 @@ import net.minecraft.util.JsonHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Origins implements ModInitializer, OrderedResourceListenerInitializer {
+public class Origins implements ModInitializer {
 
 	public static final String MODID = "origins";
 	public static String VERSION = "";
@@ -91,7 +89,19 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 		ModEntities.register();
 		ModLoot.registerLootTables();
 		ModComponents.register();
+
 		Origin.init();
+		BadgeManager.init();
+
+		OriginManager originManager = new OriginManager();
+		OriginLayers originLayerManager = new OriginLayers();
+		IdentifiableResourceReloadListener badgeManager = BadgeManager.REGISTRY.getLoader();
+
+		PowerTypes.DEPENDENCIES.add(badgeManager.getFabricId());
+
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(originManager);
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(originLayerManager);
+		ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(badgeManager);
 
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> OriginCommand.register(dispatcher));
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register((content) -> content.add(ModItems.ORB_OF_ORIGIN));
@@ -112,22 +122,6 @@ public class Origins implements ModInitializer, OrderedResourceListenerInitializ
 
 	public static Identifier identifier(String path) {
 		return new Identifier(Origins.MODID, path);
-	}
-
-	@Override
-	public void registerResourceListeners(OrderedResourceListenerManager manager) {
-		Identifier powerData = Apoli.identifier("powers");
-		Identifier originData = Origins.identifier("origins");
-
-		OriginManager originLoader = new OriginManager();
-		manager.register(ResourceType.SERVER_DATA, originLoader).after(powerData).complete();
-		manager.register(ResourceType.SERVER_DATA, new OriginLayers()).after(originData).complete();
-
-		BadgeManager.init();
-
-		IdentifiableResourceReloadListener badgeLoader = BadgeManager.REGISTRY.getLoader();
-		manager.register(ResourceType.SERVER_DATA, badgeLoader).before(powerData).complete();
-		PowerTypes.DEPENDENCIES.add(badgeLoader.getFabricId());
 	}
 
 	@Config(name = Origins.MODID + "_server")
