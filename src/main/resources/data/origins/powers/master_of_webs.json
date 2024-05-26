@@ -26,7 +26,12 @@
     }
   },
   "no_slowdown": {
-    "type": "origins:simple"
+    "type": "origins:phasing",
+    "block_condition": {
+      "type": "origins:in_tag",
+      "tag": "origins:cobwebs"
+    },
+    "render_type": "none"
   },
   "climbing": {
     "type": "origins:climbing",

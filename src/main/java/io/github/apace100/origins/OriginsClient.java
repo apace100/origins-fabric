@@ -13,6 +13,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
@@ -62,6 +63,7 @@ public class OriginsClient implements ClientModInitializer {
             }
         });
 
+        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> OriginsClient.isServerRunningOrigins = false);
         PowerClearCallback.EVENT.register(PowerKeyManager::clearCache);
     }
 }

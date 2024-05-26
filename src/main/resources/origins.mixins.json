@@ -4,21 +4,24 @@
     "package": "io.github.apace100.origins.mixin",
     "compatibilityLevel": "JAVA_16",
     "mixins": [
+        "ActiveTargetGoalAccessor",
         "ArgumentTypesMixin",
-        "ConduitOnLandMixin",
+        "ConduitPowerOnLandMixin",
         "LikeWaterMixin",
-        "NoCobwebSlowdownMixin",
+        "LivingEntityAccessor",
+        "MobEntityAccessor",
         "OriginUpgradeMixin",
         "ScareCreepersMixin",
         "SelectionInvulnerabilityMixin",
-        "WaterBreathingMixin$CanBreatheInWater",
-        "WaterBreathingMixin$UpdateAir"
+        "TargetPredicateAccessor",
+        "TrackTargetGoalAccessor",
+        "WaterBreathingMixin$BreathingImpl",
+        "WaterBreathingMixin$TurtleHelmetProxy"
     ],
     "client": [
         "DrawContextAccessor",
         "KeyBindingAccessor",
-        "ServerCheckMixin",
-        "WaterVisibilityMixin"
+        "WaterVisionMixin"
     ],
     "injectors": {
         "defaultRequire": 1
