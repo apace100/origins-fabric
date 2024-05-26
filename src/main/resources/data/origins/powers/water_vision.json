@@ -1,19 +1,35 @@
 {
   "type": "origins:multiple",
-  "night_vision": {
-    "type": "origins:toggle_night_vision",
-    "strength": 1.0,
-    "condition": {
-      "type": "origins:submerged_in",
-      "fluid": "minecraft:water"
-    },
+  "toggle": {
+    "type": "origins:toggle",
     "active_by_default": true,
     "key": {
       "key": "key.origins.primary_active",
       "continuous": false
     }
   },
+  "night_vision": {
+    "type": "origins:night_vision",
+    "strength": 1.0,
+    "condition": {
+      "type": "origins:and",
+      "conditions": [
+        {
+          "type": "origins:power_active",
+          "power": "*:*_toggle"
+        },
+        {
+          "type": "origins:submerged_in",
+          "fluid": "minecraft:water"
+        }
+      ]
+    }
+  },
   "no_delay": {
-    "type": "origins:water_vision"
+    "type": "origins:water_vision",
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
   }
 }
