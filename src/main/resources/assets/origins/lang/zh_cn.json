@@ -1,247 +1,247 @@
 {
-    "origin.origins.human.name":"人类",
-    "origin.origins.human.description":"普通的人类。普通的Minecraft体验等着你。",
-    
-    "origin.origins.merling.name":"人鱼族",
-    "origin.origins.merling.description":"这些海洋的原住民并不习惯长时间地离开水体。",
-    
-    "origin.origins.arachnid.name":"蛛形族",
-    "origin.origins.arachnid.description":"攀爬与用蛛网束缚敌人的能力使得蛛形族成为完美的猎手。",
-    
-    "origin.origins.blazeborn.name":"烈焰族",
-    "origin.origins.blazeborn.description":"作为烈焰人的后裔，烈焰族天生得以免疫下界的各色险境。",
-    
-    "origin.origins.avian.name":"羽人族",
-    "origin.origins.avian.description":"羽人族在很久以前就失去了飞行的能力。现在，有时可以观察到这些温和的生物从此方滑翔到彼方。",
-    
-    "origin.origins.phantom.name":"幻影族",
-    "origin.origins.phantom.description":"作为人类与幻翼的混血种，这些生物可以幻化自如。",
-    
-    "origin.origins.feline.name":"猫族",
-    "origin.origins.feline.description":"猫族的外表足以吓跑苦力怕。他们和猫一般灵活的动作使他们总能安全着陆。",
-    
-    "origin.origins.elytrian.name":"翼人族",
-    "origin.origins.elytrian.description":"翼人族习惯随风飘泊，如果头顶的空间不够宽阔，他们会感到不舒服。",
-    
-    "origin.origins.enderian.name":"末影族",
-    "origin.origins.enderian.description":"作为末影龙的子嗣，末影族能够随意传送，但会被水伤害。",
-    
-    "origin.origins.shulk.name":"潜影族",
-    "origin.origins.shulk.description":"潜影贝的近亲, 体表覆盖着一层保护性的壳状皮肤。",
+  "origin.origins.human.name": "人类",
+  "origin.origins.human.description": "普通的人类，你将会拥有最基础的原版体验。",
 
-    "power.origins.water_breathing.name":"鳃",
-    "power.origins.water_breathing.description":"你可以在水下呼吸，但在陆地则不能。",
-    
-    "power.origins.aqua_affinity.name":"水下速掘",
-    "power.origins.aqua_affinity.description":"你在水下可以正常速度破坏方块。",
-    
-    "power.origins.water_vision.name":"水下视野",
-    "power.origins.water_vision.description":"你的水下视力可谓完美。",
-    
-    "power.origins.swim_speed.name":"鳍",
-    "power.origins.swim_speed.description":"你在水下的移动速度提升。",
-    
-    "power.origins.like_water.name":"亲水",
-    "power.origins.like_water.description":"你不会在水中下沉，除非你刻意而为。",
-    
-    "power.origins.fragile.name":"脆弱",
-    "power.origins.fragile.description":"你比人类少3颗心的生命上限。",
-    
-    "power.origins.webbing.name":"网织",
-    "power.origins.webbing.description":"你以近战击中敌人时会把他们困在蛛网里。",
-    
-    "power.origins.climbing.name":"攀爬",
-    "power.origins.climbing.description":"你可以攀上任何一面墙，而不仅仅是梯子。",
-    
-    "power.origins.carnivore.name":"肉食性",
-    "power.origins.carnivore.description":"你只能吃肉，不吃蔬菜。",
-    
-    "power.origins.fire_immunity.name":"火焰免疫",
-    "power.origins.fire_immunity.description":"你免疫所有类型的火焰伤害。",
-    
-    "power.origins.nether_spawn.name":"下界住民",
-    "power.origins.nether_spawn.description":"你的初始出生点将位于下界。",
-    
-    "power.origins.burning_wrath.name":"怒火",
-    "power.origins.burning_wrath.description":"着火时，你的攻击造成额外伤害。",
-    
-    "power.origins.hotblooded.name":"炽血",
-    "power.origins.hotblooded.description":"你灼热的身体使毒液快速燃尽，因此你对中毒和饥饿状态效果免疫。",
-    
-    "power.origins.water_vulnerability.name":"恐水",
-    "power.origins.water_vulnerability.description":"你在接触水时会持续受到伤害。",
-    
-    "power.origins.tailwind.name":"顺风腿",
-    "power.origins.tailwind.description":"你的步伐比其他人要快一些。",
-    
-    "power.origins.slow_falling.name":"轻如鸿毛",
-    "power.origins.slow_falling.description":"你会像羽毛一样轻轻地飘落到地上，除非你潜行。",
-    
-    "power.origins.vegetarian.name":"草食性",
-    "power.origins.vegetarian.description":"你消化不了肉类。",
-    
-    "power.origins.fresh_air.name":"新风需求",
-    "power.origins.fresh_air.description":"睡觉时，你的床必须处于至少86格的高度以供你呼吸新鲜空气。",
-    
-    "power.origins.phasing.name":"相位变换",
-    "power.origins.phasing.description":"幻化时，你可以穿过黑曜石以外的任何固体。",
-    
-    "power.origins.invisibility.name":"隐身",
-    "power.origins.invisibility.description":"幻化时，你是隐形的。",
-    
-    "power.origins.hunger_over_time.name":"快速代谢",
-    "power.origins.hunger_over_time.description":"幻化会让你感到饥饿。",
-    
-    "power.origins.burn_in_daylight.name":"光敏性",
-    "power.origins.burn_in_daylight.description":"不在隐形状态时，你会被阳光点燃。",
-    
-    "power.origins.fall_immunity.name":"杂技高手",
-    "power.origins.fall_immunity.description":"你不会受到摔落伤害，无论从何处摔落。",
-    
-    "power.origins.sprint_jump.name":"强健脚踝",
-    "power.origins.sprint_jump.description":"疾跑时你跳得更高。",
-    
-    "power.origins.nine_lives.name":"九条“命”",
-    "power.origins.nine_lives.description":"你比人类少1颗心的生命上限。",
-    
-    "power.origins.cat_vision.name":"夜行性",
-    "power.origins.cat_vision.description":"不在水中时，你的暗视力略有提升。",
-    
-    "power.origins.weak_arms.name":"瘦弱手臂",
-    "power.origins.weak_arms.description":"如果没有力量药水相助，你只有在一个天然石头方块周围最多存在两个相邻的天然石头方块时才能开采它。",
-    
-    "power.origins.scare_creepers.name":"猫脸",
-    "power.origins.scare_creepers.description":"苦力怕害怕你，它们只会在你先发动攻击的情况下爆炸。",
-    
-    "power.origins.launch_into_air.name":"风之礼遇",
-    "power.origins.launch_into_air.description":"每隔30秒，你就能将自己抛向空中约20个方块高度。",
-    
-    "power.origins.elytra.name":"有翼",
-    "power.origins.elytra.description":"你天生拥有鞘翅，无需装备。",
-    
-    "power.origins.light_armor.name":"机动需求",
-    "power.origins.light_armor.description":"你不能穿任何重甲（保护值高于链甲的盔甲）。",
-    
-    "power.origins.claustrophobia.name":"幽闭恐惧",
-    "power.origins.claustrophobia.description":"在天花板很低的地方逗留太久会使你感到虚弱，速度变慢。",
-    
-    "power.origins.more_kinetic_damage.name":"骨质疏松",
-    "power.origins.more_kinetic_damage.description":"你会从坠落或撞击方块中受到更多的伤害。",
-    
-    "power.origins.aerial_combatant.name":"空中作战",
-    "power.origins.aerial_combatant.description":"鞘翅滑翔时，你造成的伤害大幅提升。",
-    
-    "power.origins.throw_ender_pearl.name":"传送",
-    "power.origins.throw_ender_pearl.description":"只要你愿意，你可以抛出一个无伤害的末影珍珠。",
-    
-    "power.origins.pumpkin_hate.name":"南瓜恐惧",
-    "power.origins.pumpkin_hate.description":"你害怕南瓜，理由想必很充分。",
-    
-    "power.origins.extra_reach.name":"瘦长身体",
-    "power.origins.extra_reach.description":"你可以触及更远的方块和实体。",
-    
-    "power.origins.shulker_inventory.name":"贮藏家",
-    "power.origins.shulker_inventory.description":"你额外拥有9个死亡不掉落的物品栏槽位。",
-    
-    "power.origins.natural_armor.name":"坚韧皮肤",
-    "power.origins.natural_armor.description":"即使不穿戴盔甲，你的皮肤也赋予你天生的保护。",
-    
-    "power.origins.more_exhaustion.name":"食欲旺盛",
-    "power.origins.more_exhaustion.description":"你的精力消耗得快于常人，因此你吃得也多。",
-    
-    "power.origins.no_shield.name":"持盾不能",
-    "power.origins.no_shield.description":"你双手的造型让你无法正常地手持盾牌。",
-    
-    "power.origins.strong_arms.name":"健壮手腕",
-    "power.origins.strong_arms.description":"你的双手足够强大，使得你不需要镐子就可以开采天然石头。",
-    
-    "power.origins.translucent.name":"半透明",
-    "power.origins.translucent.description":"你的皮肤是半透明的。",
-    
-    "power.origins.end_spawn.name":"末地住民",
-    "power.origins.end_spawn.description":"你的旅程从末地开始。",
-    
-    "power.origins.master_of_webs.name":"攀网高手",
-    "power.origins.master_of_webs.description":"你可以在蜘蛛网中穿行自如，随意攀爬。当你击中敌人的时候，他们会被蜘蛛网缠住一会儿。你能察觉到被蜘蛛网束缚住的非节肢生物。你可以用线合成蜘蛛网。",
-    
-    "power.origins.lay_eggs.name": "卵生",
-    "power.origins.lay_eggs.description": "早晨醒来时，你会产下一枚蛋。",
-    
-    "power.origins.phantomize.name": "幻影形态",
-    "power.origins.phantomize.description": "你可以在人类形态和幻影形态间自由切换，这仅限于当你的饥饿值足以疾跑时。",
-    
-    "power.origins.like_air.name": "亲风",
-    "power.origins.like_air.description": "行走时的速度提升也对你的空中速度生效。",
-    
-    "power.origins.velvet_paws.name": "柔软脚爪",
-    "power.origins.velvet_paws.description": "你的脚步不会产生任何会被其他生物捕获的振动。",
+  "origin.origins.merling.name": "人鱼族",
+  "origin.origins.merling.description": "这些来自海洋的原住民并不喜欢长时间离开水源。",
 
-    "category.origins":"起源",
-    "key.origins.primary_active":"主动能力（首要按键）",
-    "key.origins.secondary_active":"主动能力（备用按键）",
-    "key.origins.view_origin":"查看起源",
-    
-    "text.autoconfig.origins.title":"起源 设置",
-    "text.autoconfig.origins.option.xOffset":"冷却条 X轴偏移量",
-    "text.autoconfig.origins.option.yOffset":"冷却条 Y轴偏移量",
-    "text.autoconfig.origins.option.phantomizedOverlayStrength":"幻化时叠加层视觉效果强度",
+  "origin.origins.arachnid.name": "蛛形族",
+  "origin.origins.arachnid.description": "蛛形族擅长使用出色的攀爬能力和蜘蛛网来困住猎物，几乎完美的猎手。",
 
-    "item.origins.orb_of_origin":"起源之球",
-    "item.origins.orb_of_origin.layer_generic": "让你能够选择一个新的%s",
-    "item.origins.orb_of_origin.layer_specific": "将你的%1$s设置为“%2$s”",
-    
-    "enchantment.origins.water_protection":"防水",
-    
-    "container.shulker_inventory_power":"潜影背包栏",
+  "origin.origins.blazeborn.name": "烈焰族",
+  "origin.origins.blazeborn.description": "烈焰族是烈焰人的后代，天生免疫来自下界的任何危险。",
 
-    "origins.gui.select":"选择",
-    "origins.gui.close":"关闭",
-    "origins.gui.choose":"选择",
-    "origins.gui.choose_origin.title":"选择你的%s",
-    "origins.gui.view_origin.title":"这是你的%s",
-    "origins.gui.view_origin.empty":"你无法拥有任何起源。",
-    "origins.gui.view_origin.not_installed":"该服务器未安装 起源 模组。",
-    "origins.gui.impact.impact":"影响",
-    "origins.gui.impact.none":"无",
-    "origins.gui.impact.low":"低",
-    "origins.gui.impact.medium":"中",
-    "origins.gui.impact.high":"高",
-    "origins.gui.version_mismatch":"该服务器运行的起源版本（v%1$s）与你安装的（v%2$s）不兼容。",
-    
-    "origins.gui.badge.active": "主动能力，按下%s键使用",
-    "origins.gui.badge.toggle": "使用%s键开关",
-    "origins.gui.badge.recipe.crafting.shaped": "能力提供的有序合成配方：",
-    "origins.gui.badge.recipe.crafting.shapeless": "能力提供的无序合成配方：",
-    
-    "origins.gui.unbound_key": "§o未绑定§r",
-    
-    "origin.origins.random.name":"随机",
-    "origin.origins.random.description":"你将在以下中被随机抽选一项：",
-    
-    "layer.origins.origin.name":"起源",
-    "origin.origins.empty.name":"丢失",
-    "origin.origins.empty.description":"你没有任何起源。",
+  "origin.origins.avian.name": "羽人族",
+  "origin.origins.avian.description": "羽人族在很早之前就很不幸地失去了飞行能力，但是勉强保留了滑翔的能力。",
 
-    "death.attack.no_water_for_gills":"%1$s没能保持湿润",
-    "death.attack.no_water_for_gills.player":"%1$s在与%2$s战斗时没能保持湿润",
-    "death.attack.hurt_by_water":"%1$s洗澡的时间太长了",
-    "death.attack.hurt_by_water.player":"%1$s被%2$s沉入了水中",
-    "death.attack.genericDamageOverTime":"%1$s被持续性伤害效果杀死了",
-    "death.attack.genericDamageOverTime.player":"%1$s在与%2$s战斗时被持续性伤害效果杀死了",
+  "origin.origins.phantom.name": "幻影族",
+  "origin.origins.phantom.description": "作为人类和幻影的混血种族，拥有正常人类和幻影双重形态。",
 
-    "commands.origin.origin_not_found":"未知起源：%s",
-    "commands.origin.set.success.single":"已将%s的%s设置为：%s",
-    "commands.origin.set.success.multiple":"已将%s个目标的%s设置为：%s",
-    "commands.origin.get.result": "%s拥有以下%s：%s（%s）",
-    "commands.origin.gui.all": "为%s个玩家打开了选择GUI",
-    "commands.origin.gui.layer": "为%1$s个玩家打开了 %2$s 的选择GUI",
-    
-    "origins.avian_sleep_fail":"你需要新鲜空气才能正常入睡",
-    "enchantment.origins.water_protection.desc": "Delays damage from hydrophobia.",
-    "commands.origin.layer_not_found": "Unknown layer: %s",
-    "commands.origin.unregistered_in_layer": "Origin %1$s is not registered in layer %2$s!",
-    "commands.origin.random.all": "Randomly assigned an origin to %1$s targets in %2$s layers",
-    "commands.origin.random.not_allowed": "The layer %1$s does not allow for random origins!",
-    "commands.origin.random.success.multiple": "Randomly assigned an origin to %1$s targets in layer %2$s",
-    "commands.origin.random.success.single": "Randomly assigned the origin %2$s to %1$s in layer %3$s"
+  "origin.origins.feline.name": "猫人族",
+  "origin.origins.feline.description": "猫人族拥有酷似猫的外表，能够吓跑爬行生物，同时也拥有猫一样的灵巧，每次都能安全落地。",
+
+  "origin.origins.elytrian.name": "翼人族",
+  "origin.origins.elytrian.description": "翼人族喜欢在空中翱翔，但是如果在头顶上方没有足够的空间，翼人族就会变得狂躁不安。",
+
+  "origin.origins.enderian.name": "末影族",
+  "origin.origins.enderian.description": "末影族是末影龙的后代，拥有瞬移的能力，但是对水源会感到恐惧。",
+
+  "origin.origins.shulk.name": "潜影族",
+  "origin.origins.shulk.description": "潜影族拥有和潜影贝类似的保护外壳，拥有降低受到伤害的能力。",
+
+  "power.origins.water_breathing.name": "鱼鳃",
+  "power.origins.water_breathing.description": "拥有在水中呼吸的能力，但是在陆地上无法呼吸。",
+
+  "power.origins.aqua_affinity.name": "水下速掘",
+  "power.origins.aqua_affinity.description": "在水下时，挖掘方块拥有更快的速度。",
+
+  "power.origins.water_vision.name": "湿润之眼",
+  "power.origins.water_vision.description": "在水下时，拥有几乎完美的视野。",
+
+  "power.origins.swim_speed.name": "鱼鳍",
+  "power.origins.swim_speed.description": "在水下时，拥有更快的移动速度。",
+
+  "power.origins.like_water.name": "水之亲和",
+  "power.origins.like_water.description": "在水下时，除非按了潜行键，否则将永远都不会下沉。",
+
+  "power.origins.fragile.name": "脆弱",
+  "power.origins.fragile.description": "你将会比正常人类的最大生命值少3颗心。",
+
+  "power.origins.webbing.name": "结网",
+  "power.origins.webbing.description": "当使用近战武器攻击到生物时，在其脚下会生成蜘蛛网。",
+
+  "power.origins.climbing.name": "攀爬",
+  "power.origins.climbing.description": "你可以攀爬到任意的墙壁上，而不是单纯的依靠楼梯。",
+
+  "power.origins.carnivore.name": "肉食者",
+  "power.origins.carnivore.description": "你只能食用肉类，无法吃蔬菜和水果。",
+
+  "power.origins.fire_immunity.name": "火焰免疫",
+  "power.origins.fire_immunity.description": "你可以免疫任何类型的火焰伤害。",
+
+  "power.origins.nether_spawn.name": "下界居民",
+  "power.origins.nether_spawn.description": "你的复活点维度会被更改为下界。",
+
+  "power.origins.burning_wrath.name": "怒火",
+  "power.origins.burning_wrath.description": "当你在着火时，可拥有更高的攻击力。",
+
+  "power.origins.hotblooded.name": "热血",
+  "power.origins.hotblooded.description": "由于常驻于下界，体内的血液会变得灼热，所以你将会免疫中毒和饥饿效果。",
+
+  "power.origins.water_vulnerability.name": "恐水症",
+  "power.origins.water_vulnerability.description": "当接触到水时，你将会持续受到伤害。",
+
+  "power.origins.tailwind.name": "飞毛腿",
+  "power.origins.tailwind.description": "你的移动速度会比其他人更快。",
+
+  "power.origins.slow_falling.name": "轻盈",
+  "power.origins.slow_falling.description": "你会和羽毛一样缓慢地落地，除非你按住了潜行键。",
+
+  "power.origins.vegetarian.name": "素食者",
+  "power.origins.vegetarian.description": "你只能食用素食，无法食用肉类。",
+
+  "power.origins.fresh_air.name": "新鲜空气",
+  "power.origins.fresh_air.description": "当你在睡觉时，床必须要放置在Y轴在86格以上时才能获得新鲜的空气。",
+
+  "power.origins.phasing.name": "幻影",
+  "power.origins.phasing.description": "当变成幻影时，可以穿过除了黑曜石之外的任何方块。",
+
+  "power.origins.invisibility.name": "隐形",
+  "power.origins.invisibility.description": "当变成幻影时，你将会获得隐身效果。",
+
+  "power.origins.hunger_over_time.name": "快速代谢",
+  "power.origins.hunger_over_time.description": "当变成幻影时，你将会持续感觉到饥饿。",
+
+  "power.origins.burn_in_daylight.name": "恐光症",
+  "power.origins.burn_in_daylight.description": "当你未处于隐身状态时遇到阳光你将会着火。",
+
+  "power.origins.fall_immunity.name": "杂耍",
+  "power.origins.fall_immunity.description": "无论从什么高度上掉在地面上时，都不会受到摔落伤害。",
+
+  "power.origins.sprint_jump.name": "强壮脚踝",
+  "power.origins.sprint_jump.description": "当你在疾跑时跳跃，可跳跃到更高的位置上。",
+
+  "power.origins.nine_lives.name": "九条命？",
+  "power.origins.nine_lives.description": "你将会比正常人类的最大生命值少1颗心。",
+
+  "power.origins.cat_vision.name": "夜行者",
+  "power.origins.cat_vision.description": "当离开水源且在夜晚时，你将可以获得更好的视野。",
+
+  "power.origins.weak_arms.name": "手臂无力",
+  "power.origins.weak_arms.description": "如果没有饮用力量药水，那么每次只能挖掘2块相邻的自然生成石头，如果自然生成的石头超过2块则需要饮用力量药水才能继续挖掘。",
+
+  "power.origins.scare_creepers.name": "猫脸",
+  "power.origins.scare_creepers.description": "爬行类生物会因害怕而远离你，除非你自己先攻击它们，否则它们不会爆炸。",
+
+  "power.origins.launch_into_air.name": "风之礼",
+  "power.origins.launch_into_air.description": "每隔30秒，你都可以将自己抛向约20格距离的空中。",
+
+  "power.origins.elytra.name": "天翼",
+  "power.origins.elytra.description": "你将天生拥有鞘翅，无需装备。",
+
+  "power.origins.light_armor.name": "机动需求",
+  "power.origins.light_armor.description": "你将无法穿戴任何重型盔甲（护甲值高于锁链的所有盔甲）。",
+
+  "power.origins.claustrophobia.name": "幽闭恐惧症",
+  "power.origins.claustrophobia.description": "当你长时间呆在头顶有方块的位置上时会让你变得更虚弱且降低移动速度。",
+
+  "power.origins.more_kinetic_damage.name": "骨质疏松",
+  "power.origins.more_kinetic_damage.description": "当你受到摔落伤害和撞向方块时将会受到更多的伤害。",
+
+  "power.origins.aerial_combatant.name": "空中作战",
+  "power.origins.aerial_combatant.description": "当使用鞘翅在滑翔时可造成更多伤害。",
+
+  "power.origins.throw_ender_pearl.name": "瞬移",
+  "power.origins.throw_ender_pearl.description": "无论何时何地，你都可以向指定方向投掷出一颗不会造成摔落伤害且可以让玩家瞬移的末影珍珠。",
+
+  "power.origins.pumpkin_hate.name": "南瓜恐惧",
+  "power.origins.pumpkin_hate.description": "你将会对南瓜产生恐惧，也许不需要说明理由。",
+
+  "power.origins.extra_reach.name": "瘦长身体",
+  "power.origins.extra_reach.description": "你拥有更长的手臂来触碰远方的方块和生物。",
+
+  "power.origins.shulker_inventory.name": "囤积狂",
+  "power.origins.shulker_inventory.description": "你拥有9个在死亡不会掉落的物品槽。",
+
+  "power.origins.natural_armor.name": "坚实皮肤",
+  "power.origins.natural_armor.description": "哪怕不穿戴盔甲，也拥有更耐揍的皮肤。",
+
+  "power.origins.more_exhaustion.name": "食欲大增",
+  "power.origins.more_exhaustion.description": "你的食欲会比其他种族消耗更快，因此需要食用更多食物。",
+
+  "power.origins.no_shield.name": "笨重",
+  "power.origins.no_shield.description": "你的双手将无法举起盾牌。",
+
+  "power.origins.strong_arms.name": "强壮手臂",
+  "power.origins.strong_arms.description": "你拥有更加强壮的手臂，因此可以在没有镐子的前提下徒手挖掘自然生成的石头。",
+
+  "power.origins.translucent.name": "半透明",
+  "power.origins.translucent.description": "你的皮肤将会变成半透明。",
+
+  "power.origins.end_spawn.name": "末地居民",
+  "power.origins.end_spawn.description": "你的复活点维度会被更改为末地。",
+
+  "power.origins.master_of_webs.name": "织网大师",
+  "power.origins.master_of_webs.description": "你拥有驾驭蜘蛛网的能力并且可以在蜘蛛网中攀爬。当你使用近战武器攻击到生物时，会将该生物脚下生成蜘蛛网并将其短暂困住。当节肢生物在蜘蛛网中时，你也可以感应到，同时你也拥有使用线来合成蜘蛛网的能力。",
+
+  "power.origins.lay_eggs.name": "卵生",
+  "power.origins.lay_eggs.description": "每次从早上醒来，你都会生下一个鸡蛋。",
+
+  "power.origins.phantomize.name": "幻影形态",
+  "power.origins.phantomize.description": "你可以随意地在正常和幻影形态切换，但是必须要有足够的饥饿值时才能疾跑。",
+
+  "power.origins.like_air.name": "风之速",
+  "power.origins.like_air.description": "当在空中飞行时，在地面上的移动速度加成也会对飞行速度生效。",
+
+  "power.origins.velvet_paws.name": "轻如鹅毛",
+  "power.origins.velvet_paws.description": "你在行走时不会产生任何可被其他生物听见的脚步声。",
+
+  "category.origins": "起源",
+  "key.origins.primary_active": "主动能力（主动按键）",
+  "key.origins.secondary_active": "次要能力（次要按键）",
+  "key.origins.view_origin": "查看起源",
+
+  "text.autoconfig.origins.title": "起源配置",
+  "text.autoconfig.origins.option.xOffset": "冷却条的X轴偏移",
+  "text.autoconfig.origins.option.yOffset": "冷却条的Y轴偏移",
+  "text.autoconfig.origins.option.phantomizedOverlayStrength": "幻影视觉效果强度",
+
+  "item.origins.orb_of_origin": "起源之球",
+  "item.origins.orb_of_origin.layer_generic": "允许你重新选择一个%s。",
+  "item.origins.orb_of_origin.layer_specific": "将你的“%1$s”设置成“%2$s”。",
+
+  "enchantment.origins.water_protection": "水源保护",
+  "enchantment.origins.water_protection.desc": "延迟恐水症造成的伤害。",
+
+  "container.shulker_inventory_power": "潜影物品栏",
+
+  "origins.gui.select": "选择",
+  "origins.gui.close": "关闭",
+  "origins.gui.choose": "选择",
+  "origins.gui.choose_origin.title": "选择你的%s。",
+  "origins.gui.view_origin.title": "这是你的%s。",
+  "origins.gui.view_origin.empty": "你无法拥有任何起源。",
+  "origins.gui.view_origin.not_installed": "服务端未安装起源模组。",
+  "origins.gui.impact.impact": "影响",
+  "origins.gui.impact.none": "无",
+  "origins.gui.impact.low": "低",
+  "origins.gui.impact.medium": "中",
+  "origins.gui.impact.high": "高",
+  "origins.gui.version_mismatch": "服务端安装的起源模组版本（v%1$s）和你客户端上的起源版本（v%2$s）不兼容。",
+
+  "origins.gui.badge.active": "主动能力，开启/关闭按“%s”键。",
+  "origins.gui.badge.toggle": "开启/关闭按“%s”键。",
+  "origins.gui.badge.recipe.crafting.shaped": "合成配方（有序）：",
+  "origins.gui.badge.recipe.crafting.shapeless": "合成配方（无序）：",
+
+  "origins.gui.unbound_key": "§o未绑定§r",
+
+  "origin.origins.random.name": "随机",
+  "origin.origins.random.description": "你将从以下列表中随机选择：",
+
+  "layer.origins.origin.name": "起源",
+  "origin.origins.empty.name": "缺少",
+  "origin.origins.empty.description": "你未拥有任何起源。",
+
+  "death.attack.no_water_for_gills": "%1$s未能保持湿润",
+  "death.attack.no_water_for_gills.player": "%1$s在和%2$s战斗时未能保持湿润",
+  "death.attack.hurt_by_water": "%1$s洗浴时间太长",
+  "death.attack.hurt_by_water.player": "%1$s被%2$s放在水下",
+  "death.attack.genericDamageOverTime": "%1$s死于持续性的伤害效果",
+  "death.attack.genericDamageOverTime.player": "%1$s在和%2$s战斗时死于持续性的伤害效果。",
+
+  "commands.origin.origin_not_found": "未知起源：%s",
+  "commands.origin.layer_not_found": "未知层数：%s",
+  "commands.origin.unregistered_in_layer": "起源%1$s未在%2$s层中注册！",
+  "commands.origin.get.result": "%s拥有%s：%s（%s）",
+  "commands.origin.gui.all": "打开了%s的起源选择界面",
+  "commands.origin.gui.layer": "为玩家%1$s打开了选择界面%2$s",
+  "commands.origin.random.all": "在%2$s层中随机为玩家%1$s分配了一个起源",
+  "commands.origin.random.not_allowed": "在%1$s层中不允许随机起源！",
+  "commands.origin.random.success.multiple": "为在%2$s层中的%1$s目标随机分配了一个起源",
+  "commands.origin.random.success.single": "已将%2$s的起源随机分配给了%3$s层中的%1$s",
+  "commands.origin.set.success.multiple": "已将%s中的%s目标的起源设置为%s",
+  "commands.origin.set.success.single": "已将%s的%s设置为%s。",
+
+  "origins.avian_sleep_fail": "想要睡觉就必须要呼吸新鲜的空气！"
 }
