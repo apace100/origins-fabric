@@ -167,6 +167,15 @@
   "power.origins.lay_eggs.name": "Яйценосный",
   "power.origins.lay_eggs.description": "Каждый раз, когда ты просыпаешся утром, ты откладываешь яйцо.",
 
+  "power.origins.phantomize.name": "Призрачная форма",
+  "power.origins.phantomize.description": "Вы можете переключаться между человеческой и формой фантома по желанию, но только пока вы достаточно сыты.",
+  
+  "power.origins.like_air.name": "Как Воздух",
+  "power.origins.like_air.description": "Изменение скорости вашей ходьбы также применяются, когда вы находитесь в воздухе.",
+  
+  "power.origins.velvet_paws.name": "Бархатные Лапки",
+  "power.origins.velvet_paws.description": "Ваши шаги не вызывают никаких звуков, которые в противном случае могли бы быть услышаны близлежащими формами жизни.",
+
   "category.origins": "Origins",
   "key.origins.primary_active": "Активная сила (Главная)",
   "key.origins.secondary_active": "Активная сила (Второстепенная)",
@@ -178,8 +187,11 @@
   "text.autoconfig.origins.option.phantomizedOverlayStrength": "Степень наложения фантомизации",
 
   "item.origins.orb_of_origin": "Сфера происхождения",
-
+  "item.origins.orb_of_origin.layer_generic": "Позволяет выбрать новый %s.",
+  "item.origins.orb_of_origin.layer_specific": "Устанавливает ваш %1$s на \"%2$s\"."
+  
   "enchantment.origins.water_protection": "Защита от воды",
+  "enchantment.origins.water_protection.desc": "Задержка урона от гидрофобии.",
 
   "container.shulker_inventory_power": "Шалкеровый инвентарь",
 
@@ -196,6 +208,13 @@
   "origins.gui.impact.medium": "Среднее",
   "origins.gui.impact.high": "Высокое",
   "origins.gui.version_mismatch": "На это сервере установлена другая версия Origins (v%1$s), которая несовместима с той, что у вас (v%2$s).",
+
+  "origins.gui.badge.active": "Активная способность, использование с %s.",
+  "origins.gui.badge.toggle": "Переключаться с помощью %s.",
+  "origins.gui.badge.recipe.crafting.shaped": "Рецепт крафта (с формой):",
+  "origins.gui.badge.recipe.crafting.shapeless": "Рецепт крафта (без формы):",
+  
+  "origins.gui.unbound_key": "§§несвязанный§r",
   
   "origin.origins.random.name": "Случайный",
   "origin.origins.random.description": "Вам будет назначен один из следующих:",
@@ -212,31 +231,17 @@
   "death.attack.genericDamageOverTime.player": "%1$s умер от временного эффекта урона во время боя с %2$s.",
 
   "commands.origin.origin_not_found": "Неизвестное происхождение: %s",
+  "commands.origin.layer_not_found": "Неизвестный слой: %s",
+  "commands.origin.unregistered_in_layer": "Происхождение %1$s не зарегистрировано в слое %2$s!",
+  "commands.origin.get.result": "%s имеет следующие %s: %s (%s)",
+  "commands.origin.gui.all": "Открыл графический интерфейс выбора для игроков %s.",
+  "commands.origin.gui.layer": "Открыл графический интерфейс выбора \"%2$s\" для игроков % 1$s.",
+  "commands.origin.random.all": "Случайным образом назначено происхождение %1$s целям в %2$s слоях",
+  "commands.origin.random.not_allowed": "Слой %1$s не допускает случайных происхождений!",
+  "commands.origin.random.success.multiple": "Случайным образом назначено происхождение %1$s целям в слое %2$s",
+  "commands.origin.random.success.single": "Случайным образом назначено происхождение %2$s для %1$s в слое %3$s",
   "commands.origin.set.success.single": "Выбрать происхождение %s в слое %s к %s.",
   "commands.origin.set.success.multiple": "Выбрать происхождение %s целям в слое %s к %s.",
   
   "origins.avian_sleep_fail": "Тебе нужен свежий воздух для сна.",
-  "power.origins.phantomize.name": "Призрачная форма",
-  "power.origins.phantomize.description": "Вы можете переключаться между человеческой и формой фантома по желанию, но только пока вы достаточно сыты.",
-  "power.origins.like_air.name": "Как Воздух",
-  "power.origins.like_air.description": "Изменение скорости вашей ходьбы также применяются, когда вы находитесь в воздухе.",
-  "power.origins.velvet_paws.name": "Бархатные Лапки",
-  "power.origins.velvet_paws.description": "Ваши шаги не вызывают никаких звуков, которые в противном случае могли бы быть услышаны близлежащими формами жизни.",
-  "item.origins.orb_of_origin.layer_generic": "Позволяет вам выбрать новый %s.",
-  "item.origins.orb_of_origin.layer_specific": "Устанавливает для вашего % 1$s значение \"%2$s\".",
-  "origins.gui.badge.active": "Активная способность, использование с %s.",
-  "origins.gui.badge.toggle": "Переключаться с помощью %s.",
-  "origins.gui.unbound_key": "§§несвязанный§r",
-  "commands.origin.get.result": "%s имеет следующие %s: %s (%s)",
-  "commands.origin.gui.all": "Открыл графический интерфейс выбора для игроков %s.",
-  "commands.origin.gui.layer": "Открыл графический интерфейс выбора \"%2$s\" для игроков % 1$s.",
-  "enchantment.origins.water_protection.desc": "Delays damage from hydrophobia.",
-  "origins.gui.badge.recipe.crafting.shaped": "Crafting recipe (Shaped) provided by the power:",
-  "origins.gui.badge.recipe.crafting.shapeless": "Crafting recipe (Shapeless) provided by the power:",
-  "commands.origin.layer_not_found": "Unknown layer: %s",
-  "commands.origin.unregistered_in_layer": "Origin %1$s is not registered in layer %2$s!",
-  "commands.origin.random.all": "Randomly assigned an origin to %1$s targets in %2$s layers",
-  "commands.origin.random.not_allowed": "The layer %1$s does not allow for random origins!",
-  "commands.origin.random.success.multiple": "Randomly assigned an origin to %1$s targets in layer %2$s",
-  "commands.origin.random.success.single": "Randomly assigned the origin %2$s to %1$s in layer %3$s"
 }
