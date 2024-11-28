@@ -22,7 +22,7 @@ public class PowerKeyManager {
     private static String getKeyFromPower(Identifier powerId) {
 
         Power power = PowerManager.getOptional(powerId).orElse(null);
-        if (power == null || !(power.create(null) instanceof Active activePower)) {
+        if (power == null || !(power.getPowerType() instanceof Active activePower)) {
             return "";
         }
 

@@ -82,7 +82,15 @@ public class PlayerOriginComponent implements OriginComponent {
 
     @Override
     public Origin getOrigin(OriginLayer layer) {
-        return origins.get(layer);
+
+        if (OriginLayerManager.contains(layer)) {
+            return origins.computeIfAbsent(layer, k -> Origin.EMPTY);
+        }
+
+        else {
+            return origins.getOrDefault(layer, Origin.EMPTY);
+        }
+
     }
 
     @Override

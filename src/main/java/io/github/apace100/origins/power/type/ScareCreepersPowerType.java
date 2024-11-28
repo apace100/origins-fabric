@@ -1,7 +1,8 @@
 package io.github.apace100.origins.power.type;
 
 import io.github.apace100.apoli.component.PowerHolderComponent;
-import io.github.apace100.apoli.power.Power;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.apoli.util.MiscUtil;
 import io.github.apace100.origins.mixin.ActiveTargetGoalAccessor;
@@ -14,16 +15,23 @@ import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
 public class ScareCreepersPowerType extends PowerType {
 
-    public ScareCreepersPowerType(Power power, LivingEntity entity) {
-        super(power, entity);
+    public ScareCreepersPowerType(Optional<EntityCondition> condition) {
+        super(condition);
+    }
+
+    @Override
+    public @NotNull PowerConfiguration<?> getConfig() {
+        return OriginsPowerTypes.SCARE_CREEPERS;
     }
 
     public static void modifyGoals(PathAwareEntity pathAwareEntity) {

@@ -1,7 +1,7 @@
 package io.github.apace100.origins.origin;
 
 import com.google.common.collect.ImmutableList;
-import io.github.apace100.apoli.condition.factory.ConditionTypeFactory;
+import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.util.TextUtil;
 import io.github.apace100.calio.data.CompoundSerializableDataType;
@@ -16,6 +16,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -354,11 +355,11 @@ public class OriginLayer implements Comparable<OriginLayer> {
 
     }
 
-    public record ConditionedOrigin(@Nullable ConditionTypeFactory<Entity>.Instance condition, List<Identifier> origins) {
+    public record ConditionedOrigin(@NotNull Optional<EntityCondition> condition, List<Identifier> origins) {
 
         public static final CompoundSerializableDataType<ConditionedOrigin> DATA_TYPE = SerializableDataType.compound(
             new SerializableData()
-                .add("condition", ApoliDataTypes.ENTITY_CONDITION, null)
+                .add("condition", EntityCondition.DATA_TYPE.optional(), Optional.empty())
                 .add("origins", SerializableDataTypes.IDENTIFIERS),
             data -> new ConditionedOrigin(
                 data.get("condition"),
@@ -370,7 +371,7 @@ public class OriginLayer implements Comparable<OriginLayer> {
         );
 
         public boolean isConditionFulfilled(PlayerEntity playerEntity) {
-            return condition == null || condition.test(playerEntity);
+            return condition().map(condition -> condition.test(playerEntity)).orElse(true);
         }
 
     }

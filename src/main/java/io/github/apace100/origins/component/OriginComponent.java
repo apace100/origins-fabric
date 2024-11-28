@@ -5,7 +5,7 @@ import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.type.ModifyPlayerSpawnPowerType;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.origins.origin.*;
-import io.github.apace100.origins.power.type.OriginsCallbackPowerType;
+import io.github.apace100.origins.power.type.OriginsActionOnCallbackPowerType;
 import io.github.apace100.origins.registry.ModComponents;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
@@ -43,7 +43,7 @@ public interface OriginComponent extends AutoSyncedComponent, ServerTickingCompo
 				.ifPresent(ModifyPlayerSpawnPowerType::teleportToModifiedSpawn);
 		}
 
-		PowerHolderComponent.withPowerTypes(player, OriginsCallbackPowerType.class, p -> true, p -> p.onChosen(hadOriginBefore));
+		PowerHolderComponent.withPowerTypes(player, OriginsActionOnCallbackPowerType.class, p -> true, p -> p.onChosen(hadOriginBefore));
 
 	}
 
@@ -59,7 +59,7 @@ public interface OriginComponent extends AutoSyncedComponent, ServerTickingCompo
 				mps.teleportToModifiedSpawn();
 			}
 
-			else if (powerType instanceof OriginsCallbackPowerType ocp) {
+			else if (powerType instanceof OriginsActionOnCallbackPowerType ocp) {
 				ocp.onChosen(hadOriginBefore);
 			}
 

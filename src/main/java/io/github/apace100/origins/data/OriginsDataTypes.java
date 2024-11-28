@@ -12,6 +12,7 @@ import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.origin.OriginUpgrade;
 
 import java.util.List;
+import java.util.Optional;
 
 public final class OriginsDataTypes {
 
@@ -36,7 +37,7 @@ public final class OriginsDataTypes {
                 if (ops.getStringValue(input).isSuccess()) {
                     return SerializableDataTypes.IDENTIFIER.codec().decode(ops, input)
                         .map(idAndInput -> idAndInput
-                            .mapFirst(id -> new OriginLayer.ConditionedOrigin(null, Lists.newArrayList(id))));
+                            .mapFirst(id -> new OriginLayer.ConditionedOrigin(Optional.empty(), Lists.newArrayList(id))));
                 }
 
                 else {
@@ -48,13 +49,13 @@ public final class OriginsDataTypes {
 			@Override
 			public <T> DataResult<T> encode(OriginLayer.ConditionedOrigin input, DynamicOps<T> ops, T prefix) {
 
-                if (input.condition() == null && input.origins().size() == 1) {
-                    return SerializableDataTypes.IDENTIFIER.write(ops, input.origins().getFirst());
-                }
+				if (input.condition().isEmpty() && input.origins().size() == 1) {
+					return SerializableDataTypes.IDENTIFIER.write(ops, input.origins().getFirst());
+				}
 
-                else {
-                    return CONDITIONED_ORIGIN.write(ops, input);
-                }
+				else {
+					return CONDITIONED_ORIGIN.write(ops, input);
+				}
 
 			}
 

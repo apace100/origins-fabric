@@ -8,13 +8,13 @@ import io.github.apace100.apoli.power.PowerManager;
 import io.github.apace100.calio.util.IdentifierAlias;
 import io.github.apace100.origins.badge.BadgeManager;
 import io.github.apace100.origins.command.OriginCommand;
-import io.github.apace100.origins.condition.factory.entity.OriginsEntityConditions;
+import io.github.apace100.origins.condition.factory.entity.OriginsEntityConditionTypes;
 import io.github.apace100.origins.networking.ModPackets;
 import io.github.apace100.origins.networking.ModPacketsC2S;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayerManager;
 import io.github.apace100.origins.origin.OriginManager;
-import io.github.apace100.origins.power.factory.OriginsPowerTypes;
+import io.github.apace100.origins.power.type.OriginsPowerTypes;
 import io.github.apace100.origins.registry.*;
 import io.github.apace100.origins.util.ChoseOriginCriterion;
 import io.github.apace100.origins.util.OriginLootCondition;
@@ -81,7 +81,7 @@ public class Origins implements ModInitializer {
 		IdentifierAlias.GLOBAL.addNamespaceAlias(MODID, "apoli");
 
 		OriginsPowerTypes.register();
-		OriginsEntityConditions.register();
+		OriginsEntityConditionTypes.register();
 
 		ModBlocks.register();
 		ModItems.register();

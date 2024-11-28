@@ -1,8 +1,9 @@
 package io.github.apace100.origins.power.type;
 
 import io.github.apace100.apoli.component.PowerHolderComponent;
+import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.mixin.EntityAccessor;
-import io.github.apace100.apoli.power.Power;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.origins.mixin.LivingEntityAccessor;
 import io.github.apace100.origins.registry.ModDamageTypes;
@@ -10,11 +11,19 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.FluidTags;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 public class WaterBreathingPowerType extends PowerType {
 
-    public WaterBreathingPowerType(Power power, LivingEntity entity) {
-        super(power, entity);
+    public WaterBreathingPowerType(Optional<EntityCondition> condition) {
+        super(condition);
+    }
+
+    @Override
+    public @NotNull PowerConfiguration<?> getConfig() {
+        return OriginsPowerTypes.WATER_BREATHING;
     }
 
     public static boolean shouldDrown(LivingEntity entity) {

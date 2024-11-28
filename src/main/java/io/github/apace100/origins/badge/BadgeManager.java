@@ -173,7 +173,7 @@ public final class BadgeManager {
 
     private static void createAutoBadges(Identifier powerId, Power power, List<Badge> badgeList) {
 
-        switch (power.create(null)) {
+        switch (power.getPowerType()) {
             case Active active -> {
 
                 boolean toggle = active instanceof TogglePowerType

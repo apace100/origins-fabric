@@ -171,7 +171,7 @@ public class Origin implements Validatable {
             }
 
             catch (Exception e) {
-                Origins.LOGGER.error("Origin \"{}\" contained unregistered power \"{}\"!", id, powerReference.getId());
+                Origins.LOGGER.error("Origin \"{}\" contained unregistered power \"{}\"!", id, powerReference.id());
             }
 
         }

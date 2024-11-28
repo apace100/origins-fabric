@@ -1,16 +1,24 @@
 package io.github.apace100.origins.power.type;
 
 import io.github.apace100.apoli.component.PowerHolderComponent;
-import io.github.apace100.apoli.power.Power;
+import io.github.apace100.apoli.condition.EntityCondition;
+import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 public class LikeWaterPowerType extends PowerType {
 
-    public LikeWaterPowerType(Power power, LivingEntity entity) {
-        super(power, entity);
+    public LikeWaterPowerType(Optional<EntityCondition> condition) {
+        super(condition);
+    }
+
+    @Override
+    public @NotNull PowerConfiguration<?> getConfig() {
+        return OriginsPowerTypes.LIKE_WATER;
     }
 
     public static Vec3d modifyFluidMovement(Entity entity, Vec3d velocity, double fallVelocity) {
