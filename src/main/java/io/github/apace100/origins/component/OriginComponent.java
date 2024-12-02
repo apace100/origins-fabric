@@ -49,11 +49,11 @@ public interface OriginComponent extends AutoSyncedComponent, ServerTickingCompo
 
 	static void partialOnChosen(PlayerEntity player, boolean hadOriginBefore, Origin origin) {
 
-		PowerHolderComponent powerHolder = PowerHolderComponent.KEY.get(player);
+		PowerHolderComponent powerComponent = PowerHolderComponent.getOptional(player).orElseThrow();
 
-		for (Power power : powerHolder.getPowersFromSource(origin.getId())) {
+		for (Power power : powerComponent.getPowersFromSource(origin.getId())) {
 
-			PowerType powerType  = powerHolder.getPowerType(power);
+			PowerType powerType  = powerComponent.getPowerType(power);
 
 			if (powerType instanceof ModifyPlayerSpawnPowerType mps && !hadOriginBefore) {
 				mps.teleportToModifiedSpawn();

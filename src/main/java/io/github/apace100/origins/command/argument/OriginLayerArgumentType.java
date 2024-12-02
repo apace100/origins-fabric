@@ -16,14 +16,14 @@ import net.minecraft.util.Identifier;
 
 import java.util.concurrent.CompletableFuture;
 
-public class LayerArgumentType implements ArgumentType<OriginLayer> {
+public class OriginLayerArgumentType implements ArgumentType<OriginLayer> {
 
    public static final DynamicCommandExceptionType LAYER_NOT_FOUND = new DynamicCommandExceptionType(
        o -> Text.translatable("commands.origin.layer_not_found", o)
    );
 
-   public static LayerArgumentType layer() {
-      return new LayerArgumentType();
+   public static OriginLayerArgumentType layer() {
+      return new OriginLayerArgumentType();
    }
 
    public static OriginLayer getLayer(CommandContext<ServerCommandSource> context, String argumentName) {

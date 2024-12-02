@@ -2,7 +2,7 @@ package io.github.apace100.origins.mixin;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import io.github.apace100.origins.Origins;
-import io.github.apace100.origins.command.argument.LayerArgumentType;
+import io.github.apace100.origins.command.argument.OriginLayerArgumentType;
 import io.github.apace100.origins.command.argument.OriginArgumentType;
 import net.minecraft.command.argument.ArgumentTypes;
 import net.minecraft.command.argument.serialize.ArgumentSerializer;
@@ -24,6 +24,6 @@ public abstract class ArgumentTypesMixin {
     @Inject(method = "register(Lnet/minecraft/registry/Registry;)Lnet/minecraft/command/argument/serialize/ArgumentSerializer;", at = @At("RETURN"))
     private static void registerApoliArgumentTypes(Registry<ArgumentSerializer<?, ?>> registry, CallbackInfoReturnable<ArgumentSerializer<?, ?>> cir) {
         register(registry, Origins.MODID + ":origin", OriginArgumentType.class, ConstantArgumentSerializer.of(OriginArgumentType::origin));
-        register(registry, Origins.MODID + ":layer", LayerArgumentType.class, ConstantArgumentSerializer.of(LayerArgumentType::layer));
+        register(registry, Origins.MODID + ":layer", OriginLayerArgumentType.class, ConstantArgumentSerializer.of(OriginLayerArgumentType::layer));
     }
 }
