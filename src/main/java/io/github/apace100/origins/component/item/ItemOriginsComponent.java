@@ -22,8 +22,10 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -53,14 +55,14 @@ public class ItemOriginsComponent implements TooltipAppender {
         String baseKey = "component.item.origins.origin";
         boolean appendedTooltips = false;
 
-		for (Entry entry : entries) {
+		for (Entry entry : entries()) {
 
-			if (!entry.canSelect()) {
+			OriginLayer layer = OriginLayerManager.getNullable(entry.layerId());
+			Origin origin = OriginManager.getNullable(entry.originId());
+
+			if (!canSet(layer, origin)) {
 				continue;
 			}
-
-			OriginLayer layer = OriginLayerManager.get(entry.layerId());
-			Origin origin = OriginManager.get(entry.originId());
 
 			String translationKey;
 			Object[] args;
@@ -90,32 +92,26 @@ public class ItemOriginsComponent implements TooltipAppender {
         return entries;
     }
 
-    public void selectOrigins(LivingEntity user) {
+    public void setOrigin(LivingEntity user) {
 
         if (!(user instanceof ServerPlayerEntity player)) {
             return;
         }
 
-        OriginComponent originComponent = ModComponents.ORIGIN.get(player);
-        boolean assignedOrigin = false;
+		OriginComponent originComponent = ModComponents.ORIGIN.get(player);
+		boolean assignedOrigin = false;
 
-        for (Entry entry : entries) {
+		for (Entry entry : entries()) {
 
-            if (entry.canSelect()) {
-                continue;
-            }
+			OriginLayer layer = OriginLayerManager.getNullable(entry.layerId());
+			Origin origin = OriginManager.getNullable(entry.originId());
 
-            originComponent.setOrigin(OriginLayerManager.get(entry.layerId()), OriginManager.get(entry.originId()));
-            assignedOrigin = true;
+			if (canSet(layer, origin)) {
+				originComponent.setOrigin(layer, origin);
+				assignedOrigin = true;
+			}
 
-        }
-
-        if (!assignedOrigin) {
-            OriginLayerManager.values()
-                .stream()
-                .filter(OriginLayer::isEnabled)
-                .forEach(layer -> originComponent.setOrigin(layer, Origin.EMPTY));
-        }
+		}
 
         assignedOrigin |= originComponent.checkAutoChoosingLayers(player, false);
         int originOptions = OriginLayerManager.getOriginOptionCount(player);
@@ -147,18 +143,13 @@ public class ItemOriginsComponent implements TooltipAppender {
             ImmutableList::copyOf
         );
 
-        public boolean canSelect() {
-
-            OriginLayer layer = OriginLayerManager.getNullable(layerId);
-            Origin origin = OriginManager.getNullable(originId);
-
-            return layer != null
-                && origin != null
-                && layer.isEnabled()
-                && (layer.contains(origin) || origin.isSpecial());
-
-        }
-
     }
+
+	private static boolean canSet(@Nullable OriginLayer layer, @Nullable Origin origin) {
+		return layer != null
+			&& origin != null
+			&& layer.isEnabled()
+			&& (layer.contains(origin) || origin.isSpecial());
+	}
 
 }

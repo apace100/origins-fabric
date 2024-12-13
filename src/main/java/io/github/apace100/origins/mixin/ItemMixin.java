@@ -31,7 +31,7 @@ public abstract class ItemMixin {
             return original;
         }
 
-        itemOrigins.selectOrigins(user);
+        itemOrigins.setOrigin(user);
         user.incrementStat(Stats.USED.getOrCreateStat((Item) (Object) this));
 
         stack.decrementUnlessCreative(1, user);
