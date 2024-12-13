@@ -59,14 +59,12 @@ public class OriginDisplayScreen extends Screen {
     private boolean dragScrolling = false;
 
     private double mouseDragStart = 0;
-    private float time = 0;
 
     private int currentMaxScroll = 0;
     private int scrollDragStart = 0;
 
     protected int guiTop, guiLeft;
     protected int scrollPos = 0;
-
 
     public OriginDisplayScreen(Text title, boolean showDirtBackground) {
         super(title);
@@ -78,7 +76,6 @@ public class OriginDisplayScreen extends Screen {
         this.layer = layer;
         this.isOriginRandom = isRandom;
         this.scrollPos = 0;
-        this.time = 0;
     }
 
     public void setRandomOriginText(Text text) {
@@ -120,15 +117,9 @@ public class OriginDisplayScreen extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
 
         renderedBadges.clear();
-        this.time += delta;
 
         super.render(context, mouseX, mouseY, delta);
         this.renderOriginWindow(context, mouseX, mouseY, delta);
-
-        if (origin != null) {
-            renderScrollbar(context, mouseX, mouseY);
-            renderBadgeTooltip(context, mouseX, mouseY);
-        }
 
     }
 
@@ -227,22 +218,28 @@ public class OriginDisplayScreen extends Screen {
             && (mouseY >= guiTop + scrollBarY && mouseY < guiTop + scrollBarY + 27);
     }
 
-    protected void renderBadgeTooltip(DrawContext context, int mouseX, int mouseY) {
+    protected void renderBadgeTooltips(DrawContext context, int mouseX, int mouseY, float delta) {
 
-        for (RenderedBadge renderedBadge : renderedBadges) {
+        DrawContextAccessor contextAccessor = (DrawContextAccessor) context;
+        int widthLimit = width - mouseX - 24;
 
-            if (canRenderBadgeTooltip(renderedBadge, mouseX, mouseY)) {
-                int widthLimit = width - mouseX - 24;
-                ((DrawContextAccessor) context).invokeDrawTooltip(textRenderer, renderedBadge.getTooltipComponents(textRenderer, widthLimit), mouseX, mouseY, HoveredTooltipPositioner.INSTANCE);
-            }
-
+        if (this.isWithinWindowBoundaries(mouseX, mouseY)) {
+            this.renderedBadges.stream()
+                .filter(RenderedBadge::hasTooltip)
+                .filter(renderedBadge -> isWithinBadgeBoundaries(renderedBadge, mouseX, mouseY))
+                .map(renderedBadge -> renderedBadge.getTooltipComponents(textRenderer, widthLimit, delta))
+                .forEach(tooltipComponents -> contextAccessor.invokeDrawTooltip(textRenderer, tooltipComponents, mouseX, mouseY, HoveredTooltipPositioner.INSTANCE));
         }
 
     }
 
-    protected boolean canRenderBadgeTooltip(RenderedBadge renderedBadge, int mouseX, int mouseY) {
-        return renderedBadge.hasTooltip()
-            && (mouseX >= renderedBadge.x && mouseX < renderedBadge.x + 9)
+    protected boolean isWithinWindowBoundaries(int mouseX, int mouseY) {
+        return (mouseX >= guiLeft && mouseX < guiLeft + WINDOW_WIDTH)
+            && (mouseY >= guiTop && mouseY < guiTop + WINDOW_HEIGHT);
+    }
+
+    protected boolean isWithinBadgeBoundaries(RenderedBadge renderedBadge, int mouseX, int mouseY) {
+        return (mouseX >= renderedBadge.x && mouseX < renderedBadge.x + 9)
             && (mouseY >= renderedBadge.y && mouseY < renderedBadge.y + 9);
     }
 
@@ -255,9 +252,9 @@ public class OriginDisplayScreen extends Screen {
         context.drawGuiTexture(WINDOW_BACKGROUND, guiLeft, guiTop, -4, WINDOW_WIDTH, WINDOW_HEIGHT);
 
         if (origin != null) {
-            //context.enableScissor(guiLeft, guiTop, guiLeft + windowWidth, guiTop + windowHeight);
+            context.enableScissor(guiLeft, guiTop, guiLeft + WINDOW_WIDTH, guiTop + WINDOW_HEIGHT);
             this.renderOriginContent(context);
-            //context.disableScissor();
+            context.disableScissor();
         }
 
         context.drawGuiTexture(WINDOW_BORDER, guiLeft, guiTop, 2, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -274,6 +271,9 @@ public class OriginDisplayScreen extends Screen {
             context.getMatrices().pop();
             context.drawCenteredTextWithShadow(this.textRenderer, getTitleText(), width / 2, guiTop - 15, 0xFFFFFF);
 
+            renderScrollbar(context, mouseX, mouseY);
+            renderBadgeTooltips(context, mouseX, mouseY, delta);
+
         }
 
     }
@@ -283,16 +283,21 @@ public class OriginDisplayScreen extends Screen {
         Impact impact = origin.getImpact();
         context.drawGuiTexture(impact.getSpriteId(), guiLeft + 128, guiTop + 19, 2, 28, 8);
 
-        if (this.isHoveringOverImpact(mouseX, mouseY)) {
+        if (this.isWithinWindowBoundaries(mouseX, mouseY) && this.isWithinImpactBoundaries(mouseX, mouseY)) {
             MutableText impactHoverTooltip = Text.translatable(Origins.MODID + ".gui.impact.impact").append(": ").append(impact.getTextComponent());
             context.drawTooltip(this.textRenderer, impactHoverTooltip, mouseX, mouseY);
         }
 
     }
 
-    protected boolean isHoveringOverImpact(int mouseX, int mouseY) {
-        return (mouseX >= guiLeft + 128 && mouseX <= guiLeft + 158)
-            && (mouseY >= guiTop + 19 && mouseY <= guiTop + 27);
+    protected boolean isWithinImpactBoundaries(int mouseX, int mouseY) {
+
+        int impactStartX = guiLeft + 128;
+        int impactStartY = guiTop + 19;
+
+        return (mouseX >= impactStartX && mouseX < impactStartX + 28)
+            && (mouseY >= impactStartY && mouseY < impactStartY + 8);
+
     }
 
     protected void renderOriginName(DrawContext context, int mouseX, int mouseY, float delta) {
@@ -335,39 +340,29 @@ public class OriginDisplayScreen extends Screen {
 //        }
 
         int x = guiLeft + 18;
-        int y = guiTop + 50;
-        int startY = y;
-        int endY = y - 72 + WINDOW_HEIGHT;
+        int y = guiTop + 45;
 
         y -= scrollPos;
 
         Text description = origin == Origin.EMPTY && layer != null && layer.getMissingDescription() != null ? layer.getMissingDescription() : origin.getDescription();
         for (OrderedText descriptionLine : textRenderer.wrapLines(description, textWidthLimit)) {
-
-            if (y >= startY - 24 && y <= endY + 12) {
-                context.drawTextWithShadow(textRenderer, descriptionLine, x + 2, y, 0xCCCCCC);
-            }
-
+            context.drawTextWithShadow(textRenderer, descriptionLine, x + 2, y, 0xCCCCCC);
             y += 12;
-
         }
 
         y += 12;
         if (isOriginRandom) {
 
             for (OrderedText randomOriginLine : textRenderer.wrapLines(randomOriginText, textWidthLimit)) {
-
                 y += 12;
-
-                if (y >= startY - 24 && y <= endY + 12) {
-                    context.drawTextWithShadow(textRenderer, randomOriginLine, x + 2, y, 0xCCCCCC);
-                }
-
+                context.drawTextWithShadow(textRenderer, randomOriginLine, x + 2, y, 0xCCCCCC);
             }
 
             y += 14;
 
-        } else {
+        }
+
+        else {
 
             for (Power power : origin.getPowers()) {
 
@@ -379,13 +374,8 @@ public class OriginDisplayScreen extends Screen {
                 int powerNameWidth = textRenderer.getWidth(powerName.getLast());
 
                 for (OrderedText powerNameLine : powerName) {
-
-                    if (y >= startY - 24 && y <= endY + 12) {
-                        context.drawTextWithShadow(textRenderer, powerNameLine, x, y, 0xFFFFFF);
-                    }
-
+                    context.drawTextWithShadow(textRenderer, powerNameLine, x, y, 0xFFFFFF);
                     y += 12;
-
                 }
 
                 y -= 12;
@@ -413,15 +403,10 @@ public class OriginDisplayScreen extends Screen {
 
                         }
 
-                        if (badgeY >= startY - 34 && badgeY <= endY + 12) {
+                        RenderedBadge renderedBadge = new RenderedBadge(selfOrSubPower, badge, badgeX, badgeY);
+                        renderedBadges.add(renderedBadge);
 
-                            RenderedBadge renderedBadge = new RenderedBadge(selfOrSubPower, badge, badgeX, badgeY);
-                            renderedBadges.add(renderedBadge);
-
-                            context.drawTexture(badge.spriteId(), renderedBadge.x, renderedBadge.y, -2, 0, 0, 9, 9, 9, 9);
-
-                        }
-
+                        context.drawTexture(badge.spriteId(), renderedBadge.x, renderedBadge.y, -2, 0, 0, 9, 9, 9, 9);
                         badgeOffsetX++;
 
                     }
@@ -429,14 +414,10 @@ public class OriginDisplayScreen extends Screen {
                 }
 
                 y += badgeOffsetY * 10;
+
                 for (OrderedText powerDescriptionLine : textRenderer.wrapLines(power.getDescription(), textWidthLimit)) {
-
                     y += 12;
-
-                    if (y >= startY - 24 && y <= endY + 12) {
-                        context.drawTextWithShadow(textRenderer, powerDescriptionLine, x + 2, y, 0xCCCCCC);
-                    }
-
+                    context.drawTextWithShadow(textRenderer, powerDescriptionLine, x + 2, y, 0xCCCCCC);
                 }
 
                 y += 20;
@@ -462,23 +443,10 @@ public class OriginDisplayScreen extends Screen {
 
     }
 
-    protected class RenderedBadge {
+    protected record RenderedBadge(Power power, Badge badge, int x, int y) {
 
-        private final Power power;
-        private final Badge badge;
-
-        private final int x;
-        private final int y;
-
-        public RenderedBadge(Power power, Badge badge, int x, int y) {
-            this.power = power;
-            this.badge = badge;
-            this.x = x;
-            this.y = y;
-        }
-
-        public List<TooltipComponent> getTooltipComponents(TextRenderer textRenderer, int widthLimit) {
-            return badge.getTooltipComponents(power, widthLimit, OriginDisplayScreen.this.time, textRenderer);
+        public List<TooltipComponent> getTooltipComponents(TextRenderer textRenderer, int widthLimit, float delta) {
+            return badge.getTooltipComponents(power, widthLimit, delta, textRenderer);
         }
 
         public boolean hasTooltip() {
