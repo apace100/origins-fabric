@@ -27,15 +27,18 @@ public abstract class ItemMixin {
         ItemStack stack = original.getValue();
         ItemOriginsComponent itemOrigins = stack.get(ModDataComponentTypes.ORIGIN);
 
-        if (itemOrigins == null) {
-            return original;
+        if (itemOrigins != null && itemOrigins.setOrigin(user)) {
+
+            user.incrementStat(Stats.USED.getOrCreateStat((Item) (Object) this));
+            stack.decrementUnlessCreative(1, user);
+
+            return TypedActionResult.consume(stack);
+
         }
 
-        itemOrigins.setOrigin(user);
-        user.incrementStat(Stats.USED.getOrCreateStat((Item) (Object) this));
-
-        stack.decrementUnlessCreative(1, user);
-        return TypedActionResult.consume(stack);
+        else {
+            return original;
+        }
 
     }
 

@@ -7,7 +7,10 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.networking.packet.s2c.OpenChooseOriginScreenS2CPacket;
-import io.github.apace100.origins.origin.*;
+import io.github.apace100.origins.origin.Origin;
+import io.github.apace100.origins.origin.OriginLayer;
+import io.github.apace100.origins.origin.OriginLayerManager;
+import io.github.apace100.origins.origin.OriginManager;
 import io.github.apace100.origins.registry.ModComponents;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -25,7 +28,6 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -92,36 +94,36 @@ public class ItemOriginsComponent implements TooltipAppender {
         return entries;
     }
 
-    public void setOrigin(LivingEntity user) {
+    public boolean setOrigin(LivingEntity user) {
 
         if (!(user instanceof ServerPlayerEntity player)) {
-            return;
+            return false;
         }
 
 		OriginComponent originComponent = ModComponents.ORIGIN.get(player);
-		boolean assignedOrigin = false;
+		boolean assignedOrigin = entries()
+			.stream()
+			.map(entry -> entry.set(originComponent))
+			.reduce(false, Boolean::logicalOr);
 
-		for (Entry entry : entries()) {
-
-			OriginLayer layer = OriginLayerManager.getNullable(entry.layerId());
-			Origin origin = OriginManager.getNullable(entry.originId());
-
-			if (canSet(layer, origin)) {
-				originComponent.setOrigin(layer, origin);
-				assignedOrigin = true;
-			}
-
+		if (!assignedOrigin) {
+			OriginLayerManager.values()
+				.stream()
+				.filter(OriginLayer::isEnabled)
+				.forEach(layer -> originComponent.setOrigin(layer, Origin.EMPTY));
 		}
 
-        assignedOrigin |= originComponent.checkAutoChoosingLayers(player, false);
-        int originOptions = OriginLayerManager.getOriginOptionCount(player);
+		assignedOrigin |= originComponent.checkAutoChoosingLayers(player, false);
+		int originOptions = OriginLayerManager.getOriginOptionCount(player);
 
-        originComponent.selectingOrigin(!assignedOrigin || originOptions > 0);
-        originComponent.sync();
+		originComponent.selectingOrigin(!assignedOrigin || originOptions > 0);
+		originComponent.sync();
 
-        if (originComponent.isSelectingOrigin()) {
-            ServerPlayNetworking.send(player, new OpenChooseOriginScreenS2CPacket(false));
-        }
+		if (originComponent.isSelectingOrigin()) {
+			ServerPlayNetworking.send(player, new OpenChooseOriginScreenS2CPacket(false));
+		}
+
+		return originComponent.isSelectingOrigin();
 
     }
 
@@ -143,9 +145,25 @@ public class ItemOriginsComponent implements TooltipAppender {
             ImmutableList::copyOf
         );
 
+		public boolean set(OriginComponent originComponent) {
+
+			Origin origin = OriginManager.getNullable(originId());
+			OriginLayer layer = OriginLayerManager.getNullable(layerId());
+
+			if (canSet(layer, origin)) {
+				originComponent.setOrigin(layer, origin);
+				return true;
+			}
+
+			else {
+				return false;
+			}
+
+		}
+
     }
 
-	private static boolean canSet(@Nullable OriginLayer layer, @Nullable Origin origin) {
+	public static boolean canSet(@Nullable OriginLayer layer, @Nullable Origin origin) {
 		return layer != null
 			&& origin != null
 			&& layer.isEnabled()
