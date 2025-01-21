@@ -165,6 +165,9 @@ public class Origin implements Validatable {
 
         this.powers.clear();
         for (PowerReference powerReference : powerReferences) {
+            if (Origins.config.isPowerDisabled(this.id, powerReference.id())) {
+                continue;
+            }
 
             try {
                 powers.add(powerReference.getPower());
