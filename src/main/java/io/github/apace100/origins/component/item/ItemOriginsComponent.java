@@ -123,7 +123,8 @@ public class ItemOriginsComponent implements TooltipAppender {
 			ServerPlayNetworking.send(player, new OpenChooseOriginScreenS2CPacket(false));
 		}
 
-		return originComponent.isSelectingOrigin();
+		return assignedOrigin
+			|| originComponent.isSelectingOrigin();
 
     }
 
