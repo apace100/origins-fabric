@@ -7,7 +7,10 @@ import io.github.apace100.apoli.integration.PrePowerReloadCallback;
 import io.github.apace100.apoli.power.MultiplePower;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerManager;
-import io.github.apace100.apoli.power.type.*;
+import io.github.apace100.apoli.power.type.Active;
+import io.github.apace100.apoli.power.type.RecipePowerType;
+import io.github.apace100.apoli.power.type.ToggleNightVisionPowerType;
+import io.github.apace100.apoli.power.type.TogglePowerType;
 import io.github.apace100.calio.data.DataException;
 import io.github.apace100.calio.registry.DataObjectRegistry;
 import io.github.apace100.calio.util.DynamicIdentifier;
@@ -19,12 +22,18 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.recipe.*;
+import net.minecraft.recipe.CraftingRecipe;
+import net.minecraft.recipe.RecipeEntry;
+import net.minecraft.recipe.ShapedRecipe;
+import net.minecraft.recipe.ShapelessRecipe;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public final class BadgeManager {
 
@@ -60,11 +69,7 @@ public final class BadgeManager {
     }
 
     public static void send(ServerPlayerEntity player) {
-
-        if (player.server.isDedicated()) {
-            ServerPlayNetworking.send(player, new SyncBadgesS2CPacket(BADGES_BY_ID));
-        }
-
+        ServerPlayNetworking.send(player, new SyncBadgesS2CPacket(BADGES_BY_ID));
     }
 
     @Environment(EnvType.CLIENT)
