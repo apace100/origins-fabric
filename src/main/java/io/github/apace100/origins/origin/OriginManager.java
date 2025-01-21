@@ -252,11 +252,7 @@ public class OriginManager extends IdentifiableMultiJsonDataLoader implements Id
 	}
 
 	public static void send(ServerPlayerEntity player) {
-
-		if (player.server.isDedicated()) {
-			ServerPlayNetworking.send(player, new SyncOriginsS2CPacket(ORIGINS_BY_ID));
-		}
-
+		ServerPlayNetworking.send(player, new SyncOriginsS2CPacket(ORIGINS_BY_ID));
 	}
 
 	@Environment(EnvType.CLIENT)
@@ -267,7 +263,7 @@ public class OriginManager extends IdentifiableMultiJsonDataLoader implements Id
 		packet.originsById().entrySet()
 			.stream()
 			.peek(e -> e.getValue().validate())
-			.forEach(e -> ORIGINS_BY_ID.put(e.getKey(), e.getValue()));
+			.forEach(e -> update(e.getKey(), e.getValue()));
 
 		endBuilding();
 
