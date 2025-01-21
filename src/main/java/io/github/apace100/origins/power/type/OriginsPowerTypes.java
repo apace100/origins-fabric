@@ -10,7 +10,7 @@ public class OriginsPowerTypes {
 
     public static final PowerConfiguration<ConduitPowerOnLandPowerType> CONDUIT_POWER_ON_LAND = register(PowerConfiguration.conditionedSimple(Origins.identifier("conduit_power_on_land"), ConduitPowerOnLandPowerType::new));
     public static final PowerConfiguration<LikeWaterPowerType> LIKE_WATER = register(PowerConfiguration.conditionedSimple(Origins.identifier("like_water"), LikeWaterPowerType::new));
-    public static final PowerConfiguration<OriginsActionOnCallbackPowerType> ACTION_ON_CALLBACK = register(PowerConfiguration.dataFactory(Origins.identifier("action_on_callback"), OriginsActionOnCallbackPowerType.DATA_FACTORY));
+    public static final PowerConfiguration<OriginsActionOnCallbackPowerType> ACTION_ON_CALLBACK = register(PowerConfiguration.of(Origins.identifier("action_on_callback"), OriginsActionOnCallbackPowerType.DATA_FACTORY));
     public static final PowerConfiguration<ScareCreepersPowerType> SCARE_CREEPERS = register(PowerConfiguration.conditionedSimple(Origins.identifier("scare_creepers"), ScareCreepersPowerType::new));
     public static final PowerConfiguration<WaterBreathingPowerType> WATER_BREATHING = register(PowerConfiguration.conditionedSimple(Origins.identifier("water_breathing"), WaterBreathingPowerType::new));
     public static final PowerConfiguration<WaterVisionPowerType> WATER_VISION = register(PowerConfiguration.conditionedSimple(Origins.identifier("water_vision"), WaterVisionPowerType::new));

@@ -1,18 +1,18 @@
 package io.github.apace100.origins.badge;
 
 import io.github.apace100.apoli.power.Power;
+import io.github.apace100.apoli.util.keybinding.KeyBindingUtil;
 import io.github.apace100.calio.data.SerializableData;
-import io.github.apace100.origins.util.KeyBindingUtil;
 import io.github.apace100.origins.util.PowerKeyManager;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.tooltip.OrderedTextTooltipComponent;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
-import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public record KeybindBadge(Identifier spriteId, String text) implements Badge {
 
@@ -22,29 +22,32 @@ public record KeybindBadge(Identifier spriteId, String text) implements Badge {
 
     @Override
     public boolean hasTooltip() {
-        return true;
-    }
-
-    public static void addLines(List<TooltipComponent> tooltips, Text text, TextRenderer textRenderer, int widthLimit) {
-        if(textRenderer.getWidth(text) > widthLimit) {
-            for(OrderedText orderedText : textRenderer.wrapLines(text, widthLimit)) {
-                tooltips.add(new OrderedTextTooltipComponent(orderedText));
-            }
-        } else {
-            tooltips.add(new OrderedTextTooltipComponent(text.asOrderedText()));
-        }
+        return !text.isEmpty();
     }
 
     @Override
     public List<TooltipComponent> getTooltipComponents(Power power, int widthLimit, float time, TextRenderer textRenderer) {
 
-        String keyId = PowerKeyManager.getKeyIdentifier(power.getId());
+        Optional<String> keyId = PowerKeyManager.getKeyId(power);
+        List<TooltipComponent> tooltips = new ObjectArrayList<>();
 
-        Text keyName = KeyBindingUtil.getLocalizedName(keyId);
-        Text keyText = Text.literal("[").append(keyName).append("]");
+        if (keyId.isPresent()) {
 
-        List<TooltipComponent> tooltips = new LinkedList<>();
-        addLines(tooltips, Text.translatable(text, keyText), textRenderer, widthLimit);
+            Text keyName = KeyBindingUtil.getLocalizedName(keyId.get());
+            Text keyText = Text.translatable(text(), Text.literal("[").append(keyName).append("]"));
+
+            if (textRenderer.getWidth(keyText) > widthLimit) {
+                textRenderer.wrapLines(keyText, widthLimit)
+                    .stream()
+                    .map(OrderedTextTooltipComponent::new)
+                    .forEach(tooltips::add);
+            }
+
+            else {
+                tooltips.add(new OrderedTextTooltipComponent(keyText.asOrderedText()));
+            }
+
+        }
 
         return tooltips;
 
