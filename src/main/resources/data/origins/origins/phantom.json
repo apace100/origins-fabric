@@ -10,7 +10,7 @@
 		"origins:phantomize_overlay"
 	],
 	"icon": {
-		"item": "minecraft:phantom_membrane"
+		"id": "minecraft:phantom_membrane"
 	},
 	"order": 2,
 	"impact": 3
