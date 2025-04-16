@@ -42,7 +42,7 @@ public class OriginArgumentType implements ArgumentType<Identifier> {
 
       try {
 
-         OriginLayer layer = context.getArgument("layer", OriginLayer.class);
+         OriginLayer layer = OriginLayerArgumentType.getLayer(context, "layer");
          Stream.Builder<Identifier> origins = Stream.builder();
 
          origins.add(Origin.EMPTY.getId());
