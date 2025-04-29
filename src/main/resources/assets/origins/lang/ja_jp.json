@@ -239,9 +239,9 @@
   "commands.origin.random.all": "%1$s体の対象に%2$s個のレイヤーからランダムなオリジンを割り当てました",
   "commands.origin.random.not_allowed": "レイヤー%1$sではランダムなオリジンは許可されていません",
   "commands.origin.random.success.multiple": "%1$s体の対象にレイヤー%2$sのランダムなオリジンを割り当てました",
-  "commands.origin.random.success.single": "%1$sにレイヤー%3$sのランダムなオリジン%2$sを割り当てました"
+  "commands.origin.random.success.single": "%1$sにレイヤー%3$sのランダムなオリジン%2$sを割り当てました",
   "commands.origin.set.success.multiple": "%1$s体の対象にレイヤー%2$sからオリジン%3$sを設定しました",
   "commands.origin.set.success.single": "%1$sにレイヤー%2$sからオリジン%3$sを設定しました",
 
-  "origins.avian_sleep_fail": "寝るには新鮮な空気が必要です",
+  "origins.avian_sleep_fail": "寝るには新鮮な空気が必要です"
 }
