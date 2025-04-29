@@ -234,14 +234,14 @@
   "commands.origin.gui.layer": "%1$s人のプレイヤーの\"%2$s\"の選択GUIを開きました",
   "commands.origin.origin_not_found": "不明なオリジン：%s",
   "commands.origin.layer_not_found": "不明なレイヤー：%s",
-  "commands.origin.unregistered_in_layer": "オリジン%1$sは%2$sの中に登録されていません",
+  "commands.origin.unregistered_in_layer": "オリジン(%1$s)は%2$sの中に登録されていません",
   "commands.origin.get.result": "%1$sは以下の%2$sを所持しています：%3$s(%4$s)",
   "commands.origin.random.all": "%1$s体の対象に%2$s個のレイヤーからランダムなオリジンを割り当てました",
-  "commands.origin.random.not_allowed": "レイヤー%1$sではランダムなオリジンは許可されていません",
-  "commands.origin.random.success.multiple": "%1$s体の対象にレイヤー%2$sのランダムなオリジンを割り当てました",
-  "commands.origin.random.success.single": "%1$sにレイヤー%3$sのランダムなオリジン%2$sを割り当てました",
-  "commands.origin.set.success.multiple": "%1$s体の対象にレイヤー%2$sからオリジン%3$sを設定しました",
-  "commands.origin.set.success.single": "%1$sにレイヤー%2$sからオリジン%3$sを設定しました",
+  "commands.origin.random.not_allowed": "レイヤー(%1$s)ではランダムなオリジンは許可されていません",
+  "commands.origin.random.success.multiple": "%1$s体の対象にレイヤー(%2$s)のランダムなオリジンを割り当てました",
+  "commands.origin.random.success.single": "%1$sにレイヤー(%3$s)のランダムなオリジン(%2$s)を割り当てました",
+  "commands.origin.set.success.multiple": "%1$s体の対象にレイヤー(%2$s)からオリジン(%3$s)を設定しました",
+  "commands.origin.set.success.single": "%1$sにレイヤー(%2$s)からオリジン(%3$s)を設定しました",
 
   "origins.avian_sleep_fail": "寝るには新鮮な空気が必要です"
 }
