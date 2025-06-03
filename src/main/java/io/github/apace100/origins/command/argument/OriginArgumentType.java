@@ -9,14 +9,13 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import io.github.apace100.origins.origin.*;
 import net.minecraft.command.CommandSource;
-import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
-public class OriginArgumentType implements ArgumentType<Origin> {
+public class OriginArgumentType implements ArgumentType<Identifier> {
 
    public static final DynamicCommandExceptionType ORIGIN_NOT_FOUND = new DynamicCommandExceptionType(
        o -> Text.translatable("commands.origin.origin_not_found", o)
@@ -26,16 +25,16 @@ public class OriginArgumentType implements ArgumentType<Origin> {
       return new OriginArgumentType();
    }
 
-   public static Origin getOrigin(CommandContext<ServerCommandSource> context, String argumentName) {
-      return context.getArgument(argumentName, Origin.class);
-   }
-
-   @Override
-   public Origin parse(StringReader reader) throws CommandSyntaxException {
-      Identifier id =  Identifier.fromCommandInputNonEmpty(reader);
+   public static <S> Origin getOrigin(CommandContext<S> context, String argumentName) throws CommandSyntaxException {
+      Identifier id = context.getArgument(argumentName, Identifier.class);
       return OriginManager
           .getOptional(id)
           .orElseThrow(() -> ORIGIN_NOT_FOUND.create(id));
+   }
+
+   @Override
+   public Identifier parse(StringReader reader) throws CommandSyntaxException {
+      return Identifier.fromCommandInputNonEmpty(reader);
    }
 
    @Override
@@ -43,7 +42,7 @@ public class OriginArgumentType implements ArgumentType<Origin> {
 
       try {
 
-         OriginLayer layer = context.getArgument("layer", OriginLayer.class);
+         OriginLayer layer = OriginLayerArgumentType.getLayer(context, "layer");
          Stream.Builder<Identifier> origins = Stream.builder();
 
          origins.add(Origin.EMPTY.getId());

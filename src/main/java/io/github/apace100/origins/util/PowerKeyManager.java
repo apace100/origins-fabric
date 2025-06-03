@@ -33,7 +33,7 @@ public class PowerKeyManager {
 
     private static Optional<String> getKeyFromPower(Power power) {
 
-        if (power.getPowerType() instanceof Active activePowerType) {
+        if (power.getType() instanceof Active activePowerType) {
 
             KeyBindingReference keyBindingReference = activePowerType.getKey();
             String keyId = keyBindingReference.id();
