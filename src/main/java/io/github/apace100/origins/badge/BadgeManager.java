@@ -69,7 +69,11 @@ public final class BadgeManager {
     }
 
     public static void send(ServerPlayerEntity player) {
-        ServerPlayNetworking.send(player, new SyncBadgesS2CPacket(BADGES_BY_ID));
+
+        if (player.server.isRemote()) {
+            ServerPlayNetworking.send(player, new SyncBadgesS2CPacket(BADGES_BY_ID));
+        }
+
     }
 
     @Environment(EnvType.CLIENT)

@@ -252,7 +252,11 @@ public class OriginManager extends IdentifiableMultiJsonDataLoader implements Id
 	}
 
 	public static void send(ServerPlayerEntity player) {
-		ServerPlayNetworking.send(player, new SyncOriginsS2CPacket(ORIGINS_BY_ID));
+
+		if (player.server.isRemote()) {
+			ServerPlayNetworking.send(player, new SyncOriginsS2CPacket(ORIGINS_BY_ID));
+		}
+
 	}
 
 	@Environment(EnvType.CLIENT)

@@ -378,7 +378,11 @@ public class OriginLayerManager extends IdentifiableMultiJsonDataLoader implemen
     }
 
     public static void send(ServerPlayerEntity player) {
-		ServerPlayNetworking.send(player, new SyncOriginLayersS2CPacket(LAYERS_BY_ID));
+
+        if (player.server.isRemote()) {
+            ServerPlayNetworking.send(player, new SyncOriginLayersS2CPacket(LAYERS_BY_ID));
+        }
+
     }
 
     @Environment(EnvType.CLIENT)
