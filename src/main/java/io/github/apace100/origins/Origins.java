@@ -116,6 +116,7 @@ public class Origins implements ModInitializer {
 		Registry.register(Registries.LOOT_CONDITION_TYPE, identifier("origin"), OriginLootCondition.TYPE);
 
 		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> ModComponents.ORIGIN.get(handler.player).selectingOrigin(false));
+
 	}
 
 	public static void serializeConfig() {

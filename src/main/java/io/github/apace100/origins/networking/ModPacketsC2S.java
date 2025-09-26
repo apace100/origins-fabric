@@ -13,15 +13,16 @@ import io.github.apace100.origins.registry.ModComponents;
 import joptsimple.internal.Strings;
 import net.fabricmc.fabric.api.networking.v1.ServerConfigurationConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerConfigurationNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerConfigurationNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Optional;
 
 public class ModPacketsC2S {
 
@@ -34,89 +35,128 @@ public class ModPacketsC2S {
 
         ServerConfigurationConnectionEvents.CONFIGURE.register(ModPacketsC2S::sendOriginsInstallationStatus);
 
-        ServerPlayNetworking.registerGlobalReceiver(ChooseOriginC2SPacket.PACKET_ID, ModPacketsC2S::onChooseOrigin);
-        ServerPlayNetworking.registerGlobalReceiver(ChooseRandomOriginC2SPacket.PACKET_ID, ModPacketsC2S::chooseRandomOrigin);
+        ServerPlayConnectionEvents.INIT.register((handler, server) -> {
+            ServerPlayNetworking.registerReceiver(handler, ChooseOriginC2SPacket.PACKET_ID, ModPacketsC2S::onChooseOrigin);
+            ServerPlayNetworking.registerReceiver(handler, ChooseRandomOriginC2SPacket.PACKET_ID, ModPacketsC2S::chooseRandomOrigin);
+        });
 
     }
 
     private static void onChooseOrigin(ChooseOriginC2SPacket packet, ServerPlayNetworking.Context context) {
 
         ServerPlayerEntity player = context.player();
+        OriginComponent originComponent = ModComponents.ORIGIN.get(player);
 
-        OriginComponent component = ModComponents.ORIGIN.get(player);
-        OriginLayer layer = OriginLayerManager.get(packet.layerId());
+        OriginLayer layer = OriginLayerManager.getNullable(packet.layerId());
+        Origin origin = OriginManager.getNullable(packet.originId());
 
-        if (component.hasAllOrigins() && component.hasOrigin(layer)) {
-            Origins.LOGGER.warn("Player {} tried to choose origin for layer \"{}\" while having one already.", player.getName().getString(), packet.layerId());
-            return;
+        if (layer == null) {
+            Origins.LOGGER.warn("Player {} tried to choose an origin for layer \"{}\", which doesn't exist!", player.getName().getString(), packet.layerId());
         }
 
-        Origin origin = OriginManager.get(packet.originId());
-        if (!(origin.isChoosable() || layer.contains(origin, player))) {
-            Origins.LOGGER.warn("Player {} tried to choose unchoosable origin \"{}\" from layer \"{}\"!", player.getName().getString(), packet.originId(), packet.layerId());
-            component.setOrigin(layer, Origin.EMPTY);
-        } else {
+        else if (origin == null) {
+            Origins.LOGGER.warn("Player {} tried to choose origin \"{}\" for layer \"{}\", which doesn't exist!", player.getName().getString(), packet.originId(), packet.layerId());
+        }
 
-            boolean hadOriginBefore = component.hadOriginBefore();
-            boolean hadAllOrigins = component.hasAllOrigins();
+        else if (!originComponent.isSelectingOrigin()) {
+            Origins.LOGGER.warn("Player {} tried to choose origin \"{}\" for layer \"{}\" while not actively selecting an origin!", player.getName().getString(), packet.originId(), packet.layerId());
+        }
 
-            component.setOrigin(layer, origin);
-            component.checkAutoChoosingLayers(player, false);
+        else {
 
-            if (component.hasAllOrigins() && !hadAllOrigins) {
-                OriginComponent.onChosen(player, hadOriginBefore);
+            if (originComponent.hasAllOrigins() && originComponent.hasOrigin(layer)) {
+                Origins.LOGGER.warn("Player {} tried to choose origin \"{}\" for layer \"{}\" while having one already", player.getName().getString(), packet.originId(), packet.layerId());
             }
 
-            Origins.LOGGER.info("Player {} chose origin \"{}\" for layer \"{}\"", player.getName().getString(), packet.originId(), packet.layerId());
+            else {
+
+                if (!origin.isChoosable() || !layer.contains(origin, player)) {
+                    Origins.LOGGER.warn("Player {} tried to choose origin \"{}\" from layer \"{}\", which cannot be chosen!", player.getName().getString(), packet.originId(), packet.layerId());
+                }
+
+                else {
+
+                    boolean hadOriginBefore = originComponent.hadOriginBefore();
+                    boolean hadAllOrigins = originComponent.hasAllOrigins();
+
+                    originComponent.setOrigin(layer, origin);
+                    originComponent.checkAutoChoosingLayers(player, false);
+
+                    if (originComponent.hasAllOrigins() && !hadAllOrigins) {
+                        OriginComponent.onChosen(player, hadOriginBefore);
+                    }
+
+                    Origins.LOGGER.info("Player {} chose origin \"{}\" for layer \"{}\"", player.getName().getString(), packet.originId(), packet.layerId());
+
+                }
+
+            }
+
+            confirmOrigin(player, layer, originComponent.getOrigin(layer));
+
+            originComponent.selectingOrigin(false);
+            originComponent.sync();
 
         }
-
-        confirmOrigin(player, layer, component.getOrigin(layer));
-
-        component.selectingOrigin(false);
-        component.sync();
 
     }
 
     private static void chooseRandomOrigin(ChooseRandomOriginC2SPacket packet, ServerPlayNetworking.Context context) {
 
         ServerPlayerEntity player = context.player();
+        OriginComponent originComponent = ModComponents.ORIGIN.get(player);
 
-        OriginComponent component = ModComponents.ORIGIN.get(player);
-        OriginLayer layer = OriginLayerManager.get(packet.layerId());
+        OriginLayer layer = OriginLayerManager.getNullable(packet.layerId());
 
-        if (component.hasAllOrigins() && component.hasOrigin(layer)) {
-            Origins.LOGGER.warn("Player {} tried to choose origin for layer \"{}\" while having one already.", player.getName().getString(), packet.layerId());
-            return;
+        if (layer == null) {
+            Origins.LOGGER.warn("Player {} tried to choose a random origin for layer \"{}\", which doesn't exist!", player.getName().getString(), packet.layerId());
         }
 
-        List<Identifier> randomOriginIds = layer.getRandomOrigins(player);
-        if (!layer.isRandomAllowed() || randomOriginIds.isEmpty()) {
+        else if (originComponent.hasAllOrigins() && originComponent.hasOrigin(layer)) {
+            Origins.LOGGER.warn("Player {} tried to choose a random origin for layer \"{}\" while having one already", player.getName().getString(), packet.layerId());
+        }
+
+        else if (!layer.isRandomAllowed()) {
             Origins.LOGGER.warn("Player {} tried to choose a random origin for layer \"{}\", which is not allowed!", player.getName().getString(), packet.layerId());
-            component.setOrigin(layer, Origin.EMPTY);
-        } else {
+        }
 
-            Identifier randomOriginId = randomOriginIds.get(player.getRandom().nextInt(randomOriginIds.size()));
-            Origin origin = OriginManager.get(randomOriginId);
+        else if (!originComponent.isSelectingOrigin()) {
+            Origins.LOGGER.warn("Player {} tried to choose a random origin for layer \"{}\" while not actively selecting an origin!", player.getName().getString(), packet.layerId());
+        }
 
-            boolean hadOriginBefore = component.hadOriginBefore();
-            boolean hadAllOrigins = component.hasAllOrigins();
+        else {
 
-            component.setOrigin(layer, origin);
-            component.checkAutoChoosingLayers(player, false);
+            //  Random origin IDs are already validated whether they're in the origin manager, so no need to check here
+            Optional<Origin> randomOrigin = Util
+                .getRandomOrEmpty(layer.getRandomOrigins(player), player.getRandom())
+                .map(OriginManager::get);
 
-            if (component.hasAllOrigins() && !hadAllOrigins) {
-                OriginComponent.onChosen(player, hadOriginBefore);
+            if (randomOrigin.isEmpty()) {
+                Origins.LOGGER.warn("Player {} tried to choose a random origin for layer \"{}\", which didn't have random origins specified!", player.getName().getString(), packet.layerId());
             }
 
-            Origins.LOGGER.info("Player {} was randomly assigned the following origin: {}", player.getName().getString(), randomOriginId);
+            else {
+
+                boolean hadOriginBefore = originComponent.hadOriginBefore();
+                boolean hadAllOrigins = originComponent.hasAllOrigins();
+
+                originComponent.setOrigin(layer, randomOrigin.get());
+                originComponent.checkAutoChoosingLayers(player, false);
+
+                if (originComponent.hasAllOrigins() && !hadAllOrigins) {
+                    OriginComponent.onChosen(player, hadOriginBefore);
+                }
+
+                Origins.LOGGER.info("Player {} was randomly assigned the origin \"{}\" in layer \"{}\"", player.getName().getString(), randomOrigin.get().getId(), packet.layerId());
+
+            }
+
+            confirmOrigin(player, layer, originComponent.getOrigin(layer));
+
+            originComponent.selectingOrigin(false);
+            originComponent.sync();
 
         }
-
-        confirmOrigin(player, layer, component.getOrigin(layer));
-
-        component.selectingOrigin(false);
-        component.sync();
 
     }
 
