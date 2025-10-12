@@ -22,13 +22,35 @@ import java.util.Map;
 
 public class PlayerOriginComponent implements OriginComponent {
 
-    private PlayerEntity player;
-    private HashMap<OriginLayer, Origin> origins = new HashMap<>();
+    private final HashMap<OriginLayer, Origin> origins = new HashMap<>();
+    private final PlayerEntity player;
 
+    private boolean selectingOrigin = false;
     private boolean hadOriginBefore = false;
+
+    private int invulnerabilityTicks = 0;
 
     public PlayerOriginComponent(PlayerEntity player) {
         this.player = player;
+    }
+
+
+    @Override
+    public boolean hasSelectionInvulnerability() {
+        return invulnerabilityTicks > 0;
+    }
+
+    @Override
+    public boolean isSelectingOrigin() {
+        return selectingOrigin;
+    }
+
+    @Override
+    public void selectingOrigin(boolean selectingOrigin) {
+        this.selectingOrigin = selectingOrigin;
+        if (selectingOrigin) {
+            invulnerabilityTicks = 60;
+        }
     }
 
     @Override
@@ -185,11 +207,6 @@ public class PlayerOriginComponent implements OriginComponent {
                 }
             }
         }
-    }
-
-    @Override
-    public void onPowersRead() {
-        // NO-OP
     }
 
     @Override

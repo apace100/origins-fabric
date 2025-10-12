@@ -22,20 +22,20 @@ import java.util.stream.Collectors;
 
 public interface OriginComponent extends AutoSyncedComponent {
 
-	boolean hasOrigin(OriginLayer layer);
-	boolean hasAllOrigins();
 
 	HashMap<OriginLayer, Origin> getOrigins();
 	Origin getOrigin(OriginLayer layer);
 
+	boolean hasSelectionInvulnerability();
+	boolean isSelectingOrigin();
+	boolean hasOrigin(OriginLayer layer);
+	boolean hasAllOrigins();
 	boolean hadOriginBefore();
 
+	void selectingOrigin(boolean selectingOrigin);
 	void setOrigin(OriginLayer layer, Origin origin);
 
 	void sync();
-
-	@Deprecated(forRemoval = true)
-	void onPowersRead();
 
 	static void sync(PlayerEntity player) {
 		ModComponents.ORIGIN.sync(player);

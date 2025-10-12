@@ -6,15 +6,20 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.apace100.calio.data.MultiJsonDataLoader;
 import io.github.apace100.origins.Origins;
+import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.integration.OriginDataLoadedCallback;
+import io.github.apace100.origins.registry.ModComponents;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.profiler.Profiler;
 
 import java.util.*;
+import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class OriginLayers extends MultiJsonDataLoader implements IdentifiableResourceReloadListener {
 
@@ -81,6 +86,18 @@ public class OriginLayers extends MultiJsonDataLoader implements IdentifiableRes
 
     public static Collection<OriginLayer> getLayers() {
         return layers.values();
+    }
+
+    public static int getOriginOptionCount(PlayerEntity playerEntity) {
+        return getOriginOptionCount(playerEntity, (layer, component) -> !component.hasOrigin(layer));
+    }
+
+    public static int getOriginOptionCount(PlayerEntity playerEntity, BiPredicate<OriginLayer, OriginComponent> condition) {
+        return layers.values()
+                .stream()
+                .filter(ol -> ol.isEnabled() && ModComponents.ORIGIN.maybeGet(playerEntity).map(oc -> condition.test(ol, oc)).orElse(false))
+                .flatMapToInt(ol -> IntStream.of(ol.getOriginOptionCount(playerEntity)))
+                .sum();
     }
 
     public static int size() {

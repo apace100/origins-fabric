@@ -300,7 +300,9 @@ public class OriginCommand {
 
 		if (originLayer.isEnabled()) originComponent.setOrigin(originLayer, Origin.EMPTY);
 
-		originComponent.checkAutoChoosingLayers(target, false);
+		boolean originAutomaticallyAssigned = originComponent.checkAutoChoosingLayers(target, false);
+		int originOptions = originLayer != null ? originLayer.getOriginOptionCount(target) : OriginLayers.getOriginOptionCount(target);
+		originComponent.selectingOrigin(!originAutomaticallyAssigned || originOptions > 0);
 		originComponent.sync();
 
 		buffer.writeBoolean(false);

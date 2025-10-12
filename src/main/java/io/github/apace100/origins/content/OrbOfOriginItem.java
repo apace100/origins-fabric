@@ -53,7 +53,10 @@ public class OrbOfOriginItem extends Item {
                     }
                 }
             }
-            component.checkAutoChoosingLayers(user, false);
+            boolean originAutomaticallyAssigned = component.checkAutoChoosingLayers(user, false);
+            int originOptions = OriginLayers.getOriginOptionCount(user);
+
+            component.selectingOrigin(!originAutomaticallyAssigned || originOptions > 0);
             component.sync();
             PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
             data.writeBoolean(false);
