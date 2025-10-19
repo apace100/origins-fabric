@@ -25,6 +25,9 @@
     "client": [
       "io.github.apace100.origins.OriginsClient"
     ],
+    "preLaunch": [
+      "io.github.apace100.origins.OriginsPreLaunch"
+    ],
     "modmenu": [
       "io.github.apace100.origins.integration.ModMenuIntegration"
     ],
