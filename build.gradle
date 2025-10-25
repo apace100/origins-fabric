@@ -151,3 +151,33 @@ publishing {
 		}
 	}
 }
+
+def addMarkerToJar(Task jarTask, String envType) {
+	jarTask.from {
+		def markerDir = file("$buildDir/tmp/${envType}Marker")
+		markerDir.mkdirs()
+		def markerFile = file("$markerDir/.cf_marker")
+		markerFile.text = "CurseForge environment: ${envType}\nTimestamp: ${System.currentTimeMillis()}"
+		return markerDir
+	}
+}
+
+tasks.register("fabricJar", Jar) {
+	dependsOn tasks.named("remapJar")
+	from(zipTree(tasks.named("remapJar").get().archiveFile))
+	addMarkerToJar(it, "fabric")
+	destinationDirectory.set(file("$buildDir/libs/fabric"))
+	archiveFileName.set(tasks.named("remapJar").get().archiveFileName.get())
+}
+
+tasks.register("forgeJar", Jar) {
+	dependsOn tasks.named("remapJar")
+	from(zipTree(tasks.named("remapJar").get().archiveFile))
+	addMarkerToJar(it, "forge")
+	destinationDirectory.set(file("$buildDir/libs/forge"))
+	archiveFileName.set(tasks.named("remapJar").get().archiveFileName.get())
+}
+
+tasks.named("build").configure {
+	dependsOn("fabricJar", "forgeJar")
+}
