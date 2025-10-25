@@ -1,6 +1,8 @@
 plugins {
 	id 'fabric-loom' version '1.6-SNAPSHOT'
 	id 'maven-publish'
+	id "com.modrinth.minotaur" version "2.+"
+	id "com.matthewprenger.cursegradle" version "1.4.0"
 }
 
 version = project.mod_version
@@ -180,4 +182,84 @@ tasks.register("forgeJar", Jar) {
 
 tasks.named("build").configure {
 	dependsOn("fabricJar", "forgeJar")
+}
+
+def modVersion = project.findProperty("mod_version") ?: "dev"
+def minecraftVersion = project.findProperty("minecraft_version") ?: "unknown"
+def changelogText = file("changelog.md").exists() ? file("changelog.md").text : "No changelog provided."
+
+modrinth {
+	token = System.getenv("MODRINTH_TOKEN")
+	projectId = "origins"
+	versionNumber = modVersion
+	versionType = "release"
+	changelog = changelogText
+	gameVersions = [minecraftVersion]
+
+	uploadFile = file("libs/forge/origins-forge-${modVersion}.jar")
+	loaders = ["forge"]
+	versionName = "${minecraftVersion}: Origins ${modVersion} [Forge]"
+
+	dependencies {
+		required.project "connector"
+		required.project "connector-extras"
+		required.project "forgified-fabric-api"
+	}
+}
+
+tasks.register("publishModrinthFabric") {
+	doLast {
+		modrinth {
+			token = System.getenv("MODRINTH_TOKEN")
+			projectId = "origins"
+			versionNumber = modVersion
+			versionType = "release"
+			changelog = changelogText
+			gameVersions = [minecraftVersion]
+
+			uploadFile = file("libs/fabric/origins-fabric-${modVersion}.jar")
+			loaders = ["fabric"]
+			versionName = "${minecraftVersion}: Origins ${modVersion} [Fabric]"
+
+			dependencies {
+				required.project "fabric-api"
+				optional.project "modmenu"
+				embedded.project "cloth-config"
+				embedded.project "cardinal-components-api"
+			}
+		}
+	}
+}
+
+curseforge {
+	project {
+		apiKey = System.getenv("CURSEFORGE_TOKEN")
+		id = "origins"
+		changelog = changelogText
+		releaseType = "release"
+		addGameVersion minecraftVersion
+
+		mainArtifact(file("libs/fabric/Origins-${modVersion}.jar")) {
+			displayName = "${minecraftVersion}: Origins ${modVersion} [Fabric]"
+			relations {
+				requiredDependency "fabric-api"
+				embeddedLibrary "pal"
+				embeddedLibrary "cloth-config"
+				embeddedLibrary "cardinal-components-api"
+			}
+		}
+
+		addArtifact(file("libs/forge/Origins-${modVersion}.jar")) {
+			displayName = "${minecraftVersion}: Origins ${modVersion} [Forge]"
+			relations {
+				requiredDependency "sinytra-connector"
+				requiredDependency "connector-extras"
+				requiredDependency "forgified-fabric-api"
+			}
+		}
+	}
+}
+
+tasks.register("publishAll") {
+	dependsOn "modrinth", "publishModrinthFabric", "curseforge"
 }
