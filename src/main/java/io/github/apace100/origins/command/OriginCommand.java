@@ -19,10 +19,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -296,17 +293,19 @@ public class OriginCommand {
 	private static void openLayerScreen(ServerPlayerEntity target, OriginLayer originLayer) {
 
 		OriginComponent originComponent = ModComponents.ORIGIN.get(target);
-		PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
+		if (originLayer.isEnabled()) {
+			originComponent.setOrigin(originLayer, Origin.EMPTY);
+		}
 
-		if (originLayer.isEnabled()) originComponent.setOrigin(originLayer, Origin.EMPTY);
-
-		boolean originAutomaticallyAssigned = originComponent.checkAutoChoosingLayers(target, false);
-		int originOptions = originLayer != null ? originLayer.getOriginOptionCount(target) : OriginLayers.getOriginOptionCount(target);
-		originComponent.selectingOrigin(!originAutomaticallyAssigned || originOptions > 0);
+		originComponent.selectingOrigin(true);
+		originComponent.checkAutoChoosingLayers(target, false);
 		originComponent.sync();
 
-		buffer.writeBoolean(false);
-		ServerPlayNetworking.send(target, ModPackets.OPEN_ORIGIN_SCREEN, buffer);
+		if (originComponent.isSelectingOrigin()) {
+			PacketByteBuf buffer = new PacketByteBuf(Unpooled.buffer());
+			buffer.writeBoolean(false);
+			ServerPlayNetworking.send(target, ModPackets.OPEN_ORIGIN_SCREEN, buffer);
+		}
 
 	}
 

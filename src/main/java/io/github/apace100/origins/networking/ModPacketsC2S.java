@@ -90,6 +90,7 @@ public class ModPacketsC2S {
                     component.setOrigin(layer, Origin.EMPTY);
                 }
                 confirmOrigin(playerEntity, layer, component.getOrigin(layer));
+                component.selectingOrigin(false);
                 component.sync();
             } else {
                 Origins.LOGGER.warn("Player " + playerEntity.getDisplayName().getContent() + " tried to choose origin for layer " + layerId + " while having one already.");

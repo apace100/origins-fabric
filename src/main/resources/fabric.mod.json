@@ -25,9 +25,6 @@
     "client": [
       "io.github.apace100.origins.OriginsClient"
     ],
-    "preLaunch": [
-      "io.github.apace100.origins.OriginsPreLaunch"
-    ],
     "modmenu": [
       "io.github.apace100.origins.integration.ModMenuIntegration"
     ],
@@ -36,6 +33,9 @@
     ],
     "calio:ordered-resource-listener": [
       "io.github.apace100.origins.Origins"
+    ],
+    "mixinsquared": [
+      "io.github.apace100.origins.OriginsMixinCanceller"
     ]
   },
   "mixins": [
@@ -44,9 +44,15 @@
   "custom": {
     "cardinal-components": [
       "origins:origin"
-    ]
+    ],
+    "connector-depends": {
+      "connectorextras": ">=1.11.2",
+      "fabric_api": {
+        "version": "0.92.6+1.11.14",
+        "name": "Forgified Fabric API"
+      }
+    }
   },
-
   "depends": {
     "java": ">=17",
     "fabricloader": ">=0.12.3",

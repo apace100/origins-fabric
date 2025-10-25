@@ -24,13 +24,6 @@ ordering="NONE"
 side="BOTH"
 
 [[dependencies.origins]]
-modId="connectorextras"
-mandatory=true
-versionRange="[1.0.0,)"
-ordering="BEFORE"
-side="BOTH"
-
-[[dependencies.origins]]
 modId="minecraft"
 mandatory=true
 versionRange="[1.20.1,)"

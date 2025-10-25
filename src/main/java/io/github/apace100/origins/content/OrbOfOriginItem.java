@@ -42,7 +42,7 @@ public class OrbOfOriginItem extends Item {
         if(!world.isClient) {
             OriginComponent component = ModComponents.ORIGIN.get(user);
             Map<OriginLayer, Origin> targets = getTargets(stack);
-            if(targets.size() > 0) {
+            if(!targets.isEmpty()) {
                 for(Map.Entry<OriginLayer, Origin> target : targets.entrySet()) {
                     component.setOrigin(target.getKey(), target.getValue());
                 }
@@ -53,11 +53,11 @@ public class OrbOfOriginItem extends Item {
                     }
                 }
             }
-            boolean originAutomaticallyAssigned = component.checkAutoChoosingLayers(user, false);
-            int originOptions = OriginLayers.getOriginOptionCount(user);
 
-            component.selectingOrigin(!originAutomaticallyAssigned || originOptions > 0);
+            component.selectingOrigin(true);
+            component.checkAutoChoosingLayers(user, false);
             component.sync();
+
             PacketByteBuf data = new PacketByteBuf(Unpooled.buffer());
             data.writeBoolean(false);
             ServerPlayNetworking.send((ServerPlayerEntity) user, ModPackets.OPEN_ORIGIN_SCREEN, data);
@@ -84,35 +84,40 @@ public class OrbOfOriginItem extends Item {
     }
 
     private Map<OriginLayer, Origin> getTargets(ItemStack stack) {
-        HashMap<OriginLayer, Origin> targets = new HashMap<>();
-        if(!stack.hasNbt()) {
+
+        Map<OriginLayer, Origin> targets = new HashMap<>();
+
+        NbtCompound stackNbt = stack.getNbt();
+        NbtList targetsNbt = stackNbt == null ? new NbtList() : stackNbt.getList("Targets", NbtElement.COMPOUND_TYPE);
+
+        if (targetsNbt.isEmpty()) {
             return targets;
         }
-        NbtCompound nbt = stack.getNbt();
-        if(!nbt.contains("Targets", NbtType.LIST)) {
-            return targets;
-        }
-        NbtList targetList = (NbtList)nbt.get("Targets");
-        for (NbtElement nbtElement : targetList) {
-            if(nbtElement instanceof NbtCompound targetNbt) {
-                if(targetNbt.contains("Layer", NbtType.STRING)) {
-                    try {
-                        Identifier id = new Identifier(targetNbt.getString("Layer"));
-                        OriginLayer layer = OriginLayers.getLayer(id);
-                        Origin origin = Origin.EMPTY;
-                        if(targetNbt.contains("Origin", NbtType.STRING)) {
-                            Identifier originId = new Identifier(targetNbt.getString("Origin"));
-                            origin = OriginRegistry.get(originId);
-                        }
-                        if(layer.isEnabled() && (layer.contains(origin) || origin.isSpecial())) {
-                            targets.put(layer, origin);
-                        }
-                    } catch (Exception e) {
-                        // no op
-                    }
+
+        for (NbtElement nbtElement : targetsNbt) {
+            try {
+
+                NbtCompound targetNbt = (NbtCompound) nbtElement;
+                Identifier layerId = new Identifier(targetNbt.getString("Layer"));
+
+                OriginLayer layer = OriginLayers.getLayer(layerId);
+                Origin origin = Origin.EMPTY;
+
+                if (targetNbt.contains("Origin", NbtElement.STRING_TYPE)) {
+                    Identifier originId = new Identifier(targetNbt.getString("Origin"));
+                    origin = OriginRegistry.get(originId);
                 }
+
+                if (layer.isEnabled() && (layer.contains(origin) || origin.isSpecial())) {
+                    targets.put(layer, origin);
+                }
+
+            } catch (Exception ignored) {
+
             }
         }
+
         return targets;
+
     }
 }

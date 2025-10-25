@@ -61,7 +61,7 @@ repositories {
 		name = "JitPack"
 		url = "https://jitpack.io"
 	}
-	
+	maven { url = "https://maven.bawnorton.com/releases" }
 }
 
 dependencies {
@@ -94,6 +94,9 @@ dependencies {
 
 	//	Reach Entity Attributes
 	include(modApi("com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}"))
+
+	// MixinSquared
+	include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:${project.mixinsquared}")))
 }
 
 processResources {
