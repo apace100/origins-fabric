@@ -94,7 +94,7 @@ public class ModPacketsC2S {
 
             confirmOrigin(player, layer, originComponent.getOrigin(layer));
 
-            originComponent.selectingOrigin(false);
+            originComponent.selectingOrigin(!originComponent.hasAllOrigins());
             originComponent.sync();
 
         }
