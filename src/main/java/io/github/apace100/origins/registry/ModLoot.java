@@ -48,7 +48,9 @@ public class ModLoot {
 
             RegistryEntry<Enchantment> waterProtection = registries
                 .getWrapperOrThrow(RegistryKeys.ENCHANTMENT)
-                .getOrThrow(ModEnchantments.WATER_PROTECTION);
+                .getOptional(ModEnchantments.WATER_PROTECTION).orElse(null);
+
+            if (waterProtection == null) return;
 
             if (key.equals(SIMPLE_DUNGEON)) {
                 tableBuilder.pool(new LootPool.Builder()
