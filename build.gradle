@@ -170,6 +170,12 @@ tasks.register("fabricJar", Jar) {
 	addMarkerToJar(it, "fabric")
 	destinationDirectory.set(file("$buildDir/libs/fabric"))
 	archiveFileName.set(tasks.named("remapJar").get().archiveFileName.get())
+
+	manifest {
+		attributes([
+			"Implementation-Version": project.version
+		])
+	}
 }
 
 tasks.register("forgeJar", Jar) {
@@ -178,6 +184,12 @@ tasks.register("forgeJar", Jar) {
 	addMarkerToJar(it, "forge")
 	destinationDirectory.set(file("$buildDir/libs/forge"))
 	archiveFileName.set(tasks.named("remapJar").get().archiveFileName.get())
+
+	manifest {
+		attributes([
+			"Implementation-Version": project.version
+		])
+	}
 }
 
 tasks.named("build").configure {
