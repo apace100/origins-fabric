@@ -57,8 +57,8 @@ public class ModPacketsS2C {
         OriginComponent component = ModComponents.ORIGIN.get(player);
         component.setOrigin(layer, origin);
 
-        if (MinecraftClient.getInstance().currentScreen instanceof WaitForNextLayerScreen nextLayerScreen) {
-            nextLayerScreen.openSelection();
+        if (context.client().currentScreen instanceof WaitForNextLayerScreen nextLayerScreen) {
+            nextLayerScreen.nextOrClose();
         }
 
     }
@@ -76,7 +76,7 @@ public class ModPacketsS2C {
             .forEach(layers::add);
 
         Collections.sort(layers);
-        MinecraftClient.getInstance().setScreen(new ChooseOriginScreen(layers, 0, packet.showBackground()));
+        context.client().setScreen(new ChooseOriginScreen(layers, packet.showBackground()));
 
     }
 

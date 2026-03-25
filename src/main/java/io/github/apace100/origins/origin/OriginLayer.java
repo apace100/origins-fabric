@@ -2,7 +2,6 @@ package io.github.apace100.origins.origin;
 
 import com.google.common.collect.ImmutableList;
 import io.github.apace100.apoli.condition.EntityCondition;
-import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.util.TextUtil;
 import io.github.apace100.calio.data.CompoundSerializableDataType;
 import io.github.apace100.calio.data.SerializableData;
@@ -11,7 +10,6 @@ import io.github.apace100.calio.data.SerializableDataTypes;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.data.OriginsDataTypes;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;

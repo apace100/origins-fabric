@@ -1,51 +1,83 @@
 package io.github.apace100.origins.screen;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.apace100.origins.component.OriginComponent;
 import io.github.apace100.origins.origin.OriginLayer;
 import io.github.apace100.origins.registry.ModComponents;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class WaitForNextLayerScreen extends Screen {
 
-    private final List<OriginLayer> layerList;
-    private final int currentLayerIndex;
-    private final boolean showDirtBackground;
-    private final int maxSelection;
+    private final List<OriginLayer> layers;
+    private final int index;
 
-    protected WaitForNextLayerScreen(List<OriginLayer> layerList, int currentLayerIndex, boolean showDirtBackground) {
+    private final boolean showDirtBackground;
+    private int optionCount;
+
+    protected WaitForNextLayerScreen(List<OriginLayer> layers, int index, boolean showDirtBackground) {
         super(Text.empty());
-        this.layerList = layerList;
-        this.currentLayerIndex = currentLayerIndex;
+        this.layers = layers;
+        this.index = index;
         this.showDirtBackground = showDirtBackground;
-        PlayerEntity player = MinecraftClient.getInstance().player;
-        OriginLayer currentLayer = layerList.get(currentLayerIndex);
-        maxSelection = currentLayer.getOriginOptionCount(player);
     }
 
-    public void openSelection() {
+    @Override
+    protected void init() {
 
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player != null) {
+        super.init();
+        assert client != null && client.player != null;
 
-            OriginComponent component = ModComponents.ORIGIN.get(client.player);
-            OriginLayer layer;
+        this.optionCount = layers.get(index).getOriginOptionCount(client.player);
 
-            for (int index = currentLayerIndex + 1; index < layerList.size(); index++) {
+    }
 
-                layer = layerList.get(index);
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
 
-                if (!component.hasOrigin(layer) && !layer.getOrigins(client.player).isEmpty()) {
-                    client.setScreen(new ChooseOriginScreen(layerList, index, showDirtBackground));
-                    return;
-                }
+        if (optionCount == 0) {
+            nextOrClose();
+        }
 
+        else {
+            this.renderBackground(context, mouseX, mouseY, delta);
+        }
+
+    }
+
+    @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+
+        if (showDirtBackground) {
+            RenderSystem.enableBlend();
+            context.drawTexture(OriginDisplayScreen.DIRT_BACKGROUND, 0, 0, 0, 0.0F, 0.0F, this.width, this.height, 32, 32);
+            RenderSystem.disableBlend();
+        }
+
+        else {
+            super.renderBackground(context, mouseX, mouseY, delta);
+        }
+
+    }
+
+    public void nextOrClose() {
+
+        int layersCount = layers.size();
+        assert client != null && client.player != null : "Tried iterating through " + layersCount + " layer(s) with the client and its player unset!";
+
+        OriginComponent originComponent = ModComponents.ORIGIN.get(client.player);
+        OriginLayer layer;
+
+        for (int index = this.index + 1; index < layersCount; index++) {
+
+            layer = layers.get(index);
+
+            if (!originComponent.hasOrigin(layer) && !layer.getOrigins(client.player).isEmpty()) {
+                client.setScreen(new ChooseOriginScreen(layers, index, showDirtBackground));
+                return;
             }
 
         }
@@ -54,21 +86,4 @@ public class WaitForNextLayerScreen extends Screen {
 
     }
 
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        if (maxSelection == 0) {
-            openSelection();
-        } else {
-            this.renderBackground(context, mouseX, mouseY, delta);
-        }
-    }
-
-    @Override
-    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
-        if (showDirtBackground) {
-            super.renderDarkening(context);
-        } else {
-            super.renderBackground(context, mouseX, mouseY, delta);
-        }
-    }
 }

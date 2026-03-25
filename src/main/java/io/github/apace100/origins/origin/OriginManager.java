@@ -209,10 +209,11 @@ public class OriginManager extends IdentifiableMultiJsonDataLoader implements Id
 	private static void endBuilding() {
 
 		LOADING_PRIORITIES.clear();
-		ORIGINS_BY_ID.put(Origin.EMPTY.getId(), Origin.EMPTY);
 
 		ORIGINS_BY_ID.trim();
 		DISABLED_ORIGINS.trim();
+
+		Origin.getSpecials().forEach(origin -> update(origin.getId(), origin));
 
 	}
 

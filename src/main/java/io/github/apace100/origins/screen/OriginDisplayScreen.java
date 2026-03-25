@@ -1,5 +1,6 @@
 package io.github.apace100.origins.screen;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.apace100.apoli.power.MultiplePower;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.screen.widget.ScrollingTextWidget;
@@ -11,11 +12,16 @@ import io.github.apace100.origins.mixin.DrawContextAccessor;
 import io.github.apace100.origins.origin.Impact;
 import io.github.apace100.origins.origin.Origin;
 import io.github.apace100.origins.origin.OriginLayer;
+import io.github.apace100.origins.origin.OriginManager;
+import it.unimi.dsi.fastutil.objects.ObjectAVLTreeSet;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectSortedSet;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.HoveredTooltipPositioner;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;
@@ -24,13 +30,13 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
+//  TODO: Use a custom widget for the origin window -eggohito
 public class OriginDisplayScreen extends Screen {
+
+    public static final Identifier DIRT_BACKGROUND = Origins.identifier("textures/dirt_background.png");
 
     private static final Identifier WINDOW_BACKGROUND = Origins.identifier("choose_origin/background");
     private static final Identifier WINDOW_BORDER = Origins.identifier("choose_origin/border");
@@ -39,47 +45,62 @@ public class OriginDisplayScreen extends Screen {
     private static final Identifier WINDOW_SCROLL_BAR_PRESSED = Origins.identifier("choose_origin/scroll_bar/pressed");
     private static final Identifier WINDOW_SCROLL_BAR_SLOT = Origins.identifier("choose_origin/scroll_bar/slot");
 
+    private static final int MIN_SCROLL_BAR_Y = 36;
+    private static final int MAX_SCROLL_BAR_Y = 141;
+
     protected static final int WINDOW_WIDTH = 176;
     protected static final int WINDOW_HEIGHT = 182;
-
-    private final LinkedList<RenderedBadge> renderedBadges = new LinkedList<>();
 
     protected final boolean showDirtBackground;
 
     private Origin origin;
     private Origin prevOrigin;
+
     private OriginLayer layer;
     private OriginLayer prevLayer;
-    private Text randomOriginText;
-    private ScrollingTextWidget originNameWidget;
 
+    protected ScrollingTextWidget nameWidget;
+    protected Text randomDescription;
+
+    private boolean isRandom;
+    private boolean dragScrolling = false;
     private boolean refreshOriginNameWidget = false;
 
-    private boolean isOriginRandom;
-    private boolean dragScrolling = false;
-
-    private double mouseDragStart = 0;
-
-    private int currentMaxScroll = 0;
-    private int scrollDragStart = 0;
+    private double mouseYDragStart = 0;
+    private int scrollYDragStart = 0;
 
     protected int guiTop, guiLeft;
-    protected int scrollPos = 0;
+    protected int maxScroll, scrollPos;
 
     public OriginDisplayScreen(Text title, boolean showDirtBackground) {
         super(title);
         this.showDirtBackground = showDirtBackground;
     }
 
-    public void showOrigin(Origin origin,OriginLayer layer, boolean isRandom) {
+    public void showOrigin(Origin origin, OriginLayer layer) {
         this.origin = origin;
         this.layer = layer;
-        this.isOriginRandom = isRandom;
+        this.isRandom = origin == Origin.RANDOM;
         this.scrollPos = 0;
     }
 
-    public void setRandomOriginText(Text text) {
-        this.randomOriginText = text;
+    protected void initRandomDescription() {
+
+        assert client != null && client.player != null;
+
+        MutableText description = Text.of("").copy();
+        ObjectSortedSet<Origin> randoms = new ObjectAVLTreeSet<>(Origin::compareTo);
+
+        for (var originId : getCurrentLayer().getRandomOrigins(client.player)) {
+            randoms.add(OriginManager.get(originId));
+        }
+
+        for (var random : randoms) {
+            description.append(random.getName()).append(Text.of("\n"));
+        }
+
+        this.randomDescription = description;
+
     }
 
     @Override
@@ -87,10 +108,16 @@ public class OriginDisplayScreen extends Screen {
 
         super.init();
 
+        this.origin = null;
+        this.prevOrigin = null;
+
+        this.layer = null;
+        this.prevLayer = null;
+
         this.guiLeft = (this.width - WINDOW_WIDTH) / 2;
         this.guiTop = (this.height - WINDOW_HEIGHT) / 2;
 
-        this.originNameWidget = new ScrollingTextWidget(guiLeft + 38, guiTop + 18, WINDOW_WIDTH - (62 + 3 * 8), 9, Text.empty(), true, textRenderer);
+        this.nameWidget = new ScrollingTextWidget(guiLeft + 38, guiTop + 18, WINDOW_WIDTH - (62 + 3 * 8), 9, Text.empty(), true, textRenderer);
         this.refreshOriginNameWidget = true;
 
     }
@@ -99,28 +126,26 @@ public class OriginDisplayScreen extends Screen {
     public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
 
         if (showDirtBackground) {
-            super.renderBackground(context, mouseX, mouseY, delta);
+            RenderSystem.enableBlend();
+            context.drawTexture(DIRT_BACKGROUND, 0, 0, 0, 0.0F, 0.0F, this.width, this.height, 32, 32);
+            RenderSystem.disableBlend();
         }
 
         else {
-            this.renderInGameBackground(context);
+            super.renderBackground(context, mouseX, mouseY, delta);
         }
 
     }
 
     @Override
     public void renderInGameBackground(DrawContext context) {
-        context.fillGradient(0, 0, this.width, this.height, -5, 1678774288, -2112876528);
+        context.fillGradient(0, 0, this.width, this.height, 1678774288, -2112876528);
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-
-        renderedBadges.clear();
-
         super.render(context, mouseX, mouseY, delta);
-        this.renderOriginWindow(context, mouseX, mouseY, delta);
-
+        this.renderWindow(context, mouseX, mouseY, delta);
     }
 
     @Override
@@ -133,25 +158,17 @@ public class OriginDisplayScreen extends Screen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
 
         boolean mouseClicked = super.mouseClicked(mouseX, mouseY, button);
-        if (cannotScroll()) {
+        int scrollBarY = MIN_SCROLL_BAR_Y + (int) Math.floor((MAX_SCROLL_BAR_Y - MIN_SCROLL_BAR_Y) * (scrollPos / (float) maxScroll));
+
+        if (this.cannotScroll() || !this.canDragScroll(mouseX, mouseY, scrollBarY)) {
             return mouseClicked;
         }
 
-        this.dragScrolling = false;
-
-        int scrollBarY = 36;
-        int maxScrollBarOffset = 141;
-
-        scrollBarY += (int) ((maxScrollBarOffset - scrollBarY) * (scrollPos / (float) currentMaxScroll));
-        if (!canDragScroll(mouseX, mouseY, scrollBarY)) {
-            return mouseClicked;
-        }
-
+        this.scrollYDragStart = scrollBarY;
+        this.mouseYDragStart = mouseY;
         this.dragScrolling = true;
-        this.scrollDragStart = scrollBarY;
-        this.mouseDragStart = mouseY;
 
-        return true;
+        return mouseClicked;
 
     }
 
@@ -159,27 +176,38 @@ public class OriginDisplayScreen extends Screen {
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
 
         boolean mouseDragged = super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+
         if (!dragScrolling) {
             return mouseDragged;
         }
 
-        int delta = (int) (mouseY - mouseDragStart);
-        int newScrollPos = Math.max(36, Math.min(141, scrollDragStart + delta));
+        int delta = (int) Math.floor(mouseY - mouseYDragStart);
+        int newScrollPos = MathHelper.clamp(scrollYDragStart + delta, MIN_SCROLL_BAR_Y, MAX_SCROLL_BAR_Y);
 
-        float part = (newScrollPos - 36) / (float) (141 - 36);
-        this.scrollPos = (int) (part * currentMaxScroll);
+        float part = (newScrollPos - MIN_SCROLL_BAR_Y) / (float) (MAX_SCROLL_BAR_Y - MIN_SCROLL_BAR_Y);
+        this.scrollPos = (int) Math.floor(part * maxScroll);
 
         return mouseDragged;
 
     }
 
     @Override
-    public boolean mouseScrolled(double x, double y, double horizontal, double vertical) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontal, double vertical) {
 
-        int newScrollPos = this.scrollPos - (int) vertical * 4;
-        this.scrollPos = MathHelper.clamp(newScrollPos, 0, this.currentMaxScroll);
+        boolean mouseScrolled = super.mouseScrolled(mouseX, mouseY, horizontal, vertical);
 
-        return super.mouseScrolled(x, y, horizontal, vertical);
+        if (cannotScroll()) {
+            return mouseScrolled;
+        }
+
+        int scrollBarY = MIN_SCROLL_BAR_Y + (int) Math.floor((MAX_SCROLL_BAR_Y - MIN_SCROLL_BAR_Y) * (scrollPos / (float) maxScroll));
+        int delta = (int) Math.floor(vertical) * (hasShiftDown() ? 4 : 12);
+
+        int newScrollPos = MathHelper.clamp(scrollBarY - delta, MIN_SCROLL_BAR_Y, MAX_SCROLL_BAR_Y);
+        float part = (newScrollPos - MIN_SCROLL_BAR_Y) / (float) (MAX_SCROLL_BAR_Y - MIN_SCROLL_BAR_Y);
+
+        this.scrollPos = (int) Math.floor(part * maxScroll);
+        return mouseScrolled;
 
     }
 
@@ -197,20 +225,16 @@ public class OriginDisplayScreen extends Screen {
             return;
         }
 
+        int scrollbarY = MIN_SCROLL_BAR_Y + (int) Math.floor((MAX_SCROLL_BAR_Y - MIN_SCROLL_BAR_Y) * (scrollPos / (float) maxScroll));
         context.drawGuiTexture(WINDOW_SCROLL_BAR_SLOT, guiLeft + 155, guiTop + 35, 8, 134);
 
-        int scrollbarY = 36;
-        int maxScrollbarOffset = 141;
-
-        scrollbarY += (int) ((maxScrollbarOffset - scrollbarY) * (scrollPos / (float) currentMaxScroll));
-
-        Identifier scrollBarTexture = this.dragScrolling || canDragScroll(mouseX, mouseY, scrollbarY) ? WINDOW_SCROLL_BAR_PRESSED : WINDOW_SCROLL_BAR;
+        Identifier scrollBarTexture = this.dragScrolling || this.canDragScroll(mouseX, mouseY, scrollbarY) ? WINDOW_SCROLL_BAR_PRESSED : WINDOW_SCROLL_BAR;
         context.drawGuiTexture(scrollBarTexture, guiLeft + 156, guiTop + scrollbarY, 6, 27);
 
     }
 
     protected boolean cannotScroll() {
-        return origin == null || currentMaxScroll <= 0;
+        return origin == null || maxScroll <= 0;
     }
 
     protected boolean canDragScroll(double mouseX, double mouseY, int scrollBarY) {
@@ -218,75 +242,33 @@ public class OriginDisplayScreen extends Screen {
             && (mouseY >= guiTop + scrollBarY && mouseY < guiTop + scrollBarY + 27);
     }
 
-    protected void renderBadgeTooltips(DrawContext context, int mouseX, int mouseY, float delta) {
-
-        DrawContextAccessor contextAccessor = (DrawContextAccessor) context;
-        int widthLimit = width - mouseX - 24;
-
-        if (this.isWithinWindowBoundaries(mouseX, mouseY)) {
-            this.renderedBadges.stream()
-                .filter(RenderedBadge::hasTooltip)
-                .filter(renderedBadge -> isWithinBadgeBoundaries(renderedBadge, mouseX, mouseY))
-                .map(renderedBadge -> renderedBadge.getTooltipComponents(textRenderer, widthLimit, delta))
-                .forEach(tooltipComponents -> contextAccessor.invokeDrawTooltip(textRenderer, tooltipComponents, mouseX, mouseY, HoveredTooltipPositioner.INSTANCE));
-        }
-
-    }
-
     protected boolean isWithinWindowBoundaries(int mouseX, int mouseY) {
         return (mouseX >= guiLeft && mouseX < guiLeft + WINDOW_WIDTH)
             && (mouseY >= guiTop && mouseY < guiTop + WINDOW_HEIGHT);
-    }
-
-    protected boolean isWithinBadgeBoundaries(RenderedBadge renderedBadge, int mouseX, int mouseY) {
-        return (mouseX >= renderedBadge.x && mouseX < renderedBadge.x + 9)
-            && (mouseY >= renderedBadge.y && mouseY < renderedBadge.y + 9);
     }
 
     protected Text getTitleText() {
         return Text.of("Origins");
     }
 
-    protected void renderOriginWindow(DrawContext context, int mouseX, int mouseY, float delta) {
-
-        context.drawGuiTexture(WINDOW_BACKGROUND, guiLeft, guiTop, -4, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-        if (origin != null) {
-            context.enableScissor(guiLeft, guiTop, guiLeft + WINDOW_WIDTH, guiTop + WINDOW_HEIGHT);
-            this.renderOriginContent(context);
-            context.disableScissor();
-        }
-
-        context.drawGuiTexture(WINDOW_BORDER, guiLeft, guiTop, 2, WINDOW_WIDTH, WINDOW_HEIGHT);
-        context.drawGuiTexture(WINDOW_NAME_PLATE, guiLeft + 10, guiTop + 10, 2, 150, 26);
-
-        if (origin != null) {
-
-            context.getMatrices().push();
-            context.getMatrices().translate(0, 0, 5);
-
-            this.renderOriginName(context, mouseX, mouseY, delta);
-            this.renderOriginImpact(context, mouseX, mouseY);
-
-            context.getMatrices().pop();
-            context.drawCenteredTextWithShadow(this.textRenderer, getTitleText(), width / 2, guiTop - 15, 0xFFFFFF);
-
-            renderScrollbar(context, mouseX, mouseY);
-            renderBadgeTooltips(context, mouseX, mouseY, delta);
-
-        }
-
+    protected void renderTitle(DrawContext context) {
+        context.drawCenteredTextWithShadow(this.textRenderer, getTitleText(), width / 2, guiTop - 15, 0xFFFFFF);
     }
 
-    protected void renderOriginImpact(DrawContext context, int mouseX, int mouseY) {
+    protected void renderWindow(DrawContext context, int mouseX, int mouseY, float delta) {
 
-        Impact impact = origin.getImpact();
-        context.drawGuiTexture(impact.getSpriteId(), guiLeft + 128, guiTop + 19, 2, 28, 8);
+        context.drawGuiTexture(WINDOW_BACKGROUND, guiLeft, guiTop, WINDOW_WIDTH, WINDOW_HEIGHT);
+        context.drawGuiTexture(WINDOW_BORDER, guiLeft, guiTop, 2, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-        if (this.isWithinWindowBoundaries(mouseX, mouseY) && this.isWithinImpactBoundaries(mouseX, mouseY)) {
-            MutableText impactHoverTooltip = Text.translatable(Origins.MODID + ".gui.impact.impact").append(": ").append(impact.getTextComponent());
-            context.drawTooltip(this.textRenderer, impactHoverTooltip, mouseX, mouseY);
+        if (origin == null) {
+            return;
         }
+
+        renderDescriptionAndBadges(context, mouseX, mouseY, delta);
+        renderNameAndImpact(context, mouseX, mouseY, delta);
+
+        renderScrollbar(context, mouseX, mouseY);
+        renderTitle(context);
 
     }
 
@@ -294,13 +276,21 @@ public class OriginDisplayScreen extends Screen {
 
         int impactStartX = guiLeft + 128;
         int impactStartY = guiTop + 19;
+        int impactEndX = impactStartX + 28;
+        int impactEndY = impactStartY + 8;
 
-        return (mouseX >= impactStartX && mouseX < impactStartX + 28)
-            && (mouseY >= impactStartY && mouseY < impactStartY + 8);
+        return (mouseX >= impactStartX && mouseX < impactEndX)
+            && (mouseY >= impactStartY && mouseY < impactEndY);
 
     }
 
-    protected void renderOriginName(DrawContext context, int mouseX, int mouseY, float delta) {
+    protected void renderNameAndImpact(DrawContext context, int mouseX, int mouseY, float delta) {
+
+        context.getMatrices().push();
+        context.getMatrices().translate(0.0F, 0.0F, 1.0F);
+
+        //region Render the origin's name
+        context.drawGuiTexture(WINDOW_NAME_PLATE, guiLeft + 10, guiTop + 10, 150, 26);
 
         if (refreshOriginNameWidget || (origin != prevOrigin || layer != prevLayer)) {
 
@@ -308,8 +298,8 @@ public class OriginDisplayScreen extends Screen {
                 ? layer.getMissingName()
                 : origin.getName();
 
-            originNameWidget = new ScrollingTextWidget(guiLeft + 38, guiTop + 18, WINDOW_WIDTH - (62 + 3 * 8), 9, name, true, textRenderer);
-            originNameWidget.setAlignment(TextAlignment.LEFT);
+            nameWidget = new ScrollingTextWidget(guiLeft + 38, guiTop + 18, WINDOW_WIDTH - (62 + 3 * 8), 9, name, true, textRenderer);
+            nameWidget.setAlignment(TextAlignment.LEFT);
 
             refreshOriginNameWidget = false;
 
@@ -318,15 +308,29 @@ public class OriginDisplayScreen extends Screen {
 
         }
 
-        originNameWidget.render(context, mouseX, mouseY, delta);
+        nameWidget.render(context, mouseX, mouseY, delta);
 
         ItemStack iconStack = getCurrentOrigin().getDisplayItem();
         context.drawItem(iconStack, guiLeft + 15, guiTop + 15);
+        //endregion
+
+        //region Render the origin's impact
+        Impact impact = origin.getImpact();
+        context.drawGuiTexture(impact.getSpriteId(), guiLeft + 128, guiTop + 19, 28, 8);
+
+        if (this.isWithinWindowBoundaries(mouseX, mouseY) && this.isWithinImpactBoundaries(mouseX, mouseY)) {
+            MutableText impactHoverTooltip = Text.translatable(Origins.MODID + ".gui.impact.impact").append(": ").append(impact.getTextComponent());
+            context.drawTooltip(this.textRenderer, impactHoverTooltip, mouseX, mouseY);
+        }
+        //endregion
+
+        context.getMatrices().pop();
 
     }
 
-    protected void renderOriginContent(DrawContext context) {
+    protected void renderDescriptionAndBadges(DrawContext context, int mouseX, int mouseY, float delta) {
 
+        List<RenderedBadge> toRenderTooltip = new ObjectArrayList<>();
         int textWidthLimit = WINDOW_WIDTH - 48;
 
         /*
@@ -336,24 +340,26 @@ public class OriginDisplayScreen extends Screen {
          */
 
 //        if (cannotScroll()) {
-//            textWidth += 12;
+//            textWidthLimit += 12;
 //        }
 
         int x = guiLeft + 18;
         int y = guiTop + 45;
 
+        Text description = origin == Origin.EMPTY && layer != null && layer.getMissingDescription() != null ? layer.getMissingDescription() : origin.getDescription();
         y -= scrollPos;
 
-        Text description = origin == Origin.EMPTY && layer != null && layer.getMissingDescription() != null ? layer.getMissingDescription() : origin.getDescription();
+        context.enableScissor(guiLeft, guiTop, guiLeft + WINDOW_WIDTH, guiTop + WINDOW_HEIGHT);
+
         for (OrderedText descriptionLine : textRenderer.wrapLines(description, textWidthLimit)) {
             context.drawTextWithShadow(textRenderer, descriptionLine, x + 2, y, 0xCCCCCC);
             y += 12;
         }
 
         y += 12;
-        if (isOriginRandom) {
+        if (isRandom) {
 
-            for (OrderedText randomOriginLine : textRenderer.wrapLines(randomOriginText, textWidthLimit)) {
+            for (OrderedText randomOriginLine : textRenderer.wrapLines(randomDescription, textWidthLimit)) {
                 y += 12;
                 context.drawTextWithShadow(textRenderer, randomOriginLine, x + 2, y, 0xCCCCCC);
             }
@@ -404,10 +410,13 @@ public class OriginDisplayScreen extends Screen {
                         }
 
                         RenderedBadge renderedBadge = new RenderedBadge(selfOrSubPower, badge, badgeX, badgeY);
-                        renderedBadges.add(renderedBadge);
+                        context.drawTexture(badge.spriteId(), renderedBadge.x(), renderedBadge.y(), 0, 0, 9, 9, 9, 9);
 
-                        context.drawTexture(badge.spriteId(), renderedBadge.x, renderedBadge.y, -2, 0, 0, 9, 9, 9, 9);
                         badgeOffsetX++;
+
+                        if (this.isWithinWindowBoundaries(mouseX, mouseY) && renderedBadge.hasTooltip() && renderedBadge.withinBoundaries(mouseX, mouseY)) {
+                            toRenderTooltip.add(renderedBadge);
+                        }
 
                     }
 
@@ -426,8 +435,23 @@ public class OriginDisplayScreen extends Screen {
 
         }
 
+        context.disableScissor();
+
+        for (var badge : toRenderTooltip) {
+
+            MatrixStack matrices = context.getMatrices();
+            List<TooltipComponent> tooltipComponents = badge.getTooltipComponents(this.textRenderer, this.width - mouseX - 24, delta);
+
+            matrices.push();
+            matrices.translate(0.0F, 0.0F, 5.0F);
+
+            ((DrawContextAccessor) context).invokeDrawTooltip(this.textRenderer, tooltipComponents, mouseX, mouseY, HoveredTooltipPositioner.INSTANCE);
+            matrices.pop();
+
+        }
+
         y += scrollPos;
-        currentMaxScroll = Math.max(0, y - 14 - (guiTop + 158));
+        this.maxScroll = Math.max(0, y - 14 - (guiTop + 158));
 
     }
 
@@ -449,8 +473,21 @@ public class OriginDisplayScreen extends Screen {
             return badge.getTooltipComponents(power, widthLimit, delta, textRenderer);
         }
 
+        public boolean withinBoundaries(int mouseX, int mouseY) {
+            return (mouseX >= x() && mouseX < x() + width())
+                && (mouseY >= y() && mouseY < y() + height());
+        }
+
         public boolean hasTooltip() {
             return badge.hasTooltip();
+        }
+
+        public int width() {
+            return 9;
+        }
+
+        public int height() {
+            return 9;
         }
 
     }

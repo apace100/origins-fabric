@@ -1,5 +1,6 @@
 package io.github.apace100.origins.origin;
 
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.power.MultiplePower;
@@ -13,23 +14,32 @@ import io.github.apace100.calio.util.Validatable;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.data.OriginsDataTypes;
 import io.github.apace100.origins.registry.ModComponents;
+import io.github.apace100.origins.registry.ModItems;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.advancement.AdvancementEntry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Supplier;
 
-public class Origin implements Validatable {
+public class Origin implements Comparable<Origin>, Validatable {
 
-    public static final Origin EMPTY = Origin.special(Origins.identifier("empty"), ItemStack.EMPTY, Impact.NONE, Integer.MAX_VALUE);
+    private static final Set<Origin> SPECIALS = new ObjectOpenHashSet<>();
+
+    public static final Origin EMPTY = special(Origins.identifier("empty"), ItemStack.EMPTY, Impact.NONE, Integer.MIN_VALUE);
+    public static final Origin RANDOM = special(Origins.identifier("random"), () -> ModItems.ORB_OF_ORIGIN, Impact.NONE, Integer.MAX_VALUE);
+
     public static final SerializableDataType<Origin> DATA_TYPE = SerializableDataType.compound(
         new SerializableData()
             .add("id", SerializableDataTypes.IDENTIFIER)
@@ -41,7 +51,7 @@ public class Origin implements Validatable {
             .add("description", SerializableDataTypes.TEXT, null)
             .add("unchoosable", SerializableDataTypes.BOOLEAN, false)
             .add("order", SerializableDataTypes.INT, Integer.MAX_VALUE),
-        data -> new Origin(
+        data -> Origin.of(
             data.get("id"),
             data.get("icon"),
             data.get("powers"),
@@ -66,7 +76,7 @@ public class Origin implements Validatable {
     );
 
     private final Identifier id;
-    private final ItemStack displayItem;
+    private final Supplier<ItemStack> displayItem;
 
     private final Set<PowerReference> powerReferences;
     private final Set<Power> powers;
@@ -82,12 +92,12 @@ public class Origin implements Validatable {
 
     private final int order;
 
-    protected Origin(Identifier id, ItemStack icon, List<PowerReference> powerReferences, List<OriginUpgrade> upgrades, Impact impact, @Nullable Text name, @Nullable Text description, boolean unchoosable, boolean special, int order) {
+    protected Origin(Identifier id, Supplier<ItemStack> icon, List<PowerReference> powerReferences, List<OriginUpgrade> upgrades, Impact impact, @Nullable Text name, @Nullable Text description, boolean unchoosable, boolean special, int order) {
 
         this.id = id;
         String baseTranslationKey = Util.createTranslationKey("origin", id);
 
-        this.displayItem = icon.copy();
+        this.displayItem = Suppliers.compose(ItemStack::copy, icon::get);
         this.powerReferences = new ObjectLinkedOpenHashSet<>(powerReferences);
         this.powers = new ObjectLinkedOpenHashSet<>();
         this.upgrades = upgrades;
@@ -100,12 +110,35 @@ public class Origin implements Validatable {
 
     }
 
-    public Origin(Identifier id, ItemStack icon, List<PowerReference> powerReferences, List<OriginUpgrade> upgrades, Impact impact, @Nullable Text name, @Nullable Text description, boolean unchoosable, int order) {
-        this(id, icon, powerReferences, upgrades, impact, name, description, unchoosable, false, order);
+    public static Origin of(Identifier id, ItemStack icon, List<PowerReference> powers, List<OriginUpgrade> upgrades, Impact impact, @Nullable Text name, @Nullable Text description, boolean unchoosable, int order) {
+        return new Origin(id, () -> icon, powers, upgrades, impact, name, description,  unchoosable, false, order);
     }
 
     public static Origin special(Identifier id, ItemStack icon, Impact impact, int order) {
-        return new Origin(id, icon, new LinkedList<>(), new LinkedList<>(), impact, null, null, true, true, order);
+
+        var special = new Origin(id, () -> icon, new ObjectArrayList<>(), new ObjectArrayList<>(), impact, null, null, true, true, order);
+        SPECIALS.add(special);
+
+        return special;
+
+    }
+
+    public static Origin special(Identifier id, Supplier<Item> icon, Impact impact, int order) {
+
+        var special = new Origin(id, Suppliers.memoize(() -> icon.get().getDefaultStack()), new ObjectArrayList<>(), new ObjectArrayList<>(), impact, null, null, true, true, order);
+        SPECIALS.add(special);
+
+        return special;
+
+    }
+
+    //  TODO: Add a config that determines how origins should be sorted -eggohito
+    @Override
+    public int compareTo(@NotNull Origin that) {
+        int impactDelta = this.getImpact().compareTo(that.getImpact());
+        return impactDelta != 0
+            ? impactDelta
+            : Integer.compare(this.getOrder(), that.getOrder());
     }
 
     public Identifier getId() {
@@ -113,7 +146,7 @@ public class Origin implements Validatable {
     }
 
     public ItemStack getDisplayItem() {
-        return displayItem;
+        return displayItem.get();
     }
 
     public ImmutableList<PowerReference> getPowerReferences() {
@@ -230,6 +263,10 @@ public class Origin implements Validatable {
 
     public static Map<OriginLayer, Origin> get(PlayerEntity player) {
         return ModComponents.ORIGIN.get(player).getOrigins();
+    }
+
+    public static Set<Origin> getSpecials() {
+        return new ObjectOpenHashSet<>(SPECIALS);
     }
 
 }
