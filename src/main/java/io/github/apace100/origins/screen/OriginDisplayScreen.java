@@ -77,7 +77,7 @@ public class OriginDisplayScreen extends Screen {
         this.showDirtBackground = showDirtBackground;
     }
 
-    public void showOrigin(Origin origin, OriginLayer layer) {
+    protected void showOrigin(Origin origin, OriginLayer layer) {
         this.origin = origin;
         this.layer = layer;
         this.isRandom = origin == Origin.RANDOM;

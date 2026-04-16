@@ -13,16 +13,18 @@ import net.minecraft.component.type.ProfileComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PlayerHeadItem;
 import net.minecraft.text.Text;
-import net.minecraft.util.Pair;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 public class ViewOriginScreen extends OriginDisplayScreen {
 
-	private final List<Pair<OriginLayer, Origin>> layers = new ObjectArrayList<>();
+	private final List<Entry> entries = new ObjectArrayList<>();
 	private int index = 0;
+
+	private ButtonWidget chooseButton;
+	private ButtonWidget closeButton;
 
 	public ViewOriginScreen() {
 		super(Text.translatable(Origins.MODID + ".screen.view_origin"), false);
@@ -35,132 +37,130 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 		assert client != null && client.player != null;
 
 		Map<OriginLayer, Origin> origins = ModComponents.ORIGIN.get(client.player).getOrigins();
-		this.layers.clear();
+		this.entries.clear();
 
 		origins.forEach((layer, origin) -> {
 
+			if (!layer.isEnabled() || layer.isHidden() || (origin == Origin.EMPTY && layer.getOriginOptionCount(client.player) <= 0)) {
+				return;
+			}
+
+			this.entries.add(new Entry(layer, origin));
 			ItemStack icon = origin.getDisplayItem();
-			boolean hidden = layer.isHidden();
 
 			if (icon.getItem() instanceof PlayerHeadItem && !icon.contains(DataComponentTypes.PROFILE)) {
 				icon.set(DataComponentTypes.PROFILE, new ProfileComponent(client.player.getGameProfile()));
 			}
 
-			if (!hidden && (origin != Origin.EMPTY || layer.getOriginOptionCount(client.player) > 0)) {
-				this.layers.add(new Pair<>(layer, origin));
-			}
-
 		});
 
-	    //  Add the close button
-//	    addDrawableChild(ButtonWidget.builder(Text.translatable(Origins.MODID + ".gui.close"), button -> client.setScreen(null))
-//		    .position(guiLeft + WINDOW_WIDTH / 2 - 50, guiTop + WINDOW_HEIGHT)
-//		    .size(100, 20)
-//		    .build()
-//	    );
+		this.chooseButton = ButtonWidget.builder(Text.translatable(Origins.MODID + ".gui.choose"), button -> client.setScreen(new ChooseOriginScreen(getCurrentLayer(), false)))
+			.position(guiLeft + WINDOW_WIDTH / 2 - 50, guiTop + WINDOW_HEIGHT + 5)
+			.size(100, 20)
+			.build();
+		this.closeButton = ButtonWidget.builder(Text.translatable(Origins.MODID + ".gui.close"), button -> client.setScreen(null))
+			.position(guiLeft + WINDOW_WIDTH / 2 - 50, guiTop + WINDOW_HEIGHT + 5)
+			.size(100, 20)
+			.build();
 
-		if (this.layers.isEmpty() || !OriginsClient.isServerRunningOrigins) {
+		this.chooseButton.visible = false;
+		this.closeButton.visible = true;
+
+		addDrawableChild(this.closeButton);
+	    addDrawableChild(this.chooseButton);
+
+		if (this.entries.isEmpty() || !OriginsClient.isServerRunningOrigins) {
 			return;
 		}
 
-	    try {
+		this.entries.sort(Entry::compareTo);
+		showOrigin(getCurrentOrigin(), getCurrentLayer());
 
-		    this.layers.sort(Comparator.comparing(Pair::getLeft));
-		    Pair<OriginLayer, Origin> current = getCurrent();
-
-		    showOrigin(current.getRight(), current.getLeft());
-
-	    }
-
-	    catch (IndexOutOfBoundsException e) {
-		    showOrigin(null, null);
-	    }
-
-		//  Add the choose button
-	    var chooseButton = ButtonWidget.builder(Text.translatable(Origins.MODID + ".gui.choose"), button -> client.setScreen(new ChooseOriginScreen(ObjectArrayList.of(getCurrentLayer()), false)))
-		    .position(guiLeft + WINDOW_WIDTH / 2 - 50, guiTop + WINDOW_HEIGHT)
-		    .size(100, 20)
-		    .build();
-
-		chooseButton.visible = getCurrentOrigin() == Origin.EMPTY && getCurrentLayer().getOriginOptionCount(client.player) > 0;
-		addDrawableChild(chooseButton);
-
-	    var closeButton = ButtonWidget.builder(Text.translatable(Origins.MODID + ".gui.close"), button -> client.setScreen(null))
-		    .position(guiLeft + WINDOW_WIDTH / 2 - 50, guiTop + WINDOW_HEIGHT)
-		    .size(100, 20)
-		    .build();
-
-	    closeButton.visible = !chooseButton.visible;
-		addDrawableChild(closeButton);
-
-		if (this.layers.size() <= 1) {
+		if (this.entries.size() <= 1) {
 			return;
 		}
 
-		//  Add the previous button
-		addDrawableChild(ButtonWidget.builder(Text.of("<"), button -> {
-
-				int layersCount = this.layers.size();
-				index = ((index - 1) + layersCount) % layersCount;
-
-				var currentLayer = getCurrentLayer();
-				showOrigin(getCurrentOrigin(), currentLayer);
-
-				chooseButton.visible = getCurrentOrigin() == Origin.EMPTY && currentLayer.getOriginOptionCount(client.player) > 0;
-
-			})
+		addDrawableChild(ButtonWidget.builder(Text.of("<"), button -> this.showPrevious())
 			.position(guiLeft - 40, height / 2 - 10)
 			.size(20, 20)
-			.build()
-		);
-
-		//  Add the next button
-		addDrawableChild(ButtonWidget.builder(Text.of(">"), button -> {
-
-				index = (index + 1) % this.layers.size();
-				var currentLayer = getCurrentLayer();
-
-				showOrigin(getCurrentOrigin(), currentLayer);
-				chooseButton.visible = getCurrentOrigin() == Origin.EMPTY && currentLayer.getOriginOptionCount(client.player) > 0;
-
-			})
+			.build());
+		addDrawableChild(ButtonWidget.builder(Text.of(">"), button -> this.showNext())
 			.position(guiLeft + WINDOW_WIDTH + 20, height / 2 - 10)
 			.size(20, 20)
-			.build()
-		);
+			.build());
 
-	}
-
-	@Override
-	public OriginLayer getCurrentLayer() {
-		return getCurrent().getLeft();
-	}
-
-	@Override
-	public Origin getCurrentOrigin() {
-		return getCurrent().getRight();
-	}
-
-	public Pair<OriginLayer, Origin> getCurrent() {
-		return layers.get(index);
 	}
 
 	@Override
 	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
 
 		super.render(context, mouseX, mouseY, delta);
-		if (!layers.isEmpty()) {
-			return;
-		}
 
-		String translationKey = Origins.MODID + ".gui.view_origin." + (OriginsClient.isServerRunningOrigins ? "empty" : "not_installed");
-		context.drawCenteredTextWithShadow(textRenderer, Text.translatable(translationKey), width / 2, guiTop + 48, 0xFFFFFF);
+		if (entries.isEmpty()) {
+			context.drawCenteredTextWithShadow(textRenderer, Text.translatable(Origins.MODID + ".gui.view_origin." + (OriginsClient.isServerRunningOrigins ? "empty" : "not_installed")), width / 2, guiTop + 48, 0xFFFFFF);
+		}
 
 	}
 
 	@Override
 	protected Text getTitleText() {
 		return super.getCurrentLayer().getViewOriginTitle();
+	}
+
+	@Override
+	public Origin getCurrentOrigin() {
+		return getCurrent().origin();
+	}
+
+	@Override
+	public OriginLayer getCurrentLayer() {
+		return getCurrent().layer();
+	}
+
+	@Override
+	protected void showOrigin(Origin origin, OriginLayer layer) {
+		super.showOrigin(origin, layer);
+		updateButtons();
+	}
+
+	protected Entry getCurrent() {
+		return entries.get(index);
+	}
+
+	protected void showNext() {
+
+		this.index = (index + 1) % this.entries.size();
+		var entry = this.entries.get(this.index);
+
+		showOrigin(entry.origin(), entry.layer());
+
+	}
+
+	protected void showPrevious() {
+
+		this.index = Math.abs(this.index - 1) % this.entries.size();
+		var entry = this.entries.get(this.index);
+
+		showOrigin(entry.origin(), entry.layer());
+
+	}
+
+	protected void updateButtons() {
+
+		assert client != null && client.player != null : "Tried updating buttons without the client or its player unset!";
+
+		this.chooseButton.visible = getCurrentOrigin() == Origin.EMPTY && getCurrentLayer().getOriginOptionCount(client.player) > 0;
+		this.closeButton.visible = !this.chooseButton.visible;
+
+	}
+
+	public record Entry(OriginLayer layer, Origin origin) implements Comparable<Entry> {
+
+		@Override
+		public int compareTo(@NotNull Entry that) {
+			return this.layer().compareTo(that.layer());
+		}
+
 	}
 
 }
