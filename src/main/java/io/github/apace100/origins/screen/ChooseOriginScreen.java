@@ -37,8 +37,9 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 		this(layers, 0, showDirtBackground);
 	}
 
-	public ChooseOriginScreen(OriginLayer layer, boolean showDirtBackground) {
-		this(ObjectArrayList.of(layer), 0, showDirtBackground);
+	@Override
+	public boolean shouldCloseOnEsc() {
+		return false;
 	}
 
 	@Override

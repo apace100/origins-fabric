@@ -23,9 +23,6 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 	private final List<Entry> entries = new ObjectArrayList<>();
 	private int index = 0;
 
-	private ButtonWidget chooseButton;
-	private ButtonWidget closeButton;
-
 	public ViewOriginScreen() {
 		super(Text.translatable(Origins.MODID + ".screen.view_origin"), false);
 	}
@@ -54,20 +51,10 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 
 		});
 
-		this.chooseButton = ButtonWidget.builder(Text.translatable(Origins.MODID + ".gui.choose"), button -> client.setScreen(new ChooseOriginScreen(getCurrentLayer(), false)))
+		addDrawableChild(ButtonWidget.builder(Text.translatable(Origins.MODID + ".gui.close"), button -> client.setScreen(null))
 			.position(guiLeft + WINDOW_WIDTH / 2 - 50, guiTop + WINDOW_HEIGHT + 5)
 			.size(100, 20)
-			.build();
-		this.closeButton = ButtonWidget.builder(Text.translatable(Origins.MODID + ".gui.close"), button -> client.setScreen(null))
-			.position(guiLeft + WINDOW_WIDTH / 2 - 50, guiTop + WINDOW_HEIGHT + 5)
-			.size(100, 20)
-			.build();
-
-		this.chooseButton.visible = false;
-		this.closeButton.visible = true;
-
-		addDrawableChild(this.closeButton);
-	    addDrawableChild(this.chooseButton);
+			.build());
 
 		if (this.entries.isEmpty() || !OriginsClient.isServerRunningOrigins) {
 			return;
@@ -117,12 +104,6 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 		return getCurrent().layer();
 	}
 
-	@Override
-	protected void showOrigin(Origin origin, OriginLayer layer) {
-		super.showOrigin(origin, layer);
-		updateButtons();
-	}
-
 	protected Entry getCurrent() {
 		return entries.get(index);
 	}
@@ -142,15 +123,6 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 		var entry = this.entries.get(this.index);
 
 		showOrigin(entry.origin(), entry.layer());
-
-	}
-
-	protected void updateButtons() {
-
-		assert client != null && client.player != null : "Tried updating buttons without the client or its player unset!";
-
-		this.chooseButton.visible = getCurrentOrigin() == Origin.EMPTY && getCurrentLayer().getOriginOptionCount(client.player) > 0;
-		this.closeButton.visible = !this.chooseButton.visible;
 
 	}
 
