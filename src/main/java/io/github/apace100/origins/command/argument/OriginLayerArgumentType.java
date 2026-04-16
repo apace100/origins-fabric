@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 public class OriginLayerArgumentType implements ArgumentType<Identifier> {
 
    public static final DynamicCommandExceptionType LAYER_NOT_FOUND = new DynamicCommandExceptionType(
-       o -> Text.translatable("commands.origin.layer_not_found", o)
+       o -> Text.stringifiedTranslatable("commands.origin.layer_not_found", o)
    );
 
    public static OriginLayerArgumentType layer() {
@@ -29,6 +29,7 @@ public class OriginLayerArgumentType implements ArgumentType<Identifier> {
       Identifier id = context.getArgument(argumentName, Identifier.class);
       return OriginLayerManager.getResult(id)
           .result()
+          .filter(OriginLayer::isEnabled)
           .orElseThrow(() -> LAYER_NOT_FOUND.create(id));
    }
 

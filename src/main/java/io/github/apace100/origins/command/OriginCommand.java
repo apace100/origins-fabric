@@ -203,7 +203,23 @@ public class OriginCommand {
 				: EntityArgumentType.getPlayers(context, "targets");
 
 			for (ServerPlayerEntity target : targets) {
-				openLayer(target, Optional.empty());
+
+				OriginComponent originComponent = ModComponents.ORIGIN.get(target);
+				OriginLayerManager.values()
+					.stream()
+					.filter(OriginLayer::isEnabled)
+					.forEach(layer -> originComponent.setOrigin(layer, Origin.EMPTY));
+
+				boolean automaticallyAssigned = originComponent.checkAutoChoosingLayers(target, false);
+				int optionCount = OriginLayerManager.getOriginOptionCount(target);
+
+				originComponent.selectingOrigin(!automaticallyAssigned && optionCount > 0);
+				originComponent.sync();
+
+				if (originComponent.isSelectingOrigin()) {
+					ServerPlayNetworking.send(target, new OpenChooseOriginScreenS2CPacket(false));
+				}
+
 			}
 
 			source.sendFeedback(() -> Text.translatable("commands.origin.gui.all", targets.size()), true);
@@ -217,7 +233,20 @@ public class OriginCommand {
 			OriginLayer layer = OriginLayerArgumentType.getLayer(context, "layer");
 
 			for (ServerPlayerEntity target : targets) {
-				openLayer(target, Optional.of(layer));
+
+				OriginComponent originComponent = ModComponents.ORIGIN.get(target);
+				originComponent.setOrigin(layer, Origin.EMPTY);
+
+				boolean automaticallyAssigned = originComponent.checkAutoChoosingLayers(target, false);
+				int optionCount = layer.getOriginOptionCount(target);
+
+				originComponent.selectingOrigin(!automaticallyAssigned && optionCount > 0);
+				originComponent.sync();
+
+				if (originComponent.isSelectingOrigin()) {
+					ServerPlayNetworking.send(target, new OpenChooseOriginScreenS2CPacket(false));
+				}
+
 			}
 
 			context.getSource().sendFeedback(() -> Text.translatable("commands.origin.gui.layer", targets.size(), layer.getName()), true);
@@ -318,31 +347,6 @@ public class OriginCommand {
 
 		Origins.LOGGER.info("Player {} was randomly assigned the origin {} for layer {}", target.getName().getString(), origin.getId(), layer.getId());
 		return origin;
-
-	}
-
-	private static void openLayer(ServerPlayerEntity target, Optional<OriginLayer> targetLayer) {
-
-		OriginComponent originComponent = ModComponents.ORIGIN.get(target);
-		List<OriginLayer> layers = new ObjectArrayList<>();
-
-		targetLayer.ifPresentOrElse(layers::add, () -> layers.addAll(OriginLayerManager.values()));
-
-		layers.stream()
-			.filter(OriginLayer::isEnabled)
-			.forEach(layer -> originComponent.setOrigin(layer, Origin.EMPTY));
-
-		boolean automaticallyAssigned = originComponent.checkAutoChoosingLayers(target, false);
-		int options = targetLayer
-			.map(layer -> layer.getOriginOptionCount(target))
-			.orElseGet(() -> OriginLayerManager.getOriginOptionCount(target));
-
-		originComponent.selectingOrigin(!automaticallyAssigned || options > 0);
-		originComponent.sync();
-
-		if (originComponent.isSelectingOrigin()) {
-			ServerPlayNetworking.send(target, new OpenChooseOriginScreenS2CPacket(false));
-		}
 
 	}
 

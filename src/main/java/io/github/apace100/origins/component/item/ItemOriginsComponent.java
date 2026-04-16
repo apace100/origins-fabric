@@ -116,7 +116,7 @@ public class ItemOriginsComponent implements TooltipAppender {
 		assignedOrigin |= originComponent.checkAutoChoosingLayers(player, false);
 		int originOptions = OriginLayerManager.getOriginOptionCount(player);
 
-		originComponent.selectingOrigin(!assignedOrigin || originOptions > 0);
+		originComponent.selectingOrigin(!assignedOrigin && originOptions > 0);
 		originComponent.sync();
 
 		if (originComponent.isSelectingOrigin()) {
