@@ -3,6 +3,7 @@ package io.github.apace100.origins.origin;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import io.github.apace100.apoli.data.ApoliDataTypes;
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.apoli.power.MultiplePower;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerReference;
@@ -21,7 +22,6 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.advancement.AdvancementEntry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -37,8 +37,8 @@ public class Origin implements Comparable<Origin>, Validatable {
 
     private static final Set<Origin> SPECIALS = new ObjectOpenHashSet<>();
 
-    public static final Origin EMPTY = special(Origins.identifier("empty"), ItemStack.EMPTY, Impact.NONE, Integer.MIN_VALUE);
-    public static final Origin RANDOM = special(Origins.identifier("random"), () -> ModItems.ORB_OF_ORIGIN, Impact.NONE, Integer.MAX_VALUE);
+    public static final Origin EMPTY = new Origin(Origins.identifier("empty"), () -> ItemStack.EMPTY, Impact.NONE, Integer.MIN_VALUE);
+    public static final Origin RANDOM = new Origin(Origins.identifier("random"), () -> Suppliers.memoize(() -> ModItems.ORB_OF_ORIGIN).get().getDefaultStack(), Impact.NONE, Integer.MAX_VALUE);
 
     public static final SerializableDataType<Origin> DATA_TYPE = SerializableDataType.compound(
         new SerializableData()
@@ -81,6 +81,9 @@ public class Origin implements Comparable<Origin>, Validatable {
     private final Set<PowerReference> powerReferences;
     private final Set<Power> powers;
 
+    //  TODO: Allow users to modify the window textures via data packs
+    //        (delayed since it's already pre-release/release)  -eggohito
+    private final GuiMetadata guiMetadata;
     private final List<OriginUpgrade> upgrades;
     private final Impact impact;
 
@@ -88,11 +91,9 @@ public class Origin implements Comparable<Origin>, Validatable {
     private final Text description;
 
     private final boolean choosable;
-    private final boolean special;
-
     private final int order;
 
-    protected Origin(Identifier id, Supplier<ItemStack> icon, List<PowerReference> powerReferences, List<OriginUpgrade> upgrades, Impact impact, @Nullable Text name, @Nullable Text description, boolean unchoosable, boolean special, int order) {
+    protected Origin(Identifier id, Supplier<ItemStack> icon, List<PowerReference> powerReferences, GuiMetadata guiMetadata, List<OriginUpgrade> upgrades, Impact impact, @Nullable Text name, @Nullable Text description, boolean unchoosable, int order) {
 
         this.id = id;
         String baseTranslationKey = Util.createTranslationKey("origin", id);
@@ -100,36 +101,27 @@ public class Origin implements Comparable<Origin>, Validatable {
         this.displayItem = Suppliers.compose(ItemStack::copy, icon::get);
         this.powerReferences = new ObjectLinkedOpenHashSet<>(powerReferences);
         this.powers = new ObjectLinkedOpenHashSet<>();
+        this.guiMetadata = guiMetadata;
         this.upgrades = upgrades;
         this.impact = impact;
         this.name = TextUtil.forceTranslatable(baseTranslationKey + ".name", Optional.ofNullable(name));
         this.description = TextUtil.forceTranslatable(baseTranslationKey + ".description", Optional.ofNullable(description));
         this.choosable = !unchoosable;
-        this.special = special;
         this.order = order;
 
     }
 
+    protected Origin(Identifier id, Supplier<ItemStack> icon, Impact impact, int order) {
+        this(id, icon, List.of(), GuiMetadata.DEFAULT, List.of(), impact, null, null, false, order);
+        SPECIALS.add(this);
+    }
+
+    public static Origin of(Identifier id, ItemStack icon, List<PowerReference> powers, GuiMetadata windowTextures, List<OriginUpgrade> upgrades, Impact impact, @Nullable Text name, @Nullable Text description, boolean unchoosable, int order) {
+        return new Origin(id, () -> icon, powers, windowTextures, upgrades, impact, name, description,  unchoosable, order);
+    }
+
     public static Origin of(Identifier id, ItemStack icon, List<PowerReference> powers, List<OriginUpgrade> upgrades, Impact impact, @Nullable Text name, @Nullable Text description, boolean unchoosable, int order) {
-        return new Origin(id, () -> icon, powers, upgrades, impact, name, description,  unchoosable, false, order);
-    }
-
-    public static Origin special(Identifier id, ItemStack icon, Impact impact, int order) {
-
-        var special = new Origin(id, () -> icon, new ObjectArrayList<>(), new ObjectArrayList<>(), impact, null, null, true, true, order);
-        SPECIALS.add(special);
-
-        return special;
-
-    }
-
-    public static Origin special(Identifier id, Supplier<Item> icon, Impact impact, int order) {
-
-        var special = new Origin(id, Suppliers.memoize(() -> icon.get().getDefaultStack()), new ObjectArrayList<>(), new ObjectArrayList<>(), impact, null, null, true, true, order);
-        SPECIALS.add(special);
-
-        return special;
-
+        return new Origin(id, () -> icon, powers, GuiMetadata.DEFAULT, upgrades, impact, name, description,  unchoosable, order);
     }
 
     //  TODO: Add a config that determines how origins should be sorted -eggohito
@@ -155,6 +147,10 @@ public class Origin implements Comparable<Origin>, Validatable {
 
     public ImmutableList<Power> getPowers() {
         return ImmutableList.copyOf(powers);
+    }
+
+    public GuiMetadata getGuiMetadata() {
+        return guiMetadata;
     }
 
     @Deprecated(forRemoval = true)
@@ -186,7 +182,7 @@ public class Origin implements Comparable<Origin>, Validatable {
     }
 
     public boolean isSpecial() {
-        return this.special;
+        return SPECIALS.contains(this);
     }
 
     public int getOrder() {
@@ -269,4 +265,81 @@ public class Origin implements Comparable<Origin>, Validatable {
         return new ObjectOpenHashSet<>(SPECIALS);
     }
 
+    public record GuiMetadata(WindowTextures choosing, WindowTextures viewing) {
+
+        public static final GuiMetadata DEFAULT = new GuiMetadata(
+            WindowTextures.DEFAULT,
+            WindowTextures.DEFAULT
+        );
+
+        public static final TypedDataObjectFactory<GuiMetadata> DATA_FACTORY = TypedDataObjectFactory.simple(
+            new SerializableData()
+                .add("choosing", WindowTextures.DATA_FACTORY.getDataType())
+                .add("viewing", WindowTextures.DATA_FACTORY.getDataType()),
+            data -> new GuiMetadata(
+                data.get("choosing"),
+                data.get("viewing")
+            ),
+            (metadata, serializableData) -> serializableData.instance()
+                .set("choosing", metadata.choosing())
+                .set("viewing", metadata.viewing())
+        );
+
+    }
+
+    public record WindowTextures(Identifier background, Identifier border, Identifier namePlate, ScrollerTextures scroller) {
+
+        public static final WindowTextures DEFAULT = new WindowTextures(
+            Origins.identifier("choose_origin/background"),
+            Origins.identifier("choose_origin/border"),
+            Origins.identifier("choose_origin/name_plate"),
+            ScrollerTextures.DEFAULT
+        );
+
+        public static final TypedDataObjectFactory<WindowTextures> DATA_FACTORY = TypedDataObjectFactory.simple(
+            new SerializableData()
+                .add("background", SerializableDataTypes.IDENTIFIER)
+                .add("border", SerializableDataTypes.IDENTIFIER)
+                .add("name_plate", SerializableDataTypes.IDENTIFIER)
+                .add("scroller", ScrollerTextures.DATA_FACTORY.getDataType()),
+            data -> new WindowTextures(
+                data.get("background"),
+                data.get("border"),
+                data.get("name_plate"),
+                data.get("scroller")
+            ),
+            (metadata, serializableData) -> serializableData.instance()
+                .set("background", metadata.background())
+                .set("border", metadata.border())
+                .set("name_plate", metadata.namePlate())
+                .set("scroller", metadata.scroller())
+        );
+
+    }
+
+    public record ScrollerTextures(Identifier unpressed, Identifier pressed, Identifier slot) {
+
+        public static final ScrollerTextures DEFAULT = new ScrollerTextures(
+            Origins.identifier("choose_origin/scroll_bar"),
+            Origins.identifier("choose_origin/scroll_bar/pressed"),
+            Origins.identifier("choose_origin/scroll_bar/slot")
+        );
+
+        public static final TypedDataObjectFactory<ScrollerTextures> DATA_FACTORY = TypedDataObjectFactory.simple(
+            new SerializableData()
+                .add("unpressed", SerializableDataTypes.IDENTIFIER)
+                .add("pressed", SerializableDataTypes.IDENTIFIER)
+                .add("slot", SerializableDataTypes.IDENTIFIER),
+            data -> new ScrollerTextures(
+                data.get("unpressed"),
+                data.get("pressed"),
+                data.get("slot")
+            ),
+            (metadata, serializableData) -> serializableData.instance()
+                .set("unpressed", metadata.unpressed())
+                .set("pressed", metadata.pressed())
+                .set("slot", metadata.slot())
+        );
+
+    }
 }

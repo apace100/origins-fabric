@@ -13,6 +13,7 @@ import net.minecraft.component.type.ProfileComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PlayerHeadItem;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -27,11 +28,13 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 		super(Text.translatable(Origins.MODID + ".screen.view_origin"), false);
 	}
 
-    @Override
+	@Override
 	protected void init() {
 
 		super.init();
-		assert client != null && client.player != null;
+
+		assert client != null && client.player != null : "Tried initializing the view origin screen with the client and its player unset!";
+		assert windowWidget != null : "Tried initializing the view origin screen with the origin window unset!";
 
 		Map<OriginLayer, Origin> origins = ModComponents.ORIGIN.get(client.player).getOrigins();
 		this.entries.clear();
@@ -42,8 +45,8 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 				return;
 			}
 
-			this.entries.add(new Entry(layer, origin));
 			ItemStack icon = origin.getDisplayItem();
+			this.entries.add(new Entry(layer, origin));
 
 			if (icon.getItem() instanceof PlayerHeadItem && !icon.contains(DataComponentTypes.PROFILE)) {
 				icon.set(DataComponentTypes.PROFILE, new ProfileComponent(client.player.getGameProfile()));
@@ -51,8 +54,8 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 
 		});
 
-		addDrawableChild(ButtonWidget.builder(Text.translatable(Origins.MODID + ".gui.close"), button -> client.setScreen(null))
-			.position(guiLeft + WINDOW_WIDTH / 2 - 50, guiTop + WINDOW_HEIGHT + 5)
+		this.addDrawableChild(ButtonWidget.builder(Text.translatable("origins.gui.close"), button -> client.setScreen(null))
+			.position(windowWidget.getX() + windowWidget.getWidth() / 2 - 50, windowWidget.getY() + windowWidget.getHeight() + 5)
 			.size(100, 20)
 			.build());
 
@@ -61,18 +64,18 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 		}
 
 		this.entries.sort(Entry::compareTo);
-		showOrigin(getCurrentOrigin(), getCurrentLayer());
+		this.showCurrent();
 
 		if (this.entries.size() <= 1) {
 			return;
 		}
 
-		addDrawableChild(ButtonWidget.builder(Text.of("<"), button -> this.showPrevious())
-			.position(guiLeft - 40, height / 2 - 10)
+		this.addDrawableChild(ButtonWidget.builder(Text.literal("<"), button -> this.previousLayer())
+			.position(windowWidget.getX() - 40, height / 2 - 10)
 			.size(20, 20)
 			.build());
-		addDrawableChild(ButtonWidget.builder(Text.of(">"), button -> this.showNext())
-			.position(guiLeft + WINDOW_WIDTH + 20, height / 2 - 10)
+		this.addDrawableChild(ButtonWidget.builder(Text.literal(">"), button -> this.nextLayer())
+			.position(windowWidget.getX() + windowWidget.getWidth() + 20, height / 2 - 10)
 			.size(20, 20)
 			.build());
 
@@ -84,52 +87,44 @@ public class ViewOriginScreen extends OriginDisplayScreen {
 		super.render(context, mouseX, mouseY, delta);
 
 		if (entries.isEmpty()) {
-			context.drawCenteredTextWithShadow(textRenderer, Text.translatable(Origins.MODID + ".gui.view_origin." + (OriginsClient.isServerRunningOrigins ? "empty" : "not_installed")), width / 2, guiTop + 48, 0xFFFFFF);
+			context.drawCenteredTextWithShadow(textRenderer, Text.translatable(Origins.MODID + ".gui.view_origin." + (OriginsClient.isServerRunningOrigins ? "empty" : "not_installed")), width / 2, windowWidget.getY() + 48, -1);
 		}
 
 	}
 
 	@Override
-	protected Text getTitleText() {
-		return super.getCurrentLayer().getViewOriginTitle();
+	public Text getTitle() {
+		return this.getCurrentLayer().getViewOriginTitle();
 	}
 
 	@Override
-	public Origin getCurrentOrigin() {
-		return getCurrent().origin();
+	protected OriginLayer getCurrentLayer() {
+		return entries.get(index).layer();
 	}
 
 	@Override
-	public OriginLayer getCurrentLayer() {
-		return getCurrent().layer();
+	protected Origin getCurrentOrigin() {
+		return entries.get(index).origin();
 	}
 
-	protected Entry getCurrent() {
-		return entries.get(index);
+	void showCurrent() {
+		this.showCurrent(origin -> origin.getGuiMetadata().viewing());
 	}
 
-	protected void showNext() {
-
-		this.index = (index + 1) % this.entries.size();
-		var entry = this.entries.get(this.index);
-
-		showOrigin(entry.origin(), entry.layer());
-
+	void nextLayer() {
+		this.index = MathHelper.floorMod(index + 1, this.entries.size());
+		this.showCurrent();
 	}
 
-	protected void showPrevious() {
-
-		this.index = Math.abs(this.index - 1) % this.entries.size();
-		var entry = this.entries.get(this.index);
-
-		showOrigin(entry.origin(), entry.layer());
-
+	void previousLayer() {
+		this.index = MathHelper.floorMod(index - 1, this.entries.size());
+		this.showCurrent();
 	}
 
-	public record Entry(OriginLayer layer, Origin origin) implements Comparable<Entry> {
+	private record Entry(OriginLayer layer, Origin origin) implements Comparable<Entry> {
 
 		@Override
-		public int compareTo(@NotNull Entry that) {
+		public int compareTo(@NotNull ViewOriginScreen.Entry that) {
 			return this.layer().compareTo(that.layer());
 		}
 

@@ -3,7 +3,9 @@ package io.github.apace100.origins.screen;
 import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.networking.packet.c2s.ChooseOriginC2SPacket;
 import io.github.apace100.origins.networking.packet.c2s.ChooseRandomOriginC2SPacket;
-import io.github.apace100.origins.origin.*;
+import io.github.apace100.origins.origin.Origin;
+import io.github.apace100.origins.origin.OriginLayer;
+import io.github.apace100.origins.origin.OriginManager;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -46,87 +48,94 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 	protected void init() {
 
 		super.init();
+
 		assert client != null && client.player != null : "Tried initializing the choose origin screen with the client and its player unset!";
+		assert windowWidget != null : "Tried initializing the choose origin screen with the window widget unset!";
 
-		if (layers.isEmpty()) {
-			waitForNextLayer();
-			return;
-		}
-
-		OriginLayer currentLayer = getCurrentLayer();
-		this.initRandomDescription();
-
-		this.optionCount = currentLayer.getOriginOptionCount(client.player);
+		this.optionCount = 0;
 		this.origins.clear();
 
-		currentLayer.getOrigins(client.player).forEach(id -> {
+		if (layers.isEmpty()) {
+			this.waitForNextLayer();
+		}
 
-			Origin origin = OriginManager.get(id);
-			ItemStack icon = origin.getDisplayItem();
+		else {
 
-			if (origin.isChoosable()) {
+			OriginLayer currentLayer = getCurrentLayer();
+			this.optionCount = currentLayer.getOriginOptionCount(client.player);
 
-				if (icon.getItem() instanceof PlayerHeadItem && !icon.contains(DataComponentTypes.PROFILE)) {
-					icon.set(DataComponentTypes.PROFILE, new ProfileComponent(client.player.getGameProfile()));
+			for (var originId : currentLayer.getOrigins(client.player)) {
+
+				Origin origin = OriginManager.get(originId);
+				ItemStack icon = origin.getDisplayItem();
+
+				if (origin.isChoosable()) {
+
+					if (icon.getItem() instanceof PlayerHeadItem && !icon.contains(DataComponentTypes.PROFILE)) {
+						icon.set(DataComponentTypes.PROFILE, new ProfileComponent(client.player.getGameProfile()));
+					}
+
+					origins.add(origin);
+
 				}
-
-				origins.add(origin);
 
 			}
 
-		});
+			this.origins.sort(Origin::compareTo);
 
-		this.origins.sort(Origin::compareTo);
+			//  Manually add the random origin if random is allowed
+			if (currentLayer.isRandomAllowed()) {
+				origins.add(Origin.RANDOM);
+			}
 
-		//  Manually add the random origin
-		if (currentLayer.isRandomAllowed()) {
-			origins.add(Origin.RANDOM);
+			if (optionCount == 0) {
+				this.waitForNextLayer();
+			}
+
+			else {
+
+				this.addDrawableChild(ButtonWidget.builder(Text.translatable("origins.gui.select"), button -> this.selectOrigin())
+					.position(windowWidget.getX() + windowWidget.getWidth() / 2 - 50, windowWidget.getY() + windowWidget.getHeight() + 5)
+					.size(100, 20)
+					.build());
+
+				this.showCurrent();
+
+				if (optionCount > 1) {
+
+					this.addDrawableChild(ButtonWidget.builder(Text.literal("<"), button -> this.previousOrigin())
+						.position(windowWidget.getX() - 40, height / 2 - 10)
+						.size(20, 20)
+						.build());
+					this.addDrawableChild(ButtonWidget.builder(Text.literal(">"), button -> this.nextOrigin())
+						.position(windowWidget.getX() + windowWidget.getWidth() + 20, height / 2 - 10)
+						.size(20, 20)
+						.build());
+
+				}
+
+			}
+
 		}
-
-		if (optionCount == 0) {
-			waitForNextLayer();
-			return;
-		}
-
-		//	Draw the select origin button
-		addDrawableChild(ButtonWidget.builder(Text.translatable(Origins.MODID + ".gui.select"), button -> this.selectOrigin())
-			.position(guiLeft + WINDOW_WIDTH / 2 - 50, guiTop + WINDOW_HEIGHT + 5)
-			.size(100, 20)
-			.build());
-
-		showOrigin(getCurrentOrigin(), currentLayer);
-
-		if (optionCount <= 1) {
-			return;
-		}
-
-		addDrawableChild(ButtonWidget.builder(Text.of("<"), button -> this.showPreviousOrigin())
-			.position(guiLeft - 40, height / 2 - 10)
-			.size(20, 20)
-			.build());
-		addDrawableChild(ButtonWidget.builder(Text.of(">"), button -> this.showNextOrigin())
-			.position(guiLeft + WINDOW_WIDTH + 20, height / 2 - 10)
-			.size(20, 20)
-			.build());
 
 	}
 
 	@Override
-	protected Text getTitleText() {
-		return super.getCurrentLayer().getChooseOriginTitle();
+	public Text getTitle() {
+		return this.getCurrentLayer().getChooseOriginTitle();
 	}
 
 	@Override
-	public Origin getCurrentOrigin() {
+	protected Origin getCurrentOrigin() {
 		return origins.get(originIndex);
 	}
 
 	@Override
-	public OriginLayer getCurrentLayer() {
+	protected OriginLayer getCurrentLayer() {
 		return layers.get(layerIndex);
 	}
 
-	void waitForNextLayer() {
+	protected void waitForNextLayer() {
 		Objects.requireNonNull(client).setScreen(new WaitForNextLayerScreen(layers, layerIndex, showDirtBackground));
 	}
 
@@ -147,22 +156,18 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 
 	}
 
-	void showNextOrigin() {
-
-		this.originIndex = (originIndex + 1) % optionCount;
-		var origin = getCurrentOrigin();
-
-		showOrigin(origin, getCurrentLayer());
-
+	void showCurrent() {
+		this.showCurrent(origin -> origin.getGuiMetadata().choosing());
 	}
 
-	void showPreviousOrigin() {
+	void nextOrigin() {
+		this.originIndex = MathHelper.floorMod(originIndex + 1, optionCount);
+		this.showCurrent();
+	}
 
-		this.originIndex = Math.abs(originIndex - 1) % optionCount;
-		var origin = getCurrentOrigin();
-
-		showOrigin(origin, getCurrentLayer());
-
+	void previousOrigin() {
+		this.originIndex = MathHelper.floorMod(originIndex - 1, optionCount);
+		this.showCurrent();
 	}
 
 }
