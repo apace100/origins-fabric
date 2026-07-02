@@ -1,32 +1,26 @@
 {
 	"type": "origins:multiple",
 	"underwater": {
-		"type": "origins:modify_break_speed",
+		"type": "origins:conditioned_attribute",
 		"modifier": {
-			"amount": 4,
-			"operation": "multiply_total_multiplicative"
+			"id": "*:*",
+			"attribute": "minecraft:player.submerged_mining_speed",
+			"operation": "add_multiplied_total",
+			"amount": 4.0
 		},
+		"tick_rate": 5,
 		"condition": {
-			"type": "origins:all_of",
-			"conditions": [
-				{
-					"type": "origins:submerged_in",
-					"fluid": "minecraft:water"
-				},
-				{
-					"type": "origins:enchantment",
-					"enchantment": "minecraft:aqua_affinity",
-					"comparison": "==",
-					"compare_to": 0
-				}
-			]
+			"type": "origins:enchantment",
+			"enchantment": "minecraft:aqua_affinity",
+			"comparison": "==",
+			"compare_to": 0
 		}
 	},
 	"ungrounded": {
 		"type": "origins:modify_break_speed",
 		"modifier": {
-			"amount": 4,
-			"operation": "multiply_total_multiplicative"
+			"operation": "multiply_total_multiplicative",
+			"amount": 4
 		},
 		"condition": {
 			"type": "origins:all_of",
