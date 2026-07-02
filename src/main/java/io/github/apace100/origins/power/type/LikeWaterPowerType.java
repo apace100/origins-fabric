@@ -9,6 +9,7 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class LikeWaterPowerType extends PowerType {
 
@@ -21,10 +22,19 @@ public class LikeWaterPowerType extends PowerType {
         return OriginsPowerTypes.LIKE_WATER;
     }
 
-    public static Vec3d modifyFluidMovement(Entity entity, Vec3d velocity, double fallVelocity) {
-        return PowerHolderComponent.hasPowerType(entity, LikeWaterPowerType.class) && Math.abs(velocity.y - fallVelocity / 16.0D) < 0.025D
-            ? new Vec3d(velocity.x, 0, velocity.z)
-            : velocity;
+    public static Vec3d modify(Entity entity, double gravity, Vec3d motion, Supplier<Vec3d> defaultGetter) {
+        return doesApply(entity, gravity, motion)
+            ? new Vec3d(motion.x, 0, motion.z)
+            : defaultGetter.get();
+    }
+
+    private static boolean doesApply(Entity entity, double gravity, Vec3d motion) {
+        double force = Math.abs(motion.y - gravity / 16.0) - 0.005;
+        return Math.signum(gravity) >= 1.0
+            && Math.signum(force) >= 1.0
+            && force < 0.025
+            && !entity.isSprinting()
+            && PowerHolderComponent.hasPowerType(entity, LikeWaterPowerType.class);
     }
 
 }
