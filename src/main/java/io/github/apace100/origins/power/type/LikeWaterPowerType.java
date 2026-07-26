@@ -1,5 +1,6 @@
 package io.github.apace100.origins.power.type;
 
+import com.google.common.collect.Iterables;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.power.PowerConfiguration;
@@ -9,7 +10,6 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public class LikeWaterPowerType extends PowerType {
 
@@ -22,18 +22,15 @@ public class LikeWaterPowerType extends PowerType {
         return OriginsPowerTypes.LIKE_WATER;
     }
 
-    public static Vec3d modify(Entity entity, double gravity, Vec3d motion, Supplier<Vec3d> defaultGetter) {
-        return doesApply(entity, gravity, motion)
-            ? new Vec3d(motion.x, 0, motion.z)
-            : defaultGetter.get();
+    public static Vec3d modify(Entity entity, Vec3d motion) {
+        return doesApply(entity, motion)
+            ? new Vec3d(motion.getX(), 0, motion.getZ())
+            : motion;
     }
 
-    private static boolean doesApply(Entity entity, double gravity, Vec3d motion) {
-        double force = Math.abs(motion.y - gravity / 16.0) - 0.005;
-        return Math.signum(gravity) >= 1.0
-            && Math.signum(force) >= 1.0
-            && force < 0.025
-            && !entity.isSprinting()
+    private static boolean doesApply(Entity entity, Vec3d motion) {
+        return Math.abs(motion.getY()) < 0.025
+            && Iterables.isEmpty(entity.getWorld().getBlockCollisions(entity, entity.getBoundingBox().stretch(0.0, motion.getY(), 0.0)))
             && PowerHolderComponent.hasPowerType(entity, LikeWaterPowerType.class);
     }
 

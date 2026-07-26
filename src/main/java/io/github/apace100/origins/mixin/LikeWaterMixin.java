@@ -1,7 +1,6 @@
 package io.github.apace100.origins.mixin;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import io.github.apace100.origins.power.type.LikeWaterPowerType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -18,9 +17,9 @@ public abstract class LikeWaterMixin extends Entity {
         super(type, world);
     }
 
-    @WrapOperation(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyFluidMovingSpeed(DZLnet/minecraft/util/math/Vec3d;)Lnet/minecraft/util/math/Vec3d;", ordinal = 0))
-    private Vec3d origins$modifyVerticalFluidMovingSpeed(LivingEntity entity, double gravity, boolean falling, Vec3d motion, Operation<Vec3d> original) {
-        return LikeWaterPowerType.modify(this, gravity, motion, () -> original.call(entity, gravity, falling, motion));
+    @ModifyReturnValue(method = "applyFluidMovingSpeed", at = @At(value = "RETURN", ordinal = 0))
+    private Vec3d origins$modifyVerticalFluidMovingSpeed(Vec3d original) {
+        return LikeWaterPowerType.modify(this, original);
     }
 
 }
