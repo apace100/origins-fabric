@@ -181,7 +181,7 @@ public class OriginWindowWidget extends ClickableWidget {
 		}
 
 		//  Draw the border and the tooltips of the hovered elements
-		context.drawGuiTexture(textures.border(), this.getX(), this.getY(), 2, this.getWidth(), this.getHeight());
+		context.drawGuiTexture(textures.border(), this.getX(), this.getY(), 200, this.getWidth(), this.getHeight());
 		this.hoveredTooltips.forEach(tooltip -> tooltip.renderTooltip(textRenderer, context, mouseX, mouseY, delta));
 
 	}
