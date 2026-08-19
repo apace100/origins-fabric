@@ -14,8 +14,10 @@ import net.minecraft.util.Identifier;
 import java.util.List;
 
 public interface Badge extends DataObject<Badge> {
-    
-    Identifier spriteId();
+
+	int SIZE = 9;
+
+	Identifier spriteId();
     
     boolean hasTooltip();
     

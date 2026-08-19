@@ -10,21 +10,18 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.util.Objects;
 import java.util.function.Function;
 
 public abstract class OriginDisplayScreen extends Screen {
 
     public static final Identifier DIRT_BACKGROUND = Origins.identifier("textures/dirt_background.png");
 
-    protected static final int WINDOW_WIDTH = 176;
-    protected static final int WINDOW_HEIGHT = 182;
-
+    protected final OriginWindowWidget windowWidget;
     protected final boolean showDirtBackground;
-    protected OriginWindowWidget windowWidget;
 
     public OriginDisplayScreen(Text title, boolean showDirtBackground) {
         super(title);
+        this.windowWidget = new OriginWindowWidget();
         this.showDirtBackground = showDirtBackground;
     }
 
@@ -33,7 +30,9 @@ public abstract class OriginDisplayScreen extends Screen {
 
         super.init();
 
-        this.windowWidget = new OriginWindowWidget((this.width - WINDOW_WIDTH) / 2, (this.height - WINDOW_HEIGHT) / 2, WINDOW_WIDTH, WINDOW_HEIGHT, textRenderer);
+        this.windowWidget.init(this.textRenderer);
+        this.windowWidget.setPosition((this.width - windowWidget.getWidth()) / 2, (this.height - windowWidget.getHeight()) / 2);
+
         this.addDrawableChild(windowWidget);
 
     }
@@ -69,9 +68,11 @@ public abstract class OriginDisplayScreen extends Screen {
     protected abstract OriginLayer getCurrentLayer();
 
     protected void showCurrent(Function<Origin, Origin.WindowTextures> texturesGetter) {
-        Objects
-            .requireNonNull(windowWidget, "Tried showing an origin with the origin window widget unset!")
-            .show(getCurrentOrigin(), getCurrentLayer(), texturesGetter);
+        windowWidget.show(getCurrentOrigin(), getCurrentLayer(), texturesGetter);
+    }
+
+    protected void resetAndShowCurrent(Function<Origin, Origin.WindowTextures> texturesGetter) {
+        windowWidget.resetAndShow(getCurrentOrigin(), getCurrentLayer(), texturesGetter);
     }
 
 }

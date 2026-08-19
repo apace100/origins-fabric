@@ -3,7 +3,7 @@ package io.github.apace100.origins.screen.widget;
 import io.github.apace100.apoli.power.Power;
 import io.github.apace100.origins.badge.Badge;
 import io.github.apace100.origins.mixin.DrawContextAccessor;
-import io.github.apace100.origins.screen.TooltipDrawer;
+import io.github.apace100.origins.screen.DrawableTooltip;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -16,15 +16,25 @@ import net.minecraft.text.Text;
 
 import java.util.List;
 
-public final class BadgeWidget extends ClickableWidget implements TooltipDrawer {
+public final class BadgeWidget extends ClickableWidget implements DrawableTooltip {
 
 	private final Power power;
 	private final Badge badge;
 
 	public BadgeWidget(Power power, Badge badge, int x, int y) {
-		super(x, y, 9, 9, Text.empty());
+		super(x, y, Badge.SIZE, Badge.SIZE, Text.empty());
 		this.power = power;
 		this.badge = badge;
+	}
+
+	@Override
+	public void setWidth(int width) {
+		//  No-op; badges aren't supposed to be resizable
+	}
+
+	@Override
+	public void setHeight(int height) {
+		//  No-op; badges aren't supposed to be resizable
 	}
 
 	@Override

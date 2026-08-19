@@ -1,6 +1,5 @@
 package io.github.apace100.origins.screen;
 
-import io.github.apace100.origins.Origins;
 import io.github.apace100.origins.networking.packet.c2s.ChooseOriginC2SPacket;
 import io.github.apace100.origins.networking.packet.c2s.ChooseRandomOriginC2SPacket;
 import io.github.apace100.origins.origin.Origin;
@@ -30,7 +29,7 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 	private int optionCount;
 
 	protected ChooseOriginScreen(List<OriginLayer> layers, int layerIndex, boolean showDirtBackground) {
-		super(Text.translatable(Origins.MODID + ".screen.choose_origin"), showDirtBackground);
+		super(Text.empty(), showDirtBackground);
 		this.layers = layers;
 		this.layerIndex = MathHelper.clamp(Math.abs(layerIndex), 0, layers.size());
 	}
@@ -48,9 +47,7 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 	protected void init() {
 
 		super.init();
-
 		assert client != null && client.player != null : "Tried initializing the choose origin screen with the client and its player unset!";
-		assert windowWidget != null : "Tried initializing the choose origin screen with the window widget unset!";
 
 		this.optionCount = 0;
 		this.origins.clear();
@@ -122,7 +119,15 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 
 	@Override
 	public Text getTitle() {
-		return this.getCurrentLayer().getChooseOriginTitle();
+
+		if (layers.isEmpty()) {
+			return super.getTitle();
+		}
+
+		else {
+			return this.getCurrentLayer().getChooseOriginTitle();
+		}
+
 	}
 
 	@Override
@@ -160,14 +165,18 @@ public class ChooseOriginScreen extends OriginDisplayScreen {
 		this.showCurrent(origin -> origin.getGuiMetadata().choosing());
 	}
 
+	void resetAndShowCurrent() {
+		this.resetAndShowCurrent(origin -> origin.getGuiMetadata().choosing());
+	}
+
 	void nextOrigin() {
 		this.originIndex = MathHelper.floorMod(originIndex + 1, optionCount);
-		this.showCurrent();
+		this.resetAndShowCurrent();
 	}
 
 	void previousOrigin() {
 		this.originIndex = MathHelper.floorMod(originIndex - 1, optionCount);
-		this.showCurrent();
+		this.resetAndShowCurrent();
 	}
 
 }

@@ -28,7 +28,7 @@ public class MiscUtilClient {
 
 			int horizontalDiff = textWidth - width;
 
-			double d = (double) Util.getMeasuringTimeMs() / 1000.0;
+			double d = (double) Util.getMeasuringTimeMs() / 300;
 			double e = Math.max((double) horizontalDiff * 0.5, 3.0);
 			double f = Math.sin((Math.PI / 2) * Math.cos((Math.PI * 2) * d / e)) / 2.0 + 0.5;
 			double g = MathHelper.lerp(f, 0.0, horizontalDiff);

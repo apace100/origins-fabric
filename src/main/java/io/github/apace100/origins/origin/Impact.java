@@ -12,13 +12,16 @@ public enum Impact {
 	LOW(1, "low", Formatting.GREEN, Origins.identifier("choose_origin/impact/low")),
 	MEDIUM(2, "medium", Formatting.YELLOW, Origins.identifier("choose_origin/impact/medium")),
 	HIGH(3, "high", Formatting.RED, Origins.identifier("choose_origin/impact/high"));
-	
+
+	public static final int WIDTH = 28;
+	public static final int HEIGHT = 8;
+
 	private final int impactValue;
 	private final String translationKey;
 	private final Formatting textStyle;
 	private final Identifier spriteId;
 
-	private Impact(int impactValue, String translationKey, Formatting textStyle, Identifier spriteId) {
+	Impact(int impactValue, String translationKey, Formatting textStyle, Identifier spriteId) {
 		this.translationKey = "origins.gui.impact." + translationKey;
 		this.impactValue = impactValue;
 		this.textStyle = textStyle;

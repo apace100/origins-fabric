@@ -6,7 +6,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 
 @Environment(EnvType.CLIENT)
-public interface TooltipDrawer {
+public interface DrawableTooltip {
 
 	void renderTooltip(TextRenderer textRenderer, DrawContext context, int mouseX, int mouseY, float delta);
 
